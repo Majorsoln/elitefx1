@@ -65,8 +65,9 @@ def inspect(leaf: Path, con: duckdb.DuckDBPyConnection, out=sys.stdout) -> None:
 
     # 3. Sample rows 5 za kwanza
     p("\n--- SAMPLE (rows 5 za kwanza) ---")
-    sample = con.execute(f"SELECT * FROM read_parquet('{src}') LIMIT 5").fetchdf()
-    p(sample.to_string())
+    p("  " + " | ".join(cols))
+    for row in con.execute(f"SELECT * FROM read_parquet('{src}') LIMIT 5").fetchall():
+        p("  " + " | ".join(str(v) for v in row))
 
     # 4. Tafuta column ya muda, onyesha min/max + format
     p("\n--- TIMESTAMP (tafuta column ya muda) ---")
@@ -86,12 +87,13 @@ def inspect(leaf: Path, con: duckdb.DuckDBPyConnection, out=sys.stdout) -> None:
     # 5. Null counts kwa kila column
     p("\n--- NULLS kwa kila column ---")
     null_expr = ", ".join(
-        f'SUM(CASE WHEN "{c}" IS NULL THEN 1 ELSE 0 END) AS "{c}"' for c in cols
+        f'SUM(CASE WHEN "{c}" IS NULL THEN 1 ELSE 0 END)' for c in cols
     )
-    nulls = con.execute(
+    null_counts = con.execute(
         f"SELECT {null_expr} FROM read_parquet('{src}')"
-    ).fetchdf()
-    p(nulls.to_string(index=False))
+    ).fetchone()
+    for c, cnt in zip(cols, null_counts):
+        p(f"  {c:<24} {cnt}")
     p("")
 
 
