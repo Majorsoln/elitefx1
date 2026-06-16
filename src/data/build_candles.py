@@ -30,11 +30,14 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "config" / "data_config.yaml"
 
-# TF -> (idadi, kipimo cha DuckDB INTERVAL)
+# TF -> kipimo cha DuckDB INTERVAL
 TF_INTERVAL = {
+    "1m":  "INTERVAL 1 MINUTE",
+    "5m":  "INTERVAL 5 MINUTE",
     "15m": "INTERVAL 15 MINUTE",
     "30m": "INTERVAL 30 MINUTE",
     "H1":  "INTERVAL 1 HOUR",
+    "H2":  "INTERVAL 2 HOUR",
     "H4":  "INTERVAL 4 HOUR",
     "D1":  "INTERVAL 1 DAY",
 }
@@ -70,16 +73,17 @@ def build_sql(symbol: str, tf: str, cfg: dict) -> str:
     return f"""
     WITH clean AS (
         SELECT
-            (timestamp AT TIME ZONE 'UTC') AS ts_utc,
+            (timestamp AT TIME ZONE 'UTC')   AS ts_utc,
             bid, ask,
-            (ask - bid)                    AS spread_px,
-            COALESCE(bid_vol, 0) + COALESCE(ask_vol, 0) AS vol
+            (ask - bid)                      AS spread_px,
+            COALESCE(bid_vol, 0)             AS bid_vol,
+            COALESCE(ask_vol, 0)             AS ask_vol
         FROM read_parquet('{src}', union_by_name => true)
         WHERE bid > 0 AND ask > 0 AND ask >= bid          -- safisha bei mbovu
     ),
     dedup AS (
-        -- ondoa duplicates kamili za (timestamp,bid,ask): tick moja kwa kila
-        SELECT DISTINCT ts_utc, bid, ask, spread_px, vol FROM clean
+        -- ondoa duplicates kamili: tick moja kwa kila (timestamp,bid,ask,vols)
+        SELECT DISTINCT ts_utc, bid, ask, spread_px, bid_vol, ask_vol FROM clean
     )
     SELECT
         '{symbol}'                                   AS symbol,
@@ -90,7 +94,12 @@ def build_sql(symbol: str, tf: str, cfg: dict) -> str:
         min({px})                                    AS low,
         arg_max({px}, ts_utc)                        AS close,
         COUNT(*)                                     AS tick_count,
-        SUM(vol)                                     AS volume,
+        SUM(bid_vol) + SUM(ask_vol)                  AS volume,
+        SUM(bid_vol)                                 AS bid_volume,
+        SUM(ask_vol)                                 AS ask_volume,
+        -- order-flow pressure: +1 = ununuzi, -1 = uuzaji (feature, sio rule)
+        (SUM(ask_vol) - SUM(bid_vol))
+            / NULLIF(SUM(ask_vol) + SUM(bid_vol), 0)  AS volume_imbalance,
         AVG(spread_px)                               AS spread_mean,
         MAX(spread_px)                               AS spread_max,
         AVG(spread_px) / {pip}                       AS spread_mean_pips,

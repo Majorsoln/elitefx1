@@ -69,7 +69,16 @@ data analysis hufanyika.*
 - **Chanzo cha mafunzo:** Dukascopy tick data (2016–2024). FTMO MT5 hutumika
   **kuweka trades tu** — kamwe si chanzo cha data ya mafunzo.
 - **Pairs 9:** EURUSD, GBPUSD, USDJPY, EURJPY, USDCAD, USDCHF, AUDUSD, NZDUSD, EURGBP.
-- **Bars:** Kutoka tick data tunajenga candles za D1, H4, H1, 30m, na 15m.
+- **Bars:** Kutoka tick data tunajenga candles za **1m, 5m, 15m, 30m, H1, H2, H4, D1**.
+  - **1m–30m** → microstructure ya Model 2 (Entry, Sehemu 3: "1m → 30m").
+  - **H1–D1** (pamoja na **H2**) → HTF ya Model 1 (Regime, Sehemu 2).
+  - *(5m ni nyongeza ya uchambuzi kujaza pengo la microstructure kati ya 1m na 15m.)*
+- **Timezone:** tick data ghafi ni tz-aware (CE(S)T, instant kamili). Tunaibadilisha
+  → **UTC** mara moja kwenye ujenzi wa candles; bar zote & session boundaries ni UTC.
+- **Tick volume:** `bid_vol`/`ask_vol` zinahifadhiwa kama `tick_count`, `bid_volume`,
+  `ask_volume`, na `volume_imbalance`. Hutumika kama **features** (Model 1: kuthibitisha
+  regime; Model 2: order-flow pressure) na **filter ya liquidity** (kuruka nyakati za
+  tick_count ndogo — rollover/holidays). **Si rule** — ML inazitumia, hazifungui trade.
 - **Uhakiki wa ubora:** Hakuna mapengo (gaps) yasiyoelezeka, hakuna lookahead
   (data ya baadaye haitumiki kwenye uamuzi wa sasa), na **spread halisi kwa kila
   pair** (sio thamani moja kwa zote — JPY pairs zina spread kubwa zaidi).
