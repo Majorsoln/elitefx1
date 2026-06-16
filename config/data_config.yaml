@@ -46,9 +46,15 @@ resample:
 
 # --- Sessions (UTC, takriban — zitathibitishwa kwa EDA) ---
 sessions_utc:
-  asia:   { start: "23:00", end: "08:00" }
-  london: { start: "07:00", end: "16:00" }
-  newyork:{ start: "12:00", end: "21:00" }
+  asia:
+    start: "23:00"
+    end: "08:00"
+  london:
+    start: "07:00"
+    end: "16:00"
+  newyork:
+    start: "12:00"
+    end: "21:00"
 
 # --- Max spread kwa pair (placeholders — zitakadiriwa kutoka EDA) ---
 # JPY pairs zina spread kubwa zaidi (MFUMO.md). Hizi ni za awali tu.
