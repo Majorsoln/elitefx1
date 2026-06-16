@@ -1,0 +1,31 @@
+# ============================================================
+#  ftmo_config.yaml — Sizing & Compliance (kwa akaunti ya $10,000)
+#  Chanzo: MFUMO.md (Sehemu 4 & 5). Japhet anabadilisha values; mfumo unasoma tu.
+#  TAHADHARI: hatubadilishi value bila kupima athari kwanza (backtest).
+# ============================================================
+
+account_size:          10000   # ukubwa wa akaunti
+daily_budget_start:      400    # bajeti ya mwanzo (4% ya akaunti)
+win_factor:              0.50   # bajeti inakua 50% ya faida
+loss_factor:             1.00   # bajeti inapungua 100% ya hasara
+max_per_trade:           120    # kikomo cha juu kwa trade moja ($)
+max_slots:                 4    # trades nyingi zaidi kwa wakati mmoja
+max_correlated_slots:      2    # trades nyingi zaidi kwenye correlation group moja
+max_daily_loss:          500    # FTMO: 5% ya akaunti
+max_total_dd:           1000    # FTMO: 10% ya akaunti
+
+# --- Trade Management (R1–R7) ---
+trailing_method:    "fixed_pip"   # "fixed_pip" au "atr"
+trail_distance_pip: 15            # kwa fixed_pip
+trail_atr_mult:     1.5           # kwa atr (ATR_14 × 1.5)
+trailing_start_r:   2.0           # anza trailing baada ya +2R
+regime_exit_confidence_threshold: 0.65  # R6: model lazima iwe na uhakika
+regime_exit_min_change: true            # R6: lazima regime iwe kinyume (UP->DOWN)
+time_stop_multiplier: 1.2         # R7 = predicted_duration × 1.2
+
+# --- Correlation groups (Compliance Check 4) ---
+correlation_groups:
+  USD_group:     [EURUSD, GBPUSD, AUDUSD, NZDUSD]   # USD weakness plays
+  USD_strength:  [USDJPY, USDCAD, USDCHF]           # USD strength plays
+  EUR_group:     [EURUSD, EURJPY, EURGBP]
+  AUD_NZD_group: [AUDUSD, NZDUSD]

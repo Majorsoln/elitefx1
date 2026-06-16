@@ -1,0 +1,70 @@
+# ============================================================
+#  data_config.yaml — SEHEMU 1 (Tabaka la Data) ya EliteFX
+#  Inatumika na src/data/*. Japhet anabadilisha values; mfumo unasoma tu.
+# ============================================================
+
+# --- Pairs 9 kuu (kama MFUMO.md) ---
+pairs:
+  - EURUSD
+  - GBPUSD
+  - USDJPY
+  - EURJPY
+  - USDCAD
+  - USDCHF
+  - AUDUSD
+  - NZDUSD
+  - EURGBP
+
+# --- Timeframes za kujenga kutoka ticks ---
+timeframes: [D1, H4, H1, 30m, 15m]
+
+# --- Kipindi cha mafunzo (MFUMO.md: 2016–2024). 2025–2026 = OOS ya ziada ---
+date_range:
+  train_start: "2016-01-01"
+  train_end:   "2024-12-31"
+
+# --- Timezone ---
+# Data ghafi iko CE(S)T (Europe/Berlin, yenye DST). Tunaconvert -> UTC
+# mara moja kwenye ingest; candles zote & session boundaries ni UTC.
+timezone:
+  source_tz:  "Europe/Berlin"   # jinsi timestamps za raw zilivyo
+  store_tz:   "UTC"             # jinsi tutakavyohifadhi (lazima UTC)
+
+# --- Njia (relative kwa root ya repo; data iko nje ya git) ---
+paths:
+  raw_ticks:  "data/raw/ticks"        # Hive: symbol=*/year=*/.../day=*
+  interim:    "data/interim"          # ticks normalized (Parquet)
+  processed:  "data/processed"        # candles kwa kila TF (Parquet)
+  reports:    "reports"
+
+# --- Resampling ---
+# OHLC inajengwa kutoka bid (default) au mid; spread inahifadhiwa pembeni.
+resample:
+  price_for_ohlc: "bid"   # "bid" | "mid"
+  bar_timestamp:  "open"  # bar inawekewa muda wa kufunguka (kuzuia lookahead)
+  label_closed_only: true # bar inatumika tu ikiwa imekamilika (is_complete=true)
+
+# --- Sessions (UTC, takriban — zitathibitishwa kwa EDA) ---
+sessions_utc:
+  asia:   { start: "23:00", end: "08:00" }
+  london: { start: "07:00", end: "16:00" }
+  newyork:{ start: "12:00", end: "21:00" }
+
+# --- Max spread kwa pair (placeholders — zitakadiriwa kutoka EDA) ---
+# JPY pairs zina spread kubwa zaidi (MFUMO.md). Hizi ni za awali tu.
+max_spread_pips:
+  EURUSD: 2.0
+  GBPUSD: 2.5
+  USDJPY: 2.0
+  EURJPY: 3.0
+  USDCAD: 2.5
+  USDCHF: 2.5
+  AUDUSD: 2.0
+  NZDUSD: 2.5
+  EURGBP: 2.5
+
+# --- Vigezo vya quality checks ---
+quality:
+  max_gap_minutes: 60        # pengo kubwa zaidi linalokubalika ndani ya session
+  outlier_sigma:   8         # bei nje ya hii (z-score) = mshukiwa
+  min_year_coverage: 0.90    # angalau 90% ya siku za biashara kila mwaka
