@@ -64,9 +64,14 @@ def inspect(leaf: Path, con: duckdb.DuckDBPyConnection, out=sys.stdout) -> None:
     p(f"\n--- ROWS: {n:,} (siku moja, pair moja) ---")
 
     # 3. Sample rows 5 za kwanza
+    #    Tunacast kila column -> VARCHAR ili kuepuka kuhitaji pytz/numpy kwa
+    #    timestamp-with-timezone (DuckDB inarender text yenyewe, bila Python tz).
     p("\n--- SAMPLE (rows 5 za kwanza) ---")
+    cast_list = ", ".join(f'CAST("{c}" AS VARCHAR)' for c in cols)
     p("  " + " | ".join(cols))
-    for row in con.execute(f"SELECT * FROM read_parquet('{src}') LIMIT 5").fetchall():
+    for row in con.execute(
+        f"SELECT {cast_list} FROM read_parquet('{src}') LIMIT 5"
+    ).fetchall():
         p("  " + " | ".join(str(v) for v in row))
 
     # 4. Tafuta column ya muda, onyesha min/max + format
@@ -77,7 +82,8 @@ def inspect(leaf: Path, con: duckdb.DuckDBPyConnection, out=sys.stdout) -> None:
     if time_like:
         for c in time_like:
             mn, mx = con.execute(
-                f'SELECT MIN("{c}"), MAX("{c}") FROM read_parquet(\'{src}\')'
+                f'SELECT CAST(MIN("{c}") AS VARCHAR), CAST(MAX("{c}") AS VARCHAR) '
+                f"FROM read_parquet('{src}')"
             ).fetchone()
             p(f"  {c}: min={mn!r}  max={mx!r}")
         p("  -> Kama ni nambari kubwa (~1e12), ni epoch-millis. Kama ni tarehe, ni datetime.")
