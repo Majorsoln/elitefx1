@@ -1,21 +1,24 @@
 """
 build_candles.py — Ticks ghafi -> Candles (OHLC) kwa kila timeframe. SEHEMU 1.
 
-Inafanya kazi kwa DuckDB (inastream Parquet ya 26GB bila kujaza RAM):
-  1. Inasoma raw ticks za symbol (Hive: symbol=*/year=*/month=*/day=*/ticks.parquet)
-  2. Ina-convert timestamp -> UTC (timestamp tayari ni tz-aware = instant kamili)
-  3. Inasafisha INLINE: dump bid<=0, ask<=0, ask<bid, na duplicates za timestamp
-  4. Ina-bucket kwa kila TF (15m/30m/H1/H4/D1), aligned kwa UTC midnight
-  5. OHLC kutoka bid (au mid), + spread_mean/max, tick_count, volume
-  6. Inaandika Parquet: data/processed/candles/symbol=X/tf=Y.parquet
+DESIGN (cascade — kwa kasi):
+  1. Jenga 1m kutoka ticks (scan MOJA ya raw 26GB; ndiyo hatua ghali).
+  2. Jenga 5m/15m/30m/H1/H2/H4/D1 kwa kuROLLUP 1m candles (haraka sana).
+  Timeframes zote ni multiples za 1m na zime-align kwa UTC epoch, kwa hiyo 1m
+  candles zinanest ndani yake kikamilifu -> rollup = sawa kabisa na from-ticks.
 
-Bar inawekewa muda wa KUFUNGUKA (bar_open). Kanuni ya no-lookahead:
-  candle yenye bar_open = T inajulikana tu baada ya T + interval. Watumiaji
-  (Model 1/2) lazima wasitumie bar inayoendelea kuunda.
+USAHIHI wa rollup:
+  open = ya kwanza, close = ya mwisho, high = max, low = min,
+  volume/tick_count/bid/ask_volume = sum, volume_imbalance = recompute,
+  spread_mean = WEIGHTED kwa tick_count, spread_max = max.
+
+Bar inawekewa muda wa KUFUNGUKA (bar_open, UTC). No-lookahead: candle yenye
+bar_open = T inajulikana tu baada ya T + interval.
 
 Endesha kwenye PC ya Japhet (pale data ilipo):
-  python src\\data\\build_candles.py --symbol EURUSD --tf 15m   # jaribio (1 pair, 1 TF)
+  python src\\data\\build_candles.py --symbol EURUSD            # pair moja, TF zote
   python src\\data\\build_candles.py                            # pairs zote, TF zote
+  python src\\data\\build_candles.py --symbol EURUSD --force-1m # jenga upya 1m
 """
 from __future__ import annotations
 
@@ -29,6 +32,8 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "config" / "data_config.yaml"
+
+BASE_TF = "1m"  # base inajengwa kutoka ticks; zingine zinarollup kutoka hapa
 
 # TF -> kipimo cha DuckDB INTERVAL
 TF_INTERVAL = {
@@ -55,21 +60,25 @@ def pip_size(symbol: str) -> float:
 
 def price_expr(price_for_ohlc: str) -> str:
     """Bei ya kujenga OHLC: 'bid' (default) au 'mid' = (bid+ask)/2."""
-    if price_for_ohlc == "mid":
-        return "((bid + ask) / 2.0)"
-    return "bid"
+    return "((bid + ask) / 2.0)" if price_for_ohlc == "mid" else "bid"
 
 
-def build_sql(symbol: str, tf: str, cfg: dict) -> str:
+def candle_path(symbol: str, tf: str, cfg: dict) -> Path:
+    return (REPO_ROOT / cfg["paths"]["processed"] / "candles" /
+            f"symbol={symbol}" / f"tf={tf}.parquet")
+
+
+def _posix(p: Path) -> str:
+    return str(p).replace("\\", "/")
+
+
+# ---------- Hatua 1: 1m kutoka ticks ----------
+def build_1m_sql(symbol: str, cfg: dict) -> str:
     raw_glob = (REPO_ROOT / cfg["paths"]["raw_ticks"] /
                 f"symbol={symbol}" / "**" / "*.parquet")
-    src = str(raw_glob).replace("\\", "/")
-    interval = TF_INTERVAL[tf]
+    src = _posix(raw_glob)
     px = price_expr(cfg["resample"].get("price_for_ohlc", "bid"))
     pip = pip_size(symbol)
-
-    # ts_utc: instant -> naive TIMESTAMP katika UTC (kwa bucketing UTC-aligned).
-    # time_bucket origin = epoch (1970-01-01) -> buckets 00:00,00:15,... UTC.
     return f"""
     WITH clean AS (
         SELECT
@@ -82,13 +91,12 @@ def build_sql(symbol: str, tf: str, cfg: dict) -> str:
         WHERE bid > 0 AND ask > 0 AND ask >= bid          -- safisha bei mbovu
     ),
     dedup AS (
-        -- ondoa duplicates kamili: tick moja kwa kila (timestamp,bid,ask,vols)
         SELECT DISTINCT ts_utc, bid, ask, spread_px, bid_vol, ask_vol FROM clean
     )
     SELECT
         '{symbol}'                                   AS symbol,
-        '{tf}'                                       AS tf,
-        time_bucket({interval}, ts_utc, TIMESTAMP '1970-01-01') AS bar_open,
+        '{BASE_TF}'                                  AS tf,
+        time_bucket(INTERVAL 1 MINUTE, ts_utc, TIMESTAMP '1970-01-01') AS bar_open,
         arg_min({px}, ts_utc)                        AS open,
         max({px})                                    AS high,
         min({px})                                    AS low,
@@ -97,7 +105,6 @@ def build_sql(symbol: str, tf: str, cfg: dict) -> str:
         SUM(bid_vol) + SUM(ask_vol)                  AS volume,
         SUM(bid_vol)                                 AS bid_volume,
         SUM(ask_vol)                                 AS ask_volume,
-        -- order-flow pressure: +1 = ununuzi, -1 = uuzaji (feature, sio rule)
         (SUM(ask_vol) - SUM(bid_vol))
             / NULLIF(SUM(ask_vol) + SUM(bid_vol), 0)  AS volume_imbalance,
         AVG(spread_px)                               AS spread_mean,
@@ -110,29 +117,66 @@ def build_sql(symbol: str, tf: str, cfg: dict) -> str:
     """
 
 
-def build_one(con: duckdb.DuckDBPyConnection, symbol: str, tf: str, cfg: dict) -> int:
-    out_dir = REPO_ROOT / cfg["paths"]["processed"] / "candles" / f"symbol={symbol}"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"tf={tf}.parquet"
-    sql = build_sql(symbol, tf, cfg)
+# ---------- Hatua 2: rollup kutoka 1m ----------
+def build_rollup_sql(symbol: str, tf: str, cfg: dict) -> str:
+    src = _posix(candle_path(symbol, BASE_TF, cfg))
+    interval = TF_INTERVAL[tf]
+    return f"""
+    WITH base AS (
+        SELECT *,
+            time_bucket({interval}, bar_open, TIMESTAMP '1970-01-01') AS nb
+        FROM read_parquet('{src}')
+    )
+    SELECT
+        '{symbol}'                                   AS symbol,
+        '{tf}'                                        AS tf,
+        nb                                           AS bar_open,
+        arg_min(open,  bar_open)                      AS open,
+        max(high)                                    AS high,
+        min(low)                                     AS low,
+        arg_max(close, bar_open)                      AS close,
+        SUM(tick_count)                              AS tick_count,
+        SUM(volume)                                  AS volume,
+        SUM(bid_volume)                              AS bid_volume,
+        SUM(ask_volume)                              AS ask_volume,
+        (SUM(ask_volume) - SUM(bid_volume))
+            / NULLIF(SUM(ask_volume) + SUM(bid_volume), 0) AS volume_imbalance,
+        -- spread_mean: weighted kwa tick_count (mean ya means isiyo na uzito = makosa)
+        SUM(spread_mean * tick_count)      / NULLIF(SUM(tick_count), 0) AS spread_mean,
+        MAX(spread_max)                              AS spread_max,
+        SUM(spread_mean_pips * tick_count) / NULLIF(SUM(tick_count), 0) AS spread_mean_pips,
+        MAX(spread_max_pips)                         AS spread_max_pips
+    FROM base
+    GROUP BY nb
+    ORDER BY nb
+    """
 
+
+def _write(con: duckdb.DuckDBPyConnection, sql: str, out_path: Path, label: str) -> int:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     con.execute(
-        f"COPY ({sql}) TO '{str(out_path).replace(chr(92), '/')}' "
-        f"(FORMAT PARQUET, COMPRESSION ZSTD)"
+        f"COPY ({sql}) TO '{_posix(out_path)}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
-    n = con.execute(
-        f"SELECT COUNT(*) FROM read_parquet('{str(out_path).replace(chr(92), '/')}')"
-    ).fetchone()[0]
-    dt = time.time() - t0
-    print(f"  [{symbol} {tf}] candles={n:,}  ({dt:.1f}s)  -> {out_path.relative_to(REPO_ROOT)}")
+    n = con.execute(f"SELECT COUNT(*) FROM read_parquet('{_posix(out_path)}')").fetchone()[0]
+    print(f"  [{label}] candles={n:,}  ({time.time() - t0:.1f}s)  -> {out_path.relative_to(REPO_ROOT)}")
     return n
 
 
+def ensure_1m(con, symbol, cfg, force: bool) -> int:
+    out = candle_path(symbol, BASE_TF, cfg)
+    if out.exists() and not force:
+        n = con.execute(f"SELECT COUNT(*) FROM read_parquet('{_posix(out)}')").fetchone()[0]
+        print(f"  [{symbol} 1m] ipo tayari ({n:,}) — natumia upya (--force-1m kujenga upya)")
+        return n
+    return _write(con, build_1m_sql(symbol, cfg), out, f"{symbol} 1m (kutoka ticks)")
+
+
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Jenga candles kutoka ticks ghafi")
-    ap.add_argument("--symbol", default=None, help="pair moja (default: zote kwenye config)")
+    ap = argparse.ArgumentParser(description="Jenga candles kutoka ticks (cascade kupitia 1m)")
+    ap.add_argument("--symbol", default=None, help="pair moja (default: zote)")
     ap.add_argument("--tf", default=None, choices=list(TF_INTERVAL), help="TF moja (default: zote)")
+    ap.add_argument("--force-1m", action="store_true", help="jenga upya 1m hata kama ipo")
     ap.add_argument("--threads", type=int, default=0, help="DuckDB threads (0 = auto)")
     args = ap.parse_args()
 
@@ -155,9 +199,16 @@ def main() -> int:
         if not (raw_root / f"symbol={sym}").exists():
             print(f"  ONYO: symbol={sym} haipo kwenye raw — naruka.", file=sys.stderr)
             continue
+        # 1m daima inahitajika (rollup zinaitegemea). Jenga au tumia upya.
+        n1m = ensure_1m(con, sym, cfg, args.force_1m)
+        if BASE_TF in tfs:
+            total += n1m
         for tf in tfs:
-            total += build_one(con, sym, tf, cfg)
-    print(f"\nJumla ya candles zilizoandikwa: {total:,}")
+            if tf == BASE_TF:
+                continue
+            total += _write(con, build_rollup_sql(sym, tf, cfg),
+                            candle_path(sym, tf, cfg), f"{sym} {tf} (rollup)")
+    print(f"\nJumla ya candles zilizoandikwa (bila 1m za reuse): {total:,}")
     return 0
 
 
