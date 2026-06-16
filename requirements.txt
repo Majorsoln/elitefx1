@@ -1,0 +1,8 @@
+# EliteFX — SEHEMU 1 (Data). Python deps.
+# Endesha kwenye PC ya Japhet (pale data ya 26GB ilipo):
+#   python -m venv .venv && .venv\Scripts\activate   (Windows)
+#   pip install -r requirements.txt
+polars>=1.0
+duckdb>=1.0
+pyarrow>=16.0
+pyyaml>=6.0
