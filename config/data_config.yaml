@@ -76,3 +76,4 @@ quality:
   max_gap_minutes: 60        # pengo kubwa zaidi linalokubalika ndani ya session
   outlier_sigma:   8         # bei nje ya hii (z-score) = mshukiwa
   min_year_coverage: 0.90    # angalau 90% ya siku za biashara kila mwaka
+  min_tick_count:    3       # bar yenye ticks chini ya hii = liquidity ndogo (filter)
