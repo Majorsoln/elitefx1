@@ -89,10 +89,9 @@ def build_1m_sql(symbol: str, cfg: dict) -> str:
             COALESCE(ask_vol, 0)             AS ask_vol
         FROM read_parquet('{src}', union_by_name => true)
         WHERE bid > 0 AND ask > 0 AND ask >= bid          -- safisha bei mbovu
-    ),
-    dedup AS (
-        SELECT DISTINCT ts_utc, bid, ask, spread_px, bid_vol, ask_vol FROM clean
     )
+    -- HAKUNA DISTINCT: duplicates kamili haziathiri OHLC; DISTINCT juu ya
+    -- ~200M rows ilikuwa inajaza temp-disk (OOM). Aggregation inatosha.
     SELECT
         '{symbol}'                                   AS symbol,
         '{BASE_TF}'                                  AS tf,
@@ -111,7 +110,7 @@ def build_1m_sql(symbol: str, cfg: dict) -> str:
         MAX(spread_px)                               AS spread_max,
         AVG(spread_px) / {pip}                       AS spread_mean_pips,
         MAX(spread_px) / {pip}                       AS spread_max_pips
-    FROM dedup
+    FROM clean
     GROUP BY bar_open
     ORDER BY bar_open
     """
@@ -178,6 +177,8 @@ def main() -> int:
     ap.add_argument("--tf", default=None, choices=list(TF_INTERVAL), help="TF moja (default: zote)")
     ap.add_argument("--force-1m", action="store_true", help="jenga upya 1m hata kama ipo")
     ap.add_argument("--threads", type=int, default=0, help="DuckDB threads (0 = auto)")
+    ap.add_argument("--memory-limit", default=None, help="k.m. '8GB' (punguza spill)")
+    ap.add_argument("--temp-dir", default=None, help="folda ya temp (drive yenye nafasi)")
     args = ap.parse_args()
 
     cfg = load_config()
@@ -190,8 +191,14 @@ def main() -> int:
     tfs = [args.tf] if args.tf else cfg["timeframes"]
 
     con = duckdb.connect()
+    # preserve_insertion_order=false: hupunguza memory/spill kwenye GROUP BY+COPY kubwa
+    con.execute("SET preserve_insertion_order=false")
     if args.threads > 0:
-        con.execute(f"PRAGMA threads={args.threads}")
+        con.execute(f"SET threads={args.threads}")
+    if args.memory_limit:
+        con.execute(f"SET memory_limit='{args.memory_limit}'")
+    if args.temp_dir:
+        con.execute(f"SET temp_directory='{args.temp_dir}'")
 
     print(f"Symbols: {symbols}\nTimeframes: {tfs}\n")
     total = 0

@@ -37,15 +37,16 @@ def _setup(cfg) -> Path:
     con = duckdb.connect()
     con.execute(f"""
         COPY (
-          -- ticks za kawaida kila sekunde 5 kwa dakika 3 (1.10 hadi 1.10x)
-          SELECT TIMESTAMPTZ '2020-01-06 00:00:00+00' + (i * INTERVAL 5 SECOND) AS timestamp,
+          -- ticks za kawaida kila sekunde 5, zikianzia 00:00:02 (offset 2s ili
+          -- zisigongane na mpaka wa dakika; spike ndiyo iwe ya kipekee saa 00:02:00)
+          SELECT TIMESTAMPTZ '2020-01-06 00:00:02+00' + (i * INTERVAL 5 SECOND) AS timestamp,
                  CAST(1.10000 + (i % 10) * 0.00001 AS DOUBLE) AS bid,
                  CAST(1.10000 + (i % 10) * 0.00001 + 0.00005 AS DOUBLE) AS ask,
                  CAST(1.0 AS FLOAT) AS bid_vol, CAST(1.0 AS FLOAT) AS ask_vol,
                  '06' AS day, '01' AS month, '{TEST_SYMBOL}' AS symbol, 2020 AS year
           FROM range(0, 36) t(i)
           UNION ALL
-          -- SPIKE moja hasa saa 00:02:00.000 (mwanzo wa dakika ya 3)
+          -- SPIKE moja hasa saa 00:02:00.000 (tick ya KWANZA ya kipekee ya dakika 2)
           SELECT TIMESTAMPTZ '2020-01-06 00:02:00.000+00',
                  9.99000, 9.99005, CAST(1.0 AS FLOAT), CAST(1.0 AS FLOAT),
                  '06', '01', '{TEST_SYMBOL}', 2020
