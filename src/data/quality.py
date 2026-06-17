@@ -84,11 +84,16 @@ def check_one(con, symbol: str, tf: str, cfg: dict) -> dict | None:
             MIN(tick_count)                                              AS tc_min,
             CAST(ROUND(QUANTILE_CONT(tick_count, 0.50)) AS BIGINT)        AS tc_p50,
             SUM(CASE WHEN tick_count < {min_tc} THEN 1 ELSE 0 END)        AS n_low_liq,
-            -- gaps (bila weekend: prev si Ijumaa/Jumamosi)
+            -- gaps (bila weekend): tumia weekday ya CET (siku zime-anchor CET; bar_open
+            -- ya HTF ni jioni ya UTC, kwa hiyo dayofweek ya UTC ingekosea — Ijumaa
+            -- ingeonekana Alhamisi na kila wikendi ingehesabiwa kama gap).
             SUM(CASE WHEN prev IS NOT NULL
                       AND date_diff('minute', prev, bar_open) > {iv} + {gap_limit}
-                      AND dayofweek(prev) NOT IN (5, 6) THEN 1 ELSE 0 END) AS n_gaps,
-            MAX(CASE WHEN prev IS NOT NULL AND dayofweek(prev) NOT IN (5, 6)
+                      AND dayofweek((prev AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Berlin')
+                          NOT IN (5, 6) THEN 1 ELSE 0 END) AS n_gaps,
+            MAX(CASE WHEN prev IS NOT NULL
+                     AND dayofweek((prev AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Berlin')
+                         NOT IN (5, 6)
                      THEN date_diff('minute', prev, bar_open) END)         AS max_gap_min
         FROM g
     """).fetchone()

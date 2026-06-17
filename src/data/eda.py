@@ -77,7 +77,7 @@ def sec_gaps(con, cfg, ref_pair="EURUSD") -> list[str]:
         FROM g
         WHERE prev IS NOT NULL
           AND date_diff('minute', prev, bar_open) > 60 + {gap_limit}
-          AND dayofweek(prev) NOT IN (5, 6)
+          AND dayofweek((prev AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Berlin') NOT IN (5, 6)
         ORDER BY dakika DESC
     """).fetchall()
     L.append("| Gap inaanza | Gap inaisha | Dakika | Siku |")
