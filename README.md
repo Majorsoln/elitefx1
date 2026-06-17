@@ -66,19 +66,24 @@ python src\data\quality.py
 python src\data\eda.py
 ```
 
-**6. Test ya no-lookahead** *(lazima ipite)*
+**6. Feature diagnostics** → `reports\feature_diagnostics.md` *(uthibitisho wa kitakwimu)*
+```
+python src\data\feature_diagnostics.py
+```
+
+**7. Test ya no-lookahead** *(lazima ipite)*
 ```
 python tests\test_no_lookahead.py
 ```
 
-**7. Push ripoti** *(zime-ignored — lazima `-f`)*
+**8. Push ripoti** *(reports/*.md zinafuatiliwa — bila `-f`)*
 ```
-git add -f reports\data_quality_report.md reports\eda_report.md
-git commit -m "SEHEMU 1: ripoti za quality + eda"
-git push
+git add reports\*.md
+git commit -m "SEHEMU 1: ripoti za quality + eda + diagnostics"
+git push origin main
 ```
 
 ---
 
 Lengo la SEHEMU 1: kutoka Dukascopy tick data → candles safi (1m…D1) **bila
-lookahead**, zimepimwa (quality + EDA), tayari kwa Model 1 & 2.
+lookahead**, zimepimwa (quality + EDA + diagnostics), tayari kwa Model 1 & 2.
