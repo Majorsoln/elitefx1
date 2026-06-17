@@ -65,15 +65,56 @@ def sec_moments(con, cfg, pairs) -> list[str]:
             fat += 1
         L.append(f"| {s} | {r[0]} | {r[1]} | {r[2]} | {r[3]}{flag} | {r[4]} | {r[5]} |")
     L.append(f"\n*Normal: skew=0, excess kurtosis=0. **{fat}/{len(pairs)}** zina excess "
-             "kurtosis > 1 (fat tails) → Gaussian HMM itakosea tails. **Ushauri:** tumia "
-             "Student-t emissions au standardize returns kwa rolling-vol kabla ya HMM. "
-             "Skew hasi = matukio ya kuanguka makubwa kuliko ya kupanda.*\n")
+             "kurtosis > 1 (fat tails) kwenye returns **ghafi**. LAKINI: HMM yenye states "
+             "nyingi ni *Gaussian mixture* — yenyewe ina fat tails. Kwa hiyo kurtosis ghafi "
+             "PEKEE hairuhusu kuamua Student-t. **Uamuzi unategemea Section 2 (conditional "
+             "normality).** Skew hasi = matukio ya kuanguka makubwa kuliko ya kupanda.*\n")
     return L
 
 
-# ---------- 2. Volatility clustering (ACF r^2) ----------
+# ---------- 2. Conditional normality (uamuzi: Student-t vs Gaussian HMM) ----------
+def sec_normality(con, cfg, pairs) -> list[str]:
+    L = ["## 2. Conditional Normality — je tunahitaji Student-t, au vol-scaling inatosha?\n"]
+    L.append("> Swali: HMM (Gaussian mixture) yenyewe ina fat tails. Tunastandardize returns "
+             "kwa **rolling-vol (20-bar, no-lookahead)** kisha tunapima kurtosis tena. Kama "
+             "bado kubwa → fat tails ni za kweli → **Student-t**. Kama inashuka karibu 0 → "
+             "**vol-clustering ndio chanzo → Gaussian HMM inatosha** (hakuna haja ya Student-t).\n")
+    L.append("| Pair | Excess kurt (raw) | Excess kurt (vol-std) | %\\|z\\|>3σ | %>4σ | %>5σ |")
+    L.append("|------|-------------------|-----------------------|---------|------|------|")
+    still_fat = 0
+    for s in pairs:
+        r = con.execute(f"""
+            WITH r AS (
+                SELECT bar_open, ln(close / lag(close) OVER (ORDER BY bar_open)) AS lr
+                FROM read_parquet('{_path(cfg, s, "D1")}')),
+            g AS (SELECT AVG(lr) mu, STDDEV_SAMP(lr) sd FROM r WHERE lr IS NOT NULL),
+            z AS (
+                SELECT lr, (lr - g.mu) / g.sd AS zz,
+                       lr / NULLIF(stddev_samp(lr) OVER (
+                            ORDER BY bar_open ROWS BETWEEN 20 PRECEDING AND 1 PRECEDING), 0) AS zc
+                FROM r, g WHERE lr IS NOT NULL)
+            SELECT ROUND(kurtosis(lr), 2)             AS k_raw,
+                   ROUND(kurtosis(zc), 2)             AS k_cond,
+                   ROUND(100.0*AVG(CASE WHEN abs(zz)>3 THEN 1 ELSE 0 END), 3) AS p3,
+                   ROUND(100.0*AVG(CASE WHEN abs(zz)>4 THEN 1 ELSE 0 END), 3) AS p4,
+                   ROUND(100.0*AVG(CASE WHEN abs(zz)>5 THEN 1 ELSE 0 END), 3) AS p5
+            FROM z
+        """).fetchone()
+        flag = "  ⬅️ bado fat" if r[1] is not None and r[1] > 1.0 else ""
+        if r[1] and r[1] > 1.0:
+            still_fat += 1
+        L.append(f"| {s} | {r[0]} | {r[1]}{flag} | {r[2]} | {r[3]} | {r[4]} |")
+    L.append(f"\n*Gaussian inatarajia: |z|>3σ = **0.27%**, >4σ = **0.006%**, >5σ = **0.00006%**. "
+             f"Observed kubwa zaidi = fat tails. **Excess kurt (vol-std)** ndio uamuzi: "
+             f"**{still_fat}/{len(pairs)}** bado zina > 1 baada ya vol-scaling. "
+             f"Kama nyingi bado fat → **Student-t emissions**. Kama zimeshuka ~0 → "
+             f"**Gaussian HMM + vol-standardized returns inatosha** (model rahisi).*\n")
+    return L
+
+
+# ---------- 3. Volatility clustering (ACF r^2) ----------
 def sec_vol_clustering(con, cfg, pairs) -> list[str]:
-    L = ["## 2. Volatility Clustering — ACF ya r² (huhalalisha regime/HMM)\n"]
+    L = ["## 3. Volatility Clustering — ACF ya r² (huhalalisha regime/HMM)\n"]
     L.append("| Pair | ACF r (lag1) | ACF r² lag1 | lag5 | lag10 | lag20 |")
     L.append("|------|--------------|-------------|------|-------|-------|")
     clustered = 0
@@ -106,7 +147,7 @@ def sec_vol_clustering(con, cfg, pairs) -> list[str]:
 
 # ---------- 3. volume_imbalance IC (Model 2 predictive value) ----------
 def sec_imbalance_ic(con, cfg, pairs, tfs=("15m", "30m")) -> list[str]:
-    L = ["## 3. `volume_imbalance` IC — je inatabiri return ya bar inayofuata? (Model 2)\n"]
+    L = ["## 4. `volume_imbalance` IC — je inatabiri return ya bar inayofuata? (Model 2)\n"]
     L.append("> NO-LOOKAHEAD: imbalance ya bar `t` (inajulikana baada ya t kufunga) dhidi "
              "ya return ya bar `t+1` (lead). Contemporaneous = ndani ya bar `t` (sanity).\n")
     L.append("| Pair | TF | Contemp. corr | **Predictive IC** | Hit-rate (dir.) | n |")
@@ -142,7 +183,7 @@ def sec_imbalance_ic(con, cfg, pairs, tfs=("15m", "30m")) -> list[str]:
 
 # ---------- 4. Correlation stability (Compliance groups) ----------
 def sec_corr_stability(con, cfg, pairs) -> list[str]:
-    L = ["## 4. Correlation Stability — je groups za static zinafaa? (Compliance)\n"]
+    L = ["## 5. Correlation Stability — je groups za static zinafaa? (Compliance)\n"]
     # jenga wide: date x pair -> log-return
     cols = ", ".join(f"MAX(CASE WHEN symbol='{s}' THEN lr END) AS \"{s}\"" for s in pairs)
     con.execute(f"""
@@ -187,10 +228,11 @@ def main() -> int:
            f"*Imezalishwa: {datetime.now():%Y-%m-%d %H:%M} | Uthibitisho wa kitakwimu "
            "kabla ya modeling*\n"]
 
-    out += sec_moments(con, cfg, pairs);         print("  [1/4] moments — done")
-    out += sec_vol_clustering(con, cfg, pairs);  print("  [2/4] vol clustering — done")
-    out += sec_imbalance_ic(con, cfg, pairs);    print("  [3/4] imbalance IC — done")
-    out += sec_corr_stability(con, cfg, pairs);  print("  [4/4] corr stability — done")
+    out += sec_moments(con, cfg, pairs);         print("  [1/5] moments — done")
+    out += sec_normality(con, cfg, pairs);       print("  [2/5] conditional normality — done")
+    out += sec_vol_clustering(con, cfg, pairs);  print("  [3/5] vol clustering — done")
+    out += sec_imbalance_ic(con, cfg, pairs);    print("  [4/5] imbalance IC — done")
+    out += sec_corr_stability(con, cfg, pairs);  print("  [5/5] corr stability — done")
 
     path = REPO_ROOT / cfg["paths"]["reports"] / "feature_diagnostics.md"
     path.parent.mkdir(parents=True, exist_ok=True)

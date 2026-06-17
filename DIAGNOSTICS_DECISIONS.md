@@ -25,21 +25,31 @@ Kabla ya kubadilisha lolote, tulihakiki kuwa matokeo si artifact ya code:
 
 ---
 
-## 1. Model 1 — Toka Gaussian HMM → **Student-t / vol-standardized**
+## 1. Model 1 — emissions: **conditional normality ndio inayoamua** (sio kurtosis ghafi)
 
-**Report inasema:** D1 log-returns zina **excess kurtosis > 1 kwa 9/9** — kali sana:
-GBPUSD **25.9**, EURGBP 18.0, EURJPY 13.0; skew hasi (crash risk).
+**Report (Section 1) inasema:** D1 log-returns zina **excess kurtosis > 1 kwa 9/9** —
+kali sana: GBPUSD **25.9**, EURGBP 18.0, EURJPY 13.0; skew hasi (crash risk).
 
 **Mtazamo wa awali:** HMM (kwa kawaida Gaussian emissions).
 
-**Kwa nini tubadilishe:** Gaussian inadhani ~99.7% ya data iko ndani ya 3σ. Kwa
-kurtosis 25.9, matukio ya 6σ–10σ hutokea mara nyingi kuliko Gaussian inavyoruhusu.
-Matokeo: HMM ya Gaussian **itaita kila spike "regime mpya"** → states za uongo,
-transitions nyingi za uwongo, regime labels zisizoaminika. Tukijengea Model 2 + R6
-(regime exit) juu ya labels mbovu, mfumo wote unayumba.
+**Hila tuliyokuwa karibu kuikosea:** kurtosis ghafi pekee **HAITHIBITISHI** Student-t,
+kwa sababu **HMM yenye states nyingi ni Gaussian mixture — yenyewe ina fat tails.**
+Sehemu ya kurtosis ghafi inatokana na vol-clustering/regime-switching, sio lazima
+emissions zisizo-normal. (Hili lilibainishwa baada ya swali la Japhet — tulikuwa
+tumeruka kwenye Student-t bila diagnostic ya moja kwa moja.)
 
-**Uamuzi:** HATUA 1 (HMM) itumie **Student-t emissions** AU returns zilizo-standardize
-kwa **rolling volatility** kabla ya HMM. Regime modeling yenyewe **inabaki** (ona #2).
+**Diagnostic sahihi (Section 2 — conditional normality):** standardize returns kwa
+**rolling-vol (20-bar, no-lookahead)** kisha pima kurtosis tena:
+- **Bado fat (excess kurt > 1)** → fat tails ni za kweli → **Student-t emissions.**
+- **Inashuka ~0** → vol-clustering ndio chanzo → **Gaussian HMM + vol-standardized
+  returns inatosha** (model rahisi, hakuna haja ya Student-t).
+
+*Validation ya diagnostic (synthetic): Gaussian safi → vol-std kurt 0.4 (haijaflag);
+fat tails za kweli → vol-std kurt 45 (flagged). Inatofautisha sahihi.*
+
+**Uamuzi:** **UNASUBIRI** matokeo ya Section 2 kwenye data halisi (Japhet ataendesha).
+Kinachothibitika tayari: **regime modeling yenyewe ina msingi** (ona #2) — kinachosubiri
+ni *aina ya emissions* tu.
 
 ---
 
@@ -99,7 +109,7 @@ au **kuzuia trades salama** (pairs zilizoacha kuwa correlated) — kwa kosa.
 
 | # | Eneo | Mtazamo wa awali | Mtazamo mpya (data-driven) |
 |---|------|------------------|----------------------------|
-| 1 | Model 1 emissions | Gaussian HMM | **Student-t / vol-standardized** |
+| 1 | Model 1 emissions | (dhana) Gaussian HMM | **Inasubiri Section 2** (conditional normality): Student-t kama bado fat, vinginevyo Gaussian+vol-scaling |
 | 2 | Model 1 premise | (dhana) regimes zipo | **Imethibitishwa** (ACF r²) |
 | 3 | Model 2 feature | imbalance = order-flow signal | **Si signal kuu** (IC≈0) |
 | 4 | Compliance corr | static groups | **rolling / net-exposure** |
