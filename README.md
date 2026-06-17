@@ -73,6 +73,11 @@ python src\data\eda.py
 python src\data\feature_diagnostics.py
 ```
 
+**6b. Model 1 feature validation** → `reports\model1_feature_validation.md`
+```
+python src\data\feature_validation.py
+```
+
 **7. Test ya no-lookahead** *(lazima ipite)*
 ```
 python tests\test_no_lookahead.py
