@@ -3,6 +3,7 @@
 Mfumo wa kufanya biashara ya forex unaolenga kupita changamoto ya prop firm
 (**FTMO**) kwa pairs 9. Maelezo kamili ya mfumo: **[MFUMO.md](MFUMO.md)**.
 Jinsi ya kupata/kutumia/kutafsiri data: **[DATA_GUIDE.md](DATA_GUIDE.md)**.
+Maamuzi yanayotokana na data (kwa nini tulibadilisha mtazamo): **[DIAGNOSTICS_DECISIONS.md](DIAGNOSTICS_DECISIONS.md)**.
 
 ## Muundo wa mradi
 

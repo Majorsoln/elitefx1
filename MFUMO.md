@@ -79,15 +79,28 @@ data analysis hufanyika.*
     kulingana na FTMO daily reset + rollover. Mfano: D1 inaanza 23:00 UTC (winter) /
     22:00 UTC (summer). Sub-H1 (1m–H1) hazibadiliki (CET offset ni saa kamili).
 - **Tick volume:** `bid_vol`/`ask_vol` zinahifadhiwa kama `tick_count`, `bid_volume`,
-  `ask_volume`, na `volume_imbalance`. Hutumika kama **features** (Model 1: kuthibitisha
-  regime; Model 2: order-flow pressure) na **filter ya liquidity** (kuruka nyakati za
-  tick_count ndogo — rollover/holidays). **Si rule** — ML inazitumia, hazifungui trade.
+  `ask_volume`, na `volume_imbalance`. `tick_count` hutumika kama **filter ya liquidity**
+  (kuruka nyakati za tick ndogo — rollover/holidays). `volume_imbalance`: ona "Matokeo
+  ya diagnostics" hapa chini — **haitabiri** next-bar return (IC≈0). **Si rule** —
+  ML inazitumia, hazifungui trade.
 - **Uhakiki wa ubora:** Hakuna mapengo (gaps) yasiyoelezeka, hakuna lookahead
   (data ya baadaye haitumiki kwenye uamuzi wa sasa), na **spread halisi kwa kila
   pair** (sio thamani moja kwa zote — JPY pairs zina spread kubwa zaidi).
 - **No-trade window (rollover):** EDA imethibitisha spread inapanda mara 3+ wakati
   wa rollover ya broker — saa **23:00 CET** (= 21:00/22:00 UTC kwa DST). Tunaanchor
   kwa **CE(S)T** (broker local), na model haifungui trade dirisha hili.
+- **Matokeo ya diagnostics (uthibitisho wa kitakwimu — `reports/feature_diagnostics.md`):**
+  Kabla ya kujenga model, tulipima *mali za kitakwimu* za data. Matokeo 4 yanayobadilisha mtazamo:
+  1. **Fat tails (9/9):** D1 returns zina excess kurtosis > 1 (GBPUSD **25.9**, EURGBP 18.0,
+     EURJPY 13.0), skew hasi (crash risk). → **Model 1 isitumie Gaussian HMM** — tumia
+     Student-t / standardize kwa rolling-vol.
+  2. **Vol clustering (9/9):** ACF(r)≈0 lakini ACF(r²)=0.10–0.16. → regimes ni **HALISI**;
+     **HMM/Model 1 ina msingi wa kitakwimu.**
+  3. **`volume_imbalance` haitabiri (250k+ bars/pair):** Predictive IC≈0 (−0.001…+0.006),
+     hit-rate < 0.50 kote. Inaakisi move ya bar ya sasa tu (contemporaneous +ve). →
+     **Model 2 isiifanye signal kuu** (ona Sehemu 3).
+  4. **Correlation inabadilika:** jozi 3/6 Δ≥0.20 kati ya 2016–2020 na 2021–2026 (EURJPY–EURGBP
+     inageuza ishara). → Compliance itumie **rolling/net-exposure**, sio groups za static (Sehemu 5).
 - **Lengo la sehemu hii:** Kuhakikisha data ni safi na halisi kabla ya kuijengea
   chochote juu yake. Data mbovu = mfumo mbovu.
 
@@ -123,6 +136,11 @@ HATUA 2 — LightGBM (Supervised)
   Faida:  inatabiri regime ya KESHO, sio ya leo.
           HMM output inakuwa feature moja kati ya nyingi.
 ```
+
+> **Noti ya data (diagnostics, Sehemu 1):** Returns za D1 zina **fat tails kali**
+> (excess kurtosis hadi 25.9) — kwa hiyo **HMM ya Gaussian itakosea**. HATUA 1
+> itumie **Student-t emissions** AU returns zilizo-standardize kwa rolling-vol.
+> Vol clustering (ACF r²=0.10–0.16) imethibitisha regimes ni halisi — msingi wa HMM upo.
 
 **Kwa nini Hybrid?**
 - HMM peke yake inabainisha regime ya **sasa** — haioni mbele.
@@ -202,6 +220,12 @@ HATUA 5 — Duration Regressor (Random Survival Forest)
   Output: predicted_bars_to_target  →  hii NI R7 Time-Stop
           + probability ya kufika target (tp_probability)
 ```
+
+> **Noti ya data (diagnostics, Sehemu 1):** `volume_imbalance` **HAITABIRI** next-bar
+> return (predictive IC≈0, hit-rate < 0.50 kwa bars 250k+/pair). Inaakisi move ya bar
+> ya **sasa** tu. Kwa hiyo **isiwe feature kuu ya HATUA 4.** Inaweza kupimwa upya kama:
+> (a) interaction/non-linear, (b) horizon ndefu, (c) *filter ya confirmation* (sio
+> predictor), (d) conditional kwa regime — lakini **bila ushahidi mpya, isitegemewe.**
 
 ### Output ya Signal (Kamili)
 
@@ -504,6 +528,13 @@ max_correlated_slots: 2   # trades nyingi zaidi kwenye group moja wakati mmoja
 *Kikomo hiki kinabadilishwa kwenye config tu — sio wakati wa biashara. Thamani
 za correlation groups zinahesabiwa kutoka data ya kihistoria na zinasasishwa
 kila robo mwaka.*
+
+> **Noti ya data (diagnostics, Sehemu 1):** Correlation **inabadilika kwa muda** —
+> jozi 3/6 zilihama Δ≥0.20 kati ya 2016–2020 na 2021–2026, na EURJPY–EURGBP iligeuza
+> ishara kabisa (−0.08 → +0.18). Makundi ya static (`USD_group`, `EUR_group` n.k.)
+> **hayaakisi data** (k.m. GBPUSD–EURGBP = −0.64). **Ushauri:** badilisha kuwa
+> **rolling correlation** au **net-currency exposure** (sasisha kila robo, au dynamic),
+> sio makundi ya kudumu yaliyowekwa kwa mkono.
 
 ### Logi ya Kila Uamuzi
 
