@@ -1,23 +1,35 @@
-# === Data (KAMWE haiwekwi git — iko kwenye PC ya Japhet, 26GB) ===
-data/raw/*
-data/interim/*
-data/processed/*
-!data/raw/.gitkeep
-!data/interim/.gitkeep
-!data/processed/.gitkeep
+# ============================================================
+#  .gitignore — EliteFX
+#  Lengo kuu: KAMWE tusipush data ghafi (~26GB) wala virtual env.
+#  Code, config, tests, na muhtasari pekee ndio huenda git.
+# ============================================================
 
-# Ripoti zinazozalishwa kiotomatiki (tunaweka muhtasari tu, sio output zote)
+# === DATA (KAMWE haiwekwi git — iko kwenye PC ya Japhet, ~26GB) ===
+# Zuia KILA kitu ndani ya data/ (subfolders zote, hata mpya), ila .gitkeep za muundo.
+data/**
+!data/
+!data/raw/
+!data/interim/
+!data/processed/
+!data/**/.gitkeep
+
+# === Virtual environments (KAMWE haziwekwi git) ===
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# === Ripoti zinazozalishwa (push muhtasari kwa `git add -f` tu inapohitajika) ===
 reports/*
 !reports/.gitkeep
 
 # === Python ===
 __pycache__/
 *.py[cod]
-.venv/
-venv/
-env/
+*.egg-info/
+.pytest_cache/
 .ipynb_checkpoints/
-.python-version
 
 # === DuckDB / cache ===
 *.duckdb
