@@ -47,9 +47,15 @@ tumeruka kwenye Student-t bila diagnostic ya moja kwa moja.)
 *Validation ya diagnostic (synthetic): Gaussian safi → vol-std kurt 0.4 (haijaflag);
 fat tails za kweli → vol-std kurt 45 (flagged). Inatofautisha sahihi.*
 
-**Uamuzi:** **UNASUBIRI** matokeo ya Section 2 kwenye data halisi (Japhet ataendesha).
-Kinachothibitika tayari: **regime modeling yenyewe ina msingi** (ona #2) — kinachosubiri
-ni *aina ya emissions* tu.
+**Matokeo (data halisi, Section 2):** vol-scaling ilipunguza kurtosis sana (GBPUSD
+25.9→5.1, EURGBP 18→3.5) — kuthibitisha sehemu kubwa ya fat tails ghafi ILIKUWA
+vol-clustering. **LAKINI 8/9 bado zina excess kurtosis > 1** baada ya vol-scaling
+(GBPUSD 5.1, EURJPY 6.3, USDJPY 4.1), na tail exceedance 3–6× Gaussian (3σ), ~1000×+ (5σ).
+
+**Uamuzi (data-backed):** **Student-t emissions zinahitajika** — pamoja na
+**vol-standardized returns** (vol-scaling kwa clustering; Student-t kwa residual fat
+tails). Pure Gaussian ingekosea. *(EURUSD/NZDUSD ni borderline; degrees-of-freedom
+ziwe per-pair.)* Regime modeling yenyewe ina msingi tayari (ona #2).
 
 ---
 
@@ -109,7 +115,7 @@ au **kuzuia trades salama** (pairs zilizoacha kuwa correlated) — kwa kosa.
 
 | # | Eneo | Mtazamo wa awali | Mtazamo mpya (data-driven) |
 |---|------|------------------|----------------------------|
-| 1 | Model 1 emissions | (dhana) Gaussian HMM | **Inasubiri Section 2** (conditional normality): Student-t kama bado fat, vinginevyo Gaussian+vol-scaling |
+| 1 | Model 1 emissions | (dhana) Gaussian HMM | **vol-standardized returns + Student-t** (conditional kurtosis 8/9 bado >1) |
 | 2 | Model 1 premise | (dhana) regimes zipo | **Imethibitishwa** (ACF r²) |
 | 3 | Model 2 feature | imbalance = order-flow signal | **Si signal kuu** (IC≈0) |
 | 4 | Compliance corr | static groups | **rolling / net-exposure** |

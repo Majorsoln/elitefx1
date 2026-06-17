@@ -91,11 +91,11 @@ data analysis hufanyika.*
   kwa **CE(S)T** (broker local), na model haifungui trade dirisha hili.
 - **Matokeo ya diagnostics (uthibitisho wa kitakwimu — `reports/feature_diagnostics.md`):**
   Kabla ya kujenga model, tulipima *mali za kitakwimu* za data. Matokeo 4 yanayobadilisha mtazamo:
-  1. **Fat tails kwenye returns ghafi (9/9):** excess kurtosis > 1 (GBPUSD **25.9**),
-     skew hasi (crash risk). **LAKINI** HMM yenye states nyingi ni Gaussian mixture
-     (yenyewe ina fat tails) — kwa hiyo kurtosis ghafi peke yake hairuhusu kuamua
-     Student-t. → **Uamuzi (Gaussian+vol-scaling vs Student-t) unategemea conditional
-     normality** (kurtosis baada ya kustandardize kwa rolling-vol — Section 2 ya diagnostics).
+  1. **Fat tails — Student-t imethibitishwa kwa conditional normality (8/9):** returns
+     ghafi zina excess kurtosis hadi 25.9, na sehemu kubwa ni vol-clustering (mixture).
+     LAKINI baada ya kustandardize kwa rolling-vol, **8/9 bado zina excess kurtosis > 1**
+     (GBPUSD 5.1, EURJPY 6.3, USDJPY 4.1) na tail exceedance 3–6× Gaussian (3σ), ~1000×+ (5σ).
+     → **Model 1 itumie vol-standardized returns NA Student-t emissions** (sio pure Gaussian).
   2. **Vol clustering (9/9):** ACF(r)≈0 lakini ACF(r²)=0.10–0.16. → regimes ni **HALISI**;
      **HMM/Model 1 ina msingi wa kitakwimu.**
   3. **`volume_imbalance` haitabiri (250k+ bars/pair):** Predictive IC≈0 (−0.001…+0.006),
@@ -139,13 +139,13 @@ HATUA 2 — LightGBM (Supervised)
           HMM output inakuwa feature moja kati ya nyingi.
 ```
 
-> **Noti ya data (diagnostics, Sehemu 1):** Returns za D1 zina **fat tails** kwenye
-> data ghafi (excess kurtosis hadi 25.9). LAKINI HMM ya Gaussian yenye states nyingi
-> ni *mixture* — yenyewe inazalisha fat tails. Kwa hiyo **uamuzi wa emissions unategemea
-> conditional normality**: kustandardize returns kwa rolling-vol kisha kupima kurtosis
-> tena (Section 2 ya diagnostics). Kama **bado fat** → **Student-t**; kama **inashuka ~0**
-> → **Gaussian + vol-standardized returns inatosha** (model rahisi). Vol clustering
-> (ACF r²=0.10–0.16) imethibitisha regimes ni halisi — msingi wa HMM upo bila shaka.
+> **Noti ya data (diagnostics, Sehemu 1) — IMETHIBITISHWA:** returns ghafi zina fat
+> tails (kurtosis hadi 25.9), na conditional-normality test ilionyesha sehemu kubwa ni
+> vol-clustering. LAKINI baada ya kustandardize kwa rolling-vol, **8/9 bado zina excess
+> kurtosis > 1** (GBPUSD 5.1, EURJPY 6.3) na tails 3–6× Gaussian → fat tails za kweli
+> zinabaki. **Uamuzi:** HATUA 1 itumie **vol-standardized returns NA Student-t emissions**
+> (vol-scaling kwa clustering; Student-t kwa residual tails). Vol clustering (ACF r²=
+> 0.10–0.16) imethibitisha regimes ni halisi — msingi wa HMM upo bila shaka.
 
 **Kwa nini Hybrid?**
 - HMM peke yake inabainisha regime ya **sasa** — haioni mbele.
