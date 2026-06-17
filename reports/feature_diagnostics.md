@@ -1,6 +1,6 @@
 # Feature Diagnostics — EliteFX SEHEMU 1
 
-*Imezalishwa: 2026-06-17 22:57 | Uthibitisho wa kitakwimu kabla ya modeling*
+*Imezalishwa: 2026-06-17 22:59 | Uthibitisho wa kitakwimu kabla ya modeling*
 
 ## 1. Distribution Moments (D1 log-returns) — je HMM ya Gaussian ni sahihi?
 
