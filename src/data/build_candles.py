@@ -162,12 +162,31 @@ def _write(con: duckdb.DuckDBPyConnection, sql: str, out_path: Path, label: str)
     return n
 
 
+def assert_raw_tz(con, symbol: str, cfg: dict) -> None:
+    """Hakikisha column ya `timestamp` ya raw ni TIMESTAMP WITH TIME ZONE (instant
+    kamili). build inategemea hii: `timestamp AT TIME ZONE 'UTC'` inatoa UTC sahihi.
+    Kama raw ingekuwa naive (bila tz), conversion ingekosea KIMYA. Tunazuia hapo."""
+    raw_glob = (REPO_ROOT / cfg["paths"]["raw_ticks"] /
+                f"symbol={symbol}" / "**" / "*.parquet")
+    t = con.execute(
+        f"SELECT typeof(timestamp) FROM read_parquet('{_posix(raw_glob)}', "
+        f"union_by_name => true) LIMIT 1"
+    ).fetchone()
+    if t and "TIME ZONE" not in t[0].upper() and "TZ" not in t[0].upper():
+        raise SystemExit(
+            f"HITILAFU TZ: {symbol} 'timestamp' ni '{t[0]}' (si tz-aware). build "
+            f"inatarajia TIMESTAMPTZ. Rekebisha ingest kutumia source_tz="
+            f"'{cfg['timezone']['source_tz']}' kabla ya kuendelea."
+        )
+
+
 def ensure_1m(con, symbol, cfg, force: bool) -> int:
     out = candle_path(symbol, BASE_TF, cfg)
     if out.exists() and not force:
         n = con.execute(f"SELECT COUNT(*) FROM read_parquet('{_posix(out)}')").fetchone()[0]
         print(f"  [{symbol} 1m] ipo tayari ({n:,}) — natumia upya (--force-1m kujenga upya)")
         return n
+    assert_raw_tz(con, symbol, cfg)   # zuia tz mislabel kabla ya kujenga
     return _write(con, build_1m_sql(symbol, cfg), out, f"{symbol} 1m (kutoka ticks)")
 
 

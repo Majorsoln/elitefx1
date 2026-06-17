@@ -133,7 +133,9 @@ USDCHF 7.45 · EURJPY 8.67 · USDJPY 9.11 · GBPUSD 9.15 · AUDUSD 9.96 · NZDUS
 
 ✅ Pata data kupitia `dataset.py` daima.
 ✅ Tumia `shift_for_decision` kwa features za uamuzi (no-lookahead).
-✅ Train kwenye 2016–2024; pima kwenye OOS 2025+ (usichanganye).
+✅ Train kwenye 2016–2024; **2025+ ni HOLDOUT YA MWISHO** (gusa mara moja tu mwishoni).
+   Walk-forward ya Sehemu 7 (train 2016–2022, test 2023–2024) ni validation ya ndani —
+   pitisha `train_oos_split(df, "2022-12-31")`.
 ✅ Chuja rollover (`drop_no_trade`) na liquidity (`min_tick_count`) kwa entry (1m–30m).
 ❌ Usitumie bar inayoendelea kuunda kwenye uamuzi wa wakati halisi.
 ❌ Usichanganye spread ya backtest (Dukascopy) na ya LIVE (FTMO).

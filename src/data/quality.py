@@ -96,6 +96,33 @@ def check_one(con, symbol: str, tf: str, cfg: dict) -> dict | None:
             "nonpos", "spr_mean", "spr_p50", "spr_p95", "spr_max", "n_over_spread",
             "tc_min", "tc_p50", "n_low_liq", "n_gaps", "max_gap_min"]
     r = dict(zip(cols, m))
+
+    # --- Outliers: returns zenye |z-score| > outlier_sigma (mshukiwa, WARN) ---
+    sigma = cfg["quality"].get("outlier_sigma", 8)
+    r["n_outliers"] = con.execute(f"""
+        WITH ret AS (
+            SELECT (close / lag(close) OVER (ORDER BY bar_open) - 1) AS x
+            FROM read_parquet('{src}')),
+        s AS (SELECT AVG(x) mu, STDDEV_SAMP(x) sd FROM ret WHERE x IS NOT NULL)
+        SELECT COUNT(*) FROM ret, s
+        WHERE x IS NOT NULL AND s.sd > 0 AND ABS((x - s.mu) / s.sd) > {sigma}
+    """).fetchone()[0]
+
+    # --- Per-year coverage: siku za biashara / 252, miaka KAMILI tu (acha mwaka
+    #     wa mwisho ulio partial). Flag kama chini ya min_year_coverage. ---
+    min_cov = cfg["quality"].get("min_year_coverage", 0.90)
+    cov = con.execute(f"""
+        WITH yr AS (
+            SELECT EXTRACT(year FROM bar_open) AS y,
+                   COUNT(DISTINCT CAST(bar_open AS DATE)) / 252.0 AS cov
+            FROM read_parquet('{src}') GROUP BY y),
+        mx AS (SELECT MAX(y) my FROM yr)
+        SELECT ROUND(MIN(cov), 2), CAST(arg_min(y, cov) AS BIGINT)
+        FROM yr, mx WHERE y < my
+    """).fetchone()
+    r["min_year_cov"], r["worst_year"] = (cov[0], cov[1]) if cov[0] is not None else (None, None)
+    r["cov_ok"] = r["min_year_cov"] is None or r["min_year_cov"] >= min_cov
+
     r["symbol"], r["tf"] = symbol, tf
     r["pass"] = (r["ohlc_viol"] == 0 and r["nonpos"] == 0 and r["dup_bars"] == 0)
     return r
@@ -146,8 +173,24 @@ def fmt_report(rows: list[dict], cfg: dict) -> str:
         L.append(f"| {r['symbol']} | {r['tf']} | {r['tc_min']} | {r['tc_p50']} "
                  f"| {r['n_low_liq']:,} | {r['n_gaps']} | {r['max_gap_min'] or 0} |")
 
-    L.append("\n---\n*Structural lazima zipite. Spread/liquidity/gaps ni taarifa za "
-             "kuongoza filtering ya model (Sehemu 2 & 3), si sababu ya kushindwa.*")
+    # 5. Outliers & per-year coverage
+    L.append("\n## 5. Outliers (z-score) na Coverage kwa mwaka\n")
+    L.append(f"| Symbol | TF | Outliers (>{cfg['quality'].get('outlier_sigma',8)}σ) "
+             f"| Min year cov | Mwaka mbaya | Coverage ≥ {cfg['quality'].get('min_year_coverage',0.90)} |")
+    L.append("|--------|----|-----------|--------------|-------------|------------------|")
+    for r in rows:
+        cov = "—" if r["min_year_cov"] is None else f"{r['min_year_cov']:.2f}"
+        wy = "—" if r["worst_year"] is None else r["worst_year"]
+        ok = "✅" if r["cov_ok"] else "⚠️ chini"
+        L.append(f"| {r['symbol']} | {r['tf']} | {r['n_outliers']:,} | {cov} | {wy} | {ok} |")
+    L.append(f"\n*Outliers = returns nje ya {cfg['quality'].get('outlier_sigma',8)}σ — "
+             "WACHUNGUZWE (matukio halisi kama Brexit yanaweza kuwa halali, si lazima "
+             "data mbovu). Coverage hupima miaka KAMILI tu (mwaka wa mwisho partial "
+             "umeachwa). Coverage chini ya kizingiti = pengo la data la kuchunguza.*")
+
+    L.append("\n---\n*Structural lazima zipite. Spread/liquidity/gaps/outliers/coverage "
+             "ni taarifa za kuongoza filtering ya model (Sehemu 2 & 3) na kuchunguza "
+             "pengo — si sababu ya kushindwa kiotomatiki.*")
     return "\n".join(L)
 
 

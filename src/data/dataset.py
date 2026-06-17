@@ -110,7 +110,9 @@ def load_candles(
 def train_oos_split(
     df: pl.DataFrame, train_end: str | None = None
 ) -> tuple[pl.DataFrame, pl.DataFrame]:
-    """Gawanya kwa train (≤ train_end) na OOS (> train_end). Default kutoka config."""
+    """Gawanya kwa train (≤ train_end) na OOS (> train_end). Default kutoka config
+    (2024-12-31): OOS = 2025+ ni HOLDOUT YA MWISHO. Kwa walk-forward ya Sehemu 7
+    (train 2016–2022, test 2023–2024), pitisha train_end="2022-12-31"."""
     if train_end is None:
         train_end = config()["date_range"]["train_end"]
     end_date = pl.lit(train_end).str.to_date("%Y-%m-%d")   # siku NZIMA inajumuishwa
