@@ -20,9 +20,13 @@ env/
 ENV/
 .python-version
 
-# === Ripoti zinazozalishwa (push muhtasari kwa `git add -f` tu inapohitajika) ===
-reports/*
-!reports/.gitkeep
+# === Ripoti: FUATILIA muhtasari za markdown (.md) — ni nyepesi, ni rekodi ===
+# Zuia outputs NZITO tu (data dumps, charts), si ripoti za .md.
+reports/*.csv
+reports/*.parquet
+reports/*.png
+reports/*.html
+reports/*.duckdb
 
 # === Python ===
 __pycache__/
