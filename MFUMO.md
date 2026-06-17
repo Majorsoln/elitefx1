@@ -74,7 +74,10 @@ data analysis hufanyika.*
   - **H1–D1** (pamoja na **H2**) → HTF ya Model 1 (Regime, Sehemu 2).
   - *(5m ni nyongeza ya uchambuzi kujaza pengo la microstructure kati ya 1m na 15m.)*
 - **Timezone:** tick data ghafi ni tz-aware (CE(S)T, instant kamili). Tunaibadilisha
-  → **UTC** mara moja kwenye ujenzi wa candles; bar zote & session boundaries ni UTC.
+  → **UTC** mara moja kwenye ujenzi wa candles; timestamps zote zimehifadhiwa UTC.
+  - **HTF day-boundary (D1/H4/H2):** zime-anchor kwa **00:00 CE(S)T** (sio UTC),
+    kulingana na FTMO daily reset + rollover. Mfano: D1 inaanza 23:00 UTC (winter) /
+    22:00 UTC (summer). Sub-H1 (1m–H1) hazibadiliki (CET offset ni saa kamili).
 - **Tick volume:** `bid_vol`/`ask_vol` zinahifadhiwa kama `tick_count`, `bid_volume`,
   `ask_volume`, na `volume_imbalance`. Hutumika kama **features** (Model 1: kuthibitisha
   regime; Model 2: order-flow pressure) na **filter ya liquidity** (kuruka nyakati za

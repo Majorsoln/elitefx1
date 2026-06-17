@@ -35,6 +35,12 @@ CONFIG_PATH = REPO_ROOT / "config" / "data_config.yaml"
 
 BASE_TF = "1m"  # base inajengwa kutoka ticks; zingine zinarollup kutoka hapa
 
+# HTF zinazo-anchor kwa 00:00 CE(S)T (sio UTC) — kulingana na FTMO daily reset
+# + chaguo letu la rollover. Hizi pekee ndizo zinaathirika: kwa kuwa CET offset
+# ni SAA KAMILI, 1m/5m/15m/30m/H1 buckets ni zilezile UTC au CET (hazibadiliki).
+CET_ANCHORED_TF = {"H2", "H4", "D1"}
+BROKER_TZ = "Europe/Berlin"
+
 # TF -> kipimo cha DuckDB INTERVAL
 TF_INTERVAL = {
     "1m":  "INTERVAL 1 MINUTE",
@@ -46,6 +52,18 @@ TF_INTERVAL = {
     "H4":  "INTERVAL 4 HOUR",
     "D1":  "INTERVAL 1 DAY",
 }
+
+
+def bucket_expr(tf: str, col: str = "bar_open") -> str:
+    """SQL ya kuhesabu bucket ya bar. HTF (H2/H4/D1) zime-anchor kwa 00:00 CE(S)T:
+    badilisha UTC->Berlin, bucket kwa siku/saa za Berlin, kisha rudisha label UTC.
+    Nyingine: bucket ya kawaida ya UTC (= CET kwa TF hizi, kwa hiyo hakuna tofauti)."""
+    interval = TF_INTERVAL[tf]
+    if tf in CET_ANCHORED_TF:
+        local = f"(({col} AT TIME ZONE 'UTC') AT TIME ZONE '{BROKER_TZ}')"
+        b = f"time_bucket({interval}, {local}, TIMESTAMP '1970-01-01')"
+        return f"(({b}) AT TIME ZONE '{BROKER_TZ}') AT TIME ZONE 'UTC'"
+    return f"time_bucket({interval}, {col}, TIMESTAMP '1970-01-01')"
 
 
 def load_config() -> dict:
@@ -119,11 +137,10 @@ def build_1m_sql(symbol: str, cfg: dict) -> str:
 # ---------- Hatua 2: rollup kutoka 1m ----------
 def build_rollup_sql(symbol: str, tf: str, cfg: dict) -> str:
     src = _posix(candle_path(symbol, BASE_TF, cfg))
-    interval = TF_INTERVAL[tf]
     return f"""
     WITH base AS (
         SELECT *,
-            time_bucket({interval}, bar_open, TIMESTAMP '1970-01-01') AS nb
+            {bucket_expr(tf)} AS nb
         FROM read_parquet('{src}')
     )
     SELECT

@@ -42,6 +42,8 @@ train, oos = train_oos_split(df)             # 2016–2024 vs 2025+
 3. **LIQUIDITY** — `min_tick_count=N` huondoa bars zenye ticks chache (kelele). Muhimu
    kwa 1m/5m (entry); si lazima kwa H1+.
 4. **UTC** — `bar_open` zote ni UTC. Kwa session/rollover, badilisha → `Europe/Berlin`.
+   **HTF (D1/H4/H2)** zime-anchor kwa **00:00 CE(S)T** (FTMO daily reset): D1 `bar_open`
+   = 23:00 UTC (winter) / 22:00 UTC (summer), sio 00:00 UTC. Sub-H1 hazibadiliki.
 
 ---
 

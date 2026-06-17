@@ -108,13 +108,14 @@ def check_one(con, symbol: str, tf: str, cfg: dict) -> dict | None:
         WHERE x IS NOT NULL AND s.sd > 0 AND ABS((x - s.mu) / s.sd) > {sigma}
     """).fetchone()[0]
 
-    # --- Per-year coverage: siku za biashara / 252, miaka KAMILI tu (acha mwaka
-    #     wa mwisho ulio partial). Flag kama chini ya min_year_coverage. ---
+    # --- Per-year coverage: siku za biashara / 260 (~siku za kazi za FX kwa mwaka),
+    #     miaka KAMILI tu (acha mwaka wa mwisho partial). Flag kama < min_year_coverage.
+    #     260 (sio 252) ni makini zaidi: pengo la 10% (siku ~234) sasa litaonekana. ---
     min_cov = cfg["quality"].get("min_year_coverage", 0.90)
     cov = con.execute(f"""
         WITH yr AS (
             SELECT EXTRACT(year FROM bar_open) AS y,
-                   COUNT(DISTINCT CAST(bar_open AS DATE)) / 252.0 AS cov
+                   COUNT(DISTINCT CAST(bar_open AS DATE)) / 260.0 AS cov
             FROM read_parquet('{src}') GROUP BY y),
         mx AS (SELECT MAX(y) my FROM yr)
         SELECT ROUND(MIN(cov), 2), CAST(arg_min(y, cov) AS BIGINT)

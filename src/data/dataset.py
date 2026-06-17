@@ -100,11 +100,14 @@ def load_candles(
         f'"{c}"' for c in columns if c != "bar_open"
     )
     con = duckdb.connect()
-    con.execute("SET preserve_insertion_order=false")
-    return con.execute(
-        f"SELECT {sel} FROM read_parquet('{src}') "
-        f"WHERE {' AND '.join(where)} ORDER BY bar_open"
-    ).pl()
+    try:
+        con.execute("SET preserve_insertion_order=false")
+        return con.execute(
+            f"SELECT {sel} FROM read_parquet('{src}') "
+            f"WHERE {' AND '.join(where)} ORDER BY bar_open"
+        ).pl()
+    finally:
+        con.close()   # funga connection (load_candles huitwa maelfu ya mara - epuka leak)
 
 
 def train_oos_split(
