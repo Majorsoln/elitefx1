@@ -58,18 +58,28 @@ sessions_utc:
     start: "12:00"
     end: "21:00"
 
-# --- Max spread kwa pair (placeholders — zitakadiriwa kutoka EDA) ---
-# JPY pairs zina spread kubwa zaidi (MFUMO.md). Hizi ni za awali tu.
+# --- No-trade window: rollover (kutoka EDA) ---
+# Spread inapanda mara 3+ wakati wa rollover ya broker. Tunaanchor kwa CE(S)T
+# (broker local) si UTC: rollover ni saa 23:00 CET, inayohama 21:00/22:00 UTC kwa
+# DST. Code itabadilisha bar_open(UTC) -> Europe/Berlin kuangalia saa hizi.
+no_trade_window:
+  tz:    "Europe/Berlin"   # broker local time (DST-aware)
+  hours: [23, 0]           # 23:00–01:00 CET = rollover (+ ukingo); = 21–23 UTC kwa misimu
+
+# --- Max spread kwa pair (DATA-DRIVEN kutoka EDA, pips) ---
+# Hizi ni za BACKTEST (Dukascopy spread) — flag bars zenye spread isiyo ya kawaida
+# (~p95–p99 kwa kila pair). Kizingiti cha LIVE Compliance (Sehemu 5) ni cha FTMO
+# MT5 (pana zaidi) — kitawekwa kando tukiwa na data ya live. Japhet anaweza kurekebisha.
 max_spread_pips:
-  EURUSD: 2.0
-  GBPUSD: 2.5
-  USDJPY: 2.0
-  EURJPY: 3.0
-  USDCAD: 2.5
-  USDCHF: 2.5
-  AUDUSD: 2.0
-  NZDUSD: 2.5
-  EURGBP: 2.5
+  EURUSD: 1.5    # med 0.30, p95 0.65
+  GBPUSD: 3.0    # med 0.88, p95 1.89
+  USDJPY: 2.0    # med 0.39, p95 1.04
+  EURJPY: 3.0    # med 0.72, p95 1.81
+  USDCAD: 3.5    # med 1.15, p95 2.08
+  USDCHF: 3.0    # med 0.99, p95 1.96
+  AUDUSD: 2.5    # med 0.98, p95 1.55
+  NZDUSD: 3.0    # med 1.06, p95 1.84
+  EURGBP: 3.0    # med 0.87, p95 1.91
 
 # --- Vigezo vya quality checks ---
 quality:

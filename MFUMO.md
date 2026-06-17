@@ -82,6 +82,9 @@ data analysis hufanyika.*
 - **Uhakiki wa ubora:** Hakuna mapengo (gaps) yasiyoelezeka, hakuna lookahead
   (data ya baadaye haitumiki kwenye uamuzi wa sasa), na **spread halisi kwa kila
   pair** (sio thamani moja kwa zote — JPY pairs zina spread kubwa zaidi).
+- **No-trade window (rollover):** EDA imethibitisha spread inapanda mara 3+ wakati
+  wa rollover ya broker — saa **23:00 CET** (= 21:00/22:00 UTC kwa DST). Tunaanchor
+  kwa **CE(S)T** (broker local), na model haifungui trade dirisha hili.
 - **Lengo la sehemu hii:** Kuhakikisha data ni safi na halisi kabla ya kuijengea
   chochote juu yake. Data mbovu = mfumo mbovu.
 
