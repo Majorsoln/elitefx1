@@ -107,3 +107,32 @@ multi-bar, kwa sababu k=1 si horizon ya trend features na long-horizon ina spuri
 (2) `volume_imbalance` itolewe; (3) `adx` idemoted; (4) directional features zibaki lakini
 **hazitegemewa kwa mwelekeo** hadi Phase B; (5) mwelekeo wa mwisho unaweza kutegemea zaidi
 **trend-following multi-bar** kuliko next-bar prediction.
+
+---
+
+## 5. Phase B — Directional Edge gate (⚠️ → kuthibitishwa)
+
+Swali la ⚠️ (je mwelekeo una edge?) **halitatuliwi kwa IC ghafi** — next-bar IC≈0, na
+long-horizon IC ina spurious-regression bias (random walk → IC −0.15 @ k20). Jibu definitive
+= **permutation** (MFUMO Sehemu 7, Phase B).
+
+**Harness:** `src/models/direction_edge.py` — kwa kila (pair, tf, signal, holding horizon)
+inapima `mean(sign(signal)·forward_return)` (non-overlapping) dhidi ya **circular-shift
+permutation null** (N=10,000). Circular-shift inahifadhi persistence ya signal NA returns
+lakini inavunja alignment → null yenyewe ina inflation ya spurious → p-value **imede-bias**
+(ndio suluhisho la tatizo la long-horizon). Inatoa `reports/model1_direction_edge.md`.
+
+**Machinery imethibitishwa** (synthetic, `tests/test_direction_edge.py`): planted edge →
+p<0.01; spurious-regression noise (price-vs-EMA persistent dhidi ya random walk) →
+false-positive rate ≈ α. **Hukumu ya data halisi inangoja Japhet kuendesha kwenye candles.**
+
+```
+# PC ya Japhet (candles 26GB):
+python src/models/direction_edge.py
+# Popote (kuthibitisha machinery, numpy tu):
+python src/models/direction_edge.py --self-test
+```
+
+**Gate:** signal/TF yenye ✅ (significant zaidi ya bahati, hit>0.5) → ndiyo chanzo cha
+mwelekeo cha Model 1. Ikikosekana kote → mwelekeo si tradeable kwa trend-following, mfumo
+ufikiriwe upya **KABLA** ya kujenga HMM states / Model 1 / R6 juu yake.
