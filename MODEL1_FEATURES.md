@@ -80,3 +80,30 @@ isijengewe model. Tunajenga Model 1 kwa features **zilizothibitishwa tu**.
 + ujuzi kuwa HMM ni vol-regime detector** — hii ni *misingi* ya best approach. Lakini
 "best approach" KAMILI (states, feature set) inakamilika **wakati wa modeling**, ikitegemea
 **validation ya features hapa chini (#1–#5, #9)** ambayo tunaanza sasa.
+
+---
+
+## 4. Validation Results (`reports/model1_feature_validation.md`)
+
+Rank-IC (Spearman) vs forward returns, no-lookahead, pairs 9, k=1 primary.
+
+| Feature | Aina | Matokeo | Hukumu |
+|---------|------|---------|--------|
+| **`vol`** (volatility) | strength | IC **~0.19, 9/9 pairs, TF zote**, inashikilia k=5 | ⭐ **TUMIA — feature kuu** (inatabiri ukubwa wa move) |
+| `adx` | strength | IC ~0.02–0.03 (3–6/9), inashuka k=5; inarudia vol | 🟡 **demote** (redundant na vol) |
+| `ret` | directional | k=1 IC ~0 (mild mean-rev −0.01…−0.03) | ⚠️ **haijatatuliwa** (Phase B) |
+| `ema_slope` | directional | k=1 IC ~0 (0–3/9) | ⚠️ **haijatatuliwa** (Phase B) |
+| `price_vs_ema` | directional | k=1 IC ~0 (0–2/9) | ⚠️ **haijatatuliwa** (Phase B) |
+| `volume_imbalance` | confirmation | signed IC ≈ 0 (0/9) | 🔴 **DROP** (haifai Model 1) |
+| `tick_count` | confirmation | IC ≈ 0 directional | liquidity filter **tu** |
+
+**Picha kubwa:** inalingana kabisa na diagnostics (ACF r≈0, ACF r²>0): **`vol` inatabiri
+UKUBWA kwa nguvu (9/9), directional features hazitabiri MWELEKEO wa next-bar.** Kwa hiyo
+**Model 1 kimsingi ni VOLATILITY-REGIME detector** (HIGH-VOL vs LOW-VOL inadetectika wazi);
+mwelekeo (UP/DOWN) ni mgumu — swali lake la edge linahitaji **Phase B (Sehemu 7)** kwa
+multi-bar, kwa sababu k=1 si horizon ya trend features na long-horizon ina spurious bias.
+
+**Athari kwa muundo:** (1) regime states zijengwe kuzunguka **volatility** (feature thabiti);
+(2) `volume_imbalance` itolewe; (3) `adx` idemoted; (4) directional features zibaki lakini
+**hazitegemewa kwa mwelekeo** hadi Phase B; (5) mwelekeo wa mwisho unaweza kutegemea zaidi
+**trend-following multi-bar** kuliko next-bar prediction.
