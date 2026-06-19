@@ -148,7 +148,9 @@ kuchanganya masharti haya — mtu hawezi kwa if/else.
 
 | Structure | Aina | Imepimwa? | Grade | Uamuzi |
 |-----------|------|-----------|-------|--------|
-| (zitajazwa kadri tunavyopima) | | ⬜ | — | — |
+| D1/D2 — Multi-TF alignment | directional | ✅ | ❌ | win ~0.50 hata \|align\|=4; **drop kama directional** |
+| B2 — Efficiency Ratio | conditioner | 🔄 inapimwa | — | — |
+| C1 — Volatility | conditioner | 🔄 inapimwa | — | — |
 
 > **Hatua:** tunaanza na **#1 (Multi-TF alignment)**. Kama directional features
 > zikikubaliana pale TF zote zinaelekea upande mmoja → hapo ndipo trend wa kweli.
