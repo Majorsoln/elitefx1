@@ -151,7 +151,7 @@ kuchanganya masharti haya — mtu hawezi kwa if/else.
 | D1/D2 — Multi-TF alignment | directional | ✅ | ❌ | win ~0.50 hata \|align\|=4; drop kama directional |
 | B2 — Efficiency Ratio | conditioner | ✅ | ❌ | Q1–Q4 flat ~0.49; trend safi haisaidii |
 | C1 — Volatility | conditioner | ✅ | ❌ (kwa trend) | high-vol → trend-follow MBAYA (mean-rev tilt) |
-| Fade-extreme (mean-reversion) | directional+cost | 🔄 Test #3 | — | lead pekee; Phase B + spread (D1/H4) |
+| Fade-extreme (mean-reversion) | directional+cost | ✅ | 🟢 partial | **D1 edge:** AUDUSD/EURGBP robust (p=0.0002), GBPUSD/NZDUSD suggestive; H4 eaten by cost. **Thibitisha OOS 2025+.** |
 
 > **Hatua:** tunaanza na **#1 (Multi-TF alignment)**. Kama directional features
 > zikikubaliana pale TF zote zinaelekea upande mmoja → hapo ndipo trend wa kweli.
