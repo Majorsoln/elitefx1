@@ -152,6 +152,7 @@ kuchanganya masharti haya — mtu hawezi kwa if/else.
 | B2 — Efficiency Ratio | conditioner | ✅ | ❌ | Q1–Q4 flat ~0.49; trend safi haisaidii |
 | C1 — Volatility | conditioner | ✅ | ❌ (kwa trend) | high-vol → trend-follow MBAYA (mean-rev tilt) |
 | Fade-extreme (mean-reversion) | directional+cost | ✅ | 🟢 partial | **D1 edge:** AUDUSD/EURGBP robust (p=0.0002), GBPUSD/NZDUSD suggestive; H4 eaten by cost. **Thibitisha OOS 2025+.** |
+| E2 (Position-in-Range) × Volatility | signal×conditioner | 🔄 Test #4 | — | hypothesis: low-vol→mean-rev, high-vol→breakout (washauri A+B) |
 
 > **Hatua:** tunaanza na **#1 (Multi-TF alignment)**. Kama directional features
 > zikikubaliana pale TF zote zinaelekea upande mmoja → hapo ndipo trend wa kweli.
