@@ -16,7 +16,7 @@ Edge ya kweli — kama ipo — iko kwenye **mwelekeo ULIOWEKEWA MASHARTI:** *"tr
 trend ni safi (sio chop), NA TF zinakubaliana, NA regime inaruhusu."* ML inajifunza
 kuchanganya masharti haya — mtu hawezi kwa if/else.
 
-**Kanuni 7 za kuepuka overfit:**
+**Kanuni 8 za kuepuka overfit:**
 1. **Moja-moja:** pima structure moja kwa wakati; usichanganye zote (kitchen-sink = overfit).
 2. **Phase B gate:** kila dai lazima lipite permutation null (vinginevyo ni bahati/spurious).
 3. **Train/OOS:** funza 2016–2024; **2025+ ni holdout — usiguse hadi mwisho.**
@@ -24,6 +24,9 @@ kuchanganya masharti haya — mtu hawezi kwa if/else.
 5. **Kila feature iwe na MANTIKI ya kiuchumi**, sio statistical tu (data-mining = overfit).
 6. **Conditioners** zinapimwa kwa *subset-edge* (sio kutafuta threshold bora — hiyo ni overfit).
 7. **Multiple-testing:** tegemea false positives; hitaji ushahidi ZAIDI ya bahati.
+8. **Meta-overfitting (research process):** kila mbinu/feature mpya tunayojaribu = jaribio
+   jingine. **Hesabu jaribio ZOTE** za mradi mzima; holdout 2025+ ni **takatifu** — gusa
+   mara MOJA mwishoni, bila tuning. (Kujaribu mbinu nyingi = njia ya siri ya overfit.)
 
 **Aina mbili za features (zinapimwa tofauti):**
 - **Directional** — zenyewe zinatabiri mwelekeo. *Pima:* rank-IC vs forward signed return + Phase B.
@@ -91,6 +94,46 @@ kuchanganya masharti haya — mtu hawezi kwa if/else.
 **Acceptance:** STRONG/MOD kwa pairs/TF nyingi ZAIDI ya inavyotarajiwa kwa bahati
 (multiple-testing). Conditioner "inafanya kazi" kama directional-edge kwenye subset
 "nzuri" inazidi ile ya jumla kwa kiasi kinachopita Phase B.
+
+## Maboresho kutoka peer-review (yamekubaliwa)
+
+**Feature construction:**
+- **Vol-normalize directional features** (slope ÷ ATR au rolling-std) → stationarity
+  (ML isichanganye moves kubwa za regime tofauti).
+- **Match window `n` ya feature na target horizon `k`** (usipime usafi wa bars 100 nyuma
+  ukilenga bar 1 mbele).
+- **Hurst / ER / Variance-ratio:** windows **kubwa (100–500)**, jaribu multi-window
+  (20/50/100), angalia **stability**, sio IC tu (zina estimation noise kubwa).
+- **Pick MOJA** ya Hurst/Variance-ratio (zinapima kitu kile kile → multicollinearity).
+- **MTF alignment:** anza **equal-sum** (hakuna free params kuepuka overfit); **acha
+  LightGBM ijifunze weights** — usitune kwa mkono.
+
+**Validation (nyongeza):**
+- **Non-linear:** feature ikifeli rank-IC LAKINI ina mantiki ya kiuchumi → pima
+  **Mutual Information** + kama conditioner (usitupe haraka — rank-IC inakosa non-monotonic).
+- **Stability check:** feature lazima iwe +ve kwa **≥60% ya pairs**, **≥2 TF**, NA thabiti
+  kwenye **sub-periods** (2016–2020 vs 2021–2024) — vinginevyo overfit / regime-decay.
+- **Interaction phase** (baada ya individual + Phase B): pima **trend-edge ndani ya**
+  {high/low ER · high/low vol · aligned/misaligned TF}. **Hapa ndipo edge halisi.**
+
+**Labels (kwa final model):**
+- `k=1` ni clean lakini noisy. Hamia **`sign(Σ returns over k)`** au **Triple-Barrier**
+  (TP/SL kwa ATR + timeout) ili kuondoa noise.
+- **Meta-labeling:** lengo si "UP/DOWN" bali **"je signal itafanya kazi?"** (= conditioner
+  thesis — kila mtu amefika hapa).
+- ⚠️ **Triple-barrier/meta-label = overlapping & path-dependent → LAZIMA Purged + Embargoed
+  CV** (Lopez de Prado), vinginevyo leakage. Pia long-`k` + features persistent =
+  spurious-regression → tumia non-overlapping/permutation (`direction_edge.py`).
+
+**Model:** Logistic (baseline) → **LightGBM** (non-linear interactions + overfit control).
+**Transformer baadaye TU** ikishinda LightGBM kwenye OOS+Phase B (features ndizo leverage).
+
+**Tayari tumeshughulikia (tusihesabu mara mbili):**
+- **MTF lookahead bias:** imetatuliwa kwenye `trend_align.py` (as-of `avail=bar_open+interval`,
+  backward — bar zilizofungwa TU).
+- **Long-horizon spurious-regression bias:** tunajua + tunadhibiti kwa permutation.
+
+---
 
 ## Mpangilio wa kupima (kipaumbele — mantiki kubwa, overfit ndogo)
 
