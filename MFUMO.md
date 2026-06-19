@@ -1,5 +1,10 @@
 # MFUMO WA ELITEFX
 
+> **Nukuu:** Katiba ya sasa ya mfumo (falsafa + architecture, iliyojengwa kwa data)
+> iko **[DOCTRINE.md](DOCTRINE.md)**. Doc hii inahifadhi muundo wa **risk/FTMO**
+> (Sizing Sehemu 4, Compliance Sehemu 5, Trade Mgmt R1–R7 Sehemu 6, FTMO Sehemu 8) —
+> **hazibadiliki.** Sehemu za Model 1/2 (mwelekeo) zinapitiwa upya kwa DOCTRINE.
+
 EliteFX ni mfumo wa kufanya biashara ya forex unaolenga kupita changamoto za
 prop firm — hasa **FTMO** — kwa pairs 9 kuu za forex. Mfumo umejengwa kwa
 **tabaka (layers)** zinazofuatana: kila tabaka lina kazi moja wazi, na linapokea

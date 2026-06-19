@@ -1,10 +1,11 @@
 # EliteFX
 
 Mfumo wa kufanya biashara ya forex unaolenga kupita changamoto ya prop firm
-(**FTMO**) kwa pairs 9. Maelezo kamili ya mfumo: **[MFUMO.md](MFUMO.md)**.
-Jinsi ya kupata/kutumia/kutafsiri data: **[DATA_GUIDE.md](DATA_GUIDE.md)**.
-Maamuzi yanayotokana na data (kwa nini tulibadilisha mtazamo): **[DIAGNOSTICS_DECISIONS.md](DIAGNOSTICS_DECISIONS.md)**.
-Model 1 — feature inventory & validation plan: **[MODEL1_FEATURES.md](MODEL1_FEATURES.md)**.
+(**FTMO**) kwa pairs 9.
+
+- **[DOCTRINE.md](DOCTRINE.md)** — katiba ya mfumo (falsafa, architecture, sheria). **Anza hapa.**
+- **[MFUMO.md](MFUMO.md)** — muundo wa risk/FTMO (Sizing, Compliance, R1–R7).
+- **[DATA_GUIDE.md](DATA_GUIDE.md)** — jinsi ya kupata/kutumia/kutafsiri data.
 
 ## Muundo wa mradi
 
@@ -14,7 +15,8 @@ src/data/      inspect_raw.py, build_candles.py, quality.py, eda.py, dataset.py
 data/          raw / interim / processed   (NJE ya git — iko kwenye PC ya Japhet, ~26GB)
 reports/       data_quality_report.md, eda_report.md   (rekodi; push kwa -f)
 tests/         test_no_lookahead.py
-MFUMO.md       muundo wa mfumo wote (Sehemu 1–9)
+DOCTRINE.md    katiba ya mfumo (falsafa + architecture + sheria)
+MFUMO.md       risk/FTMO framework (Sizing, Compliance, R1–R7)
 DATA_GUIDE.md  how to get / use / interpret data kwa kila eneo
 ```
 
@@ -71,11 +73,6 @@ python src\data\eda.py
 **6. Feature diagnostics** → `reports\feature_diagnostics.md` *(uthibitisho wa kitakwimu)*
 ```
 python src\data\feature_diagnostics.py
-```
-
-**6b. Model 1 feature validation** → `reports\model1_feature_validation.md`
-```
-python src\data\feature_validation.py
 ```
 
 **7. Test ya no-lookahead** *(lazima ipite)*
