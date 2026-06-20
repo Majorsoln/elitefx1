@@ -15,7 +15,7 @@ Tunaongozwa na DOCTRINE.md.*
 | # | Mbinu | Mantiki ya kiuchumi | Pairs zinazofaa | Status |
 |---|-------|---------------------|-----------------|--------|
 | 1 | **Mean-reversion** (fade extreme kutoka mean ndefu) | range-bound pairs huzunguka mean (hakuna macro driver mkali) | range/cross (EURGBP) | ✅ **EURGBP** (EMA100/200) |
-| 2 | **Cross-pair spread MR** (mf. AUDUSD−NZDUSD) | pairs correlated (0.85) → spread yao hu-mean-revert hata kama kila moja haitabiriki | AUDUSD-NZDUSD, EUR/GBP/USD | ⬜ **kipaumbele** |
+| 2 | **Cross-pair spread MR** (mf. AUDUSD−NZDUSD) | pairs correlated (0.85) → spread yao hu-mean-revert hata kama kila moja haitabiriki | AUDUSD-NZDUSD, EUR/GBP/USD | ❌ (net≈0, β-estimated + cost) |
 | 3 | **Breakout** (Donchian range break) | range ikivunjika → vol expansion + momentum | mixed; HIGH-vol regime | ⬜ |
 | 4 | **Structure** (swings HH/LL, position-in-range) | bei inaheshimu levels (sio mistari ya MA) | mixed | ⬜ |
 | 5 | **Regime-switched** (MR low-vol, breakout high-vol) | regime tofauti hupendelea strategy tofauti | zote (kupitia Model 1) | ⬜ |
@@ -37,10 +37,10 @@ Tunaongozwa na DOCTRINE.md.*
 >
 > **Intraday (#9/10/11):** zinatumia 1m–30m + session (tunazo candles, hatujazitumia bado).
 
-## Mpangilio wa kupima (kipaumbele — baada ya kuongeza #9–16)
-1. **#2/#13 Cross-pair spread MR / Correlation Divergence** — wote tumeichagua; mantiki kubwa (corr 0.85), tuna D1 data. **Anza hapa.**
-2. **#16 Volatility Mean-Reversion (EURGBP)** — extension ya haraka ya edge iliyothibitishwa.
-3. **#10/#11 Intraday breakouts** (London/Asian) — mwelekeo mpya, tuna 1m–30m data, tofauti kabisa.
+## Mpangilio wa kupima (kipaumbele)
+1. ~~#2/#13 Cross-pair spread MR~~ — ❌ FAIL (net≈0 baada ya β-estimated + cost).
+2. **#16 Volatility Mean-Reversion (EURGBP)** ⟵ **INAYOFUATA** — extension ya edge iliyothibitishwa.
+3. **#10/#11 Intraday breakouts** (London/Asian) — tuna 1m–30m data, tofauti kabisa.
 4. **#3 Breakout (Donchian D1)** · **#4 Structure** (swings/range position).
 5. **#12 Pullback** · **#14 Commodity trend** (conditional).
 6. **Zinahitaji data ya ziada:** #9 (XAUUSD/NAS100/GBPJPY), #15/#7 (rate data za carry).
