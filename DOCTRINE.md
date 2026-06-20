@@ -142,3 +142,31 @@ ADX, ER, position-in-range, Hurst. Rejea `DATA_GUIDE.md`.
 
 > *Doctrine hii inasasishwa pale tu data mpya inathibitisha. Sio maoni — ni makubaliano
 > yaliyojengwa kwa ushahidi.*
+
+---
+
+## 10. Doctrine Extension V2 — Principles 11–22 (zimepokelewa)
+
+*Kutoka Doctrine_Extension_Research_V2. Zinaongeza/kuimarisha §1.*
+
+| # | Principle | Status |
+|---|-----------|--------|
+| 11 | **Edge ≠ win-rate** → EV, PF, avg-R, MaxDD, frequency, time-to-target, stability | ✅ (eval_exits, strategy_lab) |
+| 12 | **Edge = Quality × Frequency × Stability** | ✅ portfolio frequency |
+| 13 | **Event-centric** (event→outcome, sio condition→outcome) | ✅ strategy_lab (cross_into) |
+| 14 | **State ≠ Transition** (pima tofauti) | 🔄 Priority 2 |
+| 15 | **Location ≠ Intention** | 🔄 Priority 2 |
+| 16 | **Exhaustion lazima itenganishwe na Momentum** (acceleration, vol-expansion, rejection, wick, time-since-extreme) | ⬜ **Priority 2 (kuu)** |
+| 17 | **Regime existence ≠ edge** (signal-with vs signal-without regime) | ✅ partial (conditional_edge: regime haikusaidia fade) |
+| 18 | **Exits ni research object** (entry ileile, exit tofauti) | ✅ eval_exits |
+| 19 | **Multi-TF hierarchy** (D1 context, H1 setup, M15 trigger) | ⬜ Priority 5 |
+| 20 | **Features chache zenye maana** > nyingi (lazima ilete taarifa MPYA) | ✅ kanuni |
+| 21 | **Holdout ni TAKATIFU** (2025+) | ✅ |
+| 22 | **Block bootstrap** > IID | ✅ |
+
+**Research Priorities:** 1=Evaluation upgrade (✅ kiasi) · 2=**Exhaustion vs Momentum (kuu)** ·
+3=Event framework · 4=Regime refinement (expansion/mature/exhaustion) · 5=MTF (D1/H1/M15).
+
+**CORE BELIEF:** *Edge ni adimu. Research haitafuti kuthibitisha hypothesis — inajaribu
+kuibomoa. Hypothesis inayoishi baada ya cost + holdout + walk-forward + block-bootstrap =
+candidate edge.*
