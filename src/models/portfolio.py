@@ -148,7 +148,8 @@ def run(oos):
          f"*Imezalishwa: {datetime.now():%Y-%m-%d %H:%M} | MR-fade event + tp_mean exit | risk "
          f"{RISK_PCT*100:.0f}%/trade | cost imo | EURJPY imeondolewa (ilifeli mr_validate)*\n"]
     # VERDICT juu kabisa
-    L.append(f"## VERDICT: {verdict(pm)}\n")
+    ctx = "" if oos else "  *(IN-SAMPLE — SIO uthibitisho; OOS pekee ndio mwamuzi)*"
+    L.append(f"## VERDICT: {verdict(pm)}{ctx}\n")
     L.append("| Pair | n | EV(R) | PF | win% | total | MaxDD | verdict |")
     L.append("|------|---|-------|----|------|-------|-------|---------|")
     for p in EUR_PAIRS:
