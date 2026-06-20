@@ -22,13 +22,28 @@ Tunaongozwa na DOCTRINE.md.*
 | 6 | **Trend conditional** (momentum ndani ya macro regime) | carry/commodity flows huleta trends za kweli | USDJPY, AUD/NZD/CAD | ⬜ (generic FAILED; conditional untested) |
 | 7 | **Carry** (rate differential) | FX risk premium (documented) | AUDJPY, NZDJPY (high vs low yield) | ⬜ (inahitaji rate data) |
 | 8 | **Session/time-of-day** | liquidity/flow patterns kwa session | intraday (1m–30m) | ⬜ (intraday) |
+| 9 | **Volatility Expansion** (ATR squeeze→expansion) | vol ndogo (squeeze) → expansion + move | JPY-crosses (EURJPY); *GBPJPY/XAUUSD/NAS100 nje ya data* | ⬜ intraday |
+| 10 | **London Open Breakout** | liquidity inaingia London → breakout ya range ya Asia | GBPUSD, EURUSD | ⬜ intraday/session |
+| 11 | **Asian Range Breakout** | range tulivu ya Asia → breakout | EURJPY; *GBPJPY/AUDJPY nje ya data* | ⬜ intraday/session |
+| 12 | **Pullback to Value Area** (trend continuation) | trend hu-pullback kwa value kabla ya kuendelea | USDJPY, EURUSD | ⬜ (trend-refined) |
+| 13 | **Correlation Divergence** ⟵ *= #2* | corr pairs zikitofautiana → zinarudiana | EURUSD–GBPUSD, AUDUSD–NZDUSD | ⬜ **kipaumbele** |
+| 14 | **Commodity-linked Trend** ⟵ *= #6 refined* | commodity flows → trend halisi | AUDUSD, USDCAD, NZDUSD | ⬜ |
+| 15 | **Yield Differential Trend** ⟵ *= #7 carry* | rate differential = FX risk premium | USDJPY; *AUDJPY/NZDJPY nje ya data* | ⬜ (inahitaji rate data) |
+| 16 | **Volatility Mean-Reversion** ⟵ *= #1 conditional* | vol ikiwa extreme → bei inarudi | EURGBP; *EURCHF nje ya data* | ⬜ (extension ya EURGBP) |
 
-## Mpangilio wa kupima (kipaumbele)
-1. **#2 Cross-pair spread MR** — mantiki kubwa (corr 0.85 tunayo), tuna data, tofauti kabisa. **Anza hapa.**
-2. **#3 Breakout** — mbinu tofauti na MR/trend.
-3. **#4 Structure** — price-action, untested.
-4. **#5 Regime-switched** — inatumia Model 1.
-5. #6–#8 baadaye (#7 inahitaji rate data; #8 ni intraday).
+> **Data scope:** pairs zetu 9 = EURUSD, GBPUSD, USDJPY, EURJPY, USDCAD, USDCHF, AUDUSD,
+> NZDUSD, EURGBP. Instruments *nje ya data* (GBPJPY, XAUUSD, NAS100, AUDJPY, EURCHF) zinahitaji
+> kuongeza data (Dukascopy inazo) — tunaweza, ukitaka. Kwa sasa tunapima mbinu kwenye pairs 9.
+>
+> **Intraday (#9/10/11):** zinatumia 1m–30m + session (tunazo candles, hatujazitumia bado).
+
+## Mpangilio wa kupima (kipaumbele — baada ya kuongeza #9–16)
+1. **#2/#13 Cross-pair spread MR / Correlation Divergence** — wote tumeichagua; mantiki kubwa (corr 0.85), tuna D1 data. **Anza hapa.**
+2. **#16 Volatility Mean-Reversion (EURGBP)** — extension ya haraka ya edge iliyothibitishwa.
+3. **#10/#11 Intraday breakouts** (London/Asian) — mwelekeo mpya, tuna 1m–30m data, tofauti kabisa.
+4. **#3 Breakout (Donchian D1)** · **#4 Structure** (swings/range position).
+5. **#12 Pullback** · **#14 Commodity trend** (conditional).
+6. **Zinahitaji data ya ziada:** #9 (XAUUSD/NAS100/GBPJPY), #15/#7 (rate data za carry).
 
 ## Pair → Method map (inajazwa kadri tunavyopima)
 
