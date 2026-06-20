@@ -31,9 +31,10 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 H = 5
-N_PERM = 2000
+N_PERM = 1000
 MIN_N = 35
 EMA_LONG, EMA_SHORT, DONCH, SLOPE_K = 200, 50, 20, 20
+TFS = ["D1", "H4", "H2", "H1"]
 PERIODS = [("P1", 2016, 2020), ("P2", 2021, 2024)]
 TRAIN_END = "2024-12-31"
 
@@ -107,11 +108,11 @@ def robust(pos, F, rng):
 def _pip(s):
     return 0.01 if "JPY" in s.upper() else 0.0001
 
-def features(pair):
+def features(pair, tf):
     import polars as pl
     from data.dataset import load_candles
     c, h, l = pl.col("close"), pl.col("high"), pl.col("low")
-    df = load_candles(pair, "D1", end=TRAIN_END).with_columns(
+    df = load_candles(pair, tf, end=TRAIN_END).with_columns(
         c.ewm_mean(span=EMA_LONG, min_samples=EMA_LONG).alias("ema_l"),
         c.ewm_mean(span=EMA_SHORT, min_samples=EMA_SHORT).alias("ema_s"),
         (c.log() - c.log().shift(1)).alias("ret"),
@@ -141,39 +142,46 @@ def run():
     rng = np.random.default_rng(7)
     pairs = cfg["pairs"]
     grid = {}; survivors = []
-    for p in pairs:
-        try:
-            F = features(p)
-        except FileNotFoundError:
-            continue
-        for name, fn in METHODS.items():
-            res = robust(fn(F), F, rng)
-            grid[(name, p)] = res
-            if res and res[0]:
-                survivors.append((name, p, res[1]))
-        print(f"  {p} done")
-
-    L = ["# Systematic Edge Scan — Method × Pair (D1)\n",
-         f"*Imezalishwa: {datetime.now():%Y-%m-%d %H:%M} | ROBUST(✅)=net>0 + Phase B p<0.05 "
-         f"VIPINDI VYOTE | h={H}, cost imo | combos {len(METHODS)}×{len(pairs)} | 2025+ HAIJAGUSWA*\n",
-         "> ✅=robust survivor; ❌=fail; ·=sample ndogo. Multiple-testing: ~0.13 false ROBUST inatarajiwa.\n"]
-    hdr = "| Method | " + " | ".join(pairs) + " |"
-    L.append(hdr); L.append("|" + "---|" * (len(pairs) + 1))
-    for name in METHODS:
-        cells = []
+    for tf in TFS:
         for p in pairs:
-            r = grid.get((name, p))
-            cells.append("✅" if (r and r[0]) else ("❌" if r else "·"))
-        L.append(f"| {name} | " + " | ".join(cells) + " |")
-    L.append(f"\n**Survivors ({len(survivors)}):** " +
-             (", ".join(f"{n}/{p}" for n, p, _ in survivors) if survivors else "HAKUNA"))
-    L.append("\n---\n*ROBUST inahitaji p<0.05 vipindi VYOTE → stringent (controls multiple-testing). "
-             "Survivors = wagombea wa edge halisi → sub-period + cost zimepita; hatua ya mwisho OOS. "
-             "Methods/pairs ❌ = hakuna edge thabiti. Intraday (#9/10/11), carry (#7/15) hazipo "
-             "hapa (data/handling tofauti).*")
+            try:
+                F = features(p, tf)
+            except FileNotFoundError:
+                continue
+            for name, fn in METHODS.items():
+                res = robust(fn(F), F, rng)
+                grid[(tf, name, p)] = res
+                if res and res[0]:
+                    survivors.append((name, p, tf, res[1]))
+        print(f"  [{tf}] done")
+
+    L = ["# Systematic Edge Scan — Method × Pair × Timeframe\n",
+         f"*Imezalishwa: {datetime.now():%Y-%m-%d %H:%M} | ROBUST(✅)=net>0 + Phase B p<0.05 "
+         f"VIPINDI VYOTE | h={H} bars, cost imo | {len(METHODS)} methods × {len(pairs)} pairs × "
+         f"{len(TFS)} TF | 2025+ HAIJAGUSWA*\n",
+         "> ✅=robust survivor; ❌=fail; ·=sample ndogo. Multiple-testing: stringent (p<0.05 vipindi vyote).\n"]
+    for tf in TFS:
+        L.append(f"\n## {tf}\n")
+        L.append("| Method | " + " | ".join(pairs) + " |")
+        L.append("|" + "---|" * (len(pairs) + 1))
+        for name in METHODS:
+            cells = []
+            for p in pairs:
+                r = grid.get((tf, name, p))
+                cells.append("✅" if (r and r[0]) else ("❌" if r else "·"))
+            L.append(f"| {name} | " + " | ".join(cells) + " |")
+    L.append(f"\n## Survivors ({len(survivors)})\n")
+    if survivors:
+        for n, p, tf, nets in survivors:
+            L.append(f"- **{n} / {p} / {tf}** — net P1={nets[0]:+.5f}, P2={nets[1]:+.5f}")
+    else:
+        L.append("HAKUNA")
+    L.append("\n---\n*ROBUST inahitaji p<0.05 vipindi VYOTE → stringent. Survivors = wagombea wa "
+             "edge → OOS ndio mwisho. Intraday-specific (#9/10/11 session), carry (#7/15 rate "
+             "data) zinahitaji handling tofauti (hazipo hapa). h=5 bars per TF.*")
     out = REPO_ROOT / cfg["paths"]["reports"] / "scan_all.md"
     out.write_text("\n".join(L), encoding="utf-8")
-    print(f"\nSurvivors: {[(n,p) for n,p,_ in survivors]}")
+    print(f"\nSurvivors: {[(n,p,tf) for n,p,tf,_ in survivors]}")
     print(f"Ripoti: {out.relative_to(REPO_ROOT)}")
     return 0
 
