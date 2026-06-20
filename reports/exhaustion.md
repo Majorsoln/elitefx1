@@ -1,15 +1,26 @@
-# Priority 2 — Exhaustion vs Momentum (Quantile EV Curve)
+# Priority 2 — Exhaustion vs Momentum (rank-IC + EV-curve)
 
-*Imezalishwa: 2026-06-20 21:30 | MR-fade entries (EUR pairs), exit tp_mean, cost imo | EV(R) per quantile | baseline EV(all)=+0.092R, n=95 | 2025+ HAIJAGUSWA*
+*Imezalishwa: 2026-06-20 21:49 | MR-fade entries (EUR pairs), exit tp_mean, cost imo | rank-IC (Spearman feature vs R) + EV-curve | 2025+ HAIJAGUSWA*
 
-> Quantile EV-curve KWANZA (sio threshold). Feature ikionyesha STRUCTURE (EV inabadilika monotonic/wazi kwa quantile) = inatenganisha winners/losers. Narrative gain ≠ edge gain.
+> **rank-IC** ndio metric kuu (robust kuliko endpoint-spread). \|IC\|≥~0.06 thabiti kwa TF + n kubwa = structure halisi. Curve jagged + IC≈0 = NOISE → DROP. Narrative ≠ edge.
 
-| Feature | Q1 EV (n) | Q2 | Q3 | Q4 | Q5 | spread Q5−Q1 |
-|---------|-----------|----|----|----|----|--------------|
-| accel | -0.160 (19) | +0.335 (19) | -0.163 (19) | +0.297 (19) | +0.148 (19) | +0.308  ⬅️ |
-| vol_expand | +0.051 (19) | -0.323 (19) | -0.370 (19) | +0.696 (19) | +0.404 (19) | +0.353  ⬅️ |
-| wick_rej *(proxy)* | +0.261 (19) | +0.296 (19) | +0.070 (19) | +0.442 (19) | -0.612 (19) | -0.873  ⬅️ |
-| time_since | +0.062 (14) | -0.103 (23) | +0.084 (19) | +0.044 (18) | +0.482 (19) | +0.420  ⬅️ |
+## rank-IC (feature vs R) kwa TF
+
+| Feature | D1 IC (n) | H4 IC (n) | H1 IC (n) |
+|---------|---|---|---|
+| accel | +0.089 (95) | +0.024 (437) | -0.033 (1575) |
+| vol_expand | +0.130 (95) | -0.048 (437) | -0.042 (1575) |
+| wick_rej *(proxy)* | -0.137 (95) | +0.072 (437) | -0.018 (1575) |
+| time_since | +0.132 (93) | +0.020 (436) | -0.052 (1573) |
+
+## EV-curve (Q1–Q5) — H1 (n=1575, baseline EV=+0.002R)
+
+| Feature | Q1 (n) | Q2 | Q3 | Q4 | Q5 |
+|---------|--------|----|----|----|----|
+| accel | +0.069 (315) | +0.117 (315) | +0.038 (315) | -0.051 (315) | -0.164 (315) |
+| vol_expand | +0.077 (315) | +0.240 (315) | -0.066 (315) | +0.012 (315) | -0.254 (315) |
+| wick_rej | +0.102 (315) | -0.114 (315) | -0.007 (315) | +0.128 (315) | -0.101 (315) |
+| time_since | +0.155 (305) | +0.044 (321) | +0.006 (310) | -0.120 (318) | -0.081 (319) |
 
 ---
-*baseline EV(all entries) = **+0.092R**. Feature INAONGEZA edge kama quantile fulani ina EV **juu zaidi** ya baseline kwa kiasi (⬅️ = spread Q5−Q1 ≥0.15R). Hapo ndipo tutaweza kuchagua quantiles (mf. Q1-Q2=exhaustion) — BAADAYE, kwa ushahidi. Feature isiyo na structure → DROP (hata kama ina mantiki). wick_rej ni PROXY ya rejection (OHLC, sio order flow). Hatua: keep features zenye structure → conditional strategy → OOS.*
+*rank-IC = Spearman(feature, R) — feature INATENGANISHA winners/losers kama \|IC\| ni meaningful NA thabiti kwa TF. Curve jagged + IC≈0 = noise → DROP (hata kama ina mantiki). EV-curve inaonyeshwa kwa TF yenye n kubwa. wick_rej = PROXY ya rejection (OHLC, sio order flow). Keep features zenye IC thabiti → conditional strategy → OOS.*
