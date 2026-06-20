@@ -26,7 +26,7 @@ Tunaongozwa na DOCTRINE.md.*
 | 10 | **London Open Breakout** | liquidity inaingia London → breakout ya range ya Asia | GBPUSD, EURUSD | ⬜ intraday/session |
 | 11 | **Asian Range Breakout** | range tulivu ya Asia → breakout | EURJPY; *GBPJPY/AUDJPY nje ya data* | ⬜ intraday/session |
 | 12 | **Pullback to Value Area** (trend continuation) | trend hu-pullback kwa value kabla ya kuendelea | USDJPY, EURUSD | ⬜ (trend-refined) |
-| 13 | **Correlation Divergence** ⟵ *= #2* | corr pairs zikitofautiana → zinarudiana | EURUSD–GBPUSD, AUDUSD–NZDUSD | ⬜ **kipaumbele** |
+| 13 | **Correlation Divergence** ⟵ *= #2* | corr pairs zikitofautiana → zinarudiana | EURUSD–GBPUSD, AUDUSD–NZDUSD | ❌ (= #2) |
 | 14 | **Commodity-linked Trend** ⟵ *= #6 refined* | commodity flows → trend halisi | AUDUSD, USDCAD, NZDUSD | ⬜ |
 | 15 | **Yield Differential Trend** ⟵ *= #7 carry* | rate differential = FX risk premium | USDJPY; *AUDJPY/NZDJPY nje ya data* | ⬜ (inahitaji rate data) |
 | 16 | **Volatility Mean-Reversion** ⟵ *= #1 conditional* | vol ikiwa extreme → bei inarudi | EURGBP; *EURCHF nje ya data* | ⬜ (extension ya EURGBP) |
