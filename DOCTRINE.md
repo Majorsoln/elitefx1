@@ -15,6 +15,15 @@ exploratory docs zilizopita (zimefutwa; historia iko git). Kanuni kuu:
    conditional probability → chuja uamuzi (trade/skip).**
 3. **Edge inatoka kwenye FILTERING + RISK MANAGEMENT**, sio kwenye utabiri wa direction.
 4. **Kila kitu kinathibitishwa kwa data** kabla ya kujengwa juu yake.
+5. **EVENT-CENTRIC, sio condition-centric.** Soko linazalisha *matukio* (vol-expansion,
+   breakout, failure, stretch, sweep) — sio bars huru. Tafiti **aftermath ya EVENT**, sio
+   "kila bar yenye condition". (Insight ya review — kiini cha edge isiyoonekana.)
+6. **Edge = ENTRY + EXIT.** Exit (hasa kwa mean-reversion) inaweza kueleza sehemu kubwa ya
+   performance. Pima *"entry ileile, exit tofauti"* — sio entry-signal pekee.
+7. **Tathmini kwa EV, sio win-rate:** Expected Value, Profit Factor, avg-R, MaxDD,
+   trades/year, time-to-target. Win-rate pekee inadanganya.
+8. **Regime/feature lazima IONGEZE thamani inayopimika** (MR+regime vs MR-pekee), sio
+   "regime ipo" pekee. (Bila hii: sahihi lakini irrelevant.)
 
 ---
 
