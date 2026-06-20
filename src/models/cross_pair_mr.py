@@ -26,6 +26,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 H = 5
 Z_EXT = 2.0
 WIN = 20
+WIN_BETA = 60          # window ya kukadiria hedge ratio β (rolling OLS, no-lookahead)
 N_PERM = 5000
 MIN_N = 40
 PAIRS = [("AUDUSD", "NZDUSD"), ("EURUSD", "GBPUSD"), ("AUDUSD", "EURUSD")]
@@ -74,8 +75,16 @@ def spread_arrays(A, B):
     dfb = load_candles(B, "D1").select(
         ["bar_open", "close", "spread_mean_pips"]).rename({"close": "cB", "spread_mean_pips": "sB"})
     df = dfa.join(dfb, on="bar_open", how="inner").sort("bar_open")
-    sp = pl.col("cA").log() - pl.col("cB").log()
-    df = df.with_columns(sp.alias("sp"))
+    # logs
+    df = df.with_columns(pl.col("cA").log().alias("la"), pl.col("cB").log().alias("lb"))
+    # rolling hedge ratio beta = Cov(la,lb)/Var(lb) kwa window WIN_BETA (no-lookahead)
+    df = df.with_columns(
+        (((pl.col("la") * pl.col("lb")).rolling_mean(WIN_BETA)
+          - pl.col("la").rolling_mean(WIN_BETA) * pl.col("lb").rolling_mean(WIN_BETA))
+         / ((pl.col("lb") ** 2).rolling_mean(WIN_BETA)
+            - pl.col("lb").rolling_mean(WIN_BETA) ** 2)).alias("beta"))
+    # spread residual = la - beta*lb (cointegration residual, beta iliyokadiriwa)
+    df = df.with_columns((pl.col("la") - pl.col("beta") * pl.col("lb")).alias("sp"))
     df = df.with_columns(
         pl.col("bar_open").dt.year().alias("yr"),
         ((pl.col("sp") - pl.col("sp").rolling_mean(WIN)) / pl.col("sp").rolling_std(WIN)).alias("z"),
@@ -115,9 +124,10 @@ def run():
         a, b = c(r1), c(r2)
         L.append(f"| {A}−{B} | {a[0]} | {a[1]} | {a[2]} | {b[0]} | {b[1]} | {b[2]} "
                  f"| {'✅ ROBUST' if ok else '❌'} |")
-    L.append("\n---\n*✅ ROBUST (net>0 + p<0.05 vipindi VYOTE) = spread MR ni edge halisi → "
-             "inastahili OOS. Stat-arb ni market-neutral (long A, short B). Cost = miguu 2 "
-             "(spread ya pairs zote). β=1 (log-spread); cointegration kamili = hatua ya pili.*")
+    L.append(f"\n---\n*✅ ROBUST (net>0 + p<0.05 vipindi VYOTE) = spread MR ni edge halisi → "
+             "inastahili OOS. Stat-arb market-neutral (long A, short B). Cost = miguu 2. "
+             f"**β imekadiriwa kwa rolling OLS (window {WIN_BETA}, no-lookahead)** — sio β=1 "
+             "tena (kritique ya Japhet). Spread = log(A) − β·log(B) (cointegration residual).*")
     out = REPO_ROOT / cfg["paths"]["reports"] / "cross_pair_mr.md"
     out.write_text("\n".join(L), encoding="utf-8")
     print(f"Ripoti: {out.relative_to(REPO_ROOT)}")
