@@ -4,6 +4,12 @@
 > iko **[DOCTRINE.md](DOCTRINE.md)**. Doc hii inahifadhi muundo wa **risk/FTMO**
 > (Sizing Sehemu 4, Compliance Sehemu 5, Trade Mgmt R1–R7 Sehemu 6, FTMO Sehemu 8) —
 > **hazibadiliki.** Sehemu za Model 1/2 (mwelekeo) zinapitiwa upya kwa DOCTRINE.
+>
+> **⚠️ ILIYOJENGWA vs BLUEPRINT (uwazi — baada ya audit):** Sehemu 2/3 hapa chini
+> (HMM→LightGBM, Autoencoder→DBSCAN→RSF) ni **BLUEPRINT — HAZIJAJENGWA.** Kilichojengwa
+> kweli: (a) `regime.py` = median-split descriptive (SI HMM/LightGBM); (b) "Model 2" =
+> **rule rahisi ya MR-fade ya numpy** (sio ML pipeline). Na **MR-fade ILISHINDWA OOS 2025+**
+> (PF 1.15→0.79). Usisome Sehemu 2/3 kama "iliyopo" — ni mpango. Ukweli wa hali: DOCTRINE §9.
 
 EliteFX ni mfumo wa kufanya biashara ya forex unaolenga kupita changamoto za
 prop firm — hasa **FTMO** — kwa pairs 9 kuu za forex. Mfumo umejengwa kwa

@@ -1,18 +1,19 @@
 """
-portfolio.py — Mfumo halisi: portfolio ya MR edges + FTMO (train MC) + OOS ya mwisho.
+portfolio.py — EUR MR system: TRAIN portfolio FTMO + OOS (holdout). VERDICT-driven.
 
-Edges zilizothibitishwa (baada ya kupima KILA kitu): MR-fade (entry event |pve|≥q80,
-exit tp_mean) kwenye EUR pairs (EURGBP/EURUSD/EURJPY — D1 MR survivors). Risk = 1% R-unit
-(1.5×ATR). Hii ndiyo seti pekee iliyobaki baada ya trend/alignment/stat-arb/transition zote
-kushindwa.
+REKEBISHO (baada ya audit):
+  • BUG ya OOS contamination IMEREKEBISHWA: warmup 2024 inatumika kwa EMA TU; trades
+    zinachujwa entry_date ≥ 2025-01-01 (hakuna 2024/train inayoingia OOS).
+  • Footer/ verdict ni CONDITIONAL kutoka nambari (PASS/FAIL/INCONCLUSIVE), sio template.
+  • EURJPY IMEONDOLEWA (ilifeli mr_validate sub-period ❌ — gate ya KABLA ya OOS).
+  • False precision imepunguzwa; n inaonyeshwa wazi.
 
-Modes:
-  (default)  TRAIN 2016-2024: per-strategy EV/PF + PORTFOLIO FTMO (block-bootstrap, account-level).
-  --oos      OOS 2025-2026/04 (HELDOUT, SHOT MOJA): realized EV/PF/total return per strategy
-             + pooled. = jaribio la mwisho la uaminifu.
+ONYO: holdout 2025+ ni SHOT MOJA. Ikifeli, ni fail — hatupati ku-re-pick portfolio
+baada ya kuiona. Edge mpya inahitaji holdout mpya/iliyobaki.
 
-Endesha:  python src/models/portfolio.py          (train)
-          python src/models/portfolio.py --oos     (final OOS — gusa MARA MOJA)
+Edges: MR-fade (entry EVENT |pve|≥q80, exit tp_mean) — EURGBP (robust), EURUSD (borderline).
+Endesha:  python src/models/portfolio.py        (train)
+          python src/models/portfolio.py --oos   (holdout — shot moja)
 """
 from __future__ import annotations
 
@@ -24,17 +25,19 @@ import numpy as np
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-EUR_PAIRS = ["EURGBP", "EURUSD", "EURJPY"]
+EUR_PAIRS = ["EURGBP", "EURUSD"]            # EURJPY imeondolewa (ilifeli mr_validate)
 EXT_Q = 0.80
 TIMEOUT = 20
 RISK_ATR = 1.5
 RISK_PCT = 0.01
 BLOCK = 8
 N_SIM = 4000
+N_PERM = 2000
 MAX_TRADES = 250
+MIN_VERDICT_N = 30                          # chini ya hii = INCONCLUSIVE
 TARGET, DAILY, TOTAL = 0.10, 0.05, 0.10
 TRAIN = ("2016-01-01", "2024-12-31")
-OOS = ("2025-01-01", "2026-04-30")
+OOS_START = np.datetime64("2025-01-01")
 YEARS_TRAIN = 9
 
 
@@ -43,10 +46,10 @@ def _cross_into(cond):
     return np.where(c & ~np.r_[False, c[:-1]])[0]
 
 
-def gen_trades(close, ema, atr, pve, cost):
-    """MR-fade (event) + tp_mean exit -> array ya R-multiples (chronological)."""
+def gen_trades(bar_open, close, ema, atr, pve, cost):
+    """MR-fade (event) + tp_mean exit -> list ya (entry_date, R)."""
     thr = np.nanquantile(np.abs(pve), EXT_Q)
-    idx = _cross_into(np.abs(pve) >= thr); n = len(close); R = []; last = -1
+    idx = _cross_into(np.abs(pve) >= thr); n = len(close); out = []; last = -1
     for i in idx:
         i = int(i)
         if i <= last or i < 1 or i >= n - 1 or not (np.isfinite(atr[i]) and atr[i] > 0):
@@ -55,12 +58,13 @@ def gen_trades(close, ema, atr, pve, cost):
         for j in range(i + 1, min(i + TIMEOUT, n - 1) + 1):
             if d * (ema[j] - close[j]) <= 0 or d * (close[j] - close[i]) <= -2 * atr[i]:
                 ej = j; break
-        R.append((d * (close[ej] / close[i] - 1) - cost[i]) / (RISK_ATR * atr[i] / close[i]))
-        last = ej
-    return np.array(R)
+        R = (d * (close[ej] / close[i] - 1) - cost[i]) / (RISK_ATR * atr[i] / close[i])
+        out.append((bar_open[i], float(R))); last = ej
+    return out
 
 
 def m_stats(R):
+    R = np.asarray(R)
     if len(R) == 0:
         return None
     w = R[R > 0]; l = R[R < 0]
@@ -70,14 +74,30 @@ def m_stats(R):
                 total=float(eq[-1] - 1), maxdd=dd)
 
 
-def portfolio_mc(pool, rng):
-    if len(pool) < BLOCK + 1:
+def verdict(m):
+    if not m or m["n"] < MIN_VERDICT_N:
+        return f"⚪ INCONCLUSIVE (n={m['n'] if m else 0} < {MIN_VERDICT_N})"
+    return "✅ PASS" if (m["pf"] > 1.2 and m["ev"] > 0) else "❌ FAIL"
+
+
+def perm_p(R, rng):
+    """Phase B: je mean(R) inazidi null ya sign-flip? (random ±1 weights)."""
+    R = np.asarray(R); obs = R.mean(); n = len(R); cnt = 1
+    for _ in range(N_PERM):
+        if (R * rng.choice([-1.0, 1.0], n)).mean() >= obs:
+            cnt += 1
+    return cnt / (N_PERM + 1)
+
+
+def portfolio_mc(R, rng):
+    R = np.asarray(R)
+    if len(R) < BLOCK + 1:
         return None, None
     npass = 0; ttp = []
     for _ in range(N_SIM):
         seq = []
         while len(seq) < MAX_TRADES:
-            s = int(rng.integers(0, len(pool) - BLOCK)); seq.extend(pool[s:s+BLOCK])
+            s = int(rng.integers(0, len(R) - BLOCK)); seq.extend(R[s:s+BLOCK])
         eq = 1.0
         for t, r in enumerate(seq[:MAX_TRADES], 1):
             pnl = RISK_PCT * r
@@ -103,8 +123,8 @@ def arrays(pair, start, end):
         pl.col("tr").ewm_mean(alpha=1/14, min_samples=14).alias("atr"),
         ((c - pl.col("ema")) / pl.col("ema")).alias("pve"),
         (2 * pl.col("spread_mean_pips") * _pip(pair) / c).alias("cost"))
-    d = df.select(["close", "ema", "atr", "pve", "cost"]).drop_nulls()
-    return [d[x].to_numpy() for x in ["close", "ema", "atr", "pve", "cost"]]
+    d = df.select(["bar_open", "close", "ema", "atr", "pve", "cost"]).drop_nulls()
+    return [d[x].to_numpy() for x in ["bar_open", "close", "ema", "atr", "pve", "cost"]]
 
 
 def run(oos):
@@ -113,53 +133,48 @@ def run(oos):
     if not (REPO_ROOT / cfg["paths"]["processed"] / "candles").exists():
         print("HITILAFU: candles hazipo.", file=sys.stderr); return 1
     rng = np.random.default_rng(7)
-    start, end = (OOS if oos else TRAIN)
     label = "OOS 2025–2026/04 (HELDOUT — shot moja)" if oos else "TRAIN 2016–2024"
     per = {}; pool = []
     for p in EUR_PAIRS:
-        # NB: kwa OOS, EMA200 inahitaji warmup — pakia kuanzia 2024 ili 2025 iwe na EMA
-        s = "2024-01-01" if oos else start
-        R = gen_trades(*arrays(p, s, end))
-        if oos:
-            # chuja trades za 2025+ tu (warmup 2024 haihesabiwi) — approx: zote baada ya warmup
-            pass
-        per[p] = m_stats(R); pool.extend(list(R))
-    pool = np.array(pool)
+        s, e = ("2024-01-01", "2026-04-30") if oos else TRAIN
+        trades = gen_trades(*arrays(p, s, e))
+        if oos:   # REKEBISHO: chuja kweli 2025+ (warmup 2024 haihesabiwi)
+            trades = [(dt, r) for dt, r in trades if dt >= OOS_START]
+        R = [r for _, r in trades]
+        per[p] = m_stats(R); pool.extend(R)
 
+    pm = m_stats(pool)
     L = [f"# Portfolio — EUR MR System ({label})\n",
-         f"*Imezalishwa: {datetime.now():%Y-%m-%d %H:%M} | MR-fade + tp_mean exit | risk {RISK_PCT*100:.0f}%/trade "
-         f"(1.5×ATR) | cost imo | {'block-bootstrap FTMO' if not oos else 'realized path'}*\n",
-         "## Per-strategy\n",
-         "| Pair | trades | EV(R) | PF | win% | total ret | MaxDD |",
-         "|------|--------|-------|----|------|-----------|-------|"]
+         f"*Imezalishwa: {datetime.now():%Y-%m-%d %H:%M} | MR-fade event + tp_mean exit | risk "
+         f"{RISK_PCT*100:.0f}%/trade | cost imo | EURJPY imeondolewa (ilifeli mr_validate)*\n"]
+    # VERDICT juu kabisa
+    L.append(f"## VERDICT: {verdict(pm)}\n")
+    L.append("| Pair | n | EV(R) | PF | win% | total | MaxDD | verdict |")
+    L.append("|------|---|-------|----|------|-------|-------|---------|")
     for p in EUR_PAIRS:
         m = per[p]
         if not m:
-            L.append(f"| {p} | 0 | — | — | — | — | — |"); continue
-        L.append(f"| {p} | {m['n']} | {m['ev']:+.3f} | {m['pf']:.2f} | {m['win']*100:.0f}% "
-                 f"| {m['total']*100:+.1f}% | {m['maxdd']*100:.1f}% |")
-    pm = m_stats(pool)
-    L.append(f"\n## Portfolio (EUR MR pooled)\n")
+            L.append(f"| {p} | 0 | — | — | — | — | — | ⚪ |"); continue
+        L.append(f"| {p} | {m['n']} | {m['ev']:+.2f} | {m['pf']:.2f} | {m['win']*100:.0f}% "
+                 f"| {m['total']*100:+.1f}% | {m['maxdd']*100:.1f}% | {verdict(m)} |")
     if pm:
-        L.append(f"- trades={pm['n']}, EV={pm['ev']:+.3f}R, PF={pm['pf']:.2f}, win={pm['win']*100:.0f}%, "
+        L.append(f"\n**Portfolio:** n={pm['n']}, EV={pm['ev']:+.2f}R, PF={pm['pf']:.2f}, "
                  f"total={pm['total']*100:+.1f}%, MaxDD={pm['maxdd']*100:.1f}%")
-    if not oos:
-        pr, ttp = portfolio_mc(pool, rng)
-        tpy = len(pool) / YEARS_TRAIN
+        pp = perm_p(pool, rng)
+        L.append(f"- **Phase B** (permutation null): p = {pp:.3f} "
+                 f"({'edge > bahati' if pp < 0.05 else 'HAIZIDI bahati'})")
+    if not oos and pm:
+        pr, ttp = portfolio_mc(pool, rng); tpy = len(pool) / YEARS_TRAIN
         yrs = f"{ttp/tpy:.1f}" if ttp and tpy else "—"
-        L.append(f"- **portfolio trades/yr ≈ {tpy:.0f}** | **FTMO pass-rate (block-bootstrap): "
-                 f"{pr*100:.1f}%** | median trades→pass {ttp} → **≈ {yrs} years**")
-        L.append("\n---\n*TRAIN: in-sample + portfolio FTMO MC. Hatua ya mwisho = `--oos` (shot moja). "
-                 "Caveat: EUR pairs correlated → Compliance correlation-cap (Sehemu 5) ingepunguza "
-                 "concurrent slots live; MC ya pooled inakadiria frequency juu kidogo.*")
-    else:
-        L.append("\n---\n*OOS = data ISIYOONEKANA (2025+). Realized EV/PF +ve NA inalingana na TRAIN = "
-                 "**edge inadumu out-of-sample** → mfumo halisi. Tofauti kubwa na train = overfit. "
-                 "Hii ndiyo SHOT YA MWISHO ya holdout.*")
-    name = "portfolio_oos.md" if oos else "portfolio_train.md"
-    out = REPO_ROOT / cfg["paths"]["reports"] / name
+        L.append(f"- portfolio trades/yr ≈ {tpy:.0f} | FTMO pass (block-bootstrap) {pr*100:.0f}% "
+                 f"| median trades→pass {ttp} → ≈ {yrs} years")
+    L.append(f"\n---\n*VERDICT inatokana na nambari: PASS = PF>1.2 NA EV>0 NA n≥{MIN_VERDICT_N}; "
+             "vinginevyo FAIL/INCONCLUSIVE. OOS: warmup 2024 (EMA tu) → trades 2025+ TU "
+             "(contamination imerekebishwa). Holdout = SHOT MOJA: ikifeli, ni fail — hatupati "
+             "ku-re-pick. n ndogo OOS = INCONCLUSIVE, sio ushindi.*")
+    out = REPO_ROOT / cfg["paths"]["reports"] / ("portfolio_oos.md" if oos else "portfolio_train.md")
     out.write_text("\n".join(L), encoding="utf-8")
-    print(f"Ripoti: {out.relative_to(REPO_ROOT)}")
+    print(f"VERDICT: {verdict(pm)} | Ripoti: {out.relative_to(REPO_ROOT)}")
     return 0
 
 

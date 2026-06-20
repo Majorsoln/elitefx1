@@ -170,3 +170,36 @@ ADX, ER, position-in-range, Hurst. Rejea `DATA_GUIDE.md`.
 **CORE BELIEF:** *Edge ni adimu. Research haitafuti kuthibitisha hypothesis — inajaribu
 kuibomoa. Hypothesis inayoishi baada ya cost + holdout + walk-forward + block-bootstrap =
 candidate edge.*
+
+---
+
+## 11. HUKUMU YA AUDIT (uwazi — hali halisi)
+
+**OOS VERDICT: ❌ FAIL.** EUR-MR portfolio ilishindwa holdout 2025+ (TRAIN PF 1.15 → OOS
+PF 0.79, EV −0.135R). Per §5.4, hii ni fail. Nidhamu ilifanya kazi — overfit imekamatwa
+kabla ya pesa halisi. (Bonus: OOS ya awali ilikuwa **imechafuliwa** na 2024-warmup trades;
+bug imerekebishwa portfolio.py — chuja entry_date ≥ 2025. Hata baada ya fix, fail inabaki.)
+
+**Holdout 2025+ sasa IMETUMIKA kwa hypothesis ya EUR-MR (imefeli).** Hatupati ku-re-pick
+portfolio baada ya kuona OOS. Edge mpya yoyote inahitaji holdout iliyobaki/mpya.
+
+**Marekebisho ya nidhamu (kutoka audit):**
+- Ripoti zote sasa zinatamka **VERDICT** (PASS/FAIL/INCONCLUSIVE) kutoka nambari — sio template.
+- **EURJPY imeondolewa** (ilifeli `mr_validate` sub-period; haikupaswa kuwa portfolio).
+- **Validator authority:** `mr_validate` (cost + circular-shift perm + sub-period + dedup) ni
+  chanzo cha ukweli; `scan_all` "✅ EURJPY" ilikuwa criterion laini → superseded.
+- **eval_exits.md numbers (EV+0.689) ni STATE-BASED entry (deprecated)** — sio event-centric
+  (§1.5). Portfolio (event-centric) ndio sahihi; usinukuu eval_exits za zamani.
+- **Phase B sasa kwenye portfolio/OOS** (permutation null), sio block-bootstrap pekee.
+
+**META-OVERFITTING TALLY (§6.5):** majaribio ya mradi mzima ≈ scan_all 216 (6×9×4) +
+mr_validate 9 + mr_robustness 27 (9×3) + eval_exits 6 + exhaustion 12 + cross_pair 6 +
+strategy_lab 54 + portfolio = **300+ hypotheses.** Survivors 1–2 (EURGBP imara, EURUSD
+borderline) zinaendana KABISA na false-discovery ya multiple-testing → **OOS fail haishangazi.**
+
+**FREQUENCY (kizuizi cha kimfumo):** EURGBP MR ≈ 7–11 trades/yr → ~miaka 3.7 kufikia +10%.
+Hata edge halisi haitoshi kupita FTMO kwa muda. Sio la kurekebishwa kwa tuning.
+
+**Hitimisho la uaminifu:** Kwenye OHLC (majors 9, hakuna order flow), **HATUNA directional
+edge robust inayodumu OOS.** Imara pekee: vol-regime (risk/sizing). ML iliyoandikwa MFUMO
+Sehemu 2/3 **haijajengwa.** Edge halisi pekee katika trading hapa = **mfumo unaojiambia ukweli.**
