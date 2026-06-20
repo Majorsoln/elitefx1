@@ -1,14 +1,14 @@
-# Method #2/#13 — Cross-pair Spread Mean-Reversion
+# Method #2/#13 — Cross-pair Spread Mean-Reversion (β estimated)
 
-*Imezalishwa: 2026-06-20 14:58 | spread=log(A)−log(B), |z|≥2.0, fade | net baada ya cost (miguu 2) | Phase B N=5000 | sub-period | 2025+ HAIJAGUSWA*
+*Imezalishwa: 2026-06-20 15:07 | s=logA−β·logB (β rolling OLS 60), |z|≥2.0 fade | PnL β ya entry | net baada ya cost (miguu 2) | Phase B N=5000 | sub-period | 2025+ HAIJAGUSWA*
 
-> ROBUST = net>0 NA p<0.05 vipindi VYOTE. Stat-arb: corr pairs' spread hu-mean-revert.
+> ROBUST = net>0 NA p<0.05 vipindi VYOTE. Stat-arb market-neutral (long A, short β·B).
 
 | Spread | P1 n | P1 net | P1 p | P2 n | P2 net | P2 p | Hukumu |
 |--------|------|--------|------|------|--------|------|--------|
-| AUDUSD−NZDUSD | 57 | -0.04372 | 1.000 | 54 | -0.04648 | 1.000 | ❌ |
-| EURUSD−GBPUSD | 57 | -0.02789 | 1.000 | 61 | -0.02692 | 1.000 | ❌ |
-| AUDUSD−EURUSD | 53 | -0.02761 | 1.000 | 53 | -0.02166 | 1.000 | ❌ |
+| AUDUSD−NZDUSD | 57 | -0.00001 | 0.387 | 54 | -0.00091 | 0.590 | ❌ |
+| EURUSD−GBPUSD | 57 | -0.00000 | 0.451 | 61 | +0.00068 | 0.211 | ❌ |
+| AUDUSD−EURUSD | 53 | -0.00032 | 0.401 | 53 | -0.00121 | 0.668 | ❌ |
 
 ---
-*✅ ROBUST (net>0 + p<0.05 vipindi VYOTE) = spread MR ni edge halisi → inastahili OOS. Stat-arb market-neutral (long A, short B). Cost = miguu 2. **β imekadiriwa kwa rolling OLS (window 60, no-lookahead)** — sio β=1 tena (kritique ya Japhet). Spread = log(A) − β·log(B) (cointegration residual).*
+*✅ ROBUST (net>0 + p<0.05 vipindi VYOTE) = spread MR ni edge halisi → OOS. β rolling OLS (window 60, no-lookahead); PnL hutumia β ya ENTRY (sio β inayobadilika). Cost = miguu 2. Market-neutral (long A, short β·B).*
