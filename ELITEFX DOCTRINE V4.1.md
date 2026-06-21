@@ -1,506 +1,423 @@
-````md
-# ELITEFX DOCTRINE V4.1
-## Official Quantitative Research & Trading Intelligence Framework
+# ELITEFX_DOCTRINE_V5.md
 
-**Version:** 4.1 (Chief Quant Approved)
+**Chief Quant Approved — Institutional Research & Trading Framework**
 
-**Status:** Active Research Doctrine
-
-**Purpose:**
-Kujenga mfumo wa kisasa wa Quantitative Trading unaotumia Context Intelligence, Event Analysis, Triple Barrier Outcomes, Trade Lifecycle Management, na Adaptive Capital Allocation badala ya kutegemea direction prediction pekee.
+Version: 5.0
+Status: Official Doctrine
+Authority: Single Source of Truth (SSOT)
+Previous Versions: Archived (V4, V4.1)
 
 ---
 
-# EXECUTIVE SUMMARY
+# PART 1 — PHILOSOPHY
 
-EliteFX haitajengwa kama:
+## 1.1 Core Belief
 
-```text
-Market
-↓
-Prediction
-↓
-Trade
-```
+Market prediction is not the objective.
 
-EliteFX itajengwa kama:
+The objective is:
 
 ```text
-Market
-↓
-Context
-↓
-Opportunity Assessment
-↓
-Trade
-↓
-Lifecycle Management
-↓
-Outcome
-```
-
-Mfumo utajibu maswali yafuatayo:
-
-- Je mazingira ya soko yana ubora?
-- Je trade hii inastahili kufunguliwa?
-- Je trade hii inastahili kuendelea?
-- Je profit ifungiwe?
-- Je risk ipunguzwe?
-- Je trade ifungwe?
-
-Lengo ni kufanya maamuzi bora kuliko trader wa kawaida.
-
----
-
-# PART I
-# CORE PHILOSOPHY
-
----
-
-## Principle 1
-### Market Is A Decision Process
-
-Market si tatizo la:
-
-```text
-BUY
-SELL
-```
-
-pekee.
-
-Market ni mfululizo wa maamuzi:
-
-```text
-ENTER
-
-AVOID
-
-HOLD
-
-REDUCE
-
-LOCK
-
-SCALE
-
-EXIT
-```
-
-Mfumo lazima uweze kusaidia maamuzi yote.
-
----
-
-## Principle 2
-### Context Comes Before Entry
-
-Hakuna signal itakayochukuliwa kabla ya Context.
-
-Mpangilio:
-
-```text
-Context
-↓
-Opportunity
-↓
-Execution
-```
-
-sio:
-
-```text
-Indicator
-↓
-Trade
-```
-
----
-
-## Principle 3
-### Edge Is Multi-Dimensional
-
-Edge haitokani na indicator moja.
-
-Edge hutokana na:
-
-```text
-Context
-
+Positive Expected Value (EV)
 +
-Entry
+Risk Control
++
+Survivability
++
+Scalability
+```
 
+EliteFX does not attempt to predict every market move.
+
+EliteFX seeks to identify situations where:
+
+```text
+Expected Reward
+>
+Expected Risk
+```
+
+after:
+
+* spread
+* commission
+* slippage
+* execution friction
+
+---
+
+## 1.2 Market Reality
+
+Markets are:
+
+* noisy
+* adaptive
+* partially efficient
+* non-stationary
+
+Therefore:
+
+```text
+No pattern is assumed permanent.
+No edge is assumed eternal.
+```
+
+Every hypothesis must earn survival.
+
+---
+
+## 1.3 Scientific Method
+
+Every trading idea is treated as a hypothesis.
+
+Lifecycle:
+
+```text
+Hypothesis
+→ Research
+→ Validation
+→ Deployment
+→ Monitoring
+→ Retirement
+```
+
+No exceptions.
+
+---
+
+## 1.4 Anti-Overfitting Doctrine
+
+Forbidden:
+
+* feature dumping
+* indicator stacking
+* data snooping
+* parameter mining
+* retrospective storytelling
+
+Required:
+
+* holdout
+* walk-forward
+* cost-adjusted evaluation
+* statistical validation
+
+---
+
+# PART 2 — EDGE DOCTRINE
+
+## 2.1 Source of Edge
+
+Edge does NOT come from:
+
+```text
+Event alone
+Regime alone
+ML alone
+Indicators alone
+```
+
+Edge emerges from:
+
+```text
+Event
++
+Context
 +
 Management
-
 +
-Execution Quality
+Risk Allocation
+```
 
+---
+
+## 2.2 Event Is Not Edge
+
+Example:
+
+```text
+Breakout
+```
+
+is not edge.
+
+Example:
+
+```text
+EURGBP
 +
-Capital Allocation
+Range Compression
++
+Breakout Failure
++
+Adaptive Exit
++
+Positive EV
 ```
+
+may become edge.
 
 ---
 
-## Principle 4
-### Outcome Matters More Than Prediction
+## 2.3 ML Is Not Edge
 
-Trader hajali candle inayofuata.
+Machine learning is a ranking tool.
 
-Trader anajali:
+ML cannot create information.
+
+ML can only:
 
 ```text
-Trade itaishia wapi?
+Discover
+Rank
+Estimate
 ```
 
-Kwa hiyo:
-
-```text
-Outcome Prediction
->
-Direction Prediction
-```
+relationships already present.
 
 ---
 
-# PART II
-# CONTEXT ENGINE
+# PART 3 — MARKET ARCHITECTURE
 
----
+## 3.1 Dual Time Framework
 
-## Principle 5
-### Hybrid Time Architecture
+EliteFX recognizes two clocks.
 
-Volume Bars HAZITABADILISHA Calendar Time.
+### Calendar Time
 
-Tutatumia mfumo wa Hybrid Architecture.
+Used for:
 
----
+* sessions
+* weekends
+* macro timing
+* economic releases
 
-### Calendar Context Layer
+### Market Time
 
-Calendar Layer hutumika kwa:
+Used for:
 
-```text
-D1 Trend
+* execution
+* opportunity detection
+* modeling
 
-H4 Structure
-
-H1 Opportunity Context
-
-Sessions
-
-News
-
-Weekend Risk
-```
-
----
-
-### Event Layer
-
-Event Layer hutumika kwa:
+Implemented using:
 
 ```text
 Volume Bars
-
-Tick Bars
-
-Range Bars
-```
-
-kwa:
-
-```text
-Execution
-
-Microstructure
-
-Event Detection
-
-Trade Timing
 ```
 
 ---
 
-### Rationale
+## 3.2 Multi-Scale Market Context
 
-Institutions bado zinafanya maamuzi kwenye:
+Instead of:
 
 ```text
-Daily
-
-4H
-
-1H
+D1
+H4
+H1
 ```
 
-wakati Event Layer inaonyesha activity halisi ya market.
+the preferred architecture is:
 
----
-
-## Principle 6
-### Multi-Timeframe Hierarchy
-
-Timeframes zina roles tofauti.
-
-### D1
-
+```text
 Macro Context
-
-### H4
-
-Structure Context
-
-### H1
-
-Opportunity Context
-
-### Volume Bars
-
+Intermediate Context
 Execution Context
-
----
-
-## Principle 7
-### Regime Is Context, Not Signal
-
-Regime haitoi BUY au SELL.
-
-Regime inaelezea mazingira.
-
-Mfano:
-
-```text
-Trending
-
-Ranging
-
-Compression
-
-Expansion
-
-Exhaustion
-
-Recovery
 ```
 
----
-
-## Principle 8
-### Events Over Indicators
-
-Research itaanza na Events.
-
-Mfano:
+which may be implemented using:
 
 ```text
-Compression
+25000 Volume Bars
+5000 Volume Bars
+1000 Volume Bars
+```
 
-Expansion
+Research may modify exact scales.
 
-Breakout Failure
+---
 
+# PART 4 — REGIME DOCTRINE
+
+## 4.1 Regimes Are Latent
+
+Regimes are not facts.
+
+Regimes are hypotheses.
+
+Possible regimes:
+
+```text
+Trend Expansion
+Trend Mature
+Trend Exhaustion
+Range Compression
+Range Expansion
 Volatility Shock
-
-Pullback
-
-Stretch
-
-Range Escape
-
-Range Rejection
 ```
 
-Badala ya kutegemea indicators pekee.
+---
+
+## 4.2 No Regime Definition Is Sacred
+
+Potential regime definitions:
+
+* ADX
+* Hurst
+* Volatility
+* EMA Slope
+* Market Structure
+
+Research must determine which works.
 
 ---
 
-# PART III
-# VOLUME BAR FRAMEWORK
+## 4.3 Regime Validation Rule
 
----
-
-## Principle 9
-### Market Moves By Activity
-
-Soko halitembei kwa saa.
-
-Soko hutembea kwa activity.
-
-Kwa hiyo:
+Every regime definition must prove:
 
 ```text
-Market Activity
->
-Clock Time
+Predictive usefulness
 ```
 
-kwa execution decisions.
+Otherwise it is discarded.
 
 ---
 
-## Principle 10
-### Volume Bars Are Execution Units
+# PART 5 — EVENT LIBRARY
 
-Volume Bars zitatumika kwa:
+## 5.1 Event Library Principle
+
+Events generate opportunities.
+
+Events do not generate trades.
+
+---
+
+## 5.2 Core Event Library
+
+Derived from KJ_Entries_Exits.
+
+### Event 1
+
+Trend Pullback
+
+### Event 2
+
+Deep Pullback
+
+### Event 3
+
+Breakout
+
+### Event 4
+
+Volatility Breakout
+
+### Event 5
+
+Trend Continuation
+
+### Event 6
+
+Volatility Expansion
+
+### Event 7
+
+News Shock
+
+### Event 8
+
+Mean Reversion
+
+### Event 9
+
+Pattern Completion
+
+---
+
+## 5.3 Experimental Event Library
+
+Examples:
+
+* Liquidity Sweep Proxy
+* Market Structure Shift
+* Compression Release
+* Volatility Collapse
+* Exhaustion Spike
+
+Experimental events must pass validation before promotion.
+
+---
+
+# PART 6 — OPPORTUNITY ENGINE
+
+## 6.1 Objective
+
+Determine:
 
 ```text
-Signal Timing
-
-Event Detection
-
-Execution Quality
-
-Trade Monitoring
+How good is this opportunity?
 ```
 
 ---
 
-## Principle 11
-### Vertical Barrier Uses Event Time
-
-Kwa Volume Bars:
-
-Vertical Barrier haitatumia:
+## 6.2 Inputs
 
 ```text
-20 Hours
+Pair
+Regime
+Event
+Volatility
+Volume
+Structure
+Session
+Calendar Risk
 ```
 
-itatumia:
+---
+
+## 6.3 Output
 
 ```text
-5 Volume Bars
-
-10 Volume Bars
-
-20 Volume Bars
+Opportunity Score
+0.00 → 1.00
 ```
 
-Mfano:
+---
+
+## 6.4 Approval Threshold
+
+Research determines threshold.
+
+Example:
 
 ```text
-Trade ikishindwa kugusa TP au SL
-ndani ya Volume Bars 10
-
-→ Exit
+Score > 0.80
 ```
 
 ---
 
-# PART IV
-# TRIPLE BARRIER FRAMEWORK
+# PART 7 — TRIPLE BARRIER FRAMEWORK
 
----
+## 7.1 Outcome Labeling
 
-## Principle 12
-### Triple Barrier Is The Official Labeling System
-
-Labels zote za ML zitatokana na Triple Barrier.
-
----
-
-### Upper Barrier
-
-Take Profit
-
----
-
-### Lower Barrier
-
-Stop Loss
-
----
-
-### Vertical Barrier
-
-Time Expiry
-
----
-
-Labels:
-
-```text
-+1 = TP First
-
-0 = Time Expiry First
-
--1 = SL First
-```
-
----
-
-## Principle 13
-### Triple Barrier Locking Rule
-
-Mara trade inapofunguliwa:
-
-```text
-Entry Time = t0
-
-Volatility = σ(t0)
-```
-
-TP na SL huhesabiwa mara moja.
-
-Mfano:
-
-```text
-TP = Entry + 2σ
-
-SL = Entry − 1σ
-```
-
----
-
-Baada ya hapo:
+Every event receives:
 
 ```text
 TP
-
 SL
-
-Vertical Barrier
+TIME
 ```
 
-hazibadiliki.
+labels.
 
 ---
 
-### Purpose
+## 7.2 Dynamic Volatility
 
-Kuzuia:
-
-```text
-Look Ahead Bias
-
-Label Corruption
-
-Probability Distortion
-```
-
----
-
-## Principle 14
-### Dynamic Volatility Initialization
-
-Barrier width hutegemea volatility ya wakati wa entry.
-
----
-
-Volatility Sources:
-
-```text
-ATR
-
-Standard Deviation
-
-Realized Volatility
-```
-
----
-
-Formula:
+Barrier width:
 
 ```text
 Barrier Width
@@ -508,668 +425,483 @@ Barrier Width
 k × Volatility
 ```
 
+Volatility calculated at entry.
+
 ---
 
-## Principle 15
-### Volatility-Normalized Outcomes
+## 7.3 Barrier Lock Rule
 
-Model haitajifunza:
+Critical rule:
+
+Once trade opens:
 
 ```text
-30 Pips
+TP
+SL
 ```
 
-Model itajifunza:
+become fixed.
+
+No barrier resizing.
+
+This prevents look-ahead bias.
+
+---
+
+## 7.4 Volume-Bar Vertical Barrier
+
+Time barrier uses:
 
 ```text
-2.5 ATR
-
-1.8σ
-
-3 Volatility Units
+N future volume bars
 ```
 
----
+not clock hours.
 
-# PART V
-# OPPORTUNITY QUALITY ENGINE
-
----
-
-## Principle 16
-### Opportunity Ranking
-
-Kila setup itapata score.
-
-Mfano:
+Example:
 
 ```text
-0.00 → 1.00
-```
-
----
-
-Score inaonyesha:
-
-```text
-Relative Opportunity Quality
+5 volume bars
 ```
 
 ---
 
-## Principle 17
-### Opportunity Must Beat Cost
+# PART 8 — OUTCOME ENGINE
 
-Opportunity Score haitazingatia probability pekee.
+## 8.1 Objective
+
+Estimate:
+
+```text
+P(TP)
+P(SL)
+P(TIME)
+```
+
+---
+
+## 8.2 Expected Value
 
 Formula:
 
 ```text
-Quality Score
+EV
 =
-Expected Edge
-−
-Expected Friction
+P(TP)×Reward
+-
+P(SL)×Risk
 ```
+
+Trade approval depends on EV.
+
+Not win rate.
 
 ---
 
-Mfano:
+## 8.3 Pre-Trade Outcome
 
-```text
-Expected Edge = 0.8R
-
-Cost = 0.1R
-
-Quality = 0.7R
-```
+Used before entry.
 
 ---
 
-# PART VI
-# OUTCOME ENGINE
+## 8.4 In-Trade Outcome
+
+Recalculated after entry.
+
+Used by lifecycle controller.
 
 ---
 
-## Principle 18
-### Outcome Prediction
+# PART 9 — TRADE LIFECYCLE CONTROLLER
 
-Model haitatabiri:
+## 9.1 Controller Principle
 
-```text
-Next Candle
-```
+Health and management are merged.
 
-itatabiri:
-
-```text
-P(TP)
-
-P(SL)
-
-P(Time Expiry)
-```
+No separate conflicting models.
 
 ---
 
-Mfano:
+## 9.2 Controller Actions
+
+Allowed actions:
 
 ```text
-TP = 62%
-
-SL = 23%
-
-TIME = 15%
-```
-
----
-
-## Principle 19
-### Outcome Stability
-
-Outcome lazima ithibitishwe kwenye:
-
-```text
-Different Pairs
-
-Different Regimes
-
-Different Volatility States
-```
-
----
-
-# PART VII
-# TRADE LIFECYCLE CONTROLLER
-
----
-
-## Principle 20
-### Trade Lifecycle Controller
-
-Model D na Model E zimeunganishwa.
-
-Badala ya:
-
-```text
-Health Model
-
-+
-
-Management Model
-```
-
-kutakuwa na:
-
-```text
-Trade Lifecycle Controller
-```
-
----
-
-## Principle 21
-### State Engine
-
-State Engine itafuatilia:
-
-```text
-Trade Health
-
-Volatility Shift
-
-Trend Shift
-
-News Risk
-
-Weekend Risk
-
-Distance To Barrier
-
-Trade Age
-```
-
----
-
-## Principle 22
-### Policy Engine
-
-Policy Engine itaamua:
-
-```text
-KEEP
-
-LOCK
-
+HOLD
 REDUCE
-
-SCALE
-
+LOCK
 EXIT
+REVERSE
 ```
 
 ---
 
-## Principle 23
-### Trade Health Is Dynamic
-
-Trade haitabaki sokoni kwa sababu TP au SL haijafikiwa.
-
-Kila trade itapimwa mara kwa mara.
-
----
-
-# PART VIII
-# MANAGEMENT FRAMEWORK
-
----
-
-## Principle 24
-### Management Is First-Class Research
-
-Research ya management ni sawa na research ya entry.
-
-Tutafanyia kazi:
+## 9.3 Lifecycle Inputs
 
 ```text
-Partial Close
-
-Trailing Stop
-
-Break Even
-
-Time Exit
-
-News Exit
-
-Weekend Exit
-
-Profit Lock
+Updated Outcome Probabilities
+Volatility
+Time In Trade
+News Risk
+Weekend Risk
 ```
 
 ---
 
-## Principle 25
-### Exit Attribution Framework
+# PART 10 — MANAGEMENT FRAMEWORK
 
-Kila Entry Survivor lazima ipitie exits tofauti.
+Available management styles:
 
-Mfano:
-
-```text
-Exit A
-
-Exit B
-
-Exit C
-
-Exit D
-```
-
-ili kubaini:
-
-```text
-Edge ipo kwenye Entry?
-
-au
-
-Edge ipo kwenye Exit?
-```
+* Fixed Target
+* Trailing Stop
+* Partial Exit
+* Breakeven
+* Time Exit
+* News Exit
+* Weekend Exit
 
 ---
 
-## Principle 26
-### Fat Tail Capture
+## 10.1 Management Attribution
 
-Tayari tumethibitisha:
+Every event must be tested against every exit.
+
+Research target:
 
 ```text
-Fat Tails
-
-Volatility Clustering
+Event
+×
+Exit
 ```
 
-zipo.
+matrix.
 
-Kwa hiyo exits lazima ziweze:
+---
+
+# PART 11 — PAIR INTELLIGENCE
+
+## 11.1 Pair Independence Doctrine
+
+No edge is assumed transferable.
+
+Example:
 
 ```text
-Capture Rare Large Winners
-```
-
----
-
-# PART IX
-# TRANSACTION FRICTION MODEL
-
----
-
-## Principle 27
-### Cost Is State Dependent
-
-Cost si constant.
-
-Cost ni sehemu ya state ya market.
-
----
-
-Components:
-
-```text
-Spread
-
-Commission
-
-Slippage
-
-Execution Delay
+EURGBP
+≠
+GBPJPY
+≠
+XAUUSD
 ```
 
 ---
 
-## Principle 28
-### Transaction Friction States
+## 11.2 Pair-Specific Learning
 
-Expected Cost huongezeka wakati wa:
+Every pair receives:
 
 ```text
-NFP
-
-FOMC
-
-News Release
-
-London Open
-
-NY Open
-
-Volatility Shock
+Own Event Statistics
+Own Regime Statistics
+Own Opportunity Statistics
 ```
 
 ---
 
-## Principle 29
-### Cost-Aware Decisions
+# PART 12 — PORTFOLIO CONTROLLER
 
-Signal yoyote lazima ishinde:
+## 12.1 Portfolio Before Execution
+
+Before trade execution:
+
+Portfolio Controller reviews exposure.
+
+---
+
+## 12.2 Hidden Correlation Rule
+
+Example:
 
 ```text
-Expected Cost
+BUY EURUSD
+BUY GBPUSD
+BUY AUDUSD
 ```
 
-kabla ya kuidhinishwa.
-
----
-
-# PART X
-# RISK ALLOCATION ENGINE
-
----
-
-## Principle 30
-### Capital Follows Quality
-
-Risk haitakuwa static.
-
----
-
-Mfano:
+may equal:
 
 ```text
-High Quality Setup
-
-=
-Higher Allocation
+3× USD Short
 ```
 
----
-
-```text
-Low Quality Setup
-
-=
-Lower Allocation
-```
+Controller must detect this.
 
 ---
 
-## Principle 31
-### Portfolio Awareness
+## 12.3 Portfolio Heat
 
-Risk Allocation itazingatia:
+Maximum aggregate risk must be controlled.
+
+---
+
+# PART 13 — RISK ALLOCATION ENGINE
+
+## 13.1 Position Sizing
+
+Based on:
 
 ```text
-Pair Correlation
-
-Current Exposure
-
+EV
+Confidence
+Drawdown
 Portfolio Heat
-
-Drawdown State
 ```
 
 ---
 
-# PART XI
-# MACHINE LEARNING POLICY
+## 13.2 Dynamic Risk
+
+Risk may decrease during drawdowns.
+
+Risk may increase only after validation.
 
 ---
 
-## Principle 32
-### Research Before ML
+# PART 14 — MACHINE LEARNING FRAMEWORK
 
-Kabla ya model yoyote:
+## 14.1 Approved Models
+
+Initial:
+
+* Logistic Regression
+* Random Forest
+* LightGBM
+
+---
+
+## 14.2 Future Models
+
+Allowed after proof:
+
+* Transformers
+* Temporal Fusion Transformers
+* Deep Reinforcement Learning
+
+---
+
+## 14.3 Model Selection Rule
+
+More complex models must outperform simpler models.
+
+Otherwise:
 
 ```text
-Diagnostics First
+Choose simpler model.
 ```
 
 ---
 
-Required:
+# PART 15 — RESEARCH PROTOCOL
+
+## Phase 0
+
+Event Attribution
 
 ```text
-Regime Diagnostics
-
-Event Diagnostics
-
-Volume Bar Diagnostics
-
-Triple Barrier Diagnostics
-
-Cost Diagnostics
+Event
+×
+Pair
+×
+Regime
 ```
 
----
-
-## Principle 33
-### Preferred Models
-
-Order of preference:
+Output:
 
 ```text
-Logistic Regression
-
-Random Forest
-
-LightGBM
+event_outcome_matrix.md
 ```
 
 ---
 
-Advanced Models:
+## Phase 0.5
+
+Event × Exit Attribution
+
+Output:
 
 ```text
-Transformer
-
-LSTM
-
-Deep Learning
+event_exit_matrix.md
 ```
-
-zitafika baada ya proof ya edge.
-
----
-
-## Principle 34
-### Event Class Imbalance Policy
-
-Kwa events adimu:
-
-```text
-Volatility Shock
-
-Breakout Failure
-
-Liquidity Vacuum
-```
-
-hatutatumia SMOTE kama default.
-
-Tutaanza na:
-
-```text
-Class Weighting
-
-Balanced Sampling
-
-Focal Loss
-
-Cost Sensitive Learning
-```
-
----
-
-# PART XII
-# SCIENTIFIC VALIDATION
-
----
-
-## Principle 35
-### Every Hypothesis Must Survive
-
-Kila hypothesis lazima ipitie:
-
-```text
-Transaction Cost
-
-Walk Forward
-
-Out Of Sample
-
-Holdout
-
-Robustness
-```
-
----
-
-## Principle 36
-### False Discovery Control
-
-Lazima tutumie:
-
-```text
-Benjamini-Hochberg FDR
-```
-
----
-
-## Principle 37
-### Performance Reality Check
-
-Lazima tutumie:
-
-```text
-Deflated Sharpe Ratio
-```
-
----
-
-## Principle 38
-### Strategy Reality Check
-
-Lazima tutumie:
-
-```text
-White Reality Check
-```
-
----
-
-## Principle 39
-### Sacred Holdout Rule
-
-Data ya mwisho ya holdout:
-
-```text
-2025+
-```
-
-haitaguswa mpaka strategy ya mwisho iwe tayari.
-
-Shot moja tu.
-
----
-
-# PART XIII
-# RESEARCH ROADMAP
 
 ---
 
 ## Phase 1
 
-Market Diagnostics
-
-```text
-Regime
-
-Volatility
-
-Volume Bars
-
-Triple Barrier
-
-Cost
-```
+Opportunity Engine
 
 ---
 
 ## Phase 2
 
-Outcome Research
-
-```text
-Outcome Stability
-
-Outcome Persistence
-
-Outcome Probability
-```
+Outcome Engine
 
 ---
 
 ## Phase 3
 
-Opportunity Ranking
-
-```text
-Expected Edge
-
-Expected Friction
-
-Expected EV
-```
+Lifecycle Controller
 
 ---
 
 ## Phase 4
 
-Trade Lifecycle Controller
-
-```text
-KEEP
-
-LOCK
-
-REDUCE
-
-EXIT
-```
+Portfolio Controller
 
 ---
 
 ## Phase 5
 
-Risk Allocation
+Deployment
+
+---
+
+# PART 16 — STATISTICAL VALIDATION
+
+Required:
+
+* Walk Forward
+* Holdout
+* Bootstrap
+* Block Bootstrap
+* Multiple Testing Control
+
+---
+
+## Approved Methods
+
+* FDR
+* Benjamini-Hochberg
+* Deflated Sharpe Ratio
+* White Reality Check
+
+---
+
+# PART 17 — HYPOTHESIS KILL FRAMEWORK
+
+## 17.1 Principle
+
+Every hypothesis has a death condition.
+
+---
+
+## 17.2 Kill Criteria
+
+Hypothesis is retired if:
 
 ```text
-Capital Follows Quality
+EV < 0
+
+Walk-forward failure
+
+Holdout failure
+
+Cost destroys edge
+
+Regime instability
+
+Portfolio instability
 ```
 
 ---
 
-# FINAL CHIEF QUANT STATEMENT
+## 17.3 No Emotional Attachment
 
-EliteFX haitajengwa kama predictor wa market.
+Research does not defend hypotheses.
 
-EliteFX itajengwa kama:
+Research attempts to destroy hypotheses.
 
-**Context-Aware Trade Decision Intelligence System**
-
-Mfumo utalenga:
-
-- Kuelewa mazingira ya soko.
-- Kutambua opportunities zenye EV nzuri.
-- Kukadiria outcome probabilities.
-- Kupima gharama halisi za utekelezaji.
-- Kusimamia maisha ya trade kuanzia entry hadi exit.
-- Kusambaza mtaji kulingana na ubora wa opportunity.
-
-Lengo si kujua market itaenda wapi.
-
-Lengo ni kufanya maamuzi bora kuliko trader wa kawaida kwa uthabiti, kwa ushahidi wa takwimu, na kwa nidhamu ya kisayansi.
+Survivors earn deployment.
 
 ---
 
-**END OF ELITEFX DOCTRINE V4.1**
-````
+# PART 18 — TRANSACTION COST MODEL
+
+## 18.1 Cost Is First-Class
+
+Cost is part of reality.
+
+Not post-processing.
+
+---
+
+## 18.2 Dynamic Friction
+
+Transaction cost model includes:
+
+```text
+Spread
+Commission
+Slippage
+Execution Delay
+```
+
+---
+
+## 18.3 Volatility Shock Adjustment
+
+During:
+
+```text
+News
+Expansion
+Volatility Shock
+```
+
+cost assumptions must increase.
+
+---
+
+# PART 19 — PRODUCTION ARCHITECTURE
+
+```text
+Volume Bars
+        ↓
+Event Library
+        ↓
+Context Engine
+        ↓
+Opportunity Engine
+        ↓
+Triple Barrier
+        ↓
+Outcome Engine
+        ↓
+Trade Lifecycle Controller
+        ↓
+Portfolio Controller
+        ↓
+Risk Allocation Engine
+        ↓
+Execution
+```
+
+---
+
+# FINAL PRINCIPLE
+
+```text
+Predict less.
+Measure more.
+
+Assume less.
+Validate more.
+
+Optimize less.
+Generalize more.
+
+Protect capital first.
+Seek edge second.
+Scale only after proof.
+```
+
+**END OF ELITEFX_DOCTRINE_V5.md**
