@@ -52,14 +52,16 @@ def summarize(con, src, month, time_col, vol_cols, out=sys.stdout):
     total_vol = " + ".join(f'COALESCE("{c}", 0)' for c in vol_cols) if vol_cols else "0"
     per_col = ", ".join(f'SUM(COALESCE("{c}",0)) AS "sum_{c}"' for c in vol_cols)
     sel_extra = (", " + per_col) if vol_cols else ""
+    # NB: raw ina partition columns (year/month/day); tunatumia GROUP BY 1 (ordinal)
+    # na alias 'dt' ili kuepuka mgongano na column halisi 'day'.
     q = f"""
-        SELECT strftime("{time_col}", '%Y-%m-%d')                       AS day,
+        SELECT strftime("{time_col}", '%Y-%m-%d')                       AS dt,
                COUNT(*)                                                 AS ticks,
                SUM(CASE WHEN ({total_vol}) > 0 THEN 1 ELSE 0 END)       AS ticks_with_vol
                {sel_extra}
         FROM read_parquet('{src}', union_by_name => true)
         WHERE strftime("{time_col}", '%Y-%m') = '{month}'
-        GROUP BY day ORDER BY day
+        GROUP BY 1 ORDER BY 1
     """
     rows = con.execute(q).fetchall()
     if not rows:
@@ -143,16 +145,18 @@ def self_test():
     con = duckdb.connect()
     con.execute("SET TimeZone='UTC'")
     d = Path(tempfile.mkdtemp()) / "ticks.parquet"
-    # siku 2 za 2024-03, ticks 3/siku; bid_vol/ask_vol > 0
+    # siku 2 za 2024-03, ticks 3/siku; bid_vol/ask_vol > 0.
+    # NB: tunaweka partition columns (day/month/year) kama data halisi ya Hive
+    # ili kunasa mgongano wa GROUP BY (column 'day' dhidi ya alias).
     con.execute(f"""
         COPY (
           SELECT * FROM (VALUES
-            (TIMESTAMPTZ '2024-03-01 10:00:00+00', 1.10, 1.11, 2.0, 3.0),
-            (TIMESTAMPTZ '2024-03-01 10:01:00+00', 1.10, 1.11, 1.0, 1.0),
-            (TIMESTAMPTZ '2024-03-01 10:02:00+00', 1.10, 1.11, 0.0, 0.0),
-            (TIMESTAMPTZ '2024-03-02 09:00:00+00', 1.12, 1.13, 4.0, 5.0),
-            (TIMESTAMPTZ '2024-04-01 09:00:00+00', 1.12, 1.13, 9.0, 9.0)
-          ) t(timestamp, bid, ask, bid_vol, ask_vol)
+            (TIMESTAMPTZ '2024-03-01 10:00:00+00', 1.10, 1.11, 2.0, 3.0, 1, 3, 2024),
+            (TIMESTAMPTZ '2024-03-01 10:01:00+00', 1.10, 1.11, 1.0, 1.0, 1, 3, 2024),
+            (TIMESTAMPTZ '2024-03-01 10:02:00+00', 1.10, 1.11, 0.0, 0.0, 1, 3, 2024),
+            (TIMESTAMPTZ '2024-03-02 09:00:00+00', 1.12, 1.13, 4.0, 5.0, 2, 3, 2024),
+            (TIMESTAMPTZ '2024-04-01 09:00:00+00', 1.12, 1.13, 9.0, 9.0, 1, 4, 2024)
+          ) t(timestamp, bid, ask, bid_vol, ask_vol, day, month, year)
         ) TO '{_posix(d)}' (FORMAT PARQUET)
     """)
     src = _posix(d)
