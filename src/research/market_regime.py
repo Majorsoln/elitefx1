@@ -40,6 +40,7 @@ WIN = 252          # rolling window (~mwaka 1 wa biashara)
 MIN_OBS = 60       # historia ya chini kabla ya kuainisha
 LO_Q, HI_Q = 0.33, 0.67
 WIDE_Q = 0.85
+SMOOTH_ACT = 5     # smoothing ya activity (tick_count) — kuondoa noise ya kila siku
 DEFAULT_PAIR = "EURGBP"      # CQ-009
 
 
@@ -80,6 +81,17 @@ def _atr(h, l, c, n=14):
     return atr
 
 
+def _smooth(x, w):
+    """Trailing mean (bar ya sasa + zilizopita tu -> no-lookahead)."""
+    out = np.full(len(x), np.nan)
+    for i in range(len(x)):
+        seg = x[max(0, i-w+1):i+1]
+        seg = seg[np.isfinite(seg)]
+        if len(seg):
+            out[i] = float(np.mean(seg))
+    return out
+
+
 def _roll_class3(x, win=WIN, lo=LO_Q, hi=HI_Q, min_obs=MIN_OBS):
     """LOW/NORMAL/HIGH kwa rolling terciles za PAST tu (no-lookahead)."""
     out = np.array(["UNKNOWN"] * len(x), dtype=object)
@@ -114,9 +126,10 @@ def classify(bars):
     c = np.array([r[4] for r in b], float); tc = np.array([r[5] for r in b], float)
     spr = np.array([r[6] for r in b], float)
     atr = _atr(h, l, c)
-    return dict(date=d, atr=atr, tc=tc, spr=spr,
+    tc_s = _smooth(tc, SMOOTH_ACT)          # activity smoothed (kuondoa noise ya kila siku)
+    return dict(date=d, atr=atr, tc=tc, tc_smooth=tc_s, spr=spr,
                 volatility_regime=_roll_class3(atr),
-                activity_regime=_roll_class3(tc),
+                activity_regime=_roll_class3(tc_s),
                 spread_regime=_roll_class2(spr))
 
 
@@ -146,10 +159,14 @@ def write_report(sym, R, out_path):
     d = R["date"]
     L = [f"# Market Regime Report — {sym} (PHASE 1, CQ-003)\n",
          f"*{datetime.now():%Y-%m-%d %H:%M} | D1 | no-lookahead rolling (win={WIN}, min={MIN_OBS}) | "
-         f"vol/activity terciles {LO_Q}/{HI_Q} | spread WIDE > p{int(WIDE_Q*100)}*\n",
+         f"vol/activity terciles {LO_Q}/{HI_Q} | activity smoothed {SMOOTH_ACT}d | "
+         f"spread WIDE > p{int(WIDE_Q*100)}*\n",
          f"Bars: {len(d)} | {d[0]} → {d[-1]}\n",
          "> Kila bar imeainishwa kwa distribution ya bars ZILIZOPITA tu — hakuna lookahead. "
          "Hii ndiyo context ambayo KILA event itasomwa ndani yake (CQ-002/003).\n",
+         "> **Noti:** labels ni RELATIVE kwa mwaka uliopita (rolling), sio absolute — "
+         f"'HIGH' = juu ya {int(HI_Q*100)}th percentile ya bars {WIN} zilizopita. Activity "
+         f"ime-smooth-iwa siku {SMOOTH_ACT} (kuondoa noise; volatility/ATR tayari smooth).\n",
          "## Mgawanyo wa regime\n",
          "| Dimension | LOW/NORMAL | NORMAL | HIGH/WIDE | n |",
          "|-----------|-----------|--------|-----------|---|"]
@@ -186,7 +203,8 @@ def save_series(sym, R, c_cfg):
     import polars as pl
     df = pl.DataFrame({
         "date": [str(x) for x in R["date"]],
-        "atr": R["atr"], "tick_count": R["tc"], "spread_med": R["spr"],
+        "atr": R["atr"], "tick_count": R["tc"], "tick_count_smooth": R["tc_smooth"],
+        "spread_med": R["spr"],
         "volatility_regime": list(R["volatility_regime"]),
         "activity_regime": list(R["activity_regime"]),
         "spread_regime": list(R["spread_regime"]),
@@ -243,7 +261,16 @@ def self_test():
     print(f"vol dist L/N/H = {vd['LOW'][0]}/{vd['NORMAL'][0]}/{vd['HIGH'][0]} | "
           f"cluster HIGH hits {hi_hits}/{len(hi_idx)}")
     print(f"activity HIGH% = {ad['HIGH'][1]*100:.0f}%")
-    ok = (vn > 200 and hi_hits > len(hi_idx)*0.6 and vd["HIGH"][0] > 0 and vd["LOW"][0] > 0)
+    # thibitisha smoothing inaongeza persistence ya activity:
+    # slow cycle (regime halisi, dispersion ya kweli) + white noise nzito.
+    tt = np.arange(500)
+    slow = 12000 + 8000 * np.sin(tt / 40.0)            # regime cycles (terciles zina maana)
+    noisy = slow + rng.normal(0, 4000, 500)            # noise nzito -> raw inaruka
+    pers_raw = _persistence(_roll_class3(noisy))
+    pers_sm = _persistence(_roll_class3(_smooth(noisy, SMOOTH_ACT)))
+    print(f"activity persistence: raw={pers_raw:.1f} -> smoothed={pers_sm:.1f}")
+    ok = (vn > 200 and hi_hits > len(hi_idx)*0.6 and vd["HIGH"][0] > 0 and vd["LOW"][0] > 0
+          and pers_sm > pers_raw)
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
