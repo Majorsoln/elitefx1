@@ -1,8 +1,8 @@
-# Regime Transition Report — INTENTION (Phase 1, Chief Priority 1)
+# Regime Transition Report — INTENTION (Phase 1.5, CQ-011)
 
-*2026-06-22 20:07 | P(state_t -> state_t+1) bar-to-bar | chanzo: market_state_engine state series | no UNKNOWN*
+*2026-06-22 22:15 | P(state_t -> state_t+1) bar-to-bar | chanzo: market_state_engine state series | no UNKNOWN*
 
-> Market State = LOCATION (soko liko wapi). Transition = INTENTION (linaenda wapi). P(stay) = memory; P(escalate) = kupanda; P(revert) = kushuka.
+> Market State = LOCATION (soko liko wapi). Transition = INTENTION (linaenda wapi). P(stay) = memory; P(escalate) = kupanda; P(revert) = kushuka. Joint = vol+act+spr pamoja.
 
 
 ## VOLATILITY — P(from → to) %
@@ -128,5 +128,77 @@
 | EURGBP | H4 | 15,895 | 89 | 11 | 51 | 49 | 69 | 6 | 25 |
 | EURGBP | D1 | 2,532 | 91 | 9 | 53 | 47 | 69 | 4 | 27 |
 
+## JOINT STATE — vol+act+spr (code: V A S, h.m. LLN = LOW vol, LOW act, NORMAL spr)
+
+*Joint P(stay) = soko linabaki kwenye joint state ileile bar inayofuata. n_states = joint states tofauti zilizoonekana.*
+
+| Pair | TF | n_states | joint P(stay) | modal state (freq%) |
+|------|----|----------|---------------|---------------------|
+| EURUSD | H1 | 18 | 49% | HHN (14%) |
+| EURUSD | H2 | 18 | 45% | LLN (15%) |
+| EURUSD | H4 | 18 | 44% | LLN (15%) |
+| EURUSD | D1 | 18 | 45% | LLN (15%) |
+| GBPUSD | H1 | 18 | 48% | LLN (15%) |
+| GBPUSD | H2 | 18 | 45% | LLN (15%) |
+| GBPUSD | H4 | 18 | 44% | LLN (16%) |
+| GBPUSD | D1 | 18 | 50% | LLN (16%) |
+| USDJPY | H1 | 18 | 50% | LLN (17%) |
+| USDJPY | H2 | 18 | 46% | LLN (17%) |
+| USDJPY | H4 | 18 | 46% | LLN (17%) |
+| USDJPY | D1 | 18 | 48% | LLN (17%) |
+| EURJPY | H1 | 18 | 51% | LLN (15%) |
+| EURJPY | H2 | 18 | 47% | LLN (15%) |
+| EURJPY | H4 | 18 | 46% | LLN (16%) |
+| EURJPY | D1 | 18 | 47% | LLN (16%) |
+| USDCAD | H1 | 18 | 48% | HHN (14%) |
+| USDCAD | H2 | 18 | 44% | LLN (14%) |
+| USDCAD | H4 | 18 | 43% | LLN (15%) |
+| USDCAD | D1 | 18 | 47% | HHN (15%) |
+| USDCHF | H1 | 18 | 47% | LLN (15%) |
+| USDCHF | H2 | 18 | 44% | LLN (15%) |
+| USDCHF | H4 | 18 | 41% | LLN (15%) |
+| USDCHF | D1 | 18 | 41% | HHN (16%) |
+| AUDUSD | H1 | 18 | 49% | HHN (15%) |
+| AUDUSD | H2 | 18 | 45% | HHN (15%) |
+| AUDUSD | H4 | 18 | 44% | LLN (15%) |
+| AUDUSD | D1 | 18 | 46% | HHN (15%) |
+| NZDUSD | H1 | 18 | 47% | LLN (14%) |
+| NZDUSD | H2 | 18 | 43% | HHN (14%) |
+| NZDUSD | H4 | 18 | 42% | LLN (14%) |
+| NZDUSD | D1 | 18 | 44% | LLN (14%) |
+| EURGBP | H1 | 18 | 48% | LLN (15%) |
+| EURGBP | H2 | 18 | 45% | LLN (14%) |
+| EURGBP | H4 | 18 | 42% | LLN (15%) |
+| EURGBP | D1 | 18 | 48% | LLN (15%) |
+
+## JOINT deep-dive — EURGBP (top joint states + zinakoenda)
+
+| TF | joint | freq% | P(stay) | →top (≠self) | →top% |
+|----|-------|-------|---------|--------------|-------|
+| H1 | LLN | 15% | 66% | LNN | 18% |
+| H1 | HHN | 13% | 59% | HNN | 20% |
+| H1 | NNN | 11% | 42% | NLN | 20% |
+| H1 | LNN | 9% | 44% | LLN | 30% |
+| H1 | NLN | 8% | 49% | NNN | 22% |
+| H1 | NHN | 8% | 48% | NNN | 26% |
+| H2 | LLN | 14% | 63% | LNN | 19% |
+| H2 | HHN | 12% | 55% | HNN | 20% |
+| H2 | NNN | 10% | 40% | NLN | 19% |
+| H2 | LNN | 9% | 43% | LLN | 29% |
+| H2 | NHN | 8% | 46% | NNN | 26% |
+| H2 | HNN | 8% | 35% | HHN | 25% |
+| H4 | LLN | 15% | 62% | LNN | 20% |
+| H4 | HHN | 12% | 53% | HNN | 21% |
+| H4 | NNN | 11% | 38% | NLN | 22% |
+| H4 | LNN | 9% | 39% | LLN | 33% |
+| H4 | HNN | 8% | 34% | HHN | 23% |
+| H4 | NLN | 8% | 44% | NNN | 23% |
+| D1 | LLN | 15% | 66% | LNN | 17% |
+| D1 | HHN | 14% | 59% | HNN | 22% |
+| D1 | NNN | 12% | 44% | NLN | 16% |
+| D1 | NHN | 10% | 54% | NNN | 23% |
+| D1 | HNN | 9% | 38% | HHN | 25% |
+| D1 | LNN | 9% | 41% | LLN | 25% |
+
 ---
-*P(stay) kubwa = state ina MEMORY (persistence). esc/rev = mwelekeo soko linapobadilika. Hii = INTENTION layer. Inayofuata: state_half_life -> volume_bars -> Event Diagnostics (event NDANI ya state, sio peke yake). Metric = EV (CQ-008).*
+*Per-dim P(stay) = MEMORY; esc/rev = mwelekeo. JOINT inajibu 'state kamili (vol+act+spr) inaenda wapi' — ndio swali la Chief (HIGH inaweza kuwa LOW→HIGH expansion, HIGH→HIGH mature, au HIGH→LOW exhaustion). Hii = INTENTION layer. Phase 2: Adaptive Volume Bars (imejengwa, inasubiri). Metric = EV (CQ-008).*
