@@ -1,47 +1,54 @@
 """
-market_regime.py — PHASE 1 (CQ-003). Market Regime Engine.
+market_regime.py — PHASE 1 (CQ-003). Market Regime Engine — pairs ZOTE × TF ZOTE.
 
-"Hakuna event itakayosomwa nje ya regime." Engine hii inaainisha KILA bar (D1)
-kwa regime tatu, kutoka metrics zilezile zilizothibitishwa na reports za Phase 0:
+"Hakuna event itakayosomwa nje ya regime." Engine inaainisha KILA bar (kwa kila
+TF muhimu) kwa regime tatu:
 
-  • volatility_regime : LOW | NORMAL | HIGH   (ATR(14), terciles 33/67)
-  • activity_regime   : LOW | NORMAL | HIGH   (tick_count, terciles 33/67)
-  • spread_regime     : NORMAL | WIDE          (median spread, > p85 = WIDE)
+  • volatility_regime : LOW | NORMAL | HIGH   (ATR(14))
+  • activity_regime   : LOW | NORMAL | HIGH   (tick_count)
+  • spread_regime     : NORMAL | WIDE          (median spread)
 
-NIDHAMU (no-lookahead): kila bar inaainishwa kwa **rolling distribution ya bars
-ZILIZOPITA tu** (window 252, min 60). Bar ya leo HAITUMII data ya baadaye.
+MANTIKI (sio assumption):
+  1. DESEASONALIZE: kila metric inagawanywa kwa wastani wa SAA-ileile ya siku
+     (trailing, no-lookahead). Hii inaondoa muundo wa intraday (London>Asia,
+     rollover spread spike) — bila hii, "HIGH activity" ingekuwa tu "ni mchana".
+  2. TERCILES za rolling (past tu, window ~mwaka 1 kwa kila TF) -> LOW/NORMAL/HIGH.
+     Labels ni RELATIVE kwa mwaka uliopita, no-lookahead.
 
-Source methodology:
-  tick_density_report (activity) · spread_quality_report (spread) ·
-  volatility_profile_report (volatility) — Phase 0 = COMPLETE (CQ-001).
+Pairs ZOTE (config) × TF [H1, H2, H4, D1]. Hakuna pair/TF iliyopendelewa kwa
+matokeo ya zamani.
 
 Output:
-  reports/market_regime_report.md            (mgawanyo + persistence + transitions)
-  data/processed/regime/symbol=<P>.parquet   (time series kwa downstream; gitignored)
+  reports/market_regime_report.md                       (pairs × TF: dist + persistence)
+  data/processed/regime/symbol=<P>/tf=<TF>.parquet      (downstream; gitignored)
 
-Endesha (CQ-009: EURGBP kwanza):
-  python src/research/market_regime.py                 # EURGBP
-  python src/research/market_regime.py --symbol EURUSD
+Endesha: python src/research/market_regime.py                 (zote)
+         python src/research/market_regime.py --symbol EURGBP
+         python src/research/market_regime.py --tf D1
 Self-test: python src/research/market_regime.py --self-test
 """
 from __future__ import annotations
 
-import argparse, sys
+import argparse, sys, warnings
 from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+import polars as pl
 import duckdb, yaml
+
+# min_periods bado inafanya kazi (polars huita "min_samples" mpya) — zima kelele tu.
+warnings.filterwarnings("ignore", message=".*min_periods.*")
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "config" / "data_config.yaml"
 
-WIN = 252          # rolling window (~mwaka 1 wa biashara)
-MIN_OBS = 60       # historia ya chini kabla ya kuainisha
-LO_Q, HI_Q = 0.33, 0.67
-WIDE_Q = 0.85
-SMOOTH_ACT = 5     # smoothing ya activity (tick_count) — kuondoa noise ya kila siku
-DEFAULT_PAIR = "EURGBP"      # CQ-009
+TFS = ["H1", "H2", "H4", "D1"]
+WIN_BARS = {"H1": 24 * 252, "H2": 12 * 252, "H4": 6 * 252, "D1": 252}   # ~mwaka 1 kwa kila TF
+SEAS_WIN = 60          # trailing same-hour samples (deseasonalization)
+SEAS_MIN = 10
+LO_Q, HI_Q, WIDE_Q = 0.33, 0.67, 0.85
+EVERY = {"H2": "2h", "H4": "4h", "D1": "1d"}
 
 
 def cfg():
@@ -57,91 +64,86 @@ def time_col(con, src):
     return next((c for c in cols if any(k in c.lower() for k in ("time","date","ts","stamp"))), None)
 
 
-def d1_bars(con, src, t, pp):
-    """D1 bars (CAST AS DATE -> hakuna pytz): OHLC, tick_count, median spread (pips)."""
+def h1_from_ticks(con, src, t, pp) -> pl.DataFrame:
+    """H1 bars kutoka ticks. CAST AS TIMESTAMP (naive) -> time_bucket bila pytz."""
     con.execute("SET TimeZone='UTC'")
     q = f"""
-        SELECT CAST("{t}" AS DATE) AS d,
+        SELECT time_bucket(INTERVAL 1 HOUR, CAST("{t}" AS TIMESTAMP)) AS ts,
                arg_min(bid,"{t}") AS o, max(bid) AS h, min(bid) AS l, arg_max(bid,"{t}") AS c,
-               COUNT(*) AS tc,
-               approx_quantile((ask-bid)/{pp}, 0.5) AS spr
+               COUNT(*) AS tc, approx_quantile((ask-bid)/{pp}, 0.5) AS spr
         FROM read_parquet('{src}', union_by_name=>true)
         WHERE bid>0 AND ask>0 AND ask>=bid
         GROUP BY 1 ORDER BY 1
     """
-    return con.execute(q).fetchall()
+    return con.execute(q).pl()
 
 
-def _atr(h, l, c, n=14):
+def rollup(df: pl.DataFrame, tf: str) -> pl.DataFrame:
+    if tf == "H1":
+        return df.sort("ts")
+    return (df.sort("ts").group_by_dynamic("ts", every=EVERY[tf]).agg(
+        pl.col("o").first().alias("o"), pl.col("h").max().alias("h"),
+        pl.col("l").min().alias("l"), pl.col("c").last().alias("c"),
+        pl.col("tc").sum().alias("tc"),
+        ((pl.col("spr") * pl.col("tc")).sum() / pl.col("tc").sum()).alias("spr")))
+
+
+def _atr(df: pl.DataFrame, n=14) -> pl.DataFrame:
+    h = df["h"].to_numpy(); l = df["l"].to_numpy(); c = df["c"].to_numpy()
     pc = np.r_[c[0], c[:-1]]
     tr = np.maximum.reduce([h - l, np.abs(h - pc), np.abs(l - pc)])
     a = 1/n; atr = np.empty_like(tr); atr[0] = tr[0]
     for i in range(1, len(tr)):
         atr[i] = a*tr[i] + (1-a)*atr[i-1]
-    return atr
+    return df.with_columns(pl.Series("atr", atr))
 
 
-def _smooth(x, w):
-    """Trailing mean (bar ya sasa + zilizopita tu -> no-lookahead)."""
-    out = np.full(len(x), np.nan)
-    for i in range(len(x)):
-        seg = x[max(0, i-w+1):i+1]
-        seg = seg[np.isfinite(seg)]
-        if len(seg):
-            out[i] = float(np.mean(seg))
-    return out
+def _deseason(col):
+    """metric / trailing-mean ya SAA-ileile (no-lookahead)."""
+    base = pl.col(col).rolling_mean(window_size=SEAS_WIN, min_periods=SEAS_MIN).shift(1).over("hour")
+    return (pl.col(col) / base)
 
 
-def _roll_class3(x, win=WIN, lo=LO_Q, hi=HI_Q, min_obs=MIN_OBS):
-    """LOW/NORMAL/HIGH kwa rolling terciles za PAST tu (no-lookahead)."""
-    out = np.array(["UNKNOWN"] * len(x), dtype=object)
-    for i in range(len(x)):
-        past = x[max(0, i-win):i]
-        past = past[np.isfinite(past)]
-        if len(past) < min_obs or not np.isfinite(x[i]):
-            continue
-        ql, qh = np.quantile(past, [lo, hi])
-        out[i] = "LOW" if x[i] < ql else ("HIGH" if x[i] > qh else "NORMAL")
-    return out
+def _reg3(name, win, minp):
+    c = pl.col(name)
+    lo = c.rolling_quantile(quantile=LO_Q, window_size=win, min_periods=minp).shift(1)
+    hi = c.rolling_quantile(quantile=HI_Q, window_size=win, min_periods=minp).shift(1)
+    return (pl.when(lo.is_null() | c.is_null() | c.is_nan()).then(pl.lit("UNKNOWN"))
+              .when(c < lo).then(pl.lit("LOW"))
+              .when(c > hi).then(pl.lit("HIGH"))
+              .otherwise(pl.lit("NORMAL")))
 
 
-def _roll_class2(x, q=WIDE_Q, win=WIN, min_obs=MIN_OBS, hi="WIDE", lo="NORMAL"):
-    out = np.array(["UNKNOWN"] * len(x), dtype=object)
-    for i in range(len(x)):
-        past = x[max(0, i-win):i]
-        past = past[np.isfinite(past)]
-        if len(past) < min_obs or not np.isfinite(x[i]):
-            continue
-        out[i] = hi if x[i] > np.quantile(past, q) else lo
-    return out
+def _reg2(name, win, minp):
+    c = pl.col(name)
+    q = c.rolling_quantile(quantile=WIDE_Q, window_size=win, min_periods=minp).shift(1)
+    return (pl.when(q.is_null() | c.is_null() | c.is_nan()).then(pl.lit("UNKNOWN"))
+              .when(c > q).then(pl.lit("WIDE")).otherwise(pl.lit("NORMAL")))
 
 
-def classify(bars):
-    """bars=[(date,o,h,l,c,tc,spr)] -> dict ya arrays (no-lookahead regimes)."""
-    b = [r for r in bars if r[0].isoweekday() <= 5 and r[4] and r[4] > 0]
-    if len(b) < MIN_OBS + 5:
-        return None
-    d = [r[0] for r in b]
-    h = np.array([r[2] for r in b], float); l = np.array([r[3] for r in b], float)
-    c = np.array([r[4] for r in b], float); tc = np.array([r[5] for r in b], float)
-    spr = np.array([r[6] for r in b], float)
-    atr = _atr(h, l, c)
-    tc_s = _smooth(tc, SMOOTH_ACT)          # activity smoothed (kuondoa noise ya kila siku)
-    return dict(date=d, atr=atr, tc=tc, tc_smooth=tc_s, spr=spr,
-                volatility_regime=_roll_class3(atr),
-                activity_regime=_roll_class3(tc_s),
-                spread_regime=_roll_class2(spr))
+def regime_df(df: pl.DataFrame, tf: str) -> pl.DataFrame:
+    win = WIN_BARS[tf]; minp = max(20, win // 4)
+    df = _atr(df.sort("ts")).with_columns(pl.col("ts").dt.hour().alias("hour"))
+    df = df.with_columns([_deseason("atr").alias("atr_n"),
+                          _deseason("tc").alias("tc_n"),
+                          _deseason("spr").alias("spr_n")])
+    return df.with_columns([
+        _reg3("atr_n", win, minp).alias("volatility_regime"),
+        _reg3("tc_n", win, minp).alias("activity_regime"),
+        _reg2("spr_n", win, minp).alias("spread_regime")])
 
 
-def _dist(arr, levels):
-    known = [x for x in arr if x != "UNKNOWN"]
+# ───────────── muhtasari ─────────────
+def _dist(s: pl.Series, levels):
+    known = s.filter(s != "UNKNOWN")
     n = len(known) or 1
-    return {lv: (sum(1 for x in known if x == lv), sum(1 for x in known if x == lv)/n) for lv in levels}, len(known)
+    vc = dict(zip(known.value_counts().to_series(0).to_list(),
+                  known.value_counts().to_series(1).to_list())) if len(known) else {}
+    return {lv: (vc.get(lv, 0), vc.get(lv, 0)/n) for lv in levels}, len(known)
 
-def _persistence(arr):
-    """Avg run length (bars) ya regime (bila UNKNOWN)."""
+def _persist(s: pl.Series):
     runs = []; cur = None; ln = 0
-    for x in arr:
+    for x in s.to_list():
         if x == "UNKNOWN":
             continue
         if x == cur:
@@ -155,134 +157,128 @@ def _persistence(arr):
     return float(np.mean(runs)) if runs else 0.0
 
 
-def write_report(sym, R, out_path):
-    d = R["date"]
-    L = [f"# Market Regime Report — {sym} (PHASE 1, CQ-003)\n",
-         f"*{datetime.now():%Y-%m-%d %H:%M} | D1 | no-lookahead rolling (win={WIN}, min={MIN_OBS}) | "
-         f"vol/activity terciles {LO_Q}/{HI_Q} | activity smoothed {SMOOTH_ACT}d | "
-         f"spread WIDE > p{int(WIDE_Q*100)}*\n",
-         f"Bars: {len(d)} | {d[0]} → {d[-1]}\n",
-         "> Kila bar imeainishwa kwa distribution ya bars ZILIZOPITA tu — hakuna lookahead. "
-         "Hii ndiyo context ambayo KILA event itasomwa ndani yake (CQ-002/003).\n",
-         "> **Noti:** labels ni RELATIVE kwa mwaka uliopita (rolling), sio absolute — "
-         f"'HIGH' = juu ya {int(HI_Q*100)}th percentile ya bars {WIN} zilizopita. Activity "
-         f"ime-smooth-iwa siku {SMOOTH_ACT} (kuondoa noise; volatility/ATR tayari smooth).\n",
-         "## Mgawanyo wa regime\n",
-         "| Dimension | LOW/NORMAL | NORMAL | HIGH/WIDE | n |",
-         "|-----------|-----------|--------|-----------|---|"]
-    vd, vn = _dist(R["volatility_regime"], ["LOW","NORMAL","HIGH"])
-    ad, an = _dist(R["activity_regime"], ["LOW","NORMAL","HIGH"])
-    sd, sn = _dist(R["spread_regime"], ["NORMAL","WIDE"])
-    L.append(f"| volatility | {vd['LOW'][0]} ({vd['LOW'][1]*100:.0f}%) | {vd['NORMAL'][0]} ({vd['NORMAL'][1]*100:.0f}%) | {vd['HIGH'][0]} ({vd['HIGH'][1]*100:.0f}%) | {vn} |")
-    L.append(f"| activity | {ad['LOW'][0]} ({ad['LOW'][1]*100:.0f}%) | {ad['NORMAL'][0]} ({ad['NORMAL'][1]*100:.0f}%) | {ad['HIGH'][0]} ({ad['HIGH'][1]*100:.0f}%) | {an} |")
-    L.append(f"| spread | — | {sd['NORMAL'][0]} ({sd['NORMAL'][1]*100:.0f}%) | {sd['WIDE'][0]} ({sd['WIDE'][1]*100:.0f}%) | {sn} |")
+def summarize(df, sym, tf):
+    vd, vn = _dist(df["volatility_regime"], ["LOW","NORMAL","HIGH"])
+    ad, _ = _dist(df["activity_regime"], ["LOW","NORMAL","HIGH"])
+    sd, _ = _dist(df["spread_regime"], ["NORMAL","WIDE"])
+    return dict(sym=sym, tf=tf, n=vn, bars=len(df),
+                vol=vd, act=ad, spr=sd,
+                pv=_persist(df["volatility_regime"]),
+                pa=_persist(df["activity_regime"]),
+                ps=_persist(df["spread_regime"]))
 
-    L.append("\n## Persistence (avg run length, bars)\n")
-    L.append(f"- volatility: {_persistence(R['volatility_regime']):.1f} | "
-             f"activity: {_persistence(R['activity_regime']):.1f} | "
-             f"spread: {_persistence(R['spread_regime']):.1f}")
 
-    # latest snapshot
-    def last_known(a):
-        for x in reversed(a):
-            if x != "UNKNOWN":
-                return x
-        return "UNKNOWN"
-    L.append("\n## Regime ya hivi karibuni\n")
-    L.append(f"- date {d[-1]}: volatility={last_known(R['volatility_regime'])}, "
-             f"activity={last_known(R['activity_regime'])}, spread={last_known(R['spread_regime'])}")
-
-    L.append("\n---\n*CQ-003: regime engine ndiyo context layer. No-lookahead (rolling past). "
-             "Terciles -> LOW/NORMAL/HIGH; spread p85 -> WIDE. Downstream (volume_bars, "
-             "event_diagnostics) zita-join regime hii. Metric rasmi = Expected Value (CQ-008).*")
+def write_report(rows, out_path):
+    L = [f"# Market Regime Report — pairs ZOTE × TF ZOTE (PHASE 1, CQ-003)\n",
+         f"*{datetime.now():%Y-%m-%d %H:%M} | TF: {', '.join(TFS)} | DESEASONALIZED kwa saa-ya-siku "
+         f"(trailing {SEAS_WIN}) | terciles {LO_Q}/{HI_Q} rolling (~mwaka 1/TF) | spread WIDE > p{int(WIDE_Q*100)} "
+         "| no-lookahead*\n",
+         "> Metrics zime-DESEASONALIZE kabla ya terciles — 'HIGH' = juu ya kawaida ya SAA hiyo, sio "
+         "tu 'ni mchana'. Labels RELATIVE kwa mwaka uliopita. Hakuna pair/TF iliyopendelewa.\n",
+         "## Volatility & Activity (% ya bars) + persistence (run length)\n",
+         "| Pair | TF | n | vol L/N/H | act L/N/H | spr WIDE | persist v/a/s |",
+         "|------|----|---|-----------|-----------|----------|---------------|"]
+    for r in rows:
+        v = r["vol"]; a = r["act"]; s = r["spr"]
+        L.append(f"| {r['sym']} | {r['tf']} | {r['n']:,} | "
+                 f"{v['LOW'][1]*100:.0f}/{v['NORMAL'][1]*100:.0f}/{v['HIGH'][1]*100:.0f} | "
+                 f"{a['LOW'][1]*100:.0f}/{a['NORMAL'][1]*100:.0f}/{a['HIGH'][1]*100:.0f} | "
+                 f"{s['WIDE'][1]*100:.0f}% | {r['pv']:.0f}/{r['pa']:.0f}/{r['ps']:.0f} |")
+    L.append("\n---\n*DESEASONALIZE (÷ trailing same-hour mean) inaondoa intraday seasonality -> "
+             "regime ni HALI YA SOKO sio saa. Terciles rolling = no-lookahead, relative kwa mwaka. "
+             "persistence = avg bars regime inadumu (juu = context thabiti). Downstream zita-join "
+             "regime hii kwa TF husika. Metric rasmi = Expected Value (CQ-008).*")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text("\n".join(L), encoding="utf-8")
 
 
-def save_series(sym, R, c_cfg):
-    import polars as pl
-    df = pl.DataFrame({
-        "date": [str(x) for x in R["date"]],
-        "atr": R["atr"], "tick_count": R["tc"], "tick_count_smooth": R["tc_smooth"],
-        "spread_med": R["spr"],
-        "volatility_regime": list(R["volatility_regime"]),
-        "activity_regime": list(R["activity_regime"]),
-        "spread_regime": list(R["spread_regime"]),
-    })
-    out = REPO_ROOT / c_cfg["paths"]["processed"] / "regime" / f"symbol={sym}.parquet"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    df.write_parquet(out)
-    return out
-
-
-def run(sym):
+def run(pairs, tfs):
     c = cfg(); raw = REPO_ROOT / c["paths"]["raw_ticks"]
-    base = raw / f"symbol={sym}"
-    if not base.exists() or not list(base.rglob("*.parquet")):
-        print(f"HITILAFU: hakuna data ya {sym} chini ya {base}", file=sys.stderr); return 1
+    if not raw.exists():
+        print(f"HITILAFU: '{raw}' haipo.", file=sys.stderr); return 1
     con = duckdb.connect()
-    src = _posix(base / "**" / "*.parquet")
-    t = time_col(con, src)
-    print(f"  {sym}: nascan D1...", flush=True)
-    R = classify(d1_bars(con, src, t, pip(sym)))
-    if not R:
-        print("HITILAFU: bars hazitoshi.", file=sys.stderr); return 1
+    rows = []
+    for sym in pairs:
+        base = raw / f"symbol={sym}"
+        if not base.exists() or not list(base.rglob("*.parquet")):
+            print(f"  {sym}: (hakuna data)"); continue
+        src = _posix(base / "**" / "*.parquet")
+        t = time_col(con, src)
+        print(f"  {sym}: nascan H1...", flush=True)
+        h1 = h1_from_ticks(con, src, t, pip(sym))
+        for tf in tfs:
+            df = regime_df(rollup(h1, tf), tf)
+            rows.append(summarize(df, sym, tf))
+            out = REPO_ROOT / c["paths"]["processed"] / "regime" / f"symbol={sym}" / f"tf={tf}.parquet"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            df.select(["ts","atr","tc","spr","volatility_regime","activity_regime","spread_regime"]).write_parquet(out)
+            print(f"    {tf}: bars={len(df)}")
+    if not rows:
+        print("HITILAFU: hakuna data yoyote.", file=sys.stderr); return 1
     rep = REPO_ROOT / c["paths"]["reports"] / "market_regime_report.md"
-    write_report(sym, R, rep)
-    ser = save_series(sym, R, c)
-    print(f"Ripoti: {rep.relative_to(REPO_ROOT)}")
-    print(f"Series: {ser.relative_to(REPO_ROOT)} (downstream)")
+    write_report(rows, rep)
+    print(f"\nRipoti: {rep.relative_to(REPO_ROOT)} ({len(rows)} pair×TF)")
     return 0
 
 
 def self_test():
-    """Planted: cluster ya HIGH vol + HIGH activity inatambulika; mgawanyo karibu terciles."""
+    """H1 synthetic: seasonality kali ya saa + regime shift halisi.
+       Thibitisha: (1) deseasonalize inaondoa false-HIGH ya seasonality,
+       (2) regime shift halisi inatambulika, (3) no-lookahead (UNKNOWN mwanzoni)."""
     from datetime import datetime as dt, timedelta
     rng = np.random.default_rng(0)
-    bars = []; price = 0.85; day = dt(2016, 1, 4); made = 0
-    while made < 500:
-        if day.isoweekday() <= 5:
-            hi_period = 300 <= made < 380           # cluster ya vol/activity kubwa
-            vol = 0.004 if hi_period else 0.0015
-            tcount = 40000 if hi_period else 12000
-            ret = rng.normal(0, vol)
-            o = price; c = price*(1+ret)
-            h = max(o,c)*(1+abs(rng.normal(0,vol/2))); l = min(o,c)*(1-abs(rng.normal(0,vol/2)))
-            spr = abs(rng.normal(0.9, 0.1))
-            bars.append((day, o, h, l, c, int(tcount+rng.normal(0,500)), spr))
-            price = c; made += 1
-        day += timedelta(days=1)
-    R = classify(bars)
-    vd, vn = _dist(R["volatility_regime"], ["LOW","NORMAL","HIGH"])
-    ad, _ = _dist(R["activity_regime"], ["LOW","NORMAL","HIGH"])
-    # bars za cluster (index ~300-380, baada ya warmup) ziwe HIGH
-    hi_idx = [i for i, d in enumerate(R["date"]) if 305 <= i < 375]
-    hi_hits = sum(1 for i in hi_idx if R["volatility_regime"][i] == "HIGH")
-    print(f"vol dist L/N/H = {vd['LOW'][0]}/{vd['NORMAL'][0]}/{vd['HIGH'][0]} | "
-          f"cluster HIGH hits {hi_hits}/{len(hi_idx)}")
-    print(f"activity HIGH% = {ad['HIGH'][1]*100:.0f}%")
-    # thibitisha smoothing inaongeza persistence ya activity:
-    # slow cycle (regime halisi, dispersion ya kweli) + white noise nzito.
-    tt = np.arange(500)
-    slow = 12000 + 8000 * np.sin(tt / 40.0)            # regime cycles (terciles zina maana)
-    noisy = slow + rng.normal(0, 4000, 500)            # noise nzito -> raw inaruka
-    pers_raw = _persistence(_roll_class3(noisy))
-    pers_sm = _persistence(_roll_class3(_smooth(noisy, SMOOTH_ACT)))
-    print(f"activity persistence: raw={pers_raw:.1f} -> smoothed={pers_sm:.1f}")
-    ok = (vn > 200 and hi_hits > len(hi_idx)*0.6 and vd["HIGH"][0] > 0 and vd["LOW"][0] > 0
-          and pers_sm > pers_raw)
+    ts = []; tc = []; o=[]; h=[]; l=[]; cc=[]; spr=[]
+    price = 1.10; cur = dt(2018,1,1)
+    N = 24*400
+    for k in range(N):
+        hour = cur.hour
+        seas = 1.0 + 0.8*np.sin((hour-3)/24*2*np.pi)        # mchana juu (seasonality kali)
+        surge = 2.0 if 24*250 <= k < 24*280 else 1.0          # regime ya activity HIGH (siku 30)
+        base_tc = 1000 * seas * surge
+        volx = 0.001 * (1.0 + 0.6*np.sin((hour-3)/24*2*np.pi)) * (2.0 if 24*250 <= k < 24*280 else 1.0)
+        ret = rng.normal(0, volx)
+        op = price; c = price*(1+ret)
+        ts.append(cur); o.append(op); c_ = c
+        h.append(max(op,c_)*(1+abs(rng.normal(0,volx/2)))); l.append(min(op,c_)*(1-abs(rng.normal(0,volx/2))))
+        cc.append(c_); tc.append(max(1,int(base_tc+rng.normal(0,80)))); spr.append(abs(rng.normal(0.9,0.1)))
+        price = c_; cur += timedelta(hours=1)
+    df = pl.DataFrame(dict(ts=ts,o=o,h=h,l=l,c=cc,tc=tc,spr=spr))
+    R = regime_df(df, "H1")
+    win = WIN_BARS["H1"]; minp = max(20, win // 4)
+    # classification RAW (bila deseasonalize) kwa kulinganisha
+    Rraw = (df.sort("ts").with_columns(pl.col("ts").dt.hour().alias("hour"))
+              .with_columns(_reg3("tc", win, minp).alias("act_raw")))
+
+    def high_rate_by_hour(frame, col):
+        f = frame.slice(24*100, 24*140).filter(pl.col(col) != "UNKNOWN")   # non-surge, post-warmup
+        g = (f.with_columns((pl.col(col) == "HIGH").cast(pl.Float64).alias("hi"))
+               .group_by(pl.col("ts").dt.hour()).agg(pl.col("hi").mean()))
+        return float(np.std(g["hi"].to_numpy()))
+
+    std_raw = high_rate_by_hour(Rraw, "act_raw")           # raw: HIGH inajirundika saa za mchana
+    std_des = high_rate_by_hour(R, "activity_regime")      # deseasonalized: tambarare zaidi
+    unk = (R["activity_regime"] == "UNKNOWN").sum()
+    surge = R.slice(24*255, 24*20)
+    surge_high = (surge["activity_regime"] == "HIGH").mean()
+    print(f"UNKNOWN(warmup)={unk} | HIGH-rate std/hour: raw={std_raw:.3f} -> deseason={std_des:.3f} "
+          f"| surge HIGH%={surge_high*100:.0f}%")
+    ok = (unk > 0 and std_des < std_raw * 0.6 and surge_high > 0.50)
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--symbol", default=DEFAULT_PAIR)
+    ap.add_argument("--symbol", default=None, help="pair moja (default: zote za config)")
+    ap.add_argument("--tf", default=None, choices=TFS, help="TF moja (default: zote)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
-    return run(a.symbol)
+    c = cfg()
+    pairs = [a.symbol] if a.symbol else c["pairs"]
+    tfs = [a.tf] if a.tf else TFS
+    return run(pairs, tfs)
 
 
 if __name__ == "__main__":
