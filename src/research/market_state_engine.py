@@ -149,8 +149,12 @@ def state_df(df: pl.DataFrame, tf: str) -> pl.DataFrame:
 def _dist(s: pl.Series, levels):
     known = s.filter(s != "UNKNOWN")
     n = len(known) or 1
-    vc = (dict(zip(known.value_counts().to_series(0).to_list(),
-                   known.value_counts().to_series(1).to_list())) if len(known) else {})
+    vc = {}
+    if len(known):
+        counts = known.value_counts()          # ITA MARA MOJA (calls 2 = misalign bug)
+        valcol = counts.columns[0]
+        for row in counts.iter_rows(named=True):
+            vc[row[valcol]] = row["count"]
     return {lv: vc.get(lv, 0)/n for lv in levels}, len(known)
 
 def _persist(s: pl.Series):
@@ -277,7 +281,12 @@ def self_test():
     w=_rank_wide(deg); frac=np.mean([x=="WIDE" for x in w if x!="UNKNOWN"])
     print(f"UNKNOWN={unk} | HIGH-rate std/hr raw={std_raw:.3f}->des={std_des:.3f} | surge HIGH%={surge_high*100:.0f}%")
     print(f"spread RANK on degenerate(70% tie): WIDE%={frac*100:.0f}% (lengo ~{int((1-WIDE_Q)*100)}%)")
-    ok=(unk>0 and std_des<std_raw*0.6 and surge_high>0.50 and 0.05<frac<0.25)
+    # _dist lazima imap sahihi NA deterministic (bug ya value_counts mara mbili)
+    tv = pl.Series("x", np.where(np.arange(10000) < 1500, "WIDE", "NORMAL"))
+    d1, _ = _dist(tv, ["NORMAL", "WIDE"]); d2, _ = _dist(tv, ["NORMAL", "WIDE"])
+    dist_ok = abs(d1["WIDE"] - 0.15) < 0.01 and d1 == d2
+    print(f"_dist map: WIDE={d1['WIDE']*100:.0f}% (tarajio 15, deterministic={d1==d2})")
+    ok = (unk > 0 and std_des < std_raw*0.6 and surge_high > 0.50 and 0.05 < frac < 0.25 and dist_ok)
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
