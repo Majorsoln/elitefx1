@@ -56,8 +56,9 @@ def per_day(con, src, tc):
 
 def per_hour(con, src, tc):
     con.execute("SET TimeZone='UTC'")
+    # CAST AS TIMESTAMP kabla ya EXTRACT(hour) — kuepuka pytz kwenye TIMESTAMPTZ.
     q = f"""
-        SELECT EXTRACT(hour FROM "{tc}")::INT AS h, COUNT(*) AS ticks,
+        SELECT EXTRACT(hour FROM CAST("{tc}" AS TIMESTAMP))::INT AS h, COUNT(*) AS ticks,
                COUNT(DISTINCT CAST("{tc}" AS DATE)) AS days
         FROM read_parquet('{src}', union_by_name=>true)
         WHERE bid>0 AND ask>0 GROUP BY 1 ORDER BY 1

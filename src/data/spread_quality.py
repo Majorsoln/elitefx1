@@ -44,8 +44,10 @@ def time_col(con, src):
 def measure(con, src, t, pp, thr):
     """Rudisha dict ya spread metrics (pips)."""
     con.execute("SET TimeZone='UTC'")
+    # CAST AS TIMESTAMP kabla ya EXTRACT(hour) — kuepuka pytz kwenye TIMESTAMPTZ.
     base = f"""
-        SELECT (ask-bid)/{pp} AS spr, EXTRACT(hour FROM "{t}")::INT AS hr,
+        SELECT (ask-bid)/{pp} AS spr,
+               EXTRACT(hour FROM CAST("{t}" AS TIMESTAMP))::INT AS hr,
                EXTRACT(year FROM "{t}")::INT AS yr
         FROM read_parquet('{src}', union_by_name=>true)
         WHERE bid>0 AND ask>0 AND ask>=bid

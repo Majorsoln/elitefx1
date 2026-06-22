@@ -43,8 +43,9 @@ def time_col(con, src):
 
 def d1_bars(con, src, t):
     con.execute("SET TimeZone='UTC'")
+    # CAST AS DATE (sio time_bucket) — time_bucket kwenye TIMESTAMPTZ inahitaji pytz.
     q = f"""
-        SELECT time_bucket(INTERVAL 1 DAY, "{t}") AS d,
+        SELECT CAST("{t}" AS DATE) AS d,
                arg_min(bid,"{t}") AS o, max(bid) AS h, min(bid) AS l, arg_max(bid,"{t}") AS c
         FROM read_parquet('{src}', union_by_name=>true)
         WHERE bid>0 AND ask>0 GROUP BY 1 ORDER BY 1
