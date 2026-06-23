@@ -97,8 +97,8 @@ Chief Approval: YES
 
 ## Next Phase Queue
 
-- [ ] Phase 1.95  Context Generalization   *(ACTIVE)*
-- [ ] Phase 2     Adaptive Volume Bars      *(design APPROVED — no ML)*
+- [ ] Phase 1.95  Context Generalization   *(ACTIVE — engine ready, report pending data run)*
+- [ ] Phase 2     Adaptive Volume Bars      *(design APPROVED, no ML — engine ready, report pending data run)*
 - [ ] Phase 3     Event Diagnostics
 - [ ] Phase 4     Event × Context Matrix
 - [ ] Phase 5     Triple Barrier
