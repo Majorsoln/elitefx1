@@ -3,11 +3,15 @@
 **Chief Quant Amendment — State Dynamics First**
 
 Version: 5.1
-Status: APPROVED
+Status: Folded into V5.2 (see ELITEFX DOCTRINE V5.2.md — current SSOT)
 Date: 22 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.2, 23 June 2026)
 Supersedes: V5 draft sections on Event Priority
 Previous Versions: Archived (V4, V4.1, V5.0)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.2](ELITEFX%20DOCTRINE%20V5.2.md)**.
+> V5.2 inafunga amendments za V5.1 kwenye core (State Context Engine, Transition
+> Probability Layer, Hypothesis H-01, Event × Context Rule, Phase 1.8). Soma V5.2.
 
 ---
 

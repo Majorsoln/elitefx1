@@ -2,12 +2,14 @@
 
 **Chief Quant Approved — Institutional Research & Trading Framework**
 
-> ⚠️ **IMESASISHWA:** Sehemu za *Event Priority* zimesimamiwa na
-> **[ELITEFX DOCTRINE V5.1](ELITEFX%20DOCTRINE%20V5.1.md)** (State Dynamics First):
-> mtiririko mpya ni **State → Transition → Event → Outcome**. Soma V5.1 kwa amendment.
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni
+> **[ELITEFX DOCTRINE V5.2](ELITEFX%20DOCTRINE%20V5.2.md)** (Context Is a First-Class
+> Citizen), inayofunga V5.1 (State Dynamics First). Mtiririko wa core:
+> **State → State Age → Transition Probability → Event → Outcome**. Soma V5.2 kwa
+> amendments rasmi (1–4); V5.0 hapa ni rejea ya carry-forward tu.
 
 Version: 5.0
-Status: Official Doctrine (Event-priority sections superseded by V5.1)
+Status: Carry-forward reference (superseded by V5.1 and V5.2)
 Authority: Single Source of Truth (SSOT)
 Previous Versions: Archived (V4, V4.1)
 
