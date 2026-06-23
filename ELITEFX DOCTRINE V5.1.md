@@ -37,6 +37,8 @@ Lakini ushahidi wa data umeonyesha kuwa architecture sahihi ni:
 ```text
 Market State
 ↓
+State Age
+↓
 State Transition
 ↓
 Event
@@ -44,7 +46,9 @@ Event
 Outcome
 ```
 
-State Transition ni **layer mpya** ambayo haikuwepo wazi katika V5.
+State Transition ni **layer mpya** ambayo haikuwepo wazi katika V5. **State Age**
+(umri wa state) imeongezwa kama state-variable rasmi baada ya `state_age_report.md`
+(ona Finding E).
 
 ---
 
@@ -116,6 +120,29 @@ Regime evolution is continuous, not discrete.
 
 ## Finding D — Activity ≠ Volatility
 Activity persistence: **55–65%**. Volatility persistence: **88–94%**. Kwa hiyo **Volatility, Activity, Spread** ni dimensions tofauti — hazitachanganywa.
+
+## Finding E — State Age Has Information (Markov Imeanguka)
+Chanzo: `state_age_report.md`. P(stay) **INATEGEMEA umri** wa state:
+
+```text
+EURUSD H1   age 1-3 → 16+
+  Volatility  83% → 96%   (Δ +14pp wastani)
+  Activity    55% → 92%   (Δ +40pp wastani)
+  Spread      69% → 94%   (Δ +28pp wastani)
+```
+
+Implication: `P(change) = f(State, Age)`, sio `f(State)` pekee. Hazard si constant →
+durations **si geometric** → **memoryless process imekataliwa**.
+
+```text
+LOW_VOL iliyozaliwa jana  ≠  LOW_VOL iliyokaa bars 20.
+```
+
+## Finding F — Activity = Highest-Information Dimension (Hypothesis)
+Activity ina Δ kubwa zaidi (+40pp) kuliko Volatility (+14pp) au Spread (+28pp). Hii ni
+**hypothesis mpya ya EliteFX**: *Activity State inaweza kuwa predictor bora wa transitions
+kuliko Volatility* — kinyume na obsession ya retail kwa ATR/Volatility. (Itathibitishwa
+Phase 1.8.)
 
 ---
 
@@ -209,7 +236,9 @@ Deliverable: `state_age_report.md`
 Phase 0    Data Validation              COMPLETE
 Phase 1    Market State Engine          COMPLETE
 Phase 1.5  Transition Engine            COMPLETE
-Phase 1.6  State Age Analysis           NEXT
+Phase 1.6  State Age Analysis           COMPLETE
+Phase 1.7  State Context Engine         NEXT      (CQ-012: state+age+P(change))
+Phase 1.8  Transition Prediction Model            (P(next|state) vs P(next|state,age))
 Phase 2    Adaptive Volume Bars
 Phase 3    Event Diagnostics
 Phase 4    Event × Context Matrix
@@ -234,6 +263,8 @@ Doctrine mpya inasimama juu ya msingi huu:
 
 ```text
 STATE
+↓
+STATE AGE
 ↓
 TRANSITION
 ↓
