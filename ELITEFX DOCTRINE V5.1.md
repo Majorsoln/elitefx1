@@ -142,11 +142,24 @@ durations **si geometric** → **memoryless process imekataliwa**.
 LOW_VOL iliyozaliwa jana  ≠  LOW_VOL iliyokaa bars 20.
 ```
 
-## Finding F — Activity = Highest-Information Dimension (Hypothesis)
-Activity ina Δ kubwa zaidi (+40pp) kuliko Volatility (+14pp) au Spread (+28pp). Hii ni
-**hypothesis mpya ya EliteFX**: *Activity State inaweza kuwa predictor bora wa transitions
-kuliko Volatility* — kinyume na obsession ya retail kwa ATR/Volatility. (Itathibitishwa
-Phase 1.8.)
+## Finding F — Activity = Strongest State-Memory (sio Predictability) ⟲ AMENDED V5.2
+> ⚠️ **IMESAHIHISHWA na V5.2 (Chief Quant).** Toleo la awali lilidai *Activity =
+> Highest-Information / predictor bora*. Phase 1.8 (`state_transition_model_report.md`)
+> ilithibitisha **kinyume**: Activity ndiyo **NGUMU ZAIDI** kutabiri. Tulichanganya
+> *Signal Strength* na *Predictability*. **Hypothesis H-01 imekataliwa.**
+
+Finding F (toleo rasmi la V5.2):
+
+```text
+Activity exhibits the strongest state-memory effects (Δ +40pp),
+but volatility and spread demonstrate higher predictive stability.
+Volatility and Spread currently provide the most predictable state dynamics.
+```
+
+Activity ina Δ kubwa zaidi ya P(stay) (+40pp) kuliko Volatility (+14pp) au Spread (+28pp)
+— hiyo ni **state-memory**, sio predictability. Phase 1.8: Activity ina ΔLogLoss ndogo
+zaidi (+2.2%) na accuracy ndogo zaidi (≈56–63%); Volatility (+3.9%) na Spread (+4.5%)
+zinatabirika safi zaidi (accuracy ≈83–93%). Ona V5.2 Amendment 2.
 
 ---
 

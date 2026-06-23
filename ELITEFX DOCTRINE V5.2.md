@@ -13,20 +13,25 @@ Previous Versions: Archived (V4, V4.1, V5.0, V5.1)
 
 # EXECUTIVE SUMMARY
 
-V5.2 introduces six changes, all justified by completed research
-(`state_age_report.md`, `state_context_report.md`, `state_transition_model_report.md`):
+V5.2 introduces the following, all justified by completed research
+(`state_age_report.md`, `state_context_report.md`, `state_transition_model_report.md`)
+and amended by Chief Quant review:
 
 ```text
 • State Age
 • State Context Engine
 • Transition Probability Layer
-• Activity Dynamics Hypothesis (H-01)
+• State Age = CALIBRATOR, not predictor   (Chief Quant amendment)
+• Hypothesis H-01 — TESTED AND REJECTED   (Chief Quant amendment)
 • Event × Context Rule
+• Principle 03 — trading relevance gate
 • Phase 1.8 Transition Modeling
+• Phase 1.9 Context Value Test            (gate to Phase 2)
 ```
 
 This is **not a change of direction.** It adds what the data has already
-proven. The two governing statements of this version are:
+proven — and removes what it has *not.* The two governing statements of this
+version are:
 
 ```text
 Context is now a first-class citizen.
@@ -37,6 +42,28 @@ Events no longer exist independently.
 Everything in V5.0 and V5.1 that is not explicitly amended below **remains
 in force.** The official decision metric remains **Expected Value (EV > 0),
 not win rate.**
+
+---
+
+# NEW PRINCIPLE — Principle 03 (Trading Relevance)
+
+V5.1 established Principles 01 (*State precedes Event*) and 02 (*Transition
+precedes Opportunity*). V5.2 adds a third, which governs the whole Context
+program:
+
+## Principle 03 — Context must prove trading relevance
+
+```text
+Context must prove trading relevance,
+not only statistical relevance.
+```
+
+A finding that Context is statistically describable (state, age, transition
+probability, calibration) is **necessary but not sufficient.** Before Context
+is allowed to drive architecture beyond Phase 1, it must be shown to change
+the **EV of decisions on real events** — not merely to fit the data better.
+This principle is what makes **Phase 1.9 (Context Value Test)** a mandatory
+gate before Phase 2.
 
 ---
 
@@ -114,45 +141,55 @@ Implementation of record: `src/research/state_context_engine.py`
 
 ---
 
-# AMENDMENT 2 — Activity Dynamics Is Promoted to an Official Hypothesis
+# AMENDMENT 2 — Hypothesis H-01 Tested and REJECTED
 
-## What changed
+## What we believed
 
-V5.0/V5.1 treated the three state dimensions as roughly equal:
+`state_age_report.md` showed that **Activity** has the largest ΔP(stay) with
+age (+40pp vs volatility +14pp, spread +28pp). We rushed from that to the
+claim that *Activity carries the most predictive information* (V5.1 Finding F,
+proposed Hypothesis H-01).
+
+## The quant error we made
+
+We conflated two different things:
 
 ```text
-Volatility
-Activity
-Spread
+Signal Strength   ≠   Predictability
 ```
 
-The data suggests **Activity** carries a distinct dynamic signal. This is no
-longer an informal observation — it is now a **formal, falsifiable research
-hypothesis.**
+Strong state-memory (a state that, once entered, tends to persist) is **not**
+the same as a state whose *next move* is easy to predict.
 
-## HYPOTHESIS H-01 (OFFICIAL)
+## HYPOTHESIS H-01 — REJECTED
+
+Original (now rejected):
 
 ```text
-Activity Dynamics may contain
-more predictive information
-than volatility levels.
+Activity Dynamics carry more predictive information.
 ```
 
-Status: **OPEN — under test.** H-01 is a hypothesis, not a conclusion, and is
-subject to the Hypothesis Kill Framework (PART 17).
+Phase 1.8 (`state_transition_model_report.md`) showed the opposite ordering:
+Activity is the **hardest** dimension to predict (median ΔLogLoss only +2.2%,
+and the lowest accuracy ≈ 56–63%), while volatility (+3.9%) and spread (+4.5%)
+predict more cleanly (accuracy ≈ 83–93%).
 
-## Current evidence (recorded honestly, not as proof)
-
-The first measurement comes from `state_transition_model_report.md`
-(Phase 1.8). It shows that **state age improves prediction for all three
-dimensions** — but, by the ΔLogLoss comparison, Activity is **not yet** the
-highest-information dimension (median ΔLogLoss: spread +4.5%, volatility
-+3.9%, activity +2.2%). H-01 therefore remains **open**: the question of
-whether Activity *dynamics* beat Volatility *levels* (a different comparison
-than ΔLogLoss-by-dimension) has not been settled and must be tested directly.
+Replacement statement (OFFICIAL):
 
 ```text
-Measure more. Assume less.
+Activity Dynamics exhibit strong state-memory characteristics
+but remain difficult to predict.
+```
+
+New finding (OFFICIAL):
+
+```text
+Volatility and Spread currently provide
+the most predictable state dynamics.
+```
+
+```text
+Measure more. Assume less. Kill hypotheses that fail.
 ```
 
 ---
@@ -248,20 +285,35 @@ If age DOES improve predictive power:
 ## Result (Phase 1.8 — COMPLETE)
 
 `state_transition_model_report.md` reports that Model B (with age) beats
-Model A on LogLoss and Brier across all pairs and timeframes, with consistent
-median improvement:
+Model A on LogLoss and Brier across all pairs and timeframes:
 
 ```text
-volatility   median ΔLogLoss = +3.9%   → age helps
-activity     median ΔLogLoss = +2.2%   → age helps
-spread       median ΔLogLoss = +4.5%   → age helps
+volatility   median ΔLogLoss = +3.9%
+activity     median ΔLogLoss = +2.2%
+spread       median ΔLogLoss = +4.5%
 ```
 
-Per the decision rule above, the verdict is recorded:
+## Chief Quant interpretation — Age is a CALIBRATOR, not a predictor
+
+The improvement is real but its **nature** matters. Accuracy is essentially
+unchanged while calibration improves sharply:
 
 ```text
-AGE IS NOW A FIRST-CLASS FEATURE.
+Accuracy   91% → 91%      (direction unchanged)
+ECE        0.030 → 0.013  (confidence much better)
 ```
+
+This means the model did **not** learn a new direction. It learned **better
+confidence**. Therefore the doctrine is corrected:
+
+```text
+WRONG:  State Age predicts transitions.
+RIGHT:  State Age improves transition probability calibration.
+```
+
+Per the decision rule, age is promoted — but specifically as a **first-class
+CALIBRATION feature** (it sharpens P(change)), not as a new directional
+predictor.
 
 Implementation of record: `src/research/state_transition_model.py`.
 
@@ -275,8 +327,9 @@ Phase 1     Market State Engine          COMPLETE
 Phase 1.5   Transition Engine            COMPLETE
 Phase 1.6   State Age Analysis           COMPLETE
 Phase 1.7   State Context Engine         COMPLETE   (Amendment 1)
-Phase 1.8   State Transition Model       COMPLETE   (Amendment 4 — age = first-class)
-Phase 2     Adaptive Volume Bars         NEXT
+Phase 1.8   State Transition Model       COMPLETE   (Amendment 4 — age = calibrator)
+Phase 1.9   Context Value Test           NEXT       (NEW — gate to Phase 2)
+Phase 2     Adaptive Volume Bars         BLOCKED    (until Phase 1.9 proves value)
 Phase 3     Event Diagnostics
 Phase 4     Event × Context Matrix
 Phase 5     Triple Barrier Framework
@@ -286,6 +339,31 @@ Phase 8     Risk Allocation Engine
 Phase 9     Machine Learning Models
 Phase 10    Production Deployment
 ```
+
+## Phase 1.9 — Context Value Test (NEW, mandatory gate)
+
+Objective — prove **Principle 03**: does Context add *trading* value, not just
+statistical value?
+
+```text
+Take one KJ event (e.g. Trend Pullback).
+Measure:   Event alone
+   vs      Event + Context
+```
+
+```text
+If   Event + Context  >  Event alone   →  V5 architecture is validated.
+```
+
+Constraints (Chief Quant directive): **no strategy, no ML, no LightGBM, no
+Triple Barrier** at this phase. Just the doctrine proof.
+
+Deliverable: `state_context_value_report.md`.
+
+> Phase 2 (Adaptive Volume Bars) stays **BLOCKED** until this report shows
+> Context-conditioned events carry higher EV than bare events. Volume Bars is
+> the next major milestone — not because *market states are complete*, but
+> because *market context is validated.*
 
 ---
 
@@ -347,8 +425,10 @@ All of the following remain in full force and are not restated here:
 * PART 8 — Outcome Engine (EV, not win rate)
 * PART 9–13 — Lifecycle, Pair Intelligence, Portfolio, Risk Allocation
 * PART 16–18 — Statistical Validation, Hypothesis Kill, Transaction Cost
-* V5.1 Findings A–F and Principles 01–02 (State precedes Event; Transition
-  precedes Opportunity)
+* V5.1 Findings A–E and Principles 01–02 (State precedes Event; Transition
+  precedes Opportunity). **Finding F is amended** (see Amendment 2): Activity
+  shows the strongest state-memory effects, but volatility and spread
+  demonstrate higher predictive stability.
 
 ---
 
