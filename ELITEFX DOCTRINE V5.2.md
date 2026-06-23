@@ -26,7 +26,7 @@ and amended by Chief Quant review:
 • Event × Context Rule
 • Principle 03 — trading relevance gate
 • Phase 1.8 Transition Modeling
-• Phase 1.9 Context Value Test            (gate to Phase 2)
+• Phase 1.9 Context Economic Value Test   (gate to Phase 2)
 ```
 
 This is **not a change of direction.** It adds what the data has already
@@ -58,12 +58,20 @@ Context must prove trading relevance,
 not only statistical relevance.
 ```
 
+```text
+Prediction ≠ Economic Value.
+```
+
 A finding that Context is statistically describable (state, age, transition
-probability, calibration) is **necessary but not sufficient.** Before Context
-is allowed to drive architecture beyond Phase 1, it must be shown to change
-the **EV of decisions on real events** — not merely to fit the data better.
-This principle is what makes **Phase 1.9 (Context Value Test)** a mandatory
-gate before Phase 2.
+probability, calibration) is **necessary but not sufficient.** Good LogLoss is
+not edge. Good calibration is not edge. Good accuracy is not edge. The only
+edge is **decision-quality improvement** — Context changing the **Win Rate,
+EV, R-multiple, and Hit Rate of decisions on real events.** A model can
+predict rain at 95% and still not help you make money trading maize.
+
+Before Context is allowed to drive architecture beyond Phase 1, it must clear
+this economic bar. This is what makes **Phase 1.9 (Context Economic Value
+Test)** a mandatory gate before Phase 2.
 
 ---
 
@@ -184,8 +192,8 @@ but remain difficult to predict.
 New finding (OFFICIAL):
 
 ```text
-Volatility and Spread currently provide
-the most predictable state dynamics.
+Volatility and spread currently provide
+more stable predictive structure.
 ```
 
 ```text
@@ -328,8 +336,8 @@ Phase 1.5   Transition Engine            COMPLETE
 Phase 1.6   State Age Analysis           COMPLETE
 Phase 1.7   State Context Engine         COMPLETE   (Amendment 1)
 Phase 1.8   State Transition Model       COMPLETE   (Amendment 4 — age = calibrator)
-Phase 1.9   Context Value Test           NEXT       (NEW — gate to Phase 2)
-Phase 2     Adaptive Volume Bars         BLOCKED    (until Phase 1.9 proves value)
+Phase 1.9   Context Economic Value Test  NEXT       (NEW — gate to Phase 2)
+Phase 2     Adaptive Volume Bars         BLOCKED    (until 1.9 proves economic value)
 Phase 3     Event Diagnostics
 Phase 4     Event × Context Matrix
 Phase 5     Triple Barrier Framework
@@ -340,32 +348,47 @@ Phase 9     Machine Learning Models
 Phase 10    Production Deployment
 ```
 
-## Phase 1.9 — Context Value Test (NEW, mandatory gate)
+## Phase 1.9 — Context Economic Value Test (NEW, mandatory gate)
 
-Objective — prove **Principle 03**: does Context add *trading* value, not just
-statistical value?
+Objective — prove **Principle 03**: does Context improve *trading decisions*,
+not just statistical fit?
 
 ```text
-Take one KJ event (e.g. Trend Pullback).
-Measure:   Event alone
-   vs      Event + Context
+Take ONE event from the Event Library
+(e.g. Trend Pullback / Deep Pullback / Breakout).
+
+Case A:  Event alone
+Case B:  Event + State + Age + Transition Probability
+
+Compare:  Win Rate · EV · R-Multiple · Hit Rate
 ```
 
 ```text
-If   Event + Context  >  Event alone   →  V5 architecture is validated.
+If   Event + Context  outperforms  Event alone
+     →  the STATE → AGE → TRANSITION → EVENT doctrine is validated.
+```
+
+Decision:
+
+```text
+YES →  APPROVED: proceed to Phase 2 (Adaptive Volume Bars).
+NO  →  State Engine remains useful, but is NOT sufficient
+       for alpha generation. Context stays descriptive only.
 ```
 
 Constraints (Chief Quant directive): **no strategy, no ML, no LightGBM, no
-Triple Barrier** at this phase. Just the doctrine proof.
+Triple Barrier, no optimization, no fitting** at this phase. Just the
+doctrine proof.
 
-Deliverable: `state_context_value_report.md`.
-Implementation of record: `src/research/state_context_value.py`
-(Trend Pullback / KJ #1; EV in net pips; online prequential; self-test passing).
+Deliverable: `context_value_report.md`.
+Implementation of record: `src/research/context_value.py`
+(Trend Pullback / KJ #1; Win Rate / EV / R-multiple / Hit Rate; online
+prequential, no-lookahead; self-test passing).
 
 > Phase 2 (Adaptive Volume Bars) stays **BLOCKED** until this report shows
-> Context-conditioned events carry higher EV than bare events. Volume Bars is
-> the next major milestone — not because *market states are complete*, but
-> because *market context is validated.*
+> Context-conditioned events carry higher decision quality than bare events.
+> Volume Bars is the next major milestone — not because *market states are
+> complete*, but because *market context is economically validated.*
 
 ---
 

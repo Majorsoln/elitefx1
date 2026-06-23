@@ -151,9 +151,9 @@ LOW_VOL iliyozaliwa jana  ≠  LOW_VOL iliyokaa bars 20.
 Finding F (toleo rasmi la V5.2):
 
 ```text
-Activity exhibits the strongest state-memory effects (Δ +40pp),
-but volatility and spread demonstrate higher predictive stability.
-Volatility and Spread currently provide the most predictable state dynamics.
+Activity exhibits stronger state-memory effects,
+but volatility and spread currently provide
+more stable predictive structure.
 ```
 
 Activity ina Δ kubwa zaidi ya P(stay) (+40pp) kuliko Volatility (+14pp) au Spread (+28pp)
