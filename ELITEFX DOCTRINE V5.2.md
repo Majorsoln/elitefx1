@@ -75,6 +75,40 @@ Test)** a mandatory gate before Phase 2.
 
 ---
 
+# NEW PRINCIPLE — Principle 12 (Context Is A Filter)
+
+## Principle 12 — Context Is A Filter
+
+```text
+Context is not an alpha source.
+
+Context does not create opportunity.
+
+Context filters opportunity.
+```
+
+The system does not trade because a state exists. The system trades when an
+**event occurs inside a favorable context.** This is confirmed empirically by
+Phase 1.9: Context did not improve win-probability prediction (ΔLogLoss ≈ 0),
+yet improved EV by *selecting* favorable contexts — i.e. it filtered, it did
+not predict.
+
+Decision Architecture (official):
+
+```text
+Event
+↓
+Context Filter
+↓
+Outcome Assessment
+↓
+Risk Allocation
+↓
+Execution
+```
+
+---
+
 # AMENDMENT 1 — State Context Engine Is Now Core Architecture
 
 ## What changed

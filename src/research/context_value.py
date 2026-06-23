@@ -65,9 +65,11 @@ DIMS = [("volatility", "volatility_state"),
         ("activity",   "activity_state"),
         ("spread",     "spread_state")]
 
-# --- Event: Trend Pullback (KJ Event #1) ---
-SHORT_LEN = 5
-LONG_LEN  = 20
+# --- Events (KJ Event Library) ---
+SHORT_LEN   = 5     # Trend Pullback (KJ #1)
+LONG_LEN    = 20
+BREAKOUT_LEN = 10   # Super Simple Breakout (KJ #4)
+MEANREV_LEN  = 10   # Mean Reversion (KJ #8-style: N-bar extreme)
 # --- Outcome (no triple barrier — forward horizon, net ya spread) ---
 HORIZON   = 6        # bars mbele kwa outcome (Japhet anaweza kurekebisha)
 # --- Tathmini ya prequential ---
@@ -76,8 +78,9 @@ ALPHA     = 0.5      # Laplace smoothing kwa P(win)
 _posix = lambda p: str(p).replace("\\", "/")
 
 
-def pullback_signals(close: np.ndarray) -> np.ndarray:
-    """+1 = long, -1 = short, 0 = hakuna. Trend Pullback (KJ #1), no-lookahead."""
+def pullback_signals(close, high=None, low=None) -> np.ndarray:
+    """+1 = long, -1 = short, 0 = hakuna. Trend Pullback (KJ #1), no-lookahead.
+    Long: close > close[short] AND close < close[long]; short = mirror."""
     n = len(close); sig = np.zeros(n, dtype=int)
     for i in range(LONG_LEN, n):
         cs, cl = close[i - SHORT_LEN], close[i - LONG_LEN]
@@ -86,6 +89,40 @@ def pullback_signals(close: np.ndarray) -> np.ndarray:
         elif close[i] < cs and close[i] > cl:
             sig[i] = -1
     return sig
+
+
+def breakout_signals(close, high, low) -> np.ndarray:
+    """Super Simple Breakout (KJ #4), no-lookahead. Long: close inavunja juu ya
+    highest(high, x) ya bars ZILIZOPITA; short: chini ya lowest(low, x)."""
+    n = len(close); sig = np.zeros(n, dtype=int); x = BREAKOUT_LEN
+    for i in range(x, n):
+        hh = np.max(high[i - x:i]); ll = np.min(low[i - x:i])      # past x bars (excl. i)
+        if close[i] > hh:
+            sig[i] = 1
+        elif close[i] < ll:
+            sig[i] = -1
+    return sig
+
+
+def meanrev_signals(close, high=None, low=None) -> np.ndarray:
+    """Mean Reversion (KJ #8-style), no-lookahead. Long pale close = lowest(close, N)
+    (N-bar low -> tegemea bounce); short pale close = highest(close, N)."""
+    n = len(close); sig = np.zeros(n, dtype=int); N = MEANREV_LEN
+    for i in range(N - 1, n):
+        w = close[i - N + 1:i + 1]                                  # window inajumuisha i
+        if close[i] <= w.min():
+            sig[i] = 1
+        elif close[i] >= w.max():
+            sig[i] = -1
+    return sig
+
+
+# Event registry (jina -> signal fn). KJ Event Library.
+EVENTS = {
+    "pullback":      pullback_signals,
+    "breakout":      breakout_signals,
+    "mean_reversion": meanrev_signals,
+}
 
 
 def event_records(close, spr_pips, atr_pips, sig, age):
@@ -170,13 +207,16 @@ def prequential_value(state_keys, age_bkts, nets, wins, rmults, hits):
                 br_B=(brB / n_scored) if n_scored else float("nan"), n_scored=n_scored)
 
 
-def evaluate_pair_tf(df, pp):
-    """df ina ts, o,h,l,c, atr, spr (pips), + state cols. Rudisha {dim: metrics}."""
+def evaluate_pair_tf(df, pp, sigfn=pullback_signals):
+    """df ina ts, o,h,l,c, atr, spr (pips), + state cols. sigfn = event signal
+    fn (EVENTS). Rudisha {dim: metrics}."""
     close = df["c"].to_numpy() / pp                  # pips-scale
+    high = df["h"].to_numpy() / pp
+    low = df["l"].to_numpy() / pp
     atr_pips = df["atr"].to_numpy() / pp
     spr = df["spr"].to_numpy()
     spr = np.where(np.isfinite(spr), spr, 0.0)
-    sig = pullback_signals(close)
+    sig = sigfn(close, high, low)
     res = {}
     for dim, col in DIMS:
         states = df[col].to_list()
@@ -191,8 +231,9 @@ def evaluate_pair_tf(df, pp):
     return res
 
 
-def run(pairs, tfs):
+def run(pairs, tfs, event="pullback"):
     c = cfg(); raw = REPO_ROOT / c["paths"]["raw_ticks"]
+    sigfn = EVENTS[event]
     if not raw.exists():
         print(f"HITILAFU: '{raw}' haipo. (Phase 1.9 inahitaji raw ticks.)", file=sys.stderr)
         return 1
@@ -207,7 +248,7 @@ def run(pairs, tfs):
         h1 = h1_from_ticks(con, src, t, pp)
         for tf in tfs:
             df = state_df(rollup(h1, tf), tf)
-            res = evaluate_pair_tf(df, pp)
+            res = evaluate_pair_tf(df, pp, sigfn)
             for dim, _ in DIMS:
                 if res[dim]:
                     rows[dim].append((sym, tf, res[dim])); any_data = True
@@ -217,7 +258,7 @@ def run(pairs, tfs):
         print("HITILAFU: hakuna events/data.", file=sys.stderr); return 1
 
     L = ["# Context Economic Value Test — je Context inaboresha DECISIONS? (Phase 1.9)\n",
-         f"*{datetime.now():%Y-%m-%d %H:%M} | Event: Trend Pullback (KJ #1, short={SHORT_LEN}/long={LONG_LEN}) | "
+         f"*{datetime.now():%Y-%m-%d %H:%M} | Event: {event} | "
          f"outcome: forward {HORIZON} bars NET ya spread | ONLINE prequential (no-lookahead) | "
          f"context gate: EV>0 past, min={MIN_OBS}*\n",
          "> **Principle 03 (V5.2): Prediction ≠ Economic Value.** LogLoss/calibration SI edge. "
@@ -309,15 +350,19 @@ def self_test():
     print(f"null:        Win {a2['win']*100:.0f}→{b2['win']*100:.0f}% | EV {a2['ev']:+.2f}→{b2['ev']:+.2f} "
           f"(ΔEV={b2['ev']-a2['ev']:+.2f}, tarajio ≈0)")
 
-    # signal + record logic kwenye bei bandia
+    # signal + record logic kwenye bei bandia (events zote 3)
     close = np.cumsum(rng.normal(0, 1, 500)) + 1000.0
-    sig = pullback_signals(close)
+    high = close + np.abs(rng.normal(0, 0.5, 500)); low = close - np.abs(rng.normal(0, 0.5, 500))
+    sigs = {nm: fn(close, high, low) for nm, fn in EVENTS.items()}
+    sig_ok = all((s != 0).sum() > 0 and set(np.unique(s)).issubset({-1, 0, 1}) for s in sigs.values())
+    sig = sigs["pullback"]
     idx, nn, ww, rr, hh, aa = event_records(close, np.full(len(close), 0.5),
                                             np.full(len(close), 10.0), sig, np.arange(1, len(close)+1))
     rec_ok = len(nn) > 0 and all(i + HORIZON < len(close) for i in idx) and np.isfinite(rr).any()
-    print(f"signals: n={int((sig!=0).sum())} records={len(nn)} R-finite={np.isfinite(rr).any()}")
+    print(f"signals/event: " + " ".join(f"{nm}={int((s!=0).sum())}" for nm, s in sigs.items())
+          + f" | records(pullback)={len(nn)}")
 
-    ok = inf_ev and inf_win and inf_r and inf_ll and null_flat and rec_ok
+    ok = inf_ev and inf_win and inf_r and inf_ll and null_flat and rec_ok and sig_ok
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -326,6 +371,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbol", default=None)
     ap.add_argument("--tf", default=None, choices=TFS)
+    ap.add_argument("--event", default="pullback", choices=list(EVENTS))
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -333,7 +379,7 @@ def main():
     c = cfg()
     pairs = [a.symbol] if a.symbol else c["pairs"]
     tfs = [a.tf] if a.tf else TFS
-    return run(pairs, tfs)
+    return run(pairs, tfs, a.event)
 
 
 if __name__ == "__main__":
