@@ -359,6 +359,8 @@ Constraints (Chief Quant directive): **no strategy, no ML, no LightGBM, no
 Triple Barrier** at this phase. Just the doctrine proof.
 
 Deliverable: `state_context_value_report.md`.
+Implementation of record: `src/research/state_context_value.py`
+(Trend Pullback / KJ #1; EV in net pips; online prequential; self-test passing).
 
 > Phase 2 (Adaptive Volume Bars) stays **BLOCKED** until this report shows
 > Context-conditioned events carry higher EV than bare events. Volume Bars is
