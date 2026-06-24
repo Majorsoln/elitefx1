@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Information Density & Context Generalization**
 
 Version: 5.3
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.4 (current SSOT) — carry-forward in force
 Date: 24 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.4, 24 June 2026)
 Supersedes: V5.2 (records two new approved findings; corrects Volume Bars principle)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.4](ELITEFX%20DOCTRINE%20V5.4.md)**
+> (F-009 Context Sensitivity Is Event-Specific; Event Priority Tiers; Phase 5
+> Triple Barrier). V5.3 inabaki carry-forward.
 
 > Live program status (phases, ledger, approvals) lives in
 > `docs/PROGRAM_BOARD.md`. This file is the doctrine of record; V5.0–V5.2 remain

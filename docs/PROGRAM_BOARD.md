@@ -3,21 +3,21 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.3.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.4.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-24 (Chief review: Phase 3 conditionally approved; Phase 3.5 Context Selectivity opened).*
+*Last updated: 2026-06-24 (Chief review: Phase 4 PASSED → F-009; Phase 5 Triple Barrier opened).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.3.md`
+- `ELITEFX_DOCTRINE_V5.4.md`
 
 Status:
 - ACTIVE
@@ -28,6 +28,7 @@ Superseded:
 - V5.0
 - V5.1 (folded into V5.2)
 - V5.2 (superseded by V5.3)
+- V5.3 (superseded by V5.4)
 - Patches
 
 ---
@@ -86,6 +87,24 @@ D1 −3.16 → D10 +1.29; Breakout −3.80 → −0.32; Mean Reversion −1.58 �
 3/3 events). Context = ranking system, NOT pass/fail. Drives Principle 13.
 Q-005 CLOSED.
 
+**[F-009] Context Sensitivity Is Event-Specific**
+Status: APPROVED
+Evidence: `event_context_matrix_report.md`
+Summary: Events differ in context response (improvement = Top10 EV − All EV).
+Tier 1 (Top10 EV>0): Mean Reversion +2.49, Pullback +2.47, Deep Pullback +2.14,
+Trend Continuation +2.11. Tier 2 (helps, EV≤~0): Breakout +1.54, Vol Breakout
++1.23, News Shock +0.95. Tier 3 (fails): Vol Expansion −0.15, Pattern Completion
+−0.81. Event Library ≠ one block. Outcome research = Tier 1 only. Q-006 CLOSED.
+⚠️ Profitable ≠ Tradable Edge (raw pips; no cost model / barrier / walk-forward).
+
+### Event Priority Framework (F-009)
+
+```text
+Tier 1 (priority): Mean Reversion · Pullback · Deep Pullback · Trend Continuation
+Tier 2 (helps, insufficient): Breakout · Volatility Breakout · News Shock
+Tier 3 (ARCHIVED from edge research): Volatility Expansion · Pattern Completion
+```
+
 ---
 
 ## Rejected Findings
@@ -109,18 +128,16 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **4**
-Name: **Event × Context Matrix**
+Phase: **5**
+Name: **Triple Barrier Design (Tier 1 only)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Ni event gani inanufaika ZAIDI na context? Kwa kila event 9: Event Only
-(EV/Win/Freq) vs Event + Top context deciles (Top 10/20/30/50%). Matrix +
-improvement. Msingi kabla ya Triple Barrier. NO ML, NO triple barrier.
+Question: Tier 1 events: barrier width (0.5/1.0/1.5/2.0σ)? vertical (3/5/10/20
+bars)? P(TP)/P(SL)/P(TIME)? je hubadilika kwa context decile? Design tu, NO ML.
 
-> Phase 3.5 (Context Selectivity): **PASSED** → F-008 (Context = ranking engine).
-> Phase 3 (Event Diagnostics): CONDITIONALLY APPROVED (context metric too permissive,
-> fixed by ranking in 3.5).
+> Phase 4 (Event × Context Matrix): **PASSED** → F-009 (context sensitivity is
+> event-specific; Tier 1/2/3). ⚠️ Profitable ≠ Tradable Edge.
 
 ---
 
@@ -138,15 +155,15 @@ improvement. Msingi kabla ya Triple Barrier. NO ML, NO triple barrier.
 - [✓] Phase 2.1  Volume Information Value  (F-007: information density)
 - [~] Phase 3    Event Diagnostics        (CONDITIONALLY APPROVED — context metric too permissive)
 - [✓] Phase 3.5  Context Selectivity      (F-008: context = ranking engine)
+- [✓] Phase 4    Event × Context Matrix   (F-009: context sensitivity event-specific)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 4     Event × Context Matrix  *(ACTIVE — engine ready, report pending data run)*
-- [ ] Phase 5     Triple Barrier          *(BLOCKED — Chief approval)*
-- [ ] Phase 6     Outcome Engine          *(BLOCKED)*
-- [ ] Phase 7     Lifecycle Controller
+- [ ] Phase 5     Triple Barrier Design   *(ACTIVE — Tier 1 only; engine ready, report pending data run)*
+- [ ] Phase 6     Outcome Engine          *(BLOCKED — Chief approval)*
+- [ ] Phase 7     Lifecycle Controller    *(BLOCKED)*
 
 ---
 
@@ -174,9 +191,13 @@ Evidence: `context_selectivity_report.md` (monotonic decile-EV, 3/3 events).
 Resolution: Context is a RANKING engine, not a binary filter (Principle 13).
 
 **Q-006 — Which event benefits most from context ranking?**
+Status: **CLOSED — APPROVED** (F-009)
+Evidence: `event_context_matrix_report.md` (Tier 1: MR/PB/DPB/TC; Top10 EV>0).
+
+**Q-007 — What barrier/vertical and outcome odds for Tier 1 events?**
 Status: OPEN
-Needed: Phase 4 (`event_context_matrix_report.md`) — Event Only vs Event + Top
-context deciles, per event. Foundation before Triple Barrier.
+Needed: Phase 5 (`triple_barrier_design_report.md`) — P(TP/SL/TIME) by
+barrier×vertical, and shift by context decile. Tier 1 only. Design (no ML).
 
 ---
 
@@ -190,6 +211,7 @@ context deciles, per event. Foundation before Triple Barrier.
 - 2026-06-24 — **V5.3**: F-006, F-007. Volume Bars = "concentrate information; Information Density > Calendar Uniformity".
 - 2026-06-24 — Phase 3 context 'favorable' metric too permissive (~99%); no F-008 yet; Q-005 opened.
 - 2026-06-24 — **F-008** Context = Ranking Engine; **Principle 13** (Context Ranking) added to V5.3.
+- 2026-06-24 — **V5.4**: F-009 (context sensitivity event-specific); Event Priority Tiers; "Profitable ≠ Tradable Edge"; Phase 5 Triple Barrier (Tier 1).
 
 ---
 
@@ -212,6 +234,13 @@ context deciles, per event. Foundation before Triple Barrier.
 | 2026-06-24 | Phase 3.5 Context Selectivity | APPROVED (next) | Chief Quant |
 | 2026-06-24 | F-008 Context = Ranking Engine; Q-005 CLOSED; Principle 13 | APPROVED | Chief Quant |
 | 2026-06-24 | Phase 3.5 PASSED; Phase 4 Event × Context Matrix | APPROVED (start) | Chief Quant |
+| 2026-06-24 | Phase 4 PASSED; F-009 event-specific sensitivity; Event Tiers; doctrine V5.4 | APPROVED | Chief Quant |
+| 2026-06-24 | Phase 5 Triple Barrier (Tier 1 only, design, no ML) | APPROVED (start) | Chief Quant |
+
+### Archived (from current edge research)
+
+- Tier 3 events: Volatility Expansion, Pattern Completion (F-009; context fails).
+  Not deleted — may return with better representation/context.
 
 ### Still BLOCKED (Chief approval required)
 
