@@ -370,8 +370,10 @@ Phase 1.5   Transition Engine            COMPLETE
 Phase 1.6   State Age Analysis           COMPLETE
 Phase 1.7   State Context Engine         COMPLETE   (Amendment 1)
 Phase 1.8   State Transition Model       COMPLETE   (Amendment 4 — age = calibrator)
-Phase 1.9   Context Economic Value Test  NEXT       (NEW — gate to Phase 2)
-Phase 2     Adaptive Volume Bars         BLOCKED    (until 1.9 proves economic value)
+Phase 1.9   Context Economic Value Test  COMPLETE   (Context = filter, not predictor)
+Phase 1.95  Context Generalization Test   COMPLETE   (F-006: generalizes across events)
+Phase 2     Adaptive Volume Bars (stability)  REJECTED   (R-002: 0/9 pairs improved)
+Phase 2.1   Volume Information Value      NEXT       (do volume bars add INFORMATION?)
 Phase 3     Event Diagnostics
 Phase 4     Event × Context Matrix
 Phase 5     Triple Barrier Framework
@@ -382,7 +384,33 @@ Phase 9     Machine Learning Models
 Phase 10    Production Deployment
 ```
 
-## Phase 1.9 — Context Economic Value Test (NEW, mandatory gate)
+## Volume Bars — Representation, Not Stability (R-002)
+
+Earlier doctrine carried an implicit assumption:
+
+```text
+Volume Bars → Better (more stable) States
+```
+
+Phase 2 tested it directly (`adaptive_volume_bar_report.md`) and it **FAILED**:
+adaptive volume bars did **not** stabilise state distributions vs calendar bars
+(0/9 pairs for volatility, 0/9 for activity). The assumption is rejected
+(PROGRAM_BOARD R-002). Corrected doctrine:
+
+```text
+Volume Bars → Alternative Market Representation
+
+Status: UNPROVEN
+```
+
+Volume Bars are not dead — the report did **not** say that. It said they do
+not improve state-distribution *stability*. Whether they carry **more
+information** (persistence, age effect, transition predictability, context
+value) is the open question of **Phase 2.1 — Volume Information Value**
+(`volume_information_report.md`). No Volume-Bar → Transition → ML work proceeds
+until Phase 2.1 settles this.
+
+
 
 Objective — prove **Principle 03**: does Context improve *trading decisions*,
 not just statistical fit?

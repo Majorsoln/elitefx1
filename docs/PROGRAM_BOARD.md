@@ -59,6 +59,13 @@ median ΔEV chanya (vol +1.26 / spr +0.67 / act +0.59 pips), lakini ΔLogLoss �
 (P(win) haibadiliki). Hii inaunga mkono Principle 12 (Context = filter). Robustness
 inajaribiwa Phase 1.95.
 
+**[F-006] Context Value Generalizes Across Event Families**
+Status: APPROVED
+Evidence: `context_generalization_report.md`
+Note: Context adds value kwa Trend Pullback, Breakout, NA Mean Reversion — kwa
+dimensions zote tatu kwa viwango tofauti. Context ≠ Alpha; Context = Opportunity
+Filter (Principle 12) sasa ina ushahidi wa kutosha. Q-001 CLOSED.
+
 ---
 
 ## Rejected Findings
@@ -71,15 +78,24 @@ Replacement: *Activity shows strong state-memory but lower predictability;
 volatility and spread provide more stable predictive structure.*
 (Conflated Signal Strength ↔ Predictability.)
 
+**[R-002] Adaptive Volume Bars Create More Stable States**
+Status: REJECTED
+Evidence: `adaptive_volume_bar_report.md`
+Reason: 0/9 pairs improved kwa volatility; 0/9 pairs improved kwa activity.
+Replacement (doctrine): *Volume Bars → Alternative Market Representation;
+Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
+
 ---
 
 ## Current Phase
 
-Phase: **1.95**
-Name: **Context Generalization Test**
+Phase: **2.1**
+Name: **Volume Information Value**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
+Question: Volume bars hazijastabilize states — lakini je zinaongeza INFORMATION?
+(persistence · age effect · transition predictability · context value: Calendar vs Volume)
 
 ---
 
@@ -91,14 +107,15 @@ Chief Approval: YES
 - [✓] Phase 1.6  State Age
 - [✓] Phase 1.7  Context Engine
 - [✓] Phase 1.8  Transition Model
-- [✓] Phase 1.9  Context Value
+- [✓] Phase 1.9  Context Value           (Context = filter, not predictor)
+- [✓] Phase 1.95 Context Generalization  (F-006: generalizes across events)
+- [✗] Phase 2    Adaptive Volume Bars (stability)  REJECTED (R-002)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 1.95  Context Generalization   *(ACTIVE — engine ready, report pending data run)*
-- [ ] Phase 2     Adaptive Volume Bars      *(design APPROVED, no ML — engine ready, report pending data run)*
+- [ ] Phase 2.1   Volume Information Value  *(ACTIVE — engine ready, report pending data run)*
 - [ ] Phase 3     Event Diagnostics
 - [ ] Phase 4     Event × Context Matrix
 - [ ] Phase 5     Triple Barrier
@@ -110,13 +127,16 @@ Chief Approval: YES
 ## Open Questions
 
 **Q-001 — Does Context improve more than one Event Family?**
-Status: OPEN
-Needed: Breakout, Mean Reversion
-Owner: Phase 1.95
+Status: **CLOSED — APPROVED** (F-006)
+Evidence: `context_generalization_report.md` (Pullback + Breakout + Mean Reversion)
 
 **Q-002 — Do Volume Bars improve signal quality?**
+Status: PARTIAL — stability REJECTED (R-002); INFORMATION open (Phase 2.1)
+
+**Q-003 — Do Volume Bars add INFORMATION (not stability)?**
 Status: OPEN
-Needed: Phase 2
+Needed: Phase 2.1 (`volume_information_report.md`) — persistence, age effect,
+transition predictability, context value (Calendar vs Volume)
 
 ---
 
@@ -126,6 +146,7 @@ Needed: Phase 2
 - 2026-06-23 — Age = CALIBRATOR (sio predictor). Finding F amended (R-001).
 - 2026-06-23 — Principle 03: Context must prove trading relevance (Prediction ≠ Economic Value).
 - 2026-06-23 — Principle 12: **Context Is A Filter** (sio alpha source).
+- 2026-06-23 — Volume Bars = Alternative Representation, Status UNPROVEN (R-002 rejected stability).
 
 ---
 
@@ -138,6 +159,9 @@ Needed: Phase 2
 | 2026-06-23 | F-005 Context improves event quality | APPROVED | Chief Quant |
 | 2026-06-23 | Phase 1.95 Context Generalization | APPROVED (start) | Chief Quant |
 | 2026-06-23 | Phase 2 Adaptive Volume Bars (design, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-23 | F-006 Context value generalizes; Q-001 CLOSED | APPROVED | Chief Quant |
+| 2026-06-23 | R-002 Volume bars → stable states | REJECTED | Chief Quant |
+| 2026-06-23 | Phase 2.1 Volume Information Value | APPROVED (next) | Chief Quant |
 
 ### Still BLOCKED (Chief approval required)
 
