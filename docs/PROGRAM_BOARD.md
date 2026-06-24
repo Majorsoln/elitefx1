@@ -3,21 +3,21 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.2.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.3.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-23 (Chief Quant Directive 2026-06-23).*
+*Last updated: 2026-06-24 (Chief Quant review: F-007, Phase 2 COMPLETE, Phase 3 open).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.2.md`
+- `ELITEFX_DOCTRINE_V5.3.md`
 
 Status:
 - ACTIVE
@@ -27,6 +27,7 @@ Superseded:
 - V4.1
 - V5.0
 - V5.1 (folded into V5.2)
+- V5.2 (superseded by V5.3)
 - Patches
 
 ---
@@ -66,6 +67,16 @@ Note: Context adds value kwa Trend Pullback, Breakout, NA Mean Reversion — kwa
 dimensions zote tatu kwa viwango tofauti. Context ≠ Alpha; Context = Opportunity
 Filter (Principle 12) sasa ina ushahidi wa kutosha. Q-001 CLOSED.
 
+**[F-007] Volume Bars Increase Information Density**
+Status: APPROVED
+Evidence: `adaptive_volume_bar_report.md` + `volume_information_report.md`
+Summary: Volume bars HAZIBORESHI stability (R-002). Lakini zinaboresha
+INFORMATION — state persistence, state age effect, transition predictability
+(activity LogLoss 0.84→0.63, acc +12pp), na context utility (18/18 dim×pair).
+Kwa hiyo volume bars zinabaki **preferred market representation**. Doctrine V5.3:
+*Volume bars exist because they concentrate information; Information Density >
+Calendar Uniformity.* Q-003 CLOSED.
+
 ---
 
 ## Rejected Findings
@@ -89,13 +100,13 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **2.1**
-Name: **Volume Information Value**
+Phase: **3**
+Name: **Event Diagnostics**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Volume bars hazijastabilize states — lakini je zinaongeza INFORMATION?
-(persistence · age effect · transition predictability · context value: Calendar vs Volume)
+Question: Events 9 (KJ Event Library) zinatokeaje NDANI ya context? (frequency ·
+context coverage · state/age/transition distribution). NO outcomes, NO ML.
 
 ---
 
@@ -109,17 +120,17 @@ Question: Volume bars hazijastabilize states — lakini je zinaongeza INFORMATIO
 - [✓] Phase 1.8  Transition Model
 - [✓] Phase 1.9  Context Value           (Context = filter, not predictor)
 - [✓] Phase 1.95 Context Generalization  (F-006: generalizes across events)
-- [✗] Phase 2    Adaptive Volume Bars (stability)  REJECTED (R-002)
+- [✓] Phase 2    Adaptive Volume Bars     (stability REJECTED R-002; information F-007)
+- [✓] Phase 2.1  Volume Information Value  (F-007: information density)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 2.1   Volume Information Value  *(ACTIVE — engine ready, report pending data run)*
-- [ ] Phase 3     Event Diagnostics
+- [ ] Phase 3     Event Diagnostics       *(ACTIVE — engine ready, report pending data run)*
 - [ ] Phase 4     Event × Context Matrix
-- [ ] Phase 5     Triple Barrier
-- [ ] Phase 6     Outcome Engine
+- [ ] Phase 5     Triple Barrier          *(BLOCKED — Chief approval)*
+- [ ] Phase 6     Outcome Engine          *(BLOCKED)*
 - [ ] Phase 7     Lifecycle Controller
 
 ---
@@ -131,12 +142,16 @@ Status: **CLOSED — APPROVED** (F-006)
 Evidence: `context_generalization_report.md` (Pullback + Breakout + Mean Reversion)
 
 **Q-002 — Do Volume Bars improve signal quality?**
-Status: PARTIAL — stability REJECTED (R-002); INFORMATION open (Phase 2.1)
+Status: ANSWERED — stability REJECTED (R-002); INFORMATION APPROVED (F-007)
 
 **Q-003 — Do Volume Bars add INFORMATION (not stability)?**
+Status: **CLOSED — APPROVED** (F-007)
+Evidence: `volume_information_report.md` (18/18 dim×pair, predictability ∨ context)
+
+**Q-004 — How do the 9 events occur inside context?**
 Status: OPEN
-Needed: Phase 2.1 (`volume_information_report.md`) — persistence, age effect,
-transition predictability, context value (Calendar vs Volume)
+Needed: Phase 3 (`event_diagnostics_report.md`) — frequency, context coverage,
+state/age/transition distribution per event
 
 ---
 
@@ -147,6 +162,7 @@ transition predictability, context value (Calendar vs Volume)
 - 2026-06-23 — Principle 03: Context must prove trading relevance (Prediction ≠ Economic Value).
 - 2026-06-23 — Principle 12: **Context Is A Filter** (sio alpha source).
 - 2026-06-23 — Volume Bars = Alternative Representation, Status UNPROVEN (R-002 rejected stability).
+- 2026-06-24 — **V5.3**: F-006, F-007. Volume Bars = "concentrate information; Information Density > Calendar Uniformity".
 
 ---
 
@@ -162,6 +178,9 @@ transition predictability, context value (Calendar vs Volume)
 | 2026-06-23 | F-006 Context value generalizes; Q-001 CLOSED | APPROVED | Chief Quant |
 | 2026-06-23 | R-002 Volume bars → stable states | REJECTED | Chief Quant |
 | 2026-06-23 | Phase 2.1 Volume Information Value | APPROVED (next) | Chief Quant |
+| 2026-06-24 | F-007 Volume bars increase information density; Q-003 CLOSED | APPROVED | Chief Quant |
+| 2026-06-24 | Phase 2 COMPLETE; doctrine V5.3 | APPROVED | Chief Quant |
+| 2026-06-24 | Phase 3 Event Diagnostics | APPROVED (start) | Chief Quant |
 
 ### Still BLOCKED (Chief approval required)
 

@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Context Is a First-Class Citizen**
 
 Version: 5.2
-Status: APPROVED
+Status: Superseded by V5.3 (current SSOT) — carry-forward in force
 Date: 23 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.3, 24 June 2026)
 Supersedes: V5.0 (full) and V5.1 (folds the State-Dynamics amendment into the core)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.3](ELITEFX%20DOCTRINE%20V5.3.md)**
+> (F-006 Context Generalizes, F-007 Volume Bars = Information Density). V5.2
+> inabaki carry-forward isipokuwa Volume Bars rationale iliyosahihishwa V5.3.
 
 ---
 

@@ -58,6 +58,7 @@ import duckdb
 # reuse (sibling modules; dir iko kwenye sys.path tunapoendesha script moja kwa moja)
 from market_state_engine import (cfg, pip, time_col, h1_from_ticks, rollup, state_df)
 from state_context_engine import context_for_dim, _bidx
+from event_library import EVENTS_ALL, pullback_signals   # single source ya event signals
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TFS = ["H1", "H2", "H4", "D1"]
@@ -65,11 +66,6 @@ DIMS = [("volatility", "volatility_state"),
         ("activity",   "activity_state"),
         ("spread",     "spread_state")]
 
-# --- Events (KJ Event Library) ---
-SHORT_LEN   = 5     # Trend Pullback (KJ #1)
-LONG_LEN    = 20
-BREAKOUT_LEN = 10   # Super Simple Breakout (KJ #4)
-MEANREV_LEN  = 10   # Mean Reversion (KJ #8-style: N-bar extreme)
 # --- Outcome (no triple barrier — forward horizon, net ya spread) ---
 HORIZON   = 6        # bars mbele kwa outcome (Japhet anaweza kurekebisha)
 # --- Tathmini ya prequential ---
@@ -77,52 +73,8 @@ MIN_OBS   = 30       # samples za chini kwa (state,bucket) kabla ya kutumia cont
 ALPHA     = 0.5      # Laplace smoothing kwa P(win)
 _posix = lambda p: str(p).replace("\\", "/")
 
-
-def pullback_signals(close, high=None, low=None) -> np.ndarray:
-    """+1 = long, -1 = short, 0 = hakuna. Trend Pullback (KJ #1), no-lookahead.
-    Long: close > close[short] AND close < close[long]; short = mirror."""
-    n = len(close); sig = np.zeros(n, dtype=int)
-    for i in range(LONG_LEN, n):
-        cs, cl = close[i - SHORT_LEN], close[i - LONG_LEN]
-        if close[i] > cs and close[i] < cl:
-            sig[i] = 1
-        elif close[i] < cs and close[i] > cl:
-            sig[i] = -1
-    return sig
-
-
-def breakout_signals(close, high, low) -> np.ndarray:
-    """Super Simple Breakout (KJ #4), no-lookahead. Long: close inavunja juu ya
-    highest(high, x) ya bars ZILIZOPITA; short: chini ya lowest(low, x)."""
-    n = len(close); sig = np.zeros(n, dtype=int); x = BREAKOUT_LEN
-    for i in range(x, n):
-        hh = np.max(high[i - x:i]); ll = np.min(low[i - x:i])      # past x bars (excl. i)
-        if close[i] > hh:
-            sig[i] = 1
-        elif close[i] < ll:
-            sig[i] = -1
-    return sig
-
-
-def meanrev_signals(close, high=None, low=None) -> np.ndarray:
-    """Mean Reversion (KJ #8-style), no-lookahead. Long pale close = lowest(close, N)
-    (N-bar low -> tegemea bounce); short pale close = highest(close, N)."""
-    n = len(close); sig = np.zeros(n, dtype=int); N = MEANREV_LEN
-    for i in range(N - 1, n):
-        w = close[i - N + 1:i + 1]                                  # window inajumuisha i
-        if close[i] <= w.min():
-            sig[i] = 1
-        elif close[i] >= w.max():
-            sig[i] = -1
-    return sig
-
-
-# Event registry (jina -> signal fn). KJ Event Library.
-EVENTS = {
-    "pullback":      pullback_signals,
-    "breakout":      breakout_signals,
-    "mean_reversion": meanrev_signals,
-}
+# Events za Phase 1.9/1.95 (subset ya event_library; single source).
+EVENTS = {k: EVENTS_ALL[k] for k in ("pullback", "breakout", "mean_reversion")}
 
 
 def event_records(close, spr_pips, atr_pips, sig, age):

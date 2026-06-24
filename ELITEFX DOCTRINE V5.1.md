@@ -9,9 +9,9 @@ Authority: Single Source of Truth (superseded by V5.2, 23 June 2026)
 Supersedes: V5 draft sections on Event Priority
 Previous Versions: Archived (V4, V4.1, V5.0)
 
-> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.2](ELITEFX%20DOCTRINE%20V5.2.md)**.
-> V5.2 inafunga amendments za V5.1 kwenye core (State Context Engine, Transition
-> Probability Layer, Hypothesis H-01, Event × Context Rule, Phase 1.8). Soma V5.2.
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.3](ELITEFX%20DOCTRINE%20V5.3.md)**
+> (kupitia V5.2). Findings za hivi karibuni: F-006 (Context Generalizes), F-007
+> (Volume Bars = Information Density). Soma V5.3; live status: `docs/PROGRAM_BOARD.md`.
 
 ---
 

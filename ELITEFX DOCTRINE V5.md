@@ -3,10 +3,10 @@
 **Chief Quant Approved — Institutional Research & Trading Framework**
 
 > ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni
-> **[ELITEFX DOCTRINE V5.2](ELITEFX%20DOCTRINE%20V5.2.md)** (Context Is a First-Class
-> Citizen), inayofunga V5.1 (State Dynamics First). Mtiririko wa core:
-> **State → State Age → Transition Probability → Event → Outcome**. Soma V5.2 kwa
-> amendments rasmi (1–4); V5.0 hapa ni rejea ya carry-forward tu.
+> **[ELITEFX DOCTRINE V5.3](ELITEFX%20DOCTRINE%20V5.3.md)** (Information Density &
+> Context Generalization), kupitia V5.2/V5.1. Mtiririko wa core:
+> **Volume Representation → State → State Age → Transition → Context Filter → Event**.
+> Soma V5.3; live status: `docs/PROGRAM_BOARD.md`. V5.0 hapa ni carry-forward tu.
 
 Version: 5.0
 Status: Carry-forward reference (superseded by V5.1 and V5.2)
