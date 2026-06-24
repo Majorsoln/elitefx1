@@ -147,8 +147,9 @@ Phase 1.9   Context Economic Value       COMPLETE   (F-005; context = filter)
 Phase 1.95  Context Generalization       COMPLETE   (F-006)
 Phase 2     Adaptive Volume Bars         COMPLETE   (R-002 stability rejected; F-007 information)
 Phase 2.1   Volume Information Value      COMPLETE   (F-007)
-Phase 3     Event Diagnostics            NEXT       (events × context, no outcomes)
-Phase 4     Event × Context Matrix
+Phase 3     Event Diagnostics            CONDITIONAL (delivered; context metric too permissive)
+Phase 3.5   Context Selectivity          NEXT       (ranking engine vs binary filter? — Q-005)
+Phase 4     Event × Context Matrix       BLOCKED (until context defined)
 Phase 5     Triple Barrier Framework     BLOCKED (Chief approval)
 Phase 6     Outcome Engine               BLOCKED
 Phase 9     Machine Learning Models      BLOCKED

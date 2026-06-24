@@ -10,7 +10,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-24 (Chief Quant review: F-007, Phase 2 COMPLETE, Phase 3 open).*
+*Last updated: 2026-06-24 (Chief review: Phase 3 conditionally approved; Phase 3.5 Context Selectivity opened).*
 
 ---
 
@@ -100,13 +100,19 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **3**
-Name: **Event Diagnostics**
+Phase: **3.5**
+Name: **Context Selectivity**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Events 9 (KJ Event Library) zinatokeaje NDANI ya context? (frequency ·
-context coverage · state/age/transition distribution). NO outcomes, NO ML.
+Question: Je context ni RANKING ENGINE au BINARY FILTER? Phase 3 ilionyesha
+'favorable ≈ 99%' (binary permissive mno). Decile ranking ya context score +
+EV/Win/Count -> tofautisha ranking vs pass/fail. NO ML, NO triple barrier.
+
+> Phase 3 (Event Diagnostics): **CONDITIONALLY APPROVED** — data ilikusanywa
+> vizuri (frequency/state/age/transition halali), lakini metric ya 'favorable'
+> (pchange<0.5) ilikuwa PERMISSIVE mno (~99%) -> haina discrimination. Hii
+> inashughulikiwa Phase 3.5 kabla ya Phase 4.
 
 ---
 
@@ -122,13 +128,14 @@ context coverage · state/age/transition distribution). NO outcomes, NO ML.
 - [✓] Phase 1.95 Context Generalization  (F-006: generalizes across events)
 - [✓] Phase 2    Adaptive Volume Bars     (stability REJECTED R-002; information F-007)
 - [✓] Phase 2.1  Volume Information Value  (F-007: information density)
+- [~] Phase 3    Event Diagnostics        (CONDITIONALLY APPROVED — context metric too permissive)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 3     Event Diagnostics       *(ACTIVE — engine ready, report pending data run)*
-- [ ] Phase 4     Event × Context Matrix
+- [ ] Phase 3.5   Context Selectivity     *(ACTIVE — engine ready, report pending data run)*
+- [ ] Phase 4     Event × Context Matrix  *(BLOCKED until context defined — Q-005)*
 - [ ] Phase 5     Triple Barrier          *(BLOCKED — Chief approval)*
 - [ ] Phase 6     Outcome Engine          *(BLOCKED)*
 - [ ] Phase 7     Lifecycle Controller
@@ -149,9 +156,16 @@ Status: **CLOSED — APPROVED** (F-007)
 Evidence: `volume_information_report.md` (18/18 dim×pair, predictability ∨ context)
 
 **Q-004 — How do the 9 events occur inside context?**
+Status: ANSWERED (occurrence mapped) — `event_diagnostics_report.md`
+Note: frequency/state/age/transition distributions halali; lakini 'favorable'
+metric ilikuwa permissive mno -> Q-005.
+
+**Q-005 — Does Context Meaningfully Filter Events?**
 Status: OPEN
-Needed: Phase 3 (`event_diagnostics_report.md`) — frequency, context coverage,
-state/age/transition distribution per event
+Reason: current context binary accepts ~99% of events (filter strength ≈ 0).
+Need: context selectivity analysis (decile ranking, EV/Win/Count per bucket).
+Owner: Phase 3.5 (`context_selectivity_report.md`). Suspicion: Context = Ranking
+Engine, sio Pass/Fail Filter.
 
 ---
 
@@ -163,6 +177,7 @@ state/age/transition distribution per event
 - 2026-06-23 — Principle 12: **Context Is A Filter** (sio alpha source).
 - 2026-06-23 — Volume Bars = Alternative Representation, Status UNPROVEN (R-002 rejected stability).
 - 2026-06-24 — **V5.3**: F-006, F-007. Volume Bars = "concentrate information; Information Density > Calendar Uniformity".
+- 2026-06-24 — Phase 3 context 'favorable' metric too permissive (~99%); no F-008 yet; Q-005 opened.
 
 ---
 
@@ -181,6 +196,8 @@ state/age/transition distribution per event
 | 2026-06-24 | F-007 Volume bars increase information density; Q-003 CLOSED | APPROVED | Chief Quant |
 | 2026-06-24 | Phase 2 COMPLETE; doctrine V5.3 | APPROVED | Chief Quant |
 | 2026-06-24 | Phase 3 Event Diagnostics | APPROVED (start) | Chief Quant |
+| 2026-06-24 | Phase 3 Event Diagnostics (delivered) | CONDITIONALLY APPROVED | Chief Quant |
+| 2026-06-24 | Phase 3.5 Context Selectivity | APPROVED (next) | Chief Quant |
 
 ### Still BLOCKED (Chief approval required)
 
