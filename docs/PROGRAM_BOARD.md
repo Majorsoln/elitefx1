@@ -77,6 +77,15 @@ Kwa hiyo volume bars zinabaki **preferred market representation**. Doctrine V5.3
 *Volume bars exist because they concentrate information; Information Density >
 Calendar Uniformity.* Q-003 CLOSED.
 
+**[F-008] Context Is A Ranking Engine**
+Status: APPROVED
+Evidence: `context_selectivity_report.md`
+Summary: Binary context filtering was too permissive (~99% accept). Decile
+ranking by context score shows strong monotonic EV improvement (Pullback
+D1 −3.16 → D10 +1.29; Breakout −3.80 → −0.32; Mean Reversion −1.58 → +2.29;
+3/3 events). Context = ranking system, NOT pass/fail. Drives Principle 13.
+Q-005 CLOSED.
+
 ---
 
 ## Rejected Findings
@@ -100,19 +109,18 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **3.5**
-Name: **Context Selectivity**
+Phase: **4**
+Name: **Event × Context Matrix**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Je context ni RANKING ENGINE au BINARY FILTER? Phase 3 ilionyesha
-'favorable ≈ 99%' (binary permissive mno). Decile ranking ya context score +
-EV/Win/Count -> tofautisha ranking vs pass/fail. NO ML, NO triple barrier.
+Question: Ni event gani inanufaika ZAIDI na context? Kwa kila event 9: Event Only
+(EV/Win/Freq) vs Event + Top context deciles (Top 10/20/30/50%). Matrix +
+improvement. Msingi kabla ya Triple Barrier. NO ML, NO triple barrier.
 
-> Phase 3 (Event Diagnostics): **CONDITIONALLY APPROVED** — data ilikusanywa
-> vizuri (frequency/state/age/transition halali), lakini metric ya 'favorable'
-> (pchange<0.5) ilikuwa PERMISSIVE mno (~99%) -> haina discrimination. Hii
-> inashughulikiwa Phase 3.5 kabla ya Phase 4.
+> Phase 3.5 (Context Selectivity): **PASSED** → F-008 (Context = ranking engine).
+> Phase 3 (Event Diagnostics): CONDITIONALLY APPROVED (context metric too permissive,
+> fixed by ranking in 3.5).
 
 ---
 
@@ -129,13 +137,13 @@ EV/Win/Count -> tofautisha ranking vs pass/fail. NO ML, NO triple barrier.
 - [✓] Phase 2    Adaptive Volume Bars     (stability REJECTED R-002; information F-007)
 - [✓] Phase 2.1  Volume Information Value  (F-007: information density)
 - [~] Phase 3    Event Diagnostics        (CONDITIONALLY APPROVED — context metric too permissive)
+- [✓] Phase 3.5  Context Selectivity      (F-008: context = ranking engine)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 3.5   Context Selectivity     *(ACTIVE — engine ready, report pending data run)*
-- [ ] Phase 4     Event × Context Matrix  *(BLOCKED until context defined — Q-005)*
+- [ ] Phase 4     Event × Context Matrix  *(ACTIVE — engine ready, report pending data run)*
 - [ ] Phase 5     Triple Barrier          *(BLOCKED — Chief approval)*
 - [ ] Phase 6     Outcome Engine          *(BLOCKED)*
 - [ ] Phase 7     Lifecycle Controller
@@ -161,11 +169,14 @@ Note: frequency/state/age/transition distributions halali; lakini 'favorable'
 metric ilikuwa permissive mno -> Q-005.
 
 **Q-005 — Does Context Meaningfully Filter Events?**
+Status: **CLOSED — APPROVED as RANKING** (F-008)
+Evidence: `context_selectivity_report.md` (monotonic decile-EV, 3/3 events).
+Resolution: Context is a RANKING engine, not a binary filter (Principle 13).
+
+**Q-006 — Which event benefits most from context ranking?**
 Status: OPEN
-Reason: current context binary accepts ~99% of events (filter strength ≈ 0).
-Need: context selectivity analysis (decile ranking, EV/Win/Count per bucket).
-Owner: Phase 3.5 (`context_selectivity_report.md`). Suspicion: Context = Ranking
-Engine, sio Pass/Fail Filter.
+Needed: Phase 4 (`event_context_matrix_report.md`) — Event Only vs Event + Top
+context deciles, per event. Foundation before Triple Barrier.
 
 ---
 
@@ -178,6 +189,7 @@ Engine, sio Pass/Fail Filter.
 - 2026-06-23 — Volume Bars = Alternative Representation, Status UNPROVEN (R-002 rejected stability).
 - 2026-06-24 — **V5.3**: F-006, F-007. Volume Bars = "concentrate information; Information Density > Calendar Uniformity".
 - 2026-06-24 — Phase 3 context 'favorable' metric too permissive (~99%); no F-008 yet; Q-005 opened.
+- 2026-06-24 — **F-008** Context = Ranking Engine; **Principle 13** (Context Ranking) added to V5.3.
 
 ---
 
@@ -198,6 +210,8 @@ Engine, sio Pass/Fail Filter.
 | 2026-06-24 | Phase 3 Event Diagnostics | APPROVED (start) | Chief Quant |
 | 2026-06-24 | Phase 3 Event Diagnostics (delivered) | CONDITIONALLY APPROVED | Chief Quant |
 | 2026-06-24 | Phase 3.5 Context Selectivity | APPROVED (next) | Chief Quant |
+| 2026-06-24 | F-008 Context = Ranking Engine; Q-005 CLOSED; Principle 13 | APPROVED | Chief Quant |
+| 2026-06-24 | Phase 3.5 PASSED; Phase 4 Event × Context Matrix | APPROVED (start) | Chief Quant |
 
 ### Still BLOCKED (Chief approval required)
 

@@ -44,7 +44,9 @@ State Age                 (F-003, F-004 — calibration)
 ↓
 Transitions               (Phase 1.5/1.8)
 ↓
-Context Filter            (F-005, F-006 — Principle 12)
+Context Score             (F-005, F-006, F-008 — Principle 13: ranking)
+↓
+Event Ranking
 ```
 
 The decision metric remains **Expected Value (EV > 0), not win rate.**
@@ -148,8 +150,8 @@ Phase 1.95  Context Generalization       COMPLETE   (F-006)
 Phase 2     Adaptive Volume Bars         COMPLETE   (R-002 stability rejected; F-007 information)
 Phase 2.1   Volume Information Value      COMPLETE   (F-007)
 Phase 3     Event Diagnostics            CONDITIONAL (delivered; context metric too permissive)
-Phase 3.5   Context Selectivity          NEXT       (ranking engine vs binary filter? — Q-005)
-Phase 4     Event × Context Matrix       BLOCKED (until context defined)
+Phase 3.5   Context Selectivity          COMPLETE   (F-008: context = ranking engine)
+Phase 4     Event × Context Matrix       NEXT       (which event benefits most from context?)
 Phase 5     Triple Barrier Framework     BLOCKED (Chief approval)
 Phase 6     Outcome Engine               BLOCKED
 Phase 9     Machine Learning Models      BLOCKED
@@ -170,6 +172,48 @@ Frequency · Context Coverage · State Distribution · Age Distribution
 Deliverable: `event_diagnostics_report.md`
 Implementation: `src/research/event_diagnostics.py` (+ `event_library.py`, the
 single source for all 9 KJ event signals).
+
+---
+
+# NEW PRINCIPLE — Principle 13 (Context Ranking)
+
+Source: `context_selectivity_report.md` (Phase 3.5), Finding F-008.
+
+V5.2/V5.3 Principle 12 said *Context Is A Filter*. The selectivity analysis
+sharpened this: a binary filter (favorable/not) accepted ~99% of events — no
+discrimination. But ranking events by a continuous **context score** produced
+strong monotonic EV gradients (Pullback D1 −3.16 → D10 +1.29; Mean Reversion
+D1 −1.58 → D10 +2.29). Therefore:
+
+## Principle 13 — Context Ranking
+
+```text
+Context does not decide.
+Context prioritizes.
+
+The purpose of context is not to accept or reject events.
+The purpose of context is to RANK events.
+```
+
+Decision hierarchy (official, supersedes the Principle 12 filter framing):
+
+```text
+Event
+↓
+Context Score
+↓
+Event Ranking
+↓
+Outcome Assessment
+↓
+Risk Allocation
+↓
+Execution
+```
+
+Principle 12 (Context Is A Filter) stands as a special case: filtering is the
+crude binary of ranking. The system ranks; thresholds are a downstream choice,
+not the meaning of context.
 
 ---
 
