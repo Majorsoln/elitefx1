@@ -10,7 +10,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-24 (Chief review: Phase 4 PASSED → F-009; Phase 5 Triple Barrier opened).*
+*Last updated: 2026-06-24 (Chief review: Phase 5 REOPENED — P(TP) flat; Phase 5.5 Outcome Decomposition).*
 
 ---
 
@@ -128,16 +128,19 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5**
-Name: **Triple Barrier Design (Tier 1 only)**
+Phase: **5.5**
+Name: **Outcome Decomposition (Tier 1 only)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Tier 1 events: barrier width (0.5/1.0/1.5/2.0σ)? vertical (3/5/10/20
-bars)? P(TP)/P(SL)/P(TIME)? je hubadilika kwa context decile? Design tu, NO ML.
+Question: F-009 EV uplift inatokana na P(win), AvgWin, au asymmetry? Fungua
+EV = P(win)×AvgWin − P(loss)×AvgLoss kwa context decile. NO ML.
 
-> Phase 4 (Event × Context Matrix): **PASSED** → F-009 (context sensitivity is
-> event-specific; Tier 1/2/3). ⚠️ Profitable ≠ Tradable Edge.
+> Phase 5 (Triple Barrier Design): **⚠ REOPENED** — kiufundi imekamilika lakini
+> P(TP) ni FLAT kuvuka context deciles (mean_reversion 48%→48%), inapingana na
+> F-009 EV uplift. Assumption "context → higher P(TP)" **imekanushwa**. Mechanism
+> (probability vs payoff) inachunguzwa Phase 5.5 kabla ya Outcome Engine/ML.
+> Hakuna F-010 bado.
 
 ---
 
@@ -156,12 +159,14 @@ bars)? P(TP)/P(SL)/P(TIME)? je hubadilika kwa context decile? Design tu, NO ML.
 - [~] Phase 3    Event Diagnostics        (CONDITIONALLY APPROVED — context metric too permissive)
 - [✓] Phase 3.5  Context Selectivity      (F-008: context = ranking engine)
 - [✓] Phase 4    Event × Context Matrix   (F-009: context sensitivity event-specific)
+- [⚠] Phase 5    Triple Barrier Design    (REOPENED — P(TP) flat across deciles; mechanism unknown)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5     Triple Barrier Design   *(ACTIVE — Tier 1 only; engine ready, report pending data run)*
+- [ ] Phase 5.5   Outcome Decomposition   *(ACTIVE — Tier 1; engine ready, report pending data run)*
+- [ ] Phase 5     Triple Barrier (revisit) *(REOPENED — pending mechanism from 5.5)*
 - [ ] Phase 6     Outcome Engine          *(BLOCKED — Chief approval)*
 - [ ] Phase 7     Lifecycle Controller    *(BLOCKED)*
 
@@ -195,9 +200,15 @@ Status: **CLOSED — APPROVED** (F-009)
 Evidence: `event_context_matrix_report.md` (Tier 1: MR/PB/DPB/TC; Top10 EV>0).
 
 **Q-007 — What barrier/vertical and outcome odds for Tier 1 events?**
+Status: PARTIAL — `triple_barrier_design_report.md` delivered, BUT P(TP) flat
+across context deciles (assumption "context → higher P(TP)" refuted). Phase 5 reopened.
+
+**Q-008 — Does Context Improve Probability or Payoff Distribution?**
 Status: OPEN
-Needed: Phase 5 (`triple_barrier_design_report.md`) — P(TP/SL/TIME) by
-barrier×vertical, and shift by context decile. Tier 1 only. Design (no ML).
+Reason: Phase 5 P(TP) flat by decile vs Phase 4 EV uplift large → contradiction.
+Need: outcome decomposition (P(win) vs AvgWin vs AvgLoss per decile).
+Owner: Phase 5.5 (`outcome_decomposition_report.md`). Hypothesis (Chief, Scenario
+A): context improves REWARD SIZE, not win probability.
 
 ---
 
@@ -212,6 +223,7 @@ barrier×vertical, and shift by context decile. Tier 1 only. Design (no ML).
 - 2026-06-24 — Phase 3 context 'favorable' metric too permissive (~99%); no F-008 yet; Q-005 opened.
 - 2026-06-24 — **F-008** Context = Ranking Engine; **Principle 13** (Context Ranking) added to V5.3.
 - 2026-06-24 — **V5.4**: F-009 (context sensitivity event-specific); Event Priority Tiers; "Profitable ≠ Tradable Edge"; Phase 5 Triple Barrier (Tier 1).
+- 2026-06-24 — Phase 5 REOPENED: P(TP) flat across deciles refutes "context → higher P(TP)". No F-010 yet; Q-008 opened; Phase 5.5 Outcome Decomposition.
 
 ---
 
@@ -236,6 +248,8 @@ barrier×vertical, and shift by context decile. Tier 1 only. Design (no ML).
 | 2026-06-24 | Phase 3.5 PASSED; Phase 4 Event × Context Matrix | APPROVED (start) | Chief Quant |
 | 2026-06-24 | Phase 4 PASSED; F-009 event-specific sensitivity; Event Tiers; doctrine V5.4 | APPROVED | Chief Quant |
 | 2026-06-24 | Phase 5 Triple Barrier (Tier 1 only, design, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-24 | Phase 5 delivered (P(TP) flat by decile) | REOPENED | Chief Quant |
+| 2026-06-24 | Phase 5.5 Outcome Decomposition (Tier 1, no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

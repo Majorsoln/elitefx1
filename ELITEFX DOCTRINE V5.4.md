@@ -143,10 +143,21 @@ resolves to SL (conservative).
 
 ```text
 Phase 4     Event × Context Matrix       COMPLETE   (F-009)
-Phase 5     Triple Barrier (Tier 1)      NEXT       (outcome framework; design only)
+Phase 5     Triple Barrier (Tier 1)      REOPENED   (P(TP) flat across deciles vs EV uplift)
+Phase 5.5   Outcome Decomposition        NEXT       (P(win) vs AvgWin vs AvgLoss by decile)
 Phase 6     Outcome Engine               BLOCKED
 Phase 7     Trade Lifecycle Controller   BLOCKED
 ```
+
+## Phase 5 Note — P(TP) ≠ Context (mechanism open)
+
+Phase 5 delivered the triple-barrier design but **refuted an implicit
+assumption**: context did **not** change P(TP) across deciles (mean_reversion
+48% → 48%), even though Phase 4 showed large EV uplift. So the F-009 uplift is
+**not** a win-probability effect. Likely it is payoff size / asymmetry
+(consistent with Phase 1.9: win-rate flat, EV up). Phase 5.5 (Outcome
+Decomposition) settles the mechanism before any Outcome Engine or ML. No new
+finding (F-010) is recorded until the mechanism is known.
 
 ---
 
