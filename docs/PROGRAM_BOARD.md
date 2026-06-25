@@ -3,21 +3,21 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.6.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.7.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-25 (Chief review: Phase 5.6 APPROVED w/ correction → F-012; Phase 5.7 Component Interaction; Payoff Engine FROZEN).*
+*Last updated: 2026-06-25 (Chief review: Phase 5.7 APPROVED → F-013; Market Lifecycle Model; Phase 5.8 Interaction Stability).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.6.md`
+- `ELITEFX_DOCTRINE_V5.7.md`
 
 Status:
 - ACTIVE
@@ -31,6 +31,7 @@ Superseded:
 - V5.3 (superseded by V5.4)
 - V5.4 (superseded by V5.5)
 - V5.5 (superseded by V5.6)
+- V5.6 (superseded by V5.7)
 - Patches
 
 ---
@@ -142,6 +143,17 @@ conclusion "build Payoff Engine on these components" REJECTED as premature.
 Architecture: Interaction Engine inserted (…→Transition→Interaction Engine→Context
 Score→Event→Payoff…). Verified by Phase 5.7.
 
+**[F-013] State Age Is a Lifecycle Variable (not a Time Variable)**
+Status: APPROVED
+Evidence: `component_interaction_report.md` (Transition × Age sequential effect)
+Summary: The same Transition flips sign with state age (MR: Thi·4-8 +3.0 vs
+Thi·16+ −3.2). Age 12 in Expansion ≠ Age 12 in Compression → age = lifecycle
+encoding, not a bare numeric feature. Architecture: State → Age → Transition →
+**Lifecycle Stage**. Three component categories: **Drivers** (change payoff, e.g.
+volatility) · **Gatekeepers/Routing** (allow setup, e.g. transition) · **Lifecycle
+Variables** (decide market stage, e.g. state age). Market = Regime + Lifecycle
+Stage + Transition Gate. Context Score → **Market State Vector** (score = output).
+
 ---
 
 ## Rejected Findings
@@ -165,19 +177,19 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.7**
-Name: **Component Interaction (Tier 1 only)**
+Phase: **5.8**
+Name: **Interaction Stability (Tier 1 only)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Je edge iko kwenye INTERACTION (F-012)? Pima Vol×Activity, Vol×Transition,
-Activity×Age, Transition×Age, + 3-way Vol×Act×Transition. Joint EV-spread vs
-marginal. Driver ≠ Gatekeeper. NO ML, NO Payoff Engine.
+Question: Je interaction cells (Phase 5.7) zina survive cross-market? Pima rank
+consistency (Spearman), CV, modal best cell kuvuka pairs. Stable = UNIVERSAL rule;
+unstable = ADAPTIVE/LOCAL. Interaction Engine inahitaji generalizable. NO ML.
 
-> Phase 5.6 (Payoff Attribution): **APPROVED with correction** → F-012. Marginal
-> drivers (volatility/activity) measured, BUT conclusion "build Payoff Engine on
-> components" REJECTED — interactions first. Phase 6 (Payoff Engine) **FROZEN**
-> until interaction structure verified (Phase 5.7).
+> Phase 5.7 (Component Interaction): **APPROVED** → F-012 confirmed (16/16),
+> F-013 discovered (State Age = Lifecycle Variable). Interaction Engine + Payoff
+> Engine **BLOCKED** until interactions proven generalizable (Phase 5.8) and the
+> Market State Vector is assembled (Phase 5.9).
 
 ---
 
@@ -199,14 +211,16 @@ marginal. Driver ≠ Gatekeeper. NO ML, NO Payoff Engine.
 - [✓] Phase 5    Triple Barrier Design    (RESOLVED — P(TP) flat explained by F-010)
 - [✓] Phase 5.5  Outcome Decomposition    (F-010 payoff filter; F-011 two mechanisms)
 - [✓] Phase 5.6  Payoff Attribution       (marginal; conclusion corrected by F-012)
+- [✓] Phase 5.7  Component Interaction     (F-012 confirmed 16/16; F-013 discovered)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.7   Component Interaction   *(ACTIVE — Tier 1; engine ready, report pending data run)*
-- [ ] Phase 6     Payoff Distribution Engine *(FROZEN — until interaction structure verified)*
-- [ ] Phase 7     Trade Lifecycle Controller *(BLOCKED)*
+- [ ] Phase 5.8   Interaction Stability   *(ACTIVE — Tier 1; engine ready, report pending data run)*
+- [ ] Phase 5.9   Market State Vector     *(QUEUED — assemble vector)*
+- [ ] Phase 6     Interaction Engine      *(BLOCKED — needs stable interactions)*
+- [ ] Phase 7     Payoff Engine           *(BLOCKED)*
 - [ ] Phase 8     Machine Learning         *(BLOCKED — predict DISTRIBUTION, not TP)*
 
 ---
@@ -251,9 +265,14 @@ Status: PARTIAL — `payoff_attribution_report.md` gives MARGINAL drivers
 (volatility/activity), but marginal ≠ importance (F-012). Causality needs interactions.
 
 **Q-010 — Is the edge in feature interactions (not single components)?**
+Status: **CLOSED — YES** (F-012, confirmed F-013)
+Evidence: `component_interaction_report.md` (16/16 joint > marginal; lifecycle effect).
+
+**Q-011 — Do interactions survive cross-market (universal vs local)?**
 Status: OPEN
-Needed: Phase 5.7 (`component_interaction_report.md`) — 2-way + 3-way interaction
-EV; joint vs marginal spread; Driver vs Gatekeeper. Gate to the Payoff Engine.
+Needed: Phase 5.8 (`interaction_stability_report.md`) — rank consistency / CV /
+modal best cell across pairs. Universal → rules; Local → adaptive. Gate to
+Interaction Engine.
 
 ---
 
@@ -271,6 +290,7 @@ EV; joint vs marginal spread; Driver vs Gatekeeper. Gate to the Payoff Engine.
 - 2026-06-24 — Phase 5 REOPENED: P(TP) flat across deciles refutes "context → higher P(TP)". No F-010 yet; Q-008 opened; Phase 5.5 Outcome Decomposition.
 - 2026-06-24 — **V5.5**: F-010 (Context = Payoff Filter), F-011 (two payoff mechanisms: Group A reward / Group B loss); Expected Payoff Engine direction; roadmap Outcome→Payoff→Lifecycle→ML.
 - 2026-06-25 — **V5.6**: F-012 (interactions, not individual features); Driver ≠ Gatekeeper; Interaction Engine inserted; Payoff Engine FROZEN.
+- 2026-06-25 — **V5.7**: F-013 (State Age = Lifecycle Variable); three categories (Driver/Gatekeeper/Lifecycle); Market Lifecycle Model; Context Score → Market State Vector.
 
 ---
 
@@ -301,6 +321,8 @@ EV; joint vs marginal spread; Driver vs Gatekeeper. Gate to the Payoff Engine.
 | 2026-06-24 | Phase 5.6 Payoff Attribution; Phase 6 Payoff Engine (queued) | APPROVED (start) | Chief Quant |
 | 2026-06-25 | Phase 5.6 APPROVED w/ correction; F-012 interactions; Driver≠Gatekeeper; doctrine V5.6 | APPROVED | Chief Quant |
 | 2026-06-25 | Phase 5.7 Component Interaction; Phase 6 Payoff Engine FROZEN | APPROVED (start) | Chief Quant |
+| 2026-06-25 | Phase 5.7 APPROVED; F-013 Lifecycle Variable; Market Lifecycle Model; doctrine V5.7 | APPROVED | Chief Quant |
+| 2026-06-25 | Phase 5.8 Interaction Stability; Phase 5.9 Market State Vector (queued) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

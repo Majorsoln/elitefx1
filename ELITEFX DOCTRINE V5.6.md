@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Interactions, Not Individual Features**
 
 Version: 5.6
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.7 (current SSOT) — carry-forward in force
 Date: 25 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.7, 25 June 2026)
 Supersedes: V5.5 (records F-012; inserts Interaction Engine; freezes Payoff Engine)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2, V5.3, V5.4, V5.5)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.7](ELITEFX%20DOCTRINE%20V5.7.md)**
+> (F-013 State Age = Lifecycle Variable; Market Lifecycle Model; Market State
+> Vector; three component categories). V5.6 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.5 remain in force except where amended below.
