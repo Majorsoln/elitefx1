@@ -3,11 +3,14 @@
 **Chief Quant Amendment — Event-Specific Context Sensitivity & Event Priority**
 
 Version: 5.4
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.5 (current SSOT) — carry-forward in force
 Date: 24 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.5, 24 June 2026)
 Supersedes: V5.3 (records F-009; adds Event Priority Framework; opens Phase 5)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2, V5.3)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.5](ELITEFX%20DOCTRINE%20V5.5.md)**
+> (F-010 Context = Payoff Filter; F-011 payoff mechanisms; Payoff Engine). V5.4 carry-forward.
 
 > Live program status (phases, ledger, approvals) lives in
 > `docs/PROGRAM_BOARD.md`. This file is the doctrine of record; V5.0–V5.3 remain

@@ -3,21 +3,21 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.4.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.5.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-24 (Chief review: Phase 5 REOPENED — P(TP) flat; Phase 5.5 Outcome Decomposition).*
+*Last updated: 2026-06-24 (Chief review: Phase 5.5 APPROVED → F-010, F-011; Phase 5.6 Payoff Attribution).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.4.md`
+- `ELITEFX_DOCTRINE_V5.5.md`
 
 Status:
 - ACTIVE
@@ -29,6 +29,7 @@ Superseded:
 - V5.1 (folded into V5.2)
 - V5.2 (superseded by V5.3)
 - V5.3 (superseded by V5.4)
+- V5.4 (superseded by V5.5)
 - Patches
 
 ---
@@ -105,6 +106,29 @@ Tier 2 (helps, insufficient): Breakout · Volatility Breakout · News Shock
 Tier 3 (ARCHIVED from edge research): Volatility Expansion · Pattern Completion
 ```
 
+**[F-010] Context Is A Payoff Filter (not a Probability Filter)**
+Status: APPROVED
+Evidence: `outcome_decomposition_report.md`
+Summary: EV decomposed by decile (Tier-1): ΔP(win) D10−D1 ≈ +3pp (small), ΔEV
+≈ +4 pips (large). Uplift haitokani na hit-rate bali na payoff size/asymmetry
+(4/4 events). Context = Payoff Filter. Doctrine: Context → Better Payoff
+Distribution → Higher EV. Q-008 CLOSED.
+
+**[F-011] Tier-1 Has Two Payoff Mechanisms**
+Status: APPROVED
+Evidence: `outcome_decomposition_report.md`
+Summary: Group A Reward Expansion (AvgWin↑): Mean Reversion (ΔAvgWin +3.6),
+Deep Pullback (+3.1). Group B Loss Compression (AvgLoss↓): Pullback (ΔAvgLoss
+−2.4), Trend Continuation (−2.8). Event Library lazima igawiwe kwa **payoff
+mechanism**, sio jina la event.
+
+### Payoff Mechanism Groups (F-011)
+
+```text
+Group A — Reward Expansion : Mean Reversion · Deep Pullback
+Group B — Loss Compression : Pullback · Trend Continuation
+```
+
 ---
 
 ## Rejected Findings
@@ -128,19 +152,19 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.5**
-Name: **Outcome Decomposition (Tier 1 only)**
+Phase: **5.6**
+Name: **Payoff Attribution (Tier 1 only)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: F-009 EV uplift inatokana na P(win), AvgWin, au asymmetry? Fungua
-EV = P(win)×AvgWin − P(loss)×AvgLoss kwa context decile. NO ML.
+Question: Kwa NINI context inasababisha reward expansion / loss compression?
+Ganua context score kuwa components (volatility, activity, spread, state age,
+transition prob); attribute AvgWin/AvgLoss separation. Causality, NO ML.
 
-> Phase 5 (Triple Barrier Design): **⚠ REOPENED** — kiufundi imekamilika lakini
-> P(TP) ni FLAT kuvuka context deciles (mean_reversion 48%→48%), inapingana na
-> F-009 EV uplift. Assumption "context → higher P(TP)" **imekanushwa**. Mechanism
-> (probability vs payoff) inachunguzwa Phase 5.5 kabla ya Outcome Engine/ML.
-> Hakuna F-010 bado.
+> Phase 5.5 (Outcome Decomposition): **APPROVED** → F-010 (Context = Payoff
+> Filter), F-011 (two mechanisms). Phase 5 (Triple Barrier): RESOLVED — P(TP)
+> flat is correct/expected (context = payoff, not probability). No F-010-before-
+> mechanism rush honoured. Phase 6 (Payoff Engine) QUEUED after 5.6.
 
 ---
 
@@ -159,16 +183,17 @@ EV = P(win)×AvgWin − P(loss)×AvgLoss kwa context decile. NO ML.
 - [~] Phase 3    Event Diagnostics        (CONDITIONALLY APPROVED — context metric too permissive)
 - [✓] Phase 3.5  Context Selectivity      (F-008: context = ranking engine)
 - [✓] Phase 4    Event × Context Matrix   (F-009: context sensitivity event-specific)
-- [⚠] Phase 5    Triple Barrier Design    (REOPENED — P(TP) flat across deciles; mechanism unknown)
+- [✓] Phase 5    Triple Barrier Design    (RESOLVED — P(TP) flat explained by F-010)
+- [✓] Phase 5.5  Outcome Decomposition    (F-010 payoff filter; F-011 two mechanisms)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.5   Outcome Decomposition   *(ACTIVE — Tier 1; engine ready, report pending data run)*
-- [ ] Phase 5     Triple Barrier (revisit) *(REOPENED — pending mechanism from 5.5)*
-- [ ] Phase 6     Outcome Engine          *(BLOCKED — Chief approval)*
-- [ ] Phase 7     Lifecycle Controller    *(BLOCKED)*
+- [ ] Phase 5.6   Payoff Attribution      *(ACTIVE — Tier 1; engine ready, report pending data run)*
+- [ ] Phase 6     Payoff Distribution Engine *(QUEUED — after 5.6 attribution)*
+- [ ] Phase 7     Trade Lifecycle Controller *(BLOCKED)*
+- [ ] Phase 8     Machine Learning         *(BLOCKED — predict DISTRIBUTION, not TP)*
 
 ---
 
@@ -204,11 +229,14 @@ Status: PARTIAL — `triple_barrier_design_report.md` delivered, BUT P(TP) flat
 across context deciles (assumption "context → higher P(TP)" refuted). Phase 5 reopened.
 
 **Q-008 — Does Context Improve Probability or Payoff Distribution?**
+Status: **CLOSED — PAYOFF** (F-010)
+Evidence: `outcome_decomposition_report.md` (ΔP(win) ≈ +3pp; EV via payoff, 4/4).
+
+**Q-009 — Why does context cause reward expansion / loss compression?**
 Status: OPEN
-Reason: Phase 5 P(TP) flat by decile vs Phase 4 EV uplift large → contradiction.
-Need: outcome decomposition (P(win) vs AvgWin vs AvgLoss per decile).
-Owner: Phase 5.5 (`outcome_decomposition_report.md`). Hypothesis (Chief, Scenario
-A): context improves REWARD SIZE, not win probability.
+Needed: Phase 5.6 (`payoff_attribution_report.md`) — attribute AvgWin/AvgLoss
+separation to context components (volatility/activity/spread/age/transition).
+Separates predictive from descriptive; Payoff Engine builds on real causes.
 
 ---
 
@@ -224,6 +252,7 @@ A): context improves REWARD SIZE, not win probability.
 - 2026-06-24 — **F-008** Context = Ranking Engine; **Principle 13** (Context Ranking) added to V5.3.
 - 2026-06-24 — **V5.4**: F-009 (context sensitivity event-specific); Event Priority Tiers; "Profitable ≠ Tradable Edge"; Phase 5 Triple Barrier (Tier 1).
 - 2026-06-24 — Phase 5 REOPENED: P(TP) flat across deciles refutes "context → higher P(TP)". No F-010 yet; Q-008 opened; Phase 5.5 Outcome Decomposition.
+- 2026-06-24 — **V5.5**: F-010 (Context = Payoff Filter), F-011 (two payoff mechanisms: Group A reward / Group B loss); Expected Payoff Engine direction; roadmap Outcome→Payoff→Lifecycle→ML.
 
 ---
 
@@ -250,6 +279,8 @@ A): context improves REWARD SIZE, not win probability.
 | 2026-06-24 | Phase 5 Triple Barrier (Tier 1 only, design, no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-24 | Phase 5 delivered (P(TP) flat by decile) | REOPENED | Chief Quant |
 | 2026-06-24 | Phase 5.5 Outcome Decomposition (Tier 1, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-24 | Phase 5.5 PASSED; F-010 Payoff Filter; F-011 two mechanisms; doctrine V5.5 | APPROVED | Chief Quant |
+| 2026-06-24 | Phase 5.6 Payoff Attribution; Phase 6 Payoff Engine (queued) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
