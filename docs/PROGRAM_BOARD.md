@@ -3,21 +3,21 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.5.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.6.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-24 (Chief review: Phase 5.5 APPROVED → F-010, F-011; Phase 5.6 Payoff Attribution).*
+*Last updated: 2026-06-25 (Chief review: Phase 5.6 APPROVED w/ correction → F-012; Phase 5.7 Component Interaction; Payoff Engine FROZEN).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.5.md`
+- `ELITEFX_DOCTRINE_V5.6.md`
 
 Status:
 - ACTIVE
@@ -30,6 +30,7 @@ Superseded:
 - V5.2 (superseded by V5.3)
 - V5.3 (superseded by V5.4)
 - V5.4 (superseded by V5.5)
+- V5.5 (superseded by V5.6)
 - Patches
 
 ---
@@ -129,6 +130,18 @@ Group A — Reward Expansion : Mean Reversion · Deep Pullback
 Group B — Loss Compression : Pullback · Trend Continuation
 ```
 
+**[F-012] Market Opportunity Emerges from Feature Interactions, not Individual Features**
+Status: APPROVED
+Evidence: `payoff_attribution_report.md` (marginal attribution insufficient)
+Summary: Phase 5.6 marginal drivers (volatility ~21, activity ~20) measure
+*marginal* attribution, not importance. Market acts as Vol×Activity×Transition×Age
+simultaneously; edge may live in the INTERACTION. Single components do NOT explain
+opportunity. **Driver ≠ Gatekeeper**: a low-marginal component (e.g. Transition
+~11) may be a GATEKEEPER (allows the environment) not a driver. Phase 5.6
+conclusion "build Payoff Engine on these components" REJECTED as premature.
+Architecture: Interaction Engine inserted (…→Transition→Interaction Engine→Context
+Score→Event→Payoff…). Verified by Phase 5.7.
+
 ---
 
 ## Rejected Findings
@@ -152,19 +165,19 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.6**
-Name: **Payoff Attribution (Tier 1 only)**
+Phase: **5.7**
+Name: **Component Interaction (Tier 1 only)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Kwa NINI context inasababisha reward expansion / loss compression?
-Ganua context score kuwa components (volatility, activity, spread, state age,
-transition prob); attribute AvgWin/AvgLoss separation. Causality, NO ML.
+Question: Je edge iko kwenye INTERACTION (F-012)? Pima Vol×Activity, Vol×Transition,
+Activity×Age, Transition×Age, + 3-way Vol×Act×Transition. Joint EV-spread vs
+marginal. Driver ≠ Gatekeeper. NO ML, NO Payoff Engine.
 
-> Phase 5.5 (Outcome Decomposition): **APPROVED** → F-010 (Context = Payoff
-> Filter), F-011 (two mechanisms). Phase 5 (Triple Barrier): RESOLVED — P(TP)
-> flat is correct/expected (context = payoff, not probability). No F-010-before-
-> mechanism rush honoured. Phase 6 (Payoff Engine) QUEUED after 5.6.
+> Phase 5.6 (Payoff Attribution): **APPROVED with correction** → F-012. Marginal
+> drivers (volatility/activity) measured, BUT conclusion "build Payoff Engine on
+> components" REJECTED — interactions first. Phase 6 (Payoff Engine) **FROZEN**
+> until interaction structure verified (Phase 5.7).
 
 ---
 
@@ -185,13 +198,14 @@ transition prob); attribute AvgWin/AvgLoss separation. Causality, NO ML.
 - [✓] Phase 4    Event × Context Matrix   (F-009: context sensitivity event-specific)
 - [✓] Phase 5    Triple Barrier Design    (RESOLVED — P(TP) flat explained by F-010)
 - [✓] Phase 5.5  Outcome Decomposition    (F-010 payoff filter; F-011 two mechanisms)
+- [✓] Phase 5.6  Payoff Attribution       (marginal; conclusion corrected by F-012)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.6   Payoff Attribution      *(ACTIVE — Tier 1; engine ready, report pending data run)*
-- [ ] Phase 6     Payoff Distribution Engine *(QUEUED — after 5.6 attribution)*
+- [ ] Phase 5.7   Component Interaction   *(ACTIVE — Tier 1; engine ready, report pending data run)*
+- [ ] Phase 6     Payoff Distribution Engine *(FROZEN — until interaction structure verified)*
 - [ ] Phase 7     Trade Lifecycle Controller *(BLOCKED)*
 - [ ] Phase 8     Machine Learning         *(BLOCKED — predict DISTRIBUTION, not TP)*
 
@@ -233,10 +247,13 @@ Status: **CLOSED — PAYOFF** (F-010)
 Evidence: `outcome_decomposition_report.md` (ΔP(win) ≈ +3pp; EV via payoff, 4/4).
 
 **Q-009 — Why does context cause reward expansion / loss compression?**
+Status: PARTIAL — `payoff_attribution_report.md` gives MARGINAL drivers
+(volatility/activity), but marginal ≠ importance (F-012). Causality needs interactions.
+
+**Q-010 — Is the edge in feature interactions (not single components)?**
 Status: OPEN
-Needed: Phase 5.6 (`payoff_attribution_report.md`) — attribute AvgWin/AvgLoss
-separation to context components (volatility/activity/spread/age/transition).
-Separates predictive from descriptive; Payoff Engine builds on real causes.
+Needed: Phase 5.7 (`component_interaction_report.md`) — 2-way + 3-way interaction
+EV; joint vs marginal spread; Driver vs Gatekeeper. Gate to the Payoff Engine.
 
 ---
 
@@ -253,6 +270,7 @@ Separates predictive from descriptive; Payoff Engine builds on real causes.
 - 2026-06-24 — **V5.4**: F-009 (context sensitivity event-specific); Event Priority Tiers; "Profitable ≠ Tradable Edge"; Phase 5 Triple Barrier (Tier 1).
 - 2026-06-24 — Phase 5 REOPENED: P(TP) flat across deciles refutes "context → higher P(TP)". No F-010 yet; Q-008 opened; Phase 5.5 Outcome Decomposition.
 - 2026-06-24 — **V5.5**: F-010 (Context = Payoff Filter), F-011 (two payoff mechanisms: Group A reward / Group B loss); Expected Payoff Engine direction; roadmap Outcome→Payoff→Lifecycle→ML.
+- 2026-06-25 — **V5.6**: F-012 (interactions, not individual features); Driver ≠ Gatekeeper; Interaction Engine inserted; Payoff Engine FROZEN.
 
 ---
 
@@ -281,6 +299,8 @@ Separates predictive from descriptive; Payoff Engine builds on real causes.
 | 2026-06-24 | Phase 5.5 Outcome Decomposition (Tier 1, no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-24 | Phase 5.5 PASSED; F-010 Payoff Filter; F-011 two mechanisms; doctrine V5.5 | APPROVED | Chief Quant |
 | 2026-06-24 | Phase 5.6 Payoff Attribution; Phase 6 Payoff Engine (queued) | APPROVED (start) | Chief Quant |
+| 2026-06-25 | Phase 5.6 APPROVED w/ correction; F-012 interactions; Driver≠Gatekeeper; doctrine V5.6 | APPROVED | Chief Quant |
+| 2026-06-25 | Phase 5.7 Component Interaction; Phase 6 Payoff Engine FROZEN | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

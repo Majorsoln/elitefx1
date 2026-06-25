@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Context Is A Payoff Filter (Mechanism Discovered)**
 
 Version: 5.5
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.6 (current SSOT) — carry-forward in force
 Date: 24 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.6, 25 June 2026)
 Supersedes: V5.4 (records F-010, F-011; opens Payoff Engine direction)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2, V5.3, V5.4)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.6](ELITEFX%20DOCTRINE%20V5.6.md)**
+> (F-012 Interactions not Individual Features; Driver ≠ Gatekeeper; Interaction
+> Engine). Payoff Engine FROZEN hadi interaction structure ithibitishwe. V5.5 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.4 remain in force except where amended below.
