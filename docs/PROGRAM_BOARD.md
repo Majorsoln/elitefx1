@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.10.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.11.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-26 (Chief review: Phase 5.9A APPROVED → F-016; F-017 + Principle 18; Phase 5.10 + 5.11).*
+*Last updated: 2026-06-26 (Chief review: Phase 5.10 APPROVED/F-017 Experimental; Phase 5.11 NOT APPROVED; F-018, Principle 18 amended, Principle 19, H-05).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.10.md`
+- `ELITEFX_DOCTRINE_V5.11.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.8 (chain)
-- V5.9 (superseded by V5.10)
+- V4 … V5.9 (chain)
+- V5.10 (superseded by V5.11)
 - Patches
 
 ---
@@ -176,11 +176,22 @@ Trading** (a trade is a consequence of a configuration, not a signal). Q-012 CLO
 > ⚠️ **Cluster ≠ State**: a cluster is a math grouping. Latent State **Candidate**
 > → Validated → Operational. Names only after validation.
 
-**[F-017] Rare States May Carry Disproportionately High Information (HYPOTHESIS)**
-Status: OPEN — under test (Phase 5.10)
-Evidence: `latent_structure_report.md` (cluster C1 ≈ 1% of bars)
-Summary: Institutional quant cares about rare regimes (crash/news/liquidity = 1%
-but decisive). Rare states are a research PRIORITY, not noise. Tested by Phase 5.10.
+**[F-017] Rare States May Carry Disproportionately High Information**
+Status: **EXPERIMENTAL** (Phase 5.10 approved the analysis; payoff impact pending)
+Evidence: `rare_state_analysis.md` (rare cluster ~0.3%; spread +12σ, activity −1σ,
+vol slightly +; duration 1–3 bars)
+Summary: Rare regime characterised, BUT payoff impact not yet shown (OHLC absent).
+Per **Principle 19**, no finding enters doctrine without payoff/decision-quality
+impact → F-017 stays EXPERIMENTAL until Phase 5.10R (returns/MAE/MFE/triple
+barrier/holding). Also see **H-05** (rare states = liquidity events, not vol).
+
+**[F-018] Representation Robustness > Cluster Identity (methodological)**
+Status: APPROVED (methodology)
+Evidence: `cluster_robustness_report.md` (ARI ≈ 0.12 — algorithm identity too strict)
+Summary: "Algorithm independent" was too strict (KMeans/GMM/Agglomerative differ
+by assumption). Require **economic meaning to match**, not cluster identity
+(Principle 18 amended). Test latent structures across REPRESENTATIONS, not
+algorithms (Phase 5.11B). Phase 5.11 (cluster identity) **NOT APPROVED**.
 
 ---
 
@@ -205,21 +216,21 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.10 + 5.11** (parallel)
-Name: **Rare State Analysis + Cluster Robustness**
+Phase: **5.10R + 5.11B** (parallel)
+Name: **Rare State Payoff + Representation Robustness**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
 Questions:
-- 5.10: rare cluster (C1 ~1%) inafanya nini? signature/composition/duration/exit/
-  return distribution (F-017). Trade = market configuration, sio signal.
-- 5.11: latent structures ni algorithm-independent? KMeans vs GMM vs Agglomerative,
-  ARI agreement (Principle 18). NO ML, NO names.
+- 5.10R: je rare state ina PAYOFF tofauti? signed return · MAE · MFE · triple
+  barrier · holding time (rare vs non-rare). Needs OHLC re-run. → F-017 Approved?
+- 5.11B: latent structures zinabaki kuvuka REPRESENTATIONS (zscore/robust/
+  percentile/rolling)? Structure persistence + cross-rep ARI (F-018). NO ML.
 
-> Phase 5.9A (Latent Structure Discovery): **APPROVED** → F-016 (latent structures
-> exist without human labeling; k=4, 3/4 clusters universal). F-017 opened (rare
-> states). Cluster ≠ State (Latent State Candidate). Principle 18 added. Config/
-> Opportunity/Payoff engines **BLOCKED** until candidates Validated (5.11/5.12).
+> Phase 5.10 **APPROVED** (analysis); F-017 → **EXPERIMENTAL** (payoff pending,
+> Principle 19). Phase 5.11 **NOT APPROVED** (ARI 0.12; cluster identity too
+> strict). Principle 18 amended (economic meaning, not cluster identity); F-018;
+> Principle 19 (payoff gate); H-05 (liquidity events). Engines **BLOCKED**.
 
 ---
 
@@ -245,14 +256,16 @@ Questions:
 - [✓] Phase 5.8  Interaction Stability     (F-014 pair-specific; universal rules falsified)
 - [✗] Phase 5.9  Mechanism Discovery       (NOT APPROVED — human taxonomy; reworked → 5.9A)
 - [✓] Phase 5.9A Latent Structure Discovery (F-016: latent structures exist; k=4)
+- [✓] Phase 5.10  Rare State Analysis      (APPROVED; F-017 → Experimental, payoff pending)
+- [✗] Phase 5.11  Cluster Robustness       (NOT APPROVED; cluster identity too strict → 5.11B)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.10  Rare State Analysis     *(ACTIVE — F-017; engine ready, report pending data run)*
-- [ ] Phase 5.11  Cluster Robustness      *(ACTIVE — Principle 18; engine ready, report pending data run)*
-- [ ] Phase 5.12  Latent State Validation *(BLOCKED — Candidate → Validated)*
+- [ ] Phase 5.10R Rare State Payoff       *(ACTIVE — needs OHLC re-run; engine ready)*
+- [ ] Phase 5.11B Representation Robustness *(ACTIVE — F-018; engine ready, report pending data run)*
+- [ ] Phase 5.12  Liquidity Event Validation *(BLOCKED — H-05)*
 - [ ] Phase 6     Configuration Engine    *(BLOCKED)*
 - [ ] Phase 7     Opportunity Engine      *(BLOCKED)*
 - [ ] Phase 8     Payoff Engine           *(BLOCKED)*
@@ -312,15 +325,23 @@ NOT exist in coordinate space.
 Status: **CLOSED — YES** (F-016)
 Evidence: `latent_structure_report.md` (EV gap +0.126 vs null; 3/4 clusters recur).
 
-**Q-013 — What does the rare state (C1 ~1%) do?**
-Status: OPEN
-Needed: Phase 5.10 (`rare_state_analysis.md`) — signature, composition, duration,
-exit, return distribution. F-017.
+**Q-013 — What does the rare state do? Does it change payoff?**
+Status: PARTIAL — structure done (`rare_state_analysis.md`); PAYOFF pending (5.10R)
+Needed: OHLC re-run → signed return/MAE/MFE/triple barrier/holding (F-017 gate).
 
 **Q-014 — Are latent structures algorithm-independent?**
+Status: **CLOSED — NO** (F-018 reframes the question)
+Evidence: `cluster_robustness_report.md` (ARI 0.12). Reframed: economic meaning,
+not cluster identity → **Q-015**.
+
+**Q-015 — Are latent structures representation-robust?**
 Status: OPEN
-Needed: Phase 5.11 (`cluster_robustness_report.md`) — KMeans/GMM/Agglomerative,
-ARI agreement. Principle 18. Gate to Latent State Validation.
+Needed: Phase 5.11B (`representation_robustness_report.md`) — structure across
+zscore/robust/percentile/rolling encodings; cross-rep ARI. F-018.
+
+**Q-016 — Are rare states liquidity events (not volatility)?**
+Status: OPEN (H-05)
+Needed: Phase 5.12 (spread +12σ vs vol slightly + suggests liquidity).
 
 ---
 
@@ -342,6 +363,7 @@ ARI agreement. Principle 18. Gate to Latent State Validation.
 - 2026-06-25 — **V5.8**: F-014 (interactions pair-specific; universal rules falsified); F-015 (universal mechanisms, local coordinates — hypothesis); Mechanism Layer; "learns mechanisms, not cells".
 - 2026-06-25 — **V5.9**: Phase 5.9 mechanism method REJECTED (human taxonomy = verification, not discovery; NO HUMAN MARKET THEORY). F-015 reframed "Latent Market Structures" (OPEN). Mechanism Library → Latent State Library. Architecture: Latent Structure Discovery (unsupervised).
 - 2026-06-26 — **V5.10**: F-016 (latent structures exist, APPROVED); F-017 (rare states, hypothesis); **Principle 18** (algorithm independence); Cluster ≠ State → Latent State Candidate→Validated→Operational; State-based → **Market Configuration-based Trading**. OHLC added to state cache.
+- 2026-06-26 — **V5.11**: Principle 18 AMENDED (economic meaning, not cluster identity); **F-018** (representation robustness > cluster identity); **Principle 19** (no finding without payoff/decision-quality impact); F-017 → Experimental; **H-05** (rare states = liquidity events).
 
 ---
 

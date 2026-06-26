@@ -41,11 +41,14 @@ import polars as pl
 from market_state_engine import cfg, pip
 from mechanism_discovery import signatures, SIG_DIM
 from latent_structure import kmeans, FEAT, CAP_PER_PAIR, state_path
+from triple_barrier_design import first_touch
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TFS = ["H1", "H2", "H4", "D1"]
 K = 4                  # latent clusters (Phase 5.9A best k)
-HORIZON = 6            # forward bars kwa return distribution
+HORIZON = 6            # forward bars kwa signed return
+VERT = 10              # vertical barrier (bars) kwa MAE/MFE/triple barrier (5.10R)
+KSIG = 1.0             # barrier width (× ATR @ entry)
 LEVELS = ["LOW", "NORMAL", "HIGH"]
 _posix = lambda p: str(p).replace("\\", "/")
 
@@ -58,15 +61,25 @@ def read_series(sym):
         if not p.exists():
             continue
         df = pl.read_parquet(p)
-        sig, vs, acts, *_ = signatures(df, pip(sym))
+        pp = pip(sym)
+        sig, vs, acts, *_ = signatures(df, pp)
         m = np.all(np.isfinite(sig), axis=1)
+        has_px = all(col in df.columns for col in ("c", "h", "l"))
         d = dict(sig=sig[m],
                  vs=[v for v, k in zip(vs, m) if k],
                  acts=[a for a, k in zip(acts, m) if k],
                  sprs=[s for s, k in zip(df["spread_state"].to_list(), m) if k],
-                 close=(df["c"].to_numpy()[m] / pip(sym)) if "c" in df.columns else None)
+                 atr=(df["atr"].to_numpy()[m] / pp),
+                 close=(df["c"].to_numpy()[m] / pp) if has_px else None,
+                 high=(df["h"].to_numpy()[m] / pp) if has_px else None,
+                 low=(df["l"].to_numpy()[m] / pp) if has_px else None)
         out.append(d)
     return out
+
+
+def _stat(x):
+    a = np.array(x, float)
+    return f"{a.mean():+.1f}/{np.median(a):+.1f}/{np.percentile(a,5):+.0f}/{np.percentile(a,95):+.0f}" if len(a) else "—"
 
 
 def assign(sig, cen):
@@ -116,7 +129,9 @@ def run(pairs, tfs):
     prof_rare = np.zeros(SIG_DIM); n_rare = 0; prof_all = np.zeros(SIG_DIM); n_all = 0
     comp = {dim: Counter() for dim in ("vs", "acts", "sprs")}
     durations = []; exits = Counter(); per_pair_rate = {}
-    ret_rare = []; ret_other = []
+    M = {"rare": dict(ret=[], mfe=[], mae=[], hold=[], bar=Counter()),
+         "oth": dict(ret=[], mfe=[], mae=[], hold=[], bar=Counter())}
+    has_px = False
     for sym, s in series.items():
         pr_n = 0; pr_tot = 0
         for d in s:
@@ -129,11 +144,20 @@ def run(pairs, tfs):
                     if k:
                         comp[dim][x] += 1
             ln, ex = runs(L, rare); durations += ln; exits.update(ex)
-            if d["close"] is not None and len(d["close"]) > HORIZON:
-                cl = d["close"]; fwd = np.full(len(cl), np.nan)
-                fwd[:-HORIZON] = np.abs(cl[HORIZON:] - cl[:-HORIZON])     # |H-bar move| pips
-                rr = fwd[mr]; ro = fwd[~mr]
-                ret_rare += rr[np.isfinite(rr)].tolist(); ret_other += ro[np.isfinite(ro)].tolist()
+            if d["close"] is not None:                                    # 5.10R: OHLC ipo
+                has_px = True
+                cl = d["close"]; hi = d["high"]; lo = d["low"]; at = d["atr"]; n2 = len(cl)
+                for i in range(n2):
+                    if i + VERT >= n2 or not (at[i] > 0):
+                        continue
+                    tgt = M["rare"] if L[i] == rare else M["oth"]
+                    if i + HORIZON < n2:
+                        tgt["ret"].append(float(cl[i + HORIZON] - cl[i]))   # signed
+                    wh = hi[i + 1:i + VERT + 1]; wl = lo[i + 1:i + VERT + 1]
+                    tgt["mfe"].append(float(wh.max() - cl[i])); tgt["mae"].append(float(cl[i] - wl.min()))
+                    tb, oc = first_touch(i, 1, KSIG * at[i], cl, hi, lo, n2)
+                    tgt["hold"].append(min(tb, VERT))
+                    tgt["bar"][oc if tb <= VERT else "TIME"] += 1
         per_pair_rate[sym] = 100 * pr_n / pr_tot if pr_tot else 0.0
 
     pr = prof_rare / max(n_rare, 1); pa = prof_all / max(n_all, 1)
@@ -173,20 +197,29 @@ def run(pairs, tfs):
     else:
         L.append("- (hakuna runs)")
 
-    L.append(f"\n## 5) Return distribution (|{HORIZON}-bar move| pips): rare vs non-rare\n")
-    if ret_rare and ret_other:
-        rr = np.array(ret_rare); ro = np.array(ret_other)
-        L.append("| set | n | mean | median | p95 | p99 |")
-        L.append("|-----|---|------|--------|-----|-----|")
-        for nm, x in (("rare", rr), ("non-rare", ro)):
-            L.append(f"| {nm} | {len(x):,} | {x.mean():.1f} | {np.median(x):.1f} | "
-                     f"{np.percentile(x,95):.0f} | {np.percentile(x,99):.0f} |")
-        ratio = rr.mean() / ro.mean() if ro.mean() > 0 else float("nan")
-        L.append(f"\n→ rare/non-rare mean move ratio = **{ratio:.2f}×** "
-                 f"({'✅ rare ina dispersion kubwa zaidi (F-017)' if ratio > 1.3 else '— sawa-sawa'})")
+    L.append(f"\n## 5) Forward dynamics (Phase 5.10R) — pips, mean/median/p5/p95: rare vs non-rare\n")
+    if has_px and M["rare"]["mfe"]:
+        L.append("| metric | rare | non-rare |")
+        L.append("|--------|------|----------|")
+        L.append(f"| signed return ({HORIZON}b) | {_stat(M['rare']['ret'])} | {_stat(M['oth']['ret'])} |")
+        L.append(f"| MFE ({VERT}b, max favorable) | {_stat(M['rare']['mfe'])} | {_stat(M['oth']['mfe'])} |")
+        L.append(f"| MAE ({VERT}b, max adverse) | {_stat(M['rare']['mae'])} | {_stat(M['oth']['mae'])} |")
+        L.append(f"| holding (bars→barrier) | {_stat(M['rare']['hold'])} | {_stat(M['oth']['hold'])} |")
+        L.append(f"\n*Triple barrier (±{KSIG:.1f}σ ATR, {VERT}b), long-side (short = mirror): outcome %*\n")
+        L.append("| set | up (TP) | down (SL) | time |")
+        L.append("|-----|---------|-----------|------|")
+        for nm, key in (("rare", "rare"), ("non-rare", "oth")):
+            b = M[key]["bar"]; t = sum(b.values()) or 1
+            L.append(f"| {nm} | {100*b['TP']/t:.0f}% | {100*b['SL']/t:.0f}% | {100*b['TIME']/t:.0f}% |")
+        mr_mfe = np.mean(M["rare"]["mfe"]) if M["rare"]["mfe"] else 0
+        ot_mfe = np.mean(M["oth"]["mfe"]) if M["oth"]["mfe"] else 1
+        ratio = mr_mfe / ot_mfe if ot_mfe else float("nan")
+        L.append(f"\n→ rare/non-rare MFE ratio = **{ratio:.2f}×** — F-017 inathibitishwa ikiwa rare state "
+                 "ina excursion/dispersion kubwa zaidi (payoff impact, sio anomaly tu).")
     else:
-        L.append("*(close haipo kwenye state parquet — endesha market_state_engine baada ya update ya "
-                 "OHLC ili kupata return distribution. Structure (1–4) imekamilika.)*")
+        L.append("*(OHLC haipo kwenye state parquet — endesha `market_state_engine.py` (update ya OHLC) "
+                 "kisha rerun kwa **Phase 5.10R**: signed return · MAE · MFE · triple barrier · holding "
+                 "time. Structure (1–4) imekamilika.)*")
 
     L.append("\n---\n*Rare cluster ni MARKET CONFIGURATION, sio jina. F-017: rare states zikiwa na "
              "dispersion/return kubwa zaidi = high information. Hatuanzi Opportunity Engine; kwanza "

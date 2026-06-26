@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Market Configuration, Latent States, Rare Regimes**
 
 Version: 5.10
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.11 (current SSOT) — carry-forward in force
 Date: 26 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.11, 26 June 2026)
 Supersedes: V5.9 (records F-016, F-017; Principle 18; Latent State stages)
 Previous Versions: Archived (V4 … V5.9)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.11](ELITEFX%20DOCTRINE%20V5.11.md)**
+> (Principle 18 amended → economic meaning, not cluster identity; F-018; Principle
+> 19 payoff gate; F-017 → Experimental; H-05 liquidity). V5.10 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.9 remain in force except where amended below.
