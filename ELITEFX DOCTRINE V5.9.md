@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Latent Structure Before Taxonomy (No Human Theory)**
 
 Version: 5.9
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.10 (current SSOT) — carry-forward in force
 Date: 25 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.10, 26 June 2026)
 Supersedes: V5.8 (rejects Phase 5.9 method; reframes F-015; renames Mechanism→Latent)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2, V5.3, V5.4, V5.5, V5.6, V5.7, V5.8)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.10](ELITEFX%20DOCTRINE%20V5.10.md)**
+> (F-016 Latent Structures APPROVED; F-017 Rare States; Principle 18 algorithm
+> independence; Market Configuration trading). V5.9 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.8 remain in force except where amended below.

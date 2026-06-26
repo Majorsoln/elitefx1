@@ -3,37 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.9.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.10.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-25 (Chief review: Phase 5.9 NOT APPROVED — human taxonomy; F-015 reframed/OPEN; Phase 5.9A Latent Structure Discovery).*
+*Last updated: 2026-06-26 (Chief review: Phase 5.9A APPROVED → F-016; F-017 + Principle 18; Phase 5.10 + 5.11).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.9.md`
+- `ELITEFX_DOCTRINE_V5.10.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4
-- V4.1
-- V5.0
-- V5.1 (folded into V5.2)
-- V5.2 (superseded by V5.3)
-- V5.3 (superseded by V5.4)
-- V5.4 (superseded by V5.5)
-- V5.5 (superseded by V5.6)
-- V5.6 (superseded by V5.7)
-- V5.7 (superseded by V5.8)
-- V5.8 (superseded by V5.9)
+- V4 … V5.8 (chain)
+- V5.9 (superseded by V5.10)
 - Patches
 
 ---
@@ -172,7 +163,24 @@ violated NO HUMAN MARKET THEORY → **NOT APPROVED**. Reframed: do **latent mark
 structures** exist when data is left to speak (unsupervised, no labels)? Rule-based
 names removed as ground truth. "Mechanism Library" → "Latent State Library".
 Decisive test = unsupervised clustering (standardized Euclidean, not cosine) vs
-permutation null. Verified by Phase 5.9A.
+permutation null. Verified by Phase 5.9A → **CONFIRMED as F-016**.
+
+**[F-016] Latent Market Structures Exist Without Human Labeling**
+Status: APPROVED
+Evidence: `latent_structure_report.md` (k=4 best, EV gap +0.126 vs permutation
+null; 3/4 clusters recur across all 9 pairs)
+Summary: Unsupervised clustering (no human labels) of Market State Vectors found
+real structure above chance, recurring cross-pair. Market architecture, not
+feature evidence. Doctrine shift: State-based → **Market Configuration-based
+Trading** (a trade is a consequence of a configuration, not a signal). Q-012 CLOSED.
+> ⚠️ **Cluster ≠ State**: a cluster is a math grouping. Latent State **Candidate**
+> → Validated → Operational. Names only after validation.
+
+**[F-017] Rare States May Carry Disproportionately High Information (HYPOTHESIS)**
+Status: OPEN — under test (Phase 5.10)
+Evidence: `latent_structure_report.md` (cluster C1 ≈ 1% of bars)
+Summary: Institutional quant cares about rare regimes (crash/news/liquidity = 1%
+but decisive). Rare states are a research PRIORITY, not noise. Tested by Phase 5.10.
 
 ---
 
@@ -197,19 +205,21 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.9A**
-Name: **Latent Structure Discovery**
+Phase: **5.10 + 5.11** (parallel)
+Name: **Rare State Analysis + Cluster Robustness**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: BILA labels za binadamu — je market state vectors zinajikusanya kuwa
-makundi ya asili (latent structures)? Unsupervised clustering, EV vs permutation
-null, cross-pair recurrence. Standardized Euclidean (sio cosine). NO ML, NO names.
+Questions:
+- 5.10: rare cluster (C1 ~1%) inafanya nini? signature/composition/duration/exit/
+  return distribution (F-017). Trade = market configuration, sio signal.
+- 5.11: latent structures ni algorithm-independent? KMeans vs GMM vs Agglomerative,
+  ARI agreement (Principle 18). NO ML, NO names.
 
-> Phase 5.9 (Mechanism Discovery): **NOT APPROVED** — ilipiga HUMAN TAXONOMY
-> (Expansion/etc. via rules) = verification, sio discovery → ilikiuka NO HUMAN
-> MARKET THEORY. F-015 reframed "Latent Market Structures", inabaki OPEN. Latent
-> State Library / engines **BLOCKED** hadi data ionyeshe structures bila labels.
+> Phase 5.9A (Latent Structure Discovery): **APPROVED** → F-016 (latent structures
+> exist without human labeling; k=4, 3/4 clusters universal). F-017 opened (rare
+> states). Cluster ≠ State (Latent State Candidate). Principle 18 added. Config/
+> Opportunity/Payoff engines **BLOCKED** until candidates Validated (5.11/5.12).
 
 ---
 
@@ -234,17 +244,19 @@ null, cross-pair recurrence. Standardized Euclidean (sio cosine). NO ML, NO name
 - [✓] Phase 5.7  Component Interaction     (F-012 confirmed 16/16; F-013 discovered)
 - [✓] Phase 5.8  Interaction Stability     (F-014 pair-specific; universal rules falsified)
 - [✗] Phase 5.9  Mechanism Discovery       (NOT APPROVED — human taxonomy; reworked → 5.9A)
+- [✓] Phase 5.9A Latent Structure Discovery (F-016: latent structures exist; k=4)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.9A  Latent Structure Discovery *(ACTIVE — unsupervised; engine ready, report pending data run)*
-- [ ] Phase 6     Latent State Library    *(BLOCKED — only if structures emerge robustly)*
-- [ ] Phase 7     Adaptive Interaction Engine *(BLOCKED — per-pair coordinate mapping)*
-- [ ] Phase 8     Market State Vector / Opportunity *(BLOCKED)*
-- [ ] Phase 9     Payoff Engine           *(BLOCKED)*
-- [ ] Phase 10    Machine Learning         *(BLOCKED — predict DISTRIBUTION, not TP)*
+- [ ] Phase 5.10  Rare State Analysis     *(ACTIVE — F-017; engine ready, report pending data run)*
+- [ ] Phase 5.11  Cluster Robustness      *(ACTIVE — Principle 18; engine ready, report pending data run)*
+- [ ] Phase 5.12  Latent State Validation *(BLOCKED — Candidate → Validated)*
+- [ ] Phase 6     Configuration Engine    *(BLOCKED)*
+- [ ] Phase 7     Opportunity Engine      *(BLOCKED)*
+- [ ] Phase 8     Payoff Engine           *(BLOCKED)*
+- [ ] Phase 9     Machine Learning         *(BLOCKED)*
 
 ---
 
@@ -297,11 +309,18 @@ Evidence: `interaction_stability_report.md` (0/20 universal). Universal rules do
 NOT exist in coordinate space.
 
 **Q-012 — Do natural latent structures exist in market state vectors?** (reframed)
+Status: **CLOSED — YES** (F-016)
+Evidence: `latent_structure_report.md` (EV gap +0.126 vs null; 3/4 clusters recur).
+
+**Q-013 — What does the rare state (C1 ~1%) do?**
 Status: OPEN
-Needed: Phase 5.9A (`latent_structure_report.md`) — UNSUPERVISED clustering (no
-human labels); explained variance vs permutation null; cross-pair recurrence.
-Names only if structures emerge robustly. (Phase 5.9 mechanism/taxonomy approach
-NOT APPROVED.)
+Needed: Phase 5.10 (`rare_state_analysis.md`) — signature, composition, duration,
+exit, return distribution. F-017.
+
+**Q-014 — Are latent structures algorithm-independent?**
+Status: OPEN
+Needed: Phase 5.11 (`cluster_robustness_report.md`) — KMeans/GMM/Agglomerative,
+ARI agreement. Principle 18. Gate to Latent State Validation.
 
 ---
 
@@ -322,6 +341,7 @@ NOT APPROVED.)
 - 2026-06-25 — **V5.7**: F-013 (State Age = Lifecycle Variable); three categories (Driver/Gatekeeper/Lifecycle); Market Lifecycle Model; Context Score → Market State Vector.
 - 2026-06-25 — **V5.8**: F-014 (interactions pair-specific; universal rules falsified); F-015 (universal mechanisms, local coordinates — hypothesis); Mechanism Layer; "learns mechanisms, not cells".
 - 2026-06-25 — **V5.9**: Phase 5.9 mechanism method REJECTED (human taxonomy = verification, not discovery; NO HUMAN MARKET THEORY). F-015 reframed "Latent Market Structures" (OPEN). Mechanism Library → Latent State Library. Architecture: Latent Structure Discovery (unsupervised).
+- 2026-06-26 — **V5.10**: F-016 (latent structures exist, APPROVED); F-017 (rare states, hypothesis); **Principle 18** (algorithm independence); Cluster ≠ State → Latent State Candidate→Validated→Operational; State-based → **Market Configuration-based Trading**. OHLC added to state cache.
 
 ---
 
@@ -359,6 +379,8 @@ NOT APPROVED.)
 | 2026-06-25 | Phase 5.9 (delivered) — human taxonomy, not discovery | NOT APPROVED (rework) | Chief Quant |
 | 2026-06-25 | F-015 reframed "Latent Market Structures" (OPEN); doctrine V5.9 | APPROVED | Chief Quant |
 | 2026-06-25 | Phase 5.9A Latent Structure Discovery (unsupervised, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-26 | Phase 5.9A APPROVED; F-016 latent structures exist; F-017 hypothesis; Principle 18; doctrine V5.10 | APPROVED | Chief Quant |
+| 2026-06-26 | Phase 5.10 Rare State Analysis + Phase 5.11 Cluster Robustness | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

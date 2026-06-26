@@ -236,7 +236,8 @@ def run(pairs, tfs):
             rows.append(summarize(df, sym, tf, pip(sym)))
             out = REPO_ROOT / c["paths"]["processed"] / "state" / f"symbol={sym}" / f"tf={tf}.parquet"
             out.parent.mkdir(parents=True, exist_ok=True)
-            df.select(["ts","atr","tc","spr","volatility_state","activity_state","spread_state"]).write_parquet(out)
+            df.select(["ts","o","h","l","c","atr","tc","spr",
+                       "volatility_state","activity_state","spread_state"]).write_parquet(out)
             print(f"    {tf}: bars={len(df)}")
     if not rows:
         print("HITILAFU: hakuna data.", file=sys.stderr); return 1
