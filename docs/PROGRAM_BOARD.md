@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.11.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.12.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-26 (Chief review: Phase 5.10 APPROVED/F-017 Experimental; Phase 5.11 NOT APPROVED; F-018, Principle 18 amended, Principle 19, H-05).*
+*Last updated: 2026-06-26 (Chief reassessment: Trading Science; State Engine v1 APPROVED; Principle 18 replaced; Principle 19 rewritten; H-05 rejected, H-06; Phase 5.13).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.11.md`
+- `ELITEFX_DOCTRINE_V5.12.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.9 (chain)
-- V5.10 (superseded by V5.11)
+- V4 … V5.10 (chain)
+- V5.11 (superseded by V5.12)
 - Patches
 
 ---
@@ -176,22 +176,24 @@ Trading** (a trade is a consequence of a configuration, not a signal). Q-012 CLO
 > ⚠️ **Cluster ≠ State**: a cluster is a math grouping. Latent State **Candidate**
 > → Validated → Operational. Names only after validation.
 
-**[F-017] Rare States May Carry Disproportionately High Information**
-Status: **EXPERIMENTAL** (Phase 5.10 approved the analysis; payoff impact pending)
-Evidence: `rare_state_analysis.md` (rare cluster ~0.3%; spread +12σ, activity −1σ,
-vol slightly +; duration 1–3 bars)
-Summary: Rare regime characterised, BUT payoff impact not yet shown (OHLC absent).
-Per **Principle 19**, no finding enters doctrine without payoff/decision-quality
-impact → F-017 stays EXPERIMENTAL until Phase 5.10R (returns/MAE/MFE/triple
-barrier/holding). Also see **H-05** (rare states = liquidity events, not vol).
+**[F-017] Rare States — descriptive (NOT a payoff state)**
+Status: **EXPERIMENTAL** (descriptive; H-05 rejected → H-06)
+Evidence: `rare_state_analysis.md` (5.10R: rare mean move ≈23.8 vs non-rare ≈26.2
+pips, ratio ≈0.91×; spread +12σ, activity −1σ)
+Summary: Data shows rare state does NOT carry bigger payoff (Rare = Huge Moves is
+FALSE). But spread +12σ → edge can be eaten by execution. **H-05 REJECTED** (rare
+= payoff). **H-06 OPENED**: Rare States are EXECUTION RISK states, not payoff
+states (Phase 5.12). Per Principle 19, F-017 stays Experimental.
 
-**[F-018] Representation Robustness > Cluster Identity (methodological)**
+**[F-018] Decision Robustness > Cluster Identity (reframed V5.12)**
 Status: APPROVED (methodology)
-Evidence: `cluster_robustness_report.md` (ARI ≈ 0.12 — algorithm identity too strict)
-Summary: "Algorithm independent" was too strict (KMeans/GMM/Agglomerative differ
-by assumption). Require **economic meaning to match**, not cluster identity
-(Principle 18 amended). Test latent structures across REPRESENTATIONS, not
-algorithms (Phase 5.11B). Phase 5.11 (cluster identity) **NOT APPROVED**.
+Evidence: `cluster_robustness_report.md` (ARI ≈ 0.12)
+Summary: WAS "Representation Robustness". Algorithm identity is NOT the criterion
+(KMeans/GMM/Agglomerative solve different optimizations; low ARI ≠ bad
+representation). **Old Principle 18 (Algorithm Independence) REMOVED.** New
+Principle 18: a representation is valid if it improves DECISION QUALITY regardless
+of algorithm. Evaluation: Representation → Opportunity Quality → EV (Phase 5.13).
+Cluster/Representation Robustness (5.11/5.11B) = exploratory only.
 
 ---
 
@@ -216,21 +218,21 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.10R + 5.11B** (parallel)
-Name: **Rare State Payoff + Representation Robustness**
+Phase: **5.13**
+Name: **Representation Value**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Questions:
-- 5.10R: je rare state ina PAYOFF tofauti? signed return · MAE · MFE · triple
-  barrier · holding time (rare vs non-rare). Needs OHLC re-run. → F-017 Approved?
-- 5.11B: latent structures zinabaki kuvuka REPRESENTATIONS (zscore/robust/
-  percentile/rolling)? Structure persistence + cross-rep ARI (F-018). NO ML.
+Question: je kuongeza latent-state representation kunaboresha MAAMUZI? EV-selection,
+probability calibration (LogLoss), opportunity ranking, trade selection (Tier-1
+events). Kama hapana → representation iondolewe (Principle 19). NO ML.
 
-> Phase 5.10 **APPROVED** (analysis); F-017 → **EXPERIMENTAL** (payoff pending,
-> Principle 19). Phase 5.11 **NOT APPROVED** (ARI 0.12; cluster identity too
-> strict). Principle 18 amended (economic meaning, not cluster identity); F-018;
-> Principle 19 (payoff gate); H-05 (liquidity events). Engines **BLOCKED**.
+> Chief reassessment → **Trading Science**. State Engine v1 **APPROVED** (foundation).
+> Rare State descriptive; **H-05 REJECTED** (rare ≠ payoff, 0.91×) → **H-06** (rare =
+> execution risk). Old Principle 18 (algorithm independence) **REMOVED**; new
+> Principle 18 (decision quality > algorithm agreement); Principle 19 rewritten
+> (no representation survives without improving EV/decision quality); F-018 →
+> Decision Robustness. Cluster/Rep Robustness = exploratory only.
 
 ---
 
@@ -257,17 +259,18 @@ Questions:
 - [✗] Phase 5.9  Mechanism Discovery       (NOT APPROVED — human taxonomy; reworked → 5.9A)
 - [✓] Phase 5.9A Latent Structure Discovery (F-016: latent structures exist; k=4)
 - [✓] Phase 5.10  Rare State Analysis      (APPROVED; F-017 → Experimental, payoff pending)
-- [✗] Phase 5.11  Cluster Robustness       (NOT APPROVED; cluster identity too strict → 5.11B)
+- [✗] Phase 5.11  Cluster Robustness       (exploratory only — NOT acceptance criterion)
+- [~] Phase 5.10R Rare State Payoff        (H-05 rejected; rare ≠ payoff → H-06)
+- [~] Phase 5.11B Representation Robustness (exploratory; superseded by 5.13 Decision Value)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.10R Rare State Payoff       *(ACTIVE — needs OHLC re-run; engine ready)*
-- [ ] Phase 5.11B Representation Robustness *(ACTIVE — F-018; engine ready, report pending data run)*
-- [ ] Phase 5.12  Liquidity Event Validation *(BLOCKED — H-05)*
+- [ ] Phase 5.13  Representation Value     *(ACTIVE — Principle 19; engine ready, needs OHLC)*
+- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06: execution risk)*
 - [ ] Phase 6     Configuration Engine    *(BLOCKED)*
-- [ ] Phase 7     Opportunity Engine      *(BLOCKED)*
+- [ ] Phase 7     Opportunity Engine      *(BLOCKED — ranks Expected Payoff, not BUY/SELL)*
 - [ ] Phase 8     Payoff Engine           *(BLOCKED)*
 - [ ] Phase 9     Machine Learning         *(BLOCKED)*
 
@@ -335,13 +338,16 @@ Evidence: `cluster_robustness_report.md` (ARI 0.12). Reframed: economic meaning,
 not cluster identity → **Q-015**.
 
 **Q-015 — Are latent structures representation-robust?**
-Status: OPEN
-Needed: Phase 5.11B (`representation_robustness_report.md`) — structure across
-zscore/robust/percentile/rolling encodings; cross-rep ARI. F-018.
+Status: EXPLORATORY (5.11B) — not an acceptance criterion (F-018 reframed to Decision Robustness)
 
-**Q-016 — Are rare states liquidity events (not volatility)?**
-Status: OPEN (H-05)
-Needed: Phase 5.12 (spread +12σ vs vol slightly + suggests liquidity).
+**Q-016 — Are rare states liquidity / execution-risk events?**
+Status: OPEN (H-06; H-05 payoff-state REJECTED)
+Needed: Phase 5.12 (spread +12σ, returns flat → execution risk, not payoff).
+
+**Q-017 — Does the latent representation improve decision quality?**
+Status: OPEN (decisive — Principle 19)
+Needed: Phase 5.13 (`representation_value_report.md`) — EV-selection uplift +
+calibration vs baseline on Tier-1. If no improvement → remove the representation.
 
 ---
 
@@ -364,6 +370,7 @@ Needed: Phase 5.12 (spread +12σ vs vol slightly + suggests liquidity).
 - 2026-06-25 — **V5.9**: Phase 5.9 mechanism method REJECTED (human taxonomy = verification, not discovery; NO HUMAN MARKET THEORY). F-015 reframed "Latent Market Structures" (OPEN). Mechanism Library → Latent State Library. Architecture: Latent Structure Discovery (unsupervised).
 - 2026-06-26 — **V5.10**: F-016 (latent structures exist, APPROVED); F-017 (rare states, hypothesis); **Principle 18** (algorithm independence); Cluster ≠ State → Latent State Candidate→Validated→Operational; State-based → **Market Configuration-based Trading**. OHLC added to state cache.
 - 2026-06-26 — **V5.11**: Principle 18 AMENDED (economic meaning, not cluster identity); **F-018** (representation robustness > cluster identity); **Principle 19** (no finding without payoff/decision-quality impact); F-017 → Experimental; **H-05** (rare states = liquidity events).
+- 2026-06-26 — **V5.12** (Trading Science): State Engine v1 APPROVED; old Principle 18 (Algorithm Independence) **REMOVED** → new Principle 18 (Decision Quality > Algorithm Agreement); Principle 19 rewritten (no feature/state/representation survives without improving EV/Decision Quality); F-018 → **Decision Robustness**; **H-05 REJECTED**, **H-06** opened (rare = execution risk); Phase 5.13 Representation Value.
 
 ---
 
@@ -403,6 +410,10 @@ Needed: Phase 5.12 (spread +12σ vs vol slightly + suggests liquidity).
 | 2026-06-25 | Phase 5.9A Latent Structure Discovery (unsupervised, no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-26 | Phase 5.9A APPROVED; F-016 latent structures exist; F-017 hypothesis; Principle 18; doctrine V5.10 | APPROVED | Chief Quant |
 | 2026-06-26 | Phase 5.10 Rare State Analysis + Phase 5.11 Cluster Robustness | APPROVED (start) | Chief Quant |
+| 2026-06-26 | Phase 5.10 APPROVED/F-017 Experimental; Phase 5.11 NOT APPROVED; F-018; Principle 18 amended; Principle 19; H-05; doctrine V5.11 | APPROVED | Chief Quant |
+| 2026-06-26 | State Engine v1 APPROVED; Rare State descriptive; Cluster Robustness exploratory only | APPROVED | Chief Quant |
+| 2026-06-26 | Principle 18 REPLACED (decision quality); Principle 19 rewritten; F-018 Decision Robustness; H-05 REJECTED; H-06; doctrine V5.12 | APPROVED | Chief Quant |
+| 2026-06-26 | Phase 5.13 Representation Value | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

@@ -3,11 +3,16 @@
 **Chief Quant Amendment — Economic Meaning Over Cluster Identity; Payoff Gate**
 
 Version: 5.11
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.12 (current SSOT) — carry-forward in force
 Date: 26 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.12, 26 June 2026)
 Supersedes: V5.10 (amends Principle 18; adds F-018, Principle 19; F-017→Experimental)
 Previous Versions: Archived (V4 … V5.10)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.12](ELITEFX%20DOCTRINE%20V5.12.md)**
+> (Trading Science; old Principle 18 REMOVED → new Principle 18 decision-quality;
+> Principle 19 rewritten; F-018 → Decision Robustness; H-05 rejected, H-06 opened;
+> Phase 5.13 Representation Value). V5.11 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.10 remain in force except where amended below.
