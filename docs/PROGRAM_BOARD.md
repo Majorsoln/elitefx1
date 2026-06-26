@@ -3,21 +3,21 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.8.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.9.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-25 (Chief review: Phase 5.8 APPROVED → F-014; F-015 hypothesis; Phase 5.9 Mechanism Discovery).*
+*Last updated: 2026-06-25 (Chief review: Phase 5.9 NOT APPROVED — human taxonomy; F-015 reframed/OPEN; Phase 5.9A Latent Structure Discovery).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.8.md`
+- `ELITEFX_DOCTRINE_V5.9.md`
 
 Status:
 - ACTIVE
@@ -33,6 +33,7 @@ Superseded:
 - V5.5 (superseded by V5.6)
 - V5.6 (superseded by V5.7)
 - V5.7 (superseded by V5.8)
+- V5.8 (superseded by V5.9)
 - Patches
 
 ---
@@ -162,14 +163,16 @@ Summary: In feature coordinate space (LOW/NORMAL/HIGH cells), no interaction
 generalises cross-market (rank consistency <0.3 / modal best <50%). We will NOT
 build a rule engine keyed on cell IDs. Q-011 CLOSED.
 
-**[F-015] Universal Mechanisms, Local Coordinates (HYPOTHESIS — under test)**
-Status: OPEN (approved as hypothesis)
-Evidence: motivated by `interaction_stability_report.md` (cells differ but may
-share mechanism)
-Summary: Markets have different coordinates, same physics. EURUSD HIGH×HIGH×Tmid
-and GBPJPY LOW×NORMAL×Thi may both be "Expansion". Interaction Engine learns
-MECHANISMS; each pair maps its own coordinates. Mechanism Layer inserted. Decisive
-test = mechanism similarity (signature), not cell similarity. Verified by Phase 5.9.
+**[F-015] Latent Market Structures (HYPOTHESIS — OPEN, reframed V5.9)**
+Status: OPEN — NOT PROVEN
+Evidence: `mechanism_discovery_report.md` supported it on 0/4 events (method rejected)
+Summary: WAS "Universal Mechanisms, Local Coordinates". Phase 5.9 imposed a HUMAN
+TAXONOMY (Expansion/Compression/…) via rules → verification, not discovery →
+violated NO HUMAN MARKET THEORY → **NOT APPROVED**. Reframed: do **latent market
+structures** exist when data is left to speak (unsupervised, no labels)? Rule-based
+names removed as ground truth. "Mechanism Library" → "Latent State Library".
+Decisive test = unsupervised clustering (standardized Euclidean, not cosine) vs
+permutation null. Verified by Phase 5.9A.
 
 ---
 
@@ -194,19 +197,19 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.9**
-Name: **Mechanism Discovery (Tier 1 only)**
+Phase: **5.9A**
+Name: **Latent Structure Discovery**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Je best cells tofauti za pairs zina MECHANISM ileile (F-015)?
-Characterize cells kwa environmental signature (huru na labels), name mechanism
-(Expansion/Exhaustion/…), pima mechanism similarity vs cell similarity. NO ML.
+Question: BILA labels za binadamu — je market state vectors zinajikusanya kuwa
+makundi ya asili (latent structures)? Unsupervised clustering, EV vs permutation
+null, cross-pair recurrence. Standardized Euclidean (sio cosine). NO ML, NO names.
 
-> Phase 5.8 (Interaction Stability): **APPROVED** → F-014 (interactions pair-
-> specific; 0/20 universal — universal-rules hypothesis FALSIFIED). F-015 opened
-> (universal mechanisms, local coordinates). Mechanism Library / Interaction
-> Engine / Payoff Engine **BLOCKED** until mechanism representation established.
+> Phase 5.9 (Mechanism Discovery): **NOT APPROVED** — ilipiga HUMAN TAXONOMY
+> (Expansion/etc. via rules) = verification, sio discovery → ilikiuka NO HUMAN
+> MARKET THEORY. F-015 reframed "Latent Market Structures", inabaki OPEN. Latent
+> State Library / engines **BLOCKED** hadi data ionyeshe structures bila labels.
 
 ---
 
@@ -230,15 +233,16 @@ Characterize cells kwa environmental signature (huru na labels), name mechanism
 - [✓] Phase 5.6  Payoff Attribution       (marginal; conclusion corrected by F-012)
 - [✓] Phase 5.7  Component Interaction     (F-012 confirmed 16/16; F-013 discovered)
 - [✓] Phase 5.8  Interaction Stability     (F-014 pair-specific; universal rules falsified)
+- [✗] Phase 5.9  Mechanism Discovery       (NOT APPROVED — human taxonomy; reworked → 5.9A)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.9   Mechanism Discovery     *(ACTIVE — Tier 1; engine ready, report pending data run)*
-- [ ] Phase 6     Mechanism Library       *(BLOCKED — catalogue of universal mechanisms)*
+- [ ] Phase 5.9A  Latent Structure Discovery *(ACTIVE — unsupervised; engine ready, report pending data run)*
+- [ ] Phase 6     Latent State Library    *(BLOCKED — only if structures emerge robustly)*
 - [ ] Phase 7     Adaptive Interaction Engine *(BLOCKED — per-pair coordinate mapping)*
-- [ ] Phase 8     Market State Vector     *(BLOCKED)*
+- [ ] Phase 8     Market State Vector / Opportunity *(BLOCKED)*
 - [ ] Phase 9     Payoff Engine           *(BLOCKED)*
 - [ ] Phase 10    Machine Learning         *(BLOCKED — predict DISTRIBUTION, not TP)*
 
@@ -292,11 +296,12 @@ Status: **CLOSED — LOCAL** (F-014)
 Evidence: `interaction_stability_report.md` (0/20 universal). Universal rules do
 NOT exist in coordinate space.
 
-**Q-012 — Do universal MECHANISMS exist in latent market behaviour?**
+**Q-012 — Do natural latent structures exist in market state vectors?** (reframed)
 Status: OPEN
-Needed: Phase 5.9 (`mechanism_discovery_report.md`) — do different best cells
-share a mechanism signature (Expansion/Exhaustion/…)? Mechanism similarity vs
-cell similarity. Gate to the Mechanism Library.
+Needed: Phase 5.9A (`latent_structure_report.md`) — UNSUPERVISED clustering (no
+human labels); explained variance vs permutation null; cross-pair recurrence.
+Names only if structures emerge robustly. (Phase 5.9 mechanism/taxonomy approach
+NOT APPROVED.)
 
 ---
 
@@ -316,6 +321,7 @@ cell similarity. Gate to the Mechanism Library.
 - 2026-06-25 — **V5.6**: F-012 (interactions, not individual features); Driver ≠ Gatekeeper; Interaction Engine inserted; Payoff Engine FROZEN.
 - 2026-06-25 — **V5.7**: F-013 (State Age = Lifecycle Variable); three categories (Driver/Gatekeeper/Lifecycle); Market Lifecycle Model; Context Score → Market State Vector.
 - 2026-06-25 — **V5.8**: F-014 (interactions pair-specific; universal rules falsified); F-015 (universal mechanisms, local coordinates — hypothesis); Mechanism Layer; "learns mechanisms, not cells".
+- 2026-06-25 — **V5.9**: Phase 5.9 mechanism method REJECTED (human taxonomy = verification, not discovery; NO HUMAN MARKET THEORY). F-015 reframed "Latent Market Structures" (OPEN). Mechanism Library → Latent State Library. Architecture: Latent Structure Discovery (unsupervised).
 
 ---
 
@@ -350,6 +356,9 @@ cell similarity. Gate to the Mechanism Library.
 | 2026-06-25 | Phase 5.8 Interaction Stability; Phase 5.9 Market State Vector (queued) | APPROVED (start) | Chief Quant |
 | 2026-06-25 | Phase 5.8 APPROVED; F-014 pair-specific (universal rules falsified); F-015 hypothesis; doctrine V5.8 | APPROVED | Chief Quant |
 | 2026-06-25 | Phase 5.9 Mechanism Discovery; Phase 6 Mechanism Library (queued) | APPROVED (start) | Chief Quant |
+| 2026-06-25 | Phase 5.9 (delivered) — human taxonomy, not discovery | NOT APPROVED (rework) | Chief Quant |
+| 2026-06-25 | F-015 reframed "Latent Market Structures" (OPEN); doctrine V5.9 | APPROVED | Chief Quant |
+| 2026-06-25 | Phase 5.9A Latent Structure Discovery (unsupervised, no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

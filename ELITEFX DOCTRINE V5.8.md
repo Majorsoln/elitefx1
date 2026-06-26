@@ -3,11 +3,16 @@
 **Chief Quant Amendment — Universal Mechanisms, Local Coordinates**
 
 Version: 5.8
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.9 (current SSOT) — carry-forward in force
 Date: 25 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.9, 25 June 2026)
 Supersedes: V5.7 (records F-014; opens F-015; inserts Mechanism Layer)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2, V5.3, V5.4, V5.5, V5.6, V5.7)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.9](ELITEFX%20DOCTRINE%20V5.9.md)**
+> (Phase 5.9 mechanism method REJECTED — human taxonomy; F-015 reframed to "Latent
+> Market Structures", OPEN; Mechanism Library → Latent State Library). V5.8 carry-forward
+> EXCEPT the Mechanism-name framing, which V5.9 rejects.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.7 remain in force except where amended below.
