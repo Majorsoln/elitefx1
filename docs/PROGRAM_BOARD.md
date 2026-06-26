@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.13.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.14.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-26 (Chief: Phase 5.13 APPROVED, PHASE 5 CLOSED; F-019/F-020; Principle 20/21; Phase 6 Interaction Engine).*
+*Last updated: 2026-06-26 (Chief: Phase 6 APPROVED — F-020 APPROVED; F-021 no universal edge; Principle 22 opportunity=Configuration; H-07; Phase 6.5 Configuration Engine).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.13.md`
+- `ELITEFX_DOCTRINE_V5.14.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.11 (chain)
-- V5.12 (superseded by V5.13)
+- V4 … V5.12 (chain)
+- V5.13 (superseded by V5.14)
 - Patches
 
 ---
@@ -202,13 +202,25 @@ EV-selection)
 Summary: Supreme rule of ELITEFX. Drives Principle 20 (feature competition) and
 Principle 21 (selection > prediction — representation lifted EV-selection, not LogLoss).
 
-**[F-020] Trading Edge May Emerge from Event × Configuration (EXPERIMENTAL)**
-Status: OPEN — under test (Phase 6)
-Evidence: `representation_value_report.md` (EV varies strongly across latent clusters)
-Summary: Edge may live in Event × Configuration, not Events alone (Pullback inside
-State X ≠ inside State Y). Measured directly by Phase 6 Interaction Engine
-(EV/CI/Win/TB per Event×latent-state). Acceptance rule: no Event enters Opportunity
-Engine without Event × Configuration → Expected Payoff.
+**[F-020] Trading Edge Emerges from Event × Configuration**
+Status: **APPROVED** (was Experimental — upgraded Phase 6)
+Evidence: `event_state_interaction_report.md` (4/5 events: EV changes substantially
+with latent state; some Event×State beat the event alone)
+Summary: Edge lives in Event × Configuration, not Events alone (Pullback inside
+State X ≠ inside State Y). Confirmed by Phase 6 Interaction Engine (EV/CI/Win/TB
+per Event×latent-state). Acceptance rule: no Event enters Opportunity Engine
+without Event × Configuration → Expected Payoff. Q-018 CLOSED.
+
+**[F-021] No Event Possesses Universal Edge**
+Status: **APPROVED**
+Evidence: `event_state_interaction_report.md` (every event still has negative mean
+EV under Event→State alone — pullback/continuation/breakout)
+Summary: The event alone is not enough; edge exists only inside a COMPLETE Market
+Configuration. Negative event-EV is not failure — it is proof the architecture is
+right (we have not yet used Pair, Regime, Direction, Execution). Drives Principle 22
+and the redefinition of Market Configuration (= Event + Latent State + Pair + Regime
++ Direction + Execution Context). The atomic trading unit is the **Configuration**,
+not the event. Q-019 OPEN (Configuration Engine; H-07).
 
 ---
 
@@ -233,21 +245,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **6**
-Name: **Interaction Engine (Event × State)**
+Phase: **6.5**
+Name: **Configuration Engine (atomic trading unit)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: je edge iko kwenye Event × Configuration (F-020)? Kwa kila event
-(pullback/deep_pullback/trend_continuation/breakout/mean_reversion): EV±95%CI,
-Win, Triple Barrier, N kwa kila latent state. "Pullback works ONLY in State X".
-Acceptance: Event × Config → Expected Payoff kabla ya Opportunity Engine. NO ML.
+Question: jenga Configuration Objects (sio signals). Configuration = Pair + Event +
+Latent State + Regime + Direction + Execution Context. Kwa kila Configuration:
+EV±95%CI, Win, Triple Barrier (TP/SL/TIME), N, walk-forward stability (train/test).
+Tena: **H-07** — je kuondoa configurations mbaya kunaboresha EV kuliko kuongeza
+nzuri (out-of-sample)? Acceptance: Market Configuration → Expected Payoff (sio
+Indicator → BUY). NO ML bado (target inaanza kuonekana lakini haijafikiwa).
 
-> **PHASE 5 CLOSED.** Phase 5.13 **APPROVED** → F-019 (Value Law: information ina
-> value tu ikiboresha payoff/decision). Principle 20 (feature competition);
-> Principle 21 (Selection > Prediction — rep iliboresha EV-selection, sio LogLoss).
-> Pipeline mpya: Events → Market Configuration → Interaction Engine → Expected
-> Payoff → Opportunity Ranking → Trade Lifecycle. ML deferred (target haijajengwa).
+> **PHASE 6 CLOSED.** Interaction Engine **APPROVED** → **F-020 APPROVED** (edge =
+> Event × Configuration; 4/5 events). **F-021** (no universal edge; every event EV
+> bado hasi chini ya Event→State pekee — proof architecture ni sahihi). **Principle
+> 22** (opportunity = Configuration, KAMWE sio Event). Market Configuration
+> imefafanuliwa upya = Event + State + Pair + Regime + Direction + Execution. **H-07**
+> (negative edge stable zaidi ya positive). Pipeline: Events → Market Configuration →
+> Configuration Engine → Expected Payoff → Opportunity Ranking → Trade Lifecycle.
 
 ---
 
@@ -279,16 +295,18 @@ Acceptance: Event × Config → Expected Payoff kabla ya Opportunity Engine. NO 
 - [~] Phase 5.11B Representation Robustness (exploratory; superseded by 5.13 Decision Value)
 - [✓] Phase 5.13  Representation Value      (F-019; representation improves EV-selection)
 - [✓] **PHASE 5 CLOSED** (state/context/payoff/representation foundation complete)
+- [✓] Phase 6     Interaction Engine        (F-020 APPROVED edge=Event×Config; F-021 no universal edge)
+- [✓] **PHASE 6 CLOSED** (edge = Event × Configuration confirmed)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 6     Interaction Engine      *(ACTIVE — Event × State EV/CI/TB; engine ready, needs OHLC)*
+- [ ] Phase 6.5   Configuration Engine     *(ACTIVE — Configuration Objects; EV/CI/TB/stability; H-07; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 7     Opportunity Engine      *(BLOCKED — ranks Expected Payoff, not BUY/SELL)*
+- [ ] Phase 7     Opportunity Engine      *(BLOCKED — ranks Expected Payoff of Configurations, not BUY/SELL)*
 - [ ] Phase 8     Payoff Engine           *(BLOCKED)*
-- [ ] Phase 9     Machine Learning         *(BLOCKED — after a good target exists)*
+- [ ] Phase 9     Machine Learning         *(BLOCKED — predicts Expected Payoff of a Configuration)*
 
 ---
 
@@ -366,9 +384,21 @@ Evidence: `representation_value_report.md` — improved EV-selection (not LogLos
 Principle 21: selection > prediction).
 
 **Q-018 — Is the edge in Event × Configuration?**
-Status: OPEN (F-020, Experimental)
-Needed: Phase 6 (`event_state_interaction_report.md`) — EV±CI/Win/TB per
-Event×latent-state. Gate to Opportunity Engine.
+Status: **CLOSED — YES** (F-020 APPROVED)
+Evidence: `event_state_interaction_report.md` — 4/5 events: EV changes substantially
+with latent state; some Event×State beat the event alone. Gate to Opportunity Engine.
+
+**Q-019 — Is the Configuration (not the Event) the atomic trading unit?**
+Status: OPEN (F-021; Phase 6.5)
+Needed: `configuration_engine_report.md` — Configuration = Pair+Event+LatentState+
+Regime+Direction+ExecutionContext; EV±CI/Win/TB/N + walk-forward stability. Build
+Configuration Objects for the Opportunity Engine.
+
+**H-07 — Negative Edge is more stable than Positive Edge.**
+Status: OPEN (Phase 6.5). Test: does removing bad configurations improve EV more
+than adding good ones (out-of-sample, no-lookahead)? "Trade less, but in the right
+environment" — where NOT to trade may be worth more than where to trade. State C2
+was poor across nearly all events (Phase 6), seeding this hypothesis.
 
 ---
 
@@ -393,6 +423,7 @@ Event×latent-state. Gate to Opportunity Engine.
 - 2026-06-26 — **V5.11**: Principle 18 AMENDED (economic meaning, not cluster identity); **F-018** (representation robustness > cluster identity); **Principle 19** (no finding without payoff/decision-quality impact); F-017 → Experimental; **H-05** (rare states = liquidity events).
 - 2026-06-26 — **V5.12** (Trading Science): State Engine v1 APPROVED; old Principle 18 (Algorithm Independence) **REMOVED** → new Principle 18 (Decision Quality > Algorithm Agreement); Principle 19 rewritten (no feature/state/representation survives without improving EV/Decision Quality); F-018 → **Decision Robustness**; **H-05 REJECTED**, **H-06** opened (rare = execution risk); Phase 5.13 Representation Value.
 - 2026-06-26 — **V5.13**: **PHASE 5 CLOSED**. F-019 (Value Law); F-020 (Event × Configuration, Experimental); **Principle 20** (feature competition); **Principle 21** (Selection > Prediction); new pipeline (…→ Interaction Engine → Expected Payoff → Opportunity Ranking); acceptance rule (Event × Config → Payoff); Phase 6 Interaction Engine.
+- 2026-06-26 — **V5.14**: **PHASE 6 CLOSED**. **F-020 APPROVED** (edge = Event × Configuration, 4/5 events); **F-021** (no Event has universal edge — edge only inside a COMPLETE Market Configuration); **Principle 22** (opportunity = Configuration, never an Event); Market Configuration **redefined** = Event + Latent State + Pair + Regime + Direction + Execution Context (atomic trading unit); **H-07** (negative edge more stable than positive); new acceptance rule (Market Configuration → Expected Payoff, not Indicator → BUY); Phase 6.5 Configuration Engine. ML target appears but not reached.
 
 ---
 
@@ -438,6 +469,8 @@ Event×latent-state. Gate to Opportunity Engine.
 | 2026-06-26 | Phase 5.13 Representation Value | APPROVED (start) | Chief Quant |
 | 2026-06-26 | Phase 5.13 APPROVED; PHASE 5 CLOSED; F-019/F-020; Principle 20/21; doctrine V5.13 | APPROVED | Chief Quant |
 | 2026-06-26 | Phase 6 Interaction Engine (Event × State) | APPROVED (start) | Chief Quant |
+| 2026-06-26 | Phase 6 APPROVED (Scientific Milestone); PHASE 6 CLOSED; F-020 APPROVED; F-021 (no universal edge); Principle 22; Market Configuration redefined; H-07; doctrine V5.14 | APPROVED | Chief Quant |
+| 2026-06-26 | Phase 6.5 Configuration Engine (Configuration Objects, no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

@@ -3,11 +3,16 @@
 **Chief Quant — Phase 5 Closed; Interaction Engine; Selection Over Prediction**
 
 Version: 5.13
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.14 (current SSOT) — carry-forward in force
 Date: 26 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.14, 26 June 2026)
 Supersedes: V5.12 (closes Phase 5; F-019, F-020; Principle 20, 21; Interaction Engine)
 Previous Versions: Archived (V4 … V5.12)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.14](ELITEFX%20DOCTRINE%20V5.14.md)**
+> (F-020 APPROVED; F-021 hakuna universal edge; Principle 22 opportunity =
+> Configuration; Market Configuration = Event+State+Pair+Regime+Direction+Execution;
+> H-07; Phase 6.5 Configuration Engine). V5.13 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.12 remain in force except where amended below.
