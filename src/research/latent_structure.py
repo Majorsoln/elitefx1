@@ -38,9 +38,9 @@ from datetime import datetime
 from pathlib import Path
 
 import numpy as np
-import duckdb
+import polars as pl
 
-from market_state_engine import (cfg, pip, time_col, h1_from_ticks, rollup, state_df)
+from market_state_engine import cfg, pip
 from mechanism_discovery import signatures, SIG_DIM   # feature extraction tu (sio taxonomy)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -87,11 +87,20 @@ def null_ev(X, k, rng):
     return float(np.mean(evs))
 
 
-def collect(con, src, t, pp, rng):
-    """Rudisha vectors[N×7] (finite, per-df standardized) kwa pair, sampled."""
-    h1 = h1_from_ticks(con, src, t, pp); rows = []
+def state_path(sym, tf):
+    return REPO_ROOT / cfg()["paths"]["processed"] / "state" / f"symbol={sym}" / f"tf={tf}.parquet"
+
+
+def collect(sym, rng):
+    """Rudisha vectors[N×7] (finite, per-df standardized) kwa pair, sampled.
+    INASOMA state parquet (cached na market_state_engine) — HAKUNA tick rescan
+    (haraka mara nyingi; atr/tc/spr/volatility_state vyote vimo)."""
+    pp = pip(sym); rows = []
     for tf in TFS:
-        df = state_df(rollup(h1, tf), tf)
+        p = state_path(sym, tf)
+        if not p.exists():
+            continue
+        df = pl.read_parquet(p)
         sig, *_ = signatures(df, pp)
         rows.append(sig[np.all(np.isfinite(sig), axis=1)])
     X = np.vstack(rows) if rows else np.empty((0, SIG_DIM))
@@ -101,24 +110,21 @@ def collect(con, src, t, pp, rng):
 
 
 def run(pairs, tfs):
-    c = cfg(); raw = REPO_ROOT / c["paths"]["raw_ticks"]
-    if not raw.exists():
-        print(f"HITILAFU: '{raw}' haipo.", file=sys.stderr); return 1
-    con = duckdb.connect(); rng = np.random.default_rng(0)
-    Xs = []; pair_ids = []
+    c = cfg(); rng = np.random.default_rng(0)
+    Xs = []; pair_ids = []; miss = 0
     for sym in pairs:
-        base = raw / f"symbol={sym}"
-        if not base.exists() or not list(base.rglob("*.parquet")):
-            print(f"  {sym}: (hakuna data)"); continue
-        src = _posix(base / "**" / "*.parquet")
-        t = time_col(con, src); pp = pip(sym)
-        print(f"  {sym}: nascan...", flush=True)
-        X = collect(con, src, t, pp, rng)
+        print(f"  {sym}: nasoma state parquet...", flush=True)
+        X = collect(sym, rng)
         if len(X) > 50:
             Xs.append(X); pair_ids += [sym] * len(X)
+        else:
+            miss += 1
         print(f"    vectors={len(X)}")
     if not Xs:
-        print("HITILAFU: hakuna vectors.", file=sys.stderr); return 1
+        print("HITILAFU: hakuna state parquet. Endesha market_state_engine.py kwanza "
+              "(data/processed/state/...).", file=sys.stderr); return 1
+    if miss:
+        print(f"  (onyo: pairs {miss} hazina state parquet)")
     X = np.vstack(Xs); pid = np.array(pair_ids)
     print(f"  jumla vectors={len(X)} dim={X.shape[1]}", flush=True)
 
