@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.14.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.15.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-26 (Chief: Phase 6 APPROVED — F-020 APPROVED; F-021 no universal edge; Principle 22 opportunity=Configuration; H-07; Phase 6.5 Configuration Engine).*
+*Last updated: 2026-06-26 (Chief: Phase 6.5 APPROVED — RESEARCH FOUNDATION CLOSED; H-07→F-022 APPROVED; F-023 ranking; F-024 confidence; Principle 23/24; Phase 7 Confidence Engine).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.14.md`
+- `ELITEFX_DOCTRINE_V5.15.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.12 (chain)
-- V5.13 (superseded by V5.14)
+- V4 … V5.13 (chain)
+- V5.14 (superseded by V5.15)
 - Patches
 
 ---
@@ -220,7 +220,34 @@ Configuration. Negative event-EV is not failure — it is proof the architecture
 right (we have not yet used Pair, Regime, Direction, Execution). Drives Principle 22
 and the redefinition of Market Configuration (= Event + Latent State + Pair + Regime
 + Direction + Execution Context). The atomic trading unit is the **Configuration**,
-not the event. Q-019 OPEN (Configuration Engine; H-07).
+not the event. Q-019 CLOSED (Configuration confirmed atomic unit).
+
+**[F-022] Bad Configurations Are More Persistent Than Good Configurations**
+Status: **APPROVED** (was H-07 — upgraded Phase 6.5)
+Evidence: `configuration_engine_report.md` (walk-forward: train-positive→positive
+≈42% vs train-negative→negative ≈66%)
+Summary: Negative edge persists more durably than positive edge. Retail systems
+learn *where to enter*; institutional systems first learn *where NOT to enter*.
+Knowing where not to trade is the more durable edge ("trade less, in the right
+environment"). H-07 CLOSED → F-022 APPROVED.
+
+**[F-023] Ranking Is the Native Language of the Opportunity Engine**
+Status: **APPROVED**
+Evidence: `configuration_engine_report.md` (top configurations do not resemble one
+another — e.g. EURJPY·MeanReversion·C1·HIGH·SHORT·WIDE vs GBPUSD·TrendContinuation·
+C1·LOW·LONG·WIDE)
+Summary: No single rule fits the winning configurations; the engine must learn a
+**population**, not a rule. The Opportunity Engine ranks (not classifies). Drives
+Principle 23.
+
+**[F-024] Confidence Is As Valuable As Expected Payoff (OPEN)**
+Status: OPEN — under test (Phase 7)
+Evidence: `configuration_engine_report.md` (EV alone ignores N — EV=+15 at N=120 ≠
+EV=+15 at N=12,000)
+Summary: Expected Payoff alone is not enough; ranking must incorporate confidence
+interval, persistence, walk-forward stability, and sample quality. Drives Principle
+24 and the Configuration Confidence Score (CCS). Confirmed/denied by Phase 7
+Confidence Engine.
 
 ---
 
@@ -245,25 +272,26 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **6.5**
-Name: **Configuration Engine (atomic trading unit)**
+Phase: **7**
+Name: **Confidence Engine (Configuration Confidence Score)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: jenga Configuration Objects (sio signals). Configuration = Pair + Event +
-Latent State + Regime + Direction + Execution Context. Kwa kila Configuration:
-EV±95%CI, Win, Triple Barrier (TP/SL/TIME), N, walk-forward stability (train/test).
-Tena: **H-07** — je kuondoa configurations mbaya kunaboresha EV kuliko kuongeza
-nzuri (out-of-sample)? Acceptance: Market Configuration → Expected Payoff (sio
-Indicator → BUY). NO ML bado (target inaanza kuonekana lakini haijafikiwa).
+Question: pima UBORA WA USHAHIDI wa kila Configuration (sio edge mpya). Kwa kila
+Configuration: EV, 95% CI, N, K-fold walk-forward persistence, stability score,
+probability calibration (ikifaa). Tengeneza **Configuration Confidence Score
+(CCS) = EV × Confidence × Persistence × Sample Quality**. Onyesha ranking kwa CCS
+≠ ranking kwa EV peke yake (Principle 24/F-024) na thibitisha F-022. Acceptance:
+Opportunity Engine itapokea CCS, sio EV peke yake. NO ML bado (CCS = target yake).
 
-> **PHASE 6 CLOSED.** Interaction Engine **APPROVED** → **F-020 APPROVED** (edge =
-> Event × Configuration; 4/5 events). **F-021** (no universal edge; every event EV
-> bado hasi chini ya Event→State pekee — proof architecture ni sahihi). **Principle
-> 22** (opportunity = Configuration, KAMWE sio Event). Market Configuration
-> imefafanuliwa upya = Event + State + Pair + Regime + Direction + Execution. **H-07**
-> (negative edge stable zaidi ya positive). Pipeline: Events → Market Configuration →
-> Configuration Engine → Expected Payoff → Opportunity Ranking → Trade Lifecycle.
+> **PHASE 6.5 CLOSED — RESEARCH FOUNDATION CLOSED.** Configuration Engine
+> **APPROVED**. **H-07 → F-022 APPROVED** (configs mbaya zina persistence kubwa:
+> train+→+ ≈42% vs train−→− ≈66%). **F-023** (ranking ndio lugha ya asili ya
+> Opportunity Engine — population, sio rule). **F-024 OPEN** (confidence = thamani
+> sawa na payoff). **Principle 23** (rank Configurations, usi-classify Trades);
+> **Principle 24** (hakuna ranking kwa EV peke yake). Configuration = atomic unit ya
+> mwisho (hakuna component chini yake). Pipeline: Configuration → **Confidence Engine**
+> → Opportunity Engine → Trade Lifecycle. ML target (Configuration Score) sasa wazi.
 
 ---
 
@@ -297,16 +325,17 @@ Indicator → BUY). NO ML bado (target inaanza kuonekana lakini haijafikiwa).
 - [✓] **PHASE 5 CLOSED** (state/context/payoff/representation foundation complete)
 - [✓] Phase 6     Interaction Engine        (F-020 APPROVED edge=Event×Config; F-021 no universal edge)
 - [✓] **PHASE 6 CLOSED** (edge = Event × Configuration confirmed)
+- [✓] Phase 6.5   Configuration Engine      (atomic unit; F-022 bad-configs-persist; F-023 ranking)
+- [✓] **RESEARCH FOUNDATION CLOSED** (states→transitions→age→events→Event×State→Configuration→persistence)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 6.5   Configuration Engine     *(ACTIVE — Configuration Objects; EV/CI/TB/stability; H-07; needs OHLC)*
+- [ ] Phase 7     Confidence Engine        *(ACTIVE — CCS: EV + Confidence + Persistence + Sample Quality; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 7     Opportunity Engine      *(BLOCKED — ranks Expected Payoff of Configurations, not BUY/SELL)*
-- [ ] Phase 8     Payoff Engine           *(BLOCKED)*
-- [ ] Phase 9     Machine Learning         *(BLOCKED — predicts Expected Payoff of a Configuration)*
+- [ ] Phase 8     Opportunity Engine      *(BLOCKED — ranks Configurations by CCS, not BUY/SELL; F-023/P23)*
+- [ ] Phase 9     Machine Learning         *(BLOCKED — predicts Configuration Score)*
 
 ---
 
@@ -389,16 +418,20 @@ Evidence: `event_state_interaction_report.md` — 4/5 events: EV changes substan
 with latent state; some Event×State beat the event alone. Gate to Opportunity Engine.
 
 **Q-019 — Is the Configuration (not the Event) the atomic trading unit?**
-Status: OPEN (F-021; Phase 6.5)
-Needed: `configuration_engine_report.md` — Configuration = Pair+Event+LatentState+
-Regime+Direction+ExecutionContext; EV±CI/Win/TB/N + walk-forward stability. Build
-Configuration Objects for the Opportunity Engine.
+Status: **CLOSED — YES** (F-021/F-022; Phase 6.5)
+Evidence: `configuration_engine_report.md` — Configuration confirmed as atomic unit;
+no component added below it. Configuration = Pair+Event+LatentState+Regime+Direction+
+Execution Context.
+
+**Q-020 — Is Confidence as valuable as Expected Payoff (does CCS beat EV-alone ranking)?**
+Status: OPEN (F-024; Phase 7)
+Needed: `confidence_engine_report.md` — per-Configuration EV/CI/N/persistence/
+stability + Configuration Confidence Score (CCS). Show ranking by CCS ≠ ranking by
+EV alone (Principle 24). Gate to Opportunity Engine.
 
 **H-07 — Negative Edge is more stable than Positive Edge.**
-Status: OPEN (Phase 6.5). Test: does removing bad configurations improve EV more
-than adding good ones (out-of-sample, no-lookahead)? "Trade less, but in the right
-environment" — where NOT to trade may be worth more than where to trade. State C2
-was poor across nearly all events (Phase 6), seeding this hypothesis.
+Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive→positive
+≈42% vs train-negative→negative ≈66%. Bad configurations persist more than good ones.
 
 ---
 
@@ -424,6 +457,7 @@ was poor across nearly all events (Phase 6), seeding this hypothesis.
 - 2026-06-26 — **V5.12** (Trading Science): State Engine v1 APPROVED; old Principle 18 (Algorithm Independence) **REMOVED** → new Principle 18 (Decision Quality > Algorithm Agreement); Principle 19 rewritten (no feature/state/representation survives without improving EV/Decision Quality); F-018 → **Decision Robustness**; **H-05 REJECTED**, **H-06** opened (rare = execution risk); Phase 5.13 Representation Value.
 - 2026-06-26 — **V5.13**: **PHASE 5 CLOSED**. F-019 (Value Law); F-020 (Event × Configuration, Experimental); **Principle 20** (feature competition); **Principle 21** (Selection > Prediction); new pipeline (…→ Interaction Engine → Expected Payoff → Opportunity Ranking); acceptance rule (Event × Config → Payoff); Phase 6 Interaction Engine.
 - 2026-06-26 — **V5.14**: **PHASE 6 CLOSED**. **F-020 APPROVED** (edge = Event × Configuration, 4/5 events); **F-021** (no Event has universal edge — edge only inside a COMPLETE Market Configuration); **Principle 22** (opportunity = Configuration, never an Event); Market Configuration **redefined** = Event + Latent State + Pair + Regime + Direction + Execution Context (atomic trading unit); **H-07** (negative edge more stable than positive); new acceptance rule (Market Configuration → Expected Payoff, not Indicator → BUY); Phase 6.5 Configuration Engine. ML target appears but not reached.
+- 2026-06-26 — **V5.15**: **RESEARCH FOUNDATION CLOSED**. **H-07 → F-022 APPROVED** (bad configurations more persistent than good: train+→+ ≈42% vs train−→− ≈66%); **F-023** (ranking is the native language of the Opportunity Engine — population, not rule); **F-024 OPEN** (confidence as valuable as Expected Payoff); **Principle 23** (rank Configurations, don't classify Trades); **Principle 24** (no ranking by Expected Payoff alone); Configuration = final atomic unit (no component below it); pipeline Configuration → **Confidence Engine** → Opportunity Engine; Phase 7 Confidence Engine (CCS). ML target = Configuration Score.
 
 ---
 
@@ -471,6 +505,8 @@ was poor across nearly all events (Phase 6), seeding this hypothesis.
 | 2026-06-26 | Phase 6 Interaction Engine (Event × State) | APPROVED (start) | Chief Quant |
 | 2026-06-26 | Phase 6 APPROVED (Scientific Milestone); PHASE 6 CLOSED; F-020 APPROVED; F-021 (no universal edge); Principle 22; Market Configuration redefined; H-07; doctrine V5.14 | APPROVED | Chief Quant |
 | 2026-06-26 | Phase 6.5 Configuration Engine (Configuration Objects, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-26 | Phase 6.5 APPROVED; RESEARCH FOUNDATION CLOSED; H-07→F-022; F-023; F-024; Principle 23/24; doctrine V5.15 | APPROVED | Chief Quant |
+| 2026-06-26 | Phase 7 Confidence Engine (CCS: EV + Confidence + Persistence + Sample Quality, no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

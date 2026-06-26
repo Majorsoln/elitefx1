@@ -3,11 +3,17 @@
 **Chief Quant — Edge = Event × Market Configuration; Configuration as the Atomic Trading Unit**
 
 Version: 5.14
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.15 (current SSOT) — carry-forward in force
 Date: 26 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.15, 26 June 2026)
 Supersedes: V5.13 (F-020 Approved; F-021; Principle 22; Market Configuration redefined; H-07; Phase 6.5 Configuration Engine)
 Previous Versions: Archived (V4 … V5.13)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.15](ELITEFX%20DOCTRINE%20V5.15.md)**
+> (Research Foundation CLOSED; H-07→F-022 APPROVED; F-023 ranking native language;
+> F-024 confidence = payoff value; Principle 23 rank-don't-classify; Principle 24
+> no-ranking-by-EV-alone; Configuration = final atomic unit; Phase 7 Confidence
+> Engine). V5.14 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.13 remain in force except where amended below.
