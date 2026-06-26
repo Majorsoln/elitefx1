@@ -3,11 +3,15 @@
 **Chief Quant Amendment — Market Lifecycle Model**
 
 Version: 5.7
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.8 (current SSOT) — carry-forward in force
 Date: 25 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.8, 25 June 2026)
 Supersedes: V5.6 (records F-013; Lifecycle Model; Market State Vector)
 Previous Versions: Archived (V4, V4.1, V5.0, V5.1, V5.2, V5.3, V5.4, V5.5, V5.6)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.8](ELITEFX%20DOCTRINE%20V5.8.md)**
+> (F-014 interactions pair-specific; F-015 Universal Mechanisms / Local
+> Coordinates; Mechanism Layer). V5.7 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.6 remain in force except where amended below.
