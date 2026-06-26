@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.12.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.13.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-26 (Chief reassessment: Trading Science; State Engine v1 APPROVED; Principle 18 replaced; Principle 19 rewritten; H-05 rejected, H-06; Phase 5.13).*
+*Last updated: 2026-06-26 (Chief: Phase 5.13 APPROVED, PHASE 5 CLOSED; F-019/F-020; Principle 20/21; Phase 6 Interaction Engine).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.12.md`
+- `ELITEFX_DOCTRINE_V5.13.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.10 (chain)
-- V5.11 (superseded by V5.12)
+- V4 … V5.11 (chain)
+- V5.12 (superseded by V5.13)
 - Patches
 
 ---
@@ -195,6 +195,21 @@ Principle 18: a representation is valid if it improves DECISION QUALITY regardle
 of algorithm. Evaluation: Representation → Opportunity Quality → EV (Phase 5.13).
 Cluster/Representation Robustness (5.11/5.11B) = exploratory only.
 
+**[F-019] The Value Law — Information has value only if it improves Expected Payoff or Decision Quality**
+Status: APPROVED (supreme rule)
+Evidence: `representation_value_report.md` (Phase 5.13 — representation improved
+EV-selection)
+Summary: Supreme rule of ELITEFX. Drives Principle 20 (feature competition) and
+Principle 21 (selection > prediction — representation lifted EV-selection, not LogLoss).
+
+**[F-020] Trading Edge May Emerge from Event × Configuration (EXPERIMENTAL)**
+Status: OPEN — under test (Phase 6)
+Evidence: `representation_value_report.md` (EV varies strongly across latent clusters)
+Summary: Edge may live in Event × Configuration, not Events alone (Pullback inside
+State X ≠ inside State Y). Measured directly by Phase 6 Interaction Engine
+(EV/CI/Win/TB per Event×latent-state). Acceptance rule: no Event enters Opportunity
+Engine without Event × Configuration → Expected Payoff.
+
 ---
 
 ## Rejected Findings
@@ -218,21 +233,21 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **5.13**
-Name: **Representation Value**
+Phase: **6**
+Name: **Interaction Engine (Event × State)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: je kuongeza latent-state representation kunaboresha MAAMUZI? EV-selection,
-probability calibration (LogLoss), opportunity ranking, trade selection (Tier-1
-events). Kama hapana → representation iondolewe (Principle 19). NO ML.
+Question: je edge iko kwenye Event × Configuration (F-020)? Kwa kila event
+(pullback/deep_pullback/trend_continuation/breakout/mean_reversion): EV±95%CI,
+Win, Triple Barrier, N kwa kila latent state. "Pullback works ONLY in State X".
+Acceptance: Event × Config → Expected Payoff kabla ya Opportunity Engine. NO ML.
 
-> Chief reassessment → **Trading Science**. State Engine v1 **APPROVED** (foundation).
-> Rare State descriptive; **H-05 REJECTED** (rare ≠ payoff, 0.91×) → **H-06** (rare =
-> execution risk). Old Principle 18 (algorithm independence) **REMOVED**; new
-> Principle 18 (decision quality > algorithm agreement); Principle 19 rewritten
-> (no representation survives without improving EV/decision quality); F-018 →
-> Decision Robustness. Cluster/Rep Robustness = exploratory only.
+> **PHASE 5 CLOSED.** Phase 5.13 **APPROVED** → F-019 (Value Law: information ina
+> value tu ikiboresha payoff/decision). Principle 20 (feature competition);
+> Principle 21 (Selection > Prediction — rep iliboresha EV-selection, sio LogLoss).
+> Pipeline mpya: Events → Market Configuration → Interaction Engine → Expected
+> Payoff → Opportunity Ranking → Trade Lifecycle. ML deferred (target haijajengwa).
 
 ---
 
@@ -262,17 +277,18 @@ events). Kama hapana → representation iondolewe (Principle 19). NO ML.
 - [✗] Phase 5.11  Cluster Robustness       (exploratory only — NOT acceptance criterion)
 - [~] Phase 5.10R Rare State Payoff        (H-05 rejected; rare ≠ payoff → H-06)
 - [~] Phase 5.11B Representation Robustness (exploratory; superseded by 5.13 Decision Value)
+- [✓] Phase 5.13  Representation Value      (F-019; representation improves EV-selection)
+- [✓] **PHASE 5 CLOSED** (state/context/payoff/representation foundation complete)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 5.13  Representation Value     *(ACTIVE — Principle 19; engine ready, needs OHLC)*
-- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06: execution risk)*
-- [ ] Phase 6     Configuration Engine    *(BLOCKED)*
+- [ ] Phase 6     Interaction Engine      *(ACTIVE — Event × State EV/CI/TB; engine ready, needs OHLC)*
+- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
 - [ ] Phase 7     Opportunity Engine      *(BLOCKED — ranks Expected Payoff, not BUY/SELL)*
 - [ ] Phase 8     Payoff Engine           *(BLOCKED)*
-- [ ] Phase 9     Machine Learning         *(BLOCKED)*
+- [ ] Phase 9     Machine Learning         *(BLOCKED — after a good target exists)*
 
 ---
 
@@ -345,9 +361,14 @@ Status: OPEN (H-06; H-05 payoff-state REJECTED)
 Needed: Phase 5.12 (spread +12σ, returns flat → execution risk, not payoff).
 
 **Q-017 — Does the latent representation improve decision quality?**
-Status: OPEN (decisive — Principle 19)
-Needed: Phase 5.13 (`representation_value_report.md`) — EV-selection uplift +
-calibration vs baseline on Tier-1. If no improvement → remove the representation.
+Status: **CLOSED — YES (selection)** (F-019; Phase 5.13)
+Evidence: `representation_value_report.md` — improved EV-selection (not LogLoss →
+Principle 21: selection > prediction).
+
+**Q-018 — Is the edge in Event × Configuration?**
+Status: OPEN (F-020, Experimental)
+Needed: Phase 6 (`event_state_interaction_report.md`) — EV±CI/Win/TB per
+Event×latent-state. Gate to Opportunity Engine.
 
 ---
 
@@ -371,6 +392,7 @@ calibration vs baseline on Tier-1. If no improvement → remove the representati
 - 2026-06-26 — **V5.10**: F-016 (latent structures exist, APPROVED); F-017 (rare states, hypothesis); **Principle 18** (algorithm independence); Cluster ≠ State → Latent State Candidate→Validated→Operational; State-based → **Market Configuration-based Trading**. OHLC added to state cache.
 - 2026-06-26 — **V5.11**: Principle 18 AMENDED (economic meaning, not cluster identity); **F-018** (representation robustness > cluster identity); **Principle 19** (no finding without payoff/decision-quality impact); F-017 → Experimental; **H-05** (rare states = liquidity events).
 - 2026-06-26 — **V5.12** (Trading Science): State Engine v1 APPROVED; old Principle 18 (Algorithm Independence) **REMOVED** → new Principle 18 (Decision Quality > Algorithm Agreement); Principle 19 rewritten (no feature/state/representation survives without improving EV/Decision Quality); F-018 → **Decision Robustness**; **H-05 REJECTED**, **H-06** opened (rare = execution risk); Phase 5.13 Representation Value.
+- 2026-06-26 — **V5.13**: **PHASE 5 CLOSED**. F-019 (Value Law); F-020 (Event × Configuration, Experimental); **Principle 20** (feature competition); **Principle 21** (Selection > Prediction); new pipeline (…→ Interaction Engine → Expected Payoff → Opportunity Ranking); acceptance rule (Event × Config → Payoff); Phase 6 Interaction Engine.
 
 ---
 
@@ -414,6 +436,8 @@ calibration vs baseline on Tier-1. If no improvement → remove the representati
 | 2026-06-26 | State Engine v1 APPROVED; Rare State descriptive; Cluster Robustness exploratory only | APPROVED | Chief Quant |
 | 2026-06-26 | Principle 18 REPLACED (decision quality); Principle 19 rewritten; F-018 Decision Robustness; H-05 REJECTED; H-06; doctrine V5.12 | APPROVED | Chief Quant |
 | 2026-06-26 | Phase 5.13 Representation Value | APPROVED (start) | Chief Quant |
+| 2026-06-26 | Phase 5.13 APPROVED; PHASE 5 CLOSED; F-019/F-020; Principle 20/21; doctrine V5.13 | APPROVED | Chief Quant |
+| 2026-06-26 | Phase 6 Interaction Engine (Event × State) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

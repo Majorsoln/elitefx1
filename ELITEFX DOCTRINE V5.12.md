@@ -3,11 +3,16 @@
 **Chief Quant Reassessment — Trading Science: Decision Quality Over Everything**
 
 Version: 5.12
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.13 (current SSOT) — carry-forward in force
 Date: 26 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.13, 26 June 2026)
 Supersedes: V5.11 (replaces Principle 18; rewrites Principle 19; F-018→Decision Robustness; H-05 rejected, H-06 opened)
 Previous Versions: Archived (V4 … V5.11)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.13](ELITEFX%20DOCTRINE%20V5.13.md)**
+> (Phase 5 CLOSED; F-019 value law; F-020 Event × Configuration; Principle 20
+> feature competition; Principle 21 selection > prediction; Phase 6 Interaction
+> Engine). V5.12 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.11 remain in force except where amended below.
