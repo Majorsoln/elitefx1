@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.15.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.16.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-26 (Chief: Phase 6.5 APPROVED — RESEARCH FOUNDATION CLOSED; H-07→F-022 APPROVED; F-023 ranking; F-024 confidence; Principle 23/24; Phase 7 Confidence Engine).*
+*Last updated: 2026-06-27 (Chief: Phase 7 APPROVED — F-024 APPROVED; F-025 Edge=Magnitude×Availability; Principle 25; F-026 state trajectory OPEN; Gap 3 closed; Portfolio Engine added; Phase 8 Opportunity Engine).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.15.md`
+- `ELITEFX_DOCTRINE_V5.16.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.13 (chain)
-- V5.14 (superseded by V5.15)
+- V4 … V5.14 (chain)
+- V5.15 (superseded by V5.16)
 - Patches
 
 ---
@@ -240,14 +240,30 @@ Summary: No single rule fits the winning configurations; the engine must learn a
 **population**, not a rule. The Opportunity Engine ranks (not classifies). Drives
 Principle 23.
 
-**[F-024] Confidence Is As Valuable As Expected Payoff (OPEN)**
-Status: OPEN — under test (Phase 7)
-Evidence: `configuration_engine_report.md` (EV alone ignores N — EV=+15 at N=120 ≠
-EV=+15 at N=12,000)
-Summary: Expected Payoff alone is not enough; ranking must incorporate confidence
-interval, persistence, walk-forward stability, and sample quality. Drives Principle
-24 and the Configuration Confidence Score (CCS). Confirmed/denied by Phase 7
-Confidence Engine.
+**[F-024] Confidence Is As Valuable As Expected Payoff**
+Status: **APPROVED** (was OPEN — upgraded Phase 7)
+Evidence: `confidence_engine_report.md` (Top-25 by EV vs by CCS overlap 10/25;
+Spearman ρ ≈ +0.91; high-EV/low-N configs demoted)
+Summary: Ranking by CCS materially differs from ranking by EV alone. Expected
+Payoff alone misleads; ranking must incorporate confidence interval, persistence,
+walk-forward stability, and sample quality (the Configuration Confidence Score,
+CCS). Confirms Principle 24. Q-020 CLOSED.
+
+**[F-025] Edge Has Magnitude AND Availability**
+Status: **APPROVED**
+Evidence: `confidence_engine_report.md` + Chief logic gap (CCS has no Market
+Capacity: CCS=5.4 occurring 2×/yr ≠ CCS=3.9 occurring 300×)
+Summary: Portfolio return depends on frequency, not magnitude alone. Edge has two
+dimensions — Magnitude (strength·confidence) and Availability (frequency) — both
+determine portfolio value. Drives Principle 25 and the Opportunity Score
+(Quality × Availability). Tested by Phase 8 Opportunity Engine.
+
+**[F-026] State Trajectory May Carry Information (OPEN)**
+Status: OPEN — hypothesis (tested after Phase 8)
+Evidence: conceptual (LOW→NORMAL→HIGH ≠ HIGH→HIGH→HIGH although both end HIGH)
+Summary: A state has velocity, not only value. State Direction (trajectory /
+momentum) may carry additional predictive information beyond current State Value.
+"State Momentum" is the next research hypothesis — not part of Phase 8.
 
 ---
 
@@ -272,26 +288,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **7**
-Name: **Confidence Engine (Configuration Confidence Score)**
+Phase: **8**
+Name: **Opportunity Engine (CCS → decision)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: pima UBORA WA USHAHIDI wa kila Configuration (sio edge mpya). Kwa kila
-Configuration: EV, 95% CI, N, K-fold walk-forward persistence, stability score,
-probability calibration (ikifaa). Tengeneza **Configuration Confidence Score
-(CCS) = EV × Confidence × Persistence × Sample Quality**. Onyesha ranking kwa CCS
-≠ ranking kwa EV peke yake (Principle 24/F-024) na thibitisha F-022. Acceptance:
-Opportunity Engine itapokea CCS, sio EV peke yake. NO ML bado (CCS = target yake).
+Question: SIO edge mpya — thibitisha CCS inaweza kuwa mfumo wa MAAMUZI bila ML.
+Report ijibu (yote out-of-sample, rank kwa train/pima kwa test): (1) CCS-ranking vs
+trade-all — portfolio EV inaboreshwa kiasi gani? (2) Top 5/10/20% zinabeba edge
+kiasi gani? (concentration) (3) Je Availability (frequency) inaboresha portfolio
+dhidi ya CCS pekee? (F-025/P25: OppScore = Quality × Availability) (4) Je inaweza
+kutengeneza priority queue bila ML? Acceptance: CCS → decision. NO ML bado.
 
-> **PHASE 6.5 CLOSED — RESEARCH FOUNDATION CLOSED.** Configuration Engine
-> **APPROVED**. **H-07 → F-022 APPROVED** (configs mbaya zina persistence kubwa:
-> train+→+ ≈42% vs train−→− ≈66%). **F-023** (ranking ndio lugha ya asili ya
-> Opportunity Engine — population, sio rule). **F-024 OPEN** (confidence = thamani
-> sawa na payoff). **Principle 23** (rank Configurations, usi-classify Trades);
-> **Principle 24** (hakuna ranking kwa EV peke yake). Configuration = atomic unit ya
-> mwisho (hakuna component chini yake). Pipeline: Configuration → **Confidence Engine**
-> → Opportunity Engine → Trade Lifecycle. ML target (Configuration Score) sasa wazi.
+> **PHASE 7 CLOSED.** Confidence Engine **APPROVED**. **F-024 APPROVED** (Top-25 EV
+> vs CCS overlap 10/25). **F-025 APPROVED** (Edge ina Magnitude NA Availability —
+> CCS=5.4 mara 2/mwaka ≠ CCS=3.9 mara 300). **Principle 25** (Opportunity = Quality
+> × Availability). **F-026 OPEN** (state trajectory/momentum — swali linalofuata).
+> **Gap 3 imefungwa** (absolute distributions: EURGBP ATR≈54 vs EURJPY≈106 D1).
+> Architecture: Configuration → Confidence → **Opportunity** → **Portfolio Engine**
+> → Trade Lifecycle (ranking ≠ allocation). Kutoka *knowledge* hadi *decision*.
 
 ---
 
@@ -327,15 +342,17 @@ Opportunity Engine itapokea CCS, sio EV peke yake. NO ML bado (CCS = target yake
 - [✓] **PHASE 6 CLOSED** (edge = Event × Configuration confirmed)
 - [✓] Phase 6.5   Configuration Engine      (atomic unit; F-022 bad-configs-persist; F-023 ranking)
 - [✓] **RESEARCH FOUNDATION CLOSED** (states→transitions→age→events→Event×State→Configuration→persistence)
+- [✓] Phase 7     Confidence Engine         (CCS; F-024 APPROVED; F-025 Magnitude×Availability; Principle 25)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 7     Confidence Engine        *(ACTIVE — CCS: EV + Confidence + Persistence + Sample Quality; needs OHLC)*
+- [ ] Phase 8     Opportunity Engine       *(ACTIVE — CCS → decision; Quality × Availability; priority queue; no ML; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 8     Opportunity Engine      *(BLOCKED — ranks Configurations by CCS, not BUY/SELL; F-023/P23)*
-- [ ] Phase 9     Machine Learning         *(BLOCKED — predicts Configuration Score)*
+- [ ] Phase 9     Portfolio Engine        *(BLOCKED — allocation; ranking ≠ allocation)*
+- [ ] Phase 10    Machine Learning         *(BLOCKED — learns Configuration Score)*
+- [ ] (parallel)  F-026 State Trajectory   *(OPEN — state momentum; next research hypothesis)*
 
 ---
 
@@ -424,10 +441,19 @@ no component added below it. Configuration = Pair+Event+LatentState+Regime+Direc
 Execution Context.
 
 **Q-020 — Is Confidence as valuable as Expected Payoff (does CCS beat EV-alone ranking)?**
-Status: OPEN (F-024; Phase 7)
-Needed: `confidence_engine_report.md` — per-Configuration EV/CI/N/persistence/
-stability + Configuration Confidence Score (CCS). Show ranking by CCS ≠ ranking by
-EV alone (Principle 24). Gate to Opportunity Engine.
+Status: **CLOSED — YES** (F-024 APPROVED; Phase 7)
+Evidence: `confidence_engine_report.md` — Top-25 EV vs CCS overlap 10/25; ρ ≈ +0.91.
+
+**Q-021 — Can CCS be turned into a decision system (rank → portfolio) without ML?**
+Status: OPEN (Phase 8)
+Needed: `opportunity_engine_report.md` — (1) CCS-ranked vs trade-all portfolio EV;
+(2) concentration of edge (Top 5/10/20%); (3) Availability uplift (F-025/P25:
+OppScore = Quality × Availability); (4) priority queue without ML. All out-of-sample.
+
+**Q-022 — Does state trajectory (momentum) carry information beyond current state?**
+Status: OPEN (F-026; after Phase 8)
+Needed: state-momentum study — LOW→NORMAL→HIGH vs HIGH→HIGH→HIGH (same endpoint,
+different trajectory). Next research hypothesis, parallel to the decision pipeline.
 
 **H-07 — Negative Edge is more stable than Positive Edge.**
 Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive→positive
@@ -458,6 +484,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-26 — **V5.13**: **PHASE 5 CLOSED**. F-019 (Value Law); F-020 (Event × Configuration, Experimental); **Principle 20** (feature competition); **Principle 21** (Selection > Prediction); new pipeline (…→ Interaction Engine → Expected Payoff → Opportunity Ranking); acceptance rule (Event × Config → Payoff); Phase 6 Interaction Engine.
 - 2026-06-26 — **V5.14**: **PHASE 6 CLOSED**. **F-020 APPROVED** (edge = Event × Configuration, 4/5 events); **F-021** (no Event has universal edge — edge only inside a COMPLETE Market Configuration); **Principle 22** (opportunity = Configuration, never an Event); Market Configuration **redefined** = Event + Latent State + Pair + Regime + Direction + Execution Context (atomic trading unit); **H-07** (negative edge more stable than positive); new acceptance rule (Market Configuration → Expected Payoff, not Indicator → BUY); Phase 6.5 Configuration Engine. ML target appears but not reached.
 - 2026-06-26 — **V5.15**: **RESEARCH FOUNDATION CLOSED**. **H-07 → F-022 APPROVED** (bad configurations more persistent than good: train+→+ ≈42% vs train−→− ≈66%); **F-023** (ranking is the native language of the Opportunity Engine — population, not rule); **F-024 OPEN** (confidence as valuable as Expected Payoff); **Principle 23** (rank Configurations, don't classify Trades); **Principle 24** (no ranking by Expected Payoff alone); Configuration = final atomic unit (no component below it); pipeline Configuration → **Confidence Engine** → Opportunity Engine; Phase 7 Confidence Engine (CCS). ML target = Configuration Score.
+- 2026-06-27 — **V5.16**: **F-024 APPROVED** (CCS-ranking ≠ EV-ranking; Top-25 overlap 10/25); **F-025 APPROVED** (Edge has Magnitude AND Availability — portfolio return needs frequency, not magnitude alone); **Principle 25** (Opportunity Score = Quality × Availability); **F-026 OPEN** (state trajectory/momentum carries information beyond state value); **Gap 3 CLOSED** (absolute distributions show pair individuality); architecture gains **Portfolio Engine** (Configuration → Confidence → Opportunity → Portfolio; ranking ≠ allocation); Phase 8 Opportunity Engine (CCS → decision, no ML). From knowledge to decision.
 
 ---
 
@@ -507,6 +534,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-26 | Phase 6.5 Configuration Engine (Configuration Objects, no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-26 | Phase 6.5 APPROVED; RESEARCH FOUNDATION CLOSED; H-07→F-022; F-023; F-024; Principle 23/24; doctrine V5.15 | APPROVED | Chief Quant |
 | 2026-06-26 | Phase 7 Confidence Engine (CCS: EV + Confidence + Persistence + Sample Quality, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-27 | Phase 7 APPROVED; F-024 APPROVED; F-025 (Magnitude×Availability); Principle 25; F-026 OPEN; Gap 3 CLOSED; Portfolio Engine added; doctrine V5.16 | APPROVED | Chief Quant |
+| 2026-06-27 | Phase 8 Opportunity Engine (CCS → decision, Quality × Availability, no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

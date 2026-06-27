@@ -3,11 +3,16 @@
 **Chief Quant — Research Foundation Closed; Configuration is the Atomic Unit; Rank, Don't Classify**
 
 Version: 5.15
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.16 (current SSOT) — carry-forward in force
 Date: 26 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.16, 27 June 2026)
 Supersedes: V5.14 (H-07→F-022 APPROVED; F-023, F-024; Principle 23, 24; Configuration = final atomic unit; Confidence Engine inserted; Research Foundation CLOSED)
 Previous Versions: Archived (V4 … V5.14)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.16](ELITEFX%20DOCTRINE%20V5.16.md)**
+> (F-024 APPROVED; F-025 Edge = Magnitude × Availability; Principle 25 Opportunity =
+> Quality × Availability; F-026 state trajectory OPEN; Gap 3 closed; Portfolio Engine
+> added; Phase 8 Opportunity Engine). V5.15 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.14 remain in force except where amended below.
