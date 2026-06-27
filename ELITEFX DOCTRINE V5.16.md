@@ -3,11 +3,17 @@
 **Chief Quant — Edge Has Magnitude and Availability; From Knowledge to Decision**
 
 Version: 5.16
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.17 (current SSOT) — carry-forward in force
 Date: 27 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.17, 27 June 2026)
 Supersedes: V5.15 (F-024 APPROVED; F-025 Magnitude+Availability; Principle 25; F-026 state trajectory; Gap 3 closed; Portfolio Engine added; Phase 8 Opportunity Engine)
 Previous Versions: Archived (V4 … V5.15)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.17](ELITEFX%20DOCTRINE%20V5.17.md)**
+> (Phase 8 hypothesis rejected; F-022 → Core Principle; Principle 26 capital
+> preservation first; Principle 25 enhanced → Quality × Availability × Survivability;
+> F-027 survivability independent of quality OPEN; Opportunity Engine reframed
+> remove-bad-first; Phase 9 Survivability Engine). V5.16 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.15 remain in force except where amended below.

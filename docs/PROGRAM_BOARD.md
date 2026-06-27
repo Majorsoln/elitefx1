@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.16.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.17.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-27 (Chief: Phase 7 APPROVED — F-024 APPROVED; F-025 Edge=Magnitude×Availability; Principle 25; F-026 state trajectory OPEN; Gap 3 closed; Portfolio Engine added; Phase 8 Opportunity Engine).*
+*Last updated: 2026-06-27 (Chief: Phase 8 APPROVED — hypothesis rejected; F-022 → Core Principle; Principle 26 capital-preservation-first; Principle 25 += Survivability; F-027 OPEN; Opportunity Engine reframed; Phase 9 Survivability Engine).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.16.md`
+- `ELITEFX_DOCTRINE_V5.17.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.14 (chain)
-- V5.15 (superseded by V5.16)
+- V4 … V5.15 (chain)
+- V5.16 (superseded by V5.17)
 - Patches
 
 ---
@@ -223,13 +223,14 @@ and the redefinition of Market Configuration (= Event + Latent State + Pair + Re
 not the event. Q-019 CLOSED (Configuration confirmed atomic unit).
 
 **[F-022] Bad Configurations Are More Persistent Than Good Configurations**
-Status: **APPROVED** (was H-07 — upgraded Phase 6.5)
-Evidence: `configuration_engine_report.md` (walk-forward: train-positive→positive
-≈42% vs train-negative→negative ≈66%)
-Summary: Negative edge persists more durably than positive edge. Retail systems
-learn *where to enter*; institutional systems first learn *where NOT to enter*.
-Knowing where not to trade is the more durable edge ("trade less, in the right
-environment"). H-07 CLOSED → F-022 APPROVED.
+Status: **CORE PRINCIPLE** (promoted from APPROVED Finding — Phase 8)
+Evidence: `configuration_engine_report.md` (train+→+ ≈42% vs train−→− ≈66%) +
+`opportunity_engine_report.md` (positive CCS-ranking does NOT survive out-of-sample;
+Top 5% by train-CCS = −1.162 in test, worse than trade-all)
+Summary: Negative edge persists; positive ranking does not survive OOS. Promoted to
+a Core Principle: institutional systems make money by removing bad trades first, not
+by finding good ones. Foundation of Principle 26 and the reframed Opportunity Engine
+(remove bad → rank → allocate).
 
 **[F-023] Ranking Is the Native Language of the Opportunity Engine**
 Status: **APPROVED**
@@ -259,11 +260,20 @@ determine portfolio value. Drives Principle 25 and the Opportunity Score
 (Quality × Availability). Tested by Phase 8 Opportunity Engine.
 
 **[F-026] State Trajectory May Carry Information (OPEN)**
-Status: OPEN — hypothesis (tested after Phase 8)
+Status: OPEN — hypothesis (parallel research)
 Evidence: conceptual (LOW→NORMAL→HIGH ≠ HIGH→HIGH→HIGH although both end HIGH)
 Summary: A state has velocity, not only value. State Direction (trajectory /
 momentum) may carry additional predictive information beyond current State Value.
-"State Momentum" is the next research hypothesis — not part of Phase 8.
+"State Momentum" is a parallel research hypothesis.
+
+**[F-027] Configuration Survivability May Be Independent of Quality (OPEN)**
+Status: OPEN — under test (Phase 9)
+Evidence: `opportunity_engine_report.md` (high in-sample CCS did NOT predict OOS
+performance — quality ≠ durability)
+Summary: Survivability ("did the edge STAY good over time?") may be a dimension
+independent from Quality (EV/CCS). Tested in Phase 9 as the correlation between
+survivability and EV/CCS (low correlation ⇒ independent dimension). Drives the
+enhanced Principle 25 (Opportunity = Quality × Availability × Survivability).
 
 ---
 
@@ -288,25 +298,26 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **8**
-Name: **Opportunity Engine (CCS → decision)**
+Phase: **9**
+Name: **Survivability Engine (je edge inadumu?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: SIO edge mpya — thibitisha CCS inaweza kuwa mfumo wa MAAMUZI bila ML.
-Report ijibu (yote out-of-sample, rank kwa train/pima kwa test): (1) CCS-ranking vs
-trade-all — portfolio EV inaboreshwa kiasi gani? (2) Top 5/10/20% zinabeba edge
-kiasi gani? (concentration) (3) Je Availability (frequency) inaboresha portfolio
-dhidi ya CCS pekee? (F-025/P25: OppScore = Quality × Availability) (4) Je inaweza
-kutengeneza priority queue bila ML? Acceptance: CCS → decision. NO ML bado.
+Question: kwa **rolling walk-forward NYINGI** (sio 70/30 moja), pima durability ya
+kila Configuration. Report ijibu: (1) configs zipi zinadumu kwenye windows nyingi?
+(2) median survival time ya edge? (3) edge decay inaanza baada ya trades/muda gani?
+(4) je survivability inatabirika kutokana na event/regime/state/context? (5) configs
+zenye EV ya wastani lakini survivability kubwa (workhorses za portfolio)? + F-027
+(corr survivability vs EV/CCS — ndogo = dimension huru). NO ML bado.
 
-> **PHASE 7 CLOSED.** Confidence Engine **APPROVED**. **F-024 APPROVED** (Top-25 EV
-> vs CCS overlap 10/25). **F-025 APPROVED** (Edge ina Magnitude NA Availability —
-> CCS=5.4 mara 2/mwaka ≠ CCS=3.9 mara 300). **Principle 25** (Opportunity = Quality
-> × Availability). **F-026 OPEN** (state trajectory/momentum — swali linalofuata).
-> **Gap 3 imefungwa** (absolute distributions: EURGBP ATR≈54 vs EURJPY≈106 D1).
-> Architecture: Configuration → Confidence → **Opportunity** → **Portfolio Engine**
-> → Trade Lifecycle (ranking ≠ allocation). Kutoka *knowledge* hadi *decision*.
+> **PHASE 8 CLOSED — HYPOTHESIS REJECTED.** Opportunity Engine ilionyesha CCS-
+> selection HAITOI portfolio chanya OOS (trade-all −1.122 → CCS −0.757, bado hasi;
+> Top 5% train-CCS hata mbaya zaidi). Data ilikataa hypothesis → doctrine inabadilika.
+> **F-022 → CORE PRINCIPLE**. **Principle 26** (linda mtaji kwanza, sio kutafuta
+> alpha). **Principle 25 enhanced**: Opportunity = Quality × Availability ×
+> **Survivability**. **F-027 OPEN** (survivability huru kutoka quality). Opportunity
+> Engine imejengwa upya: **remove bad → rank survivable → allocate**. Architecture:
+> …→ Confidence → **Survivability** → Opportunity → Portfolio → Execution.
 
 ---
 
@@ -343,16 +354,18 @@ kutengeneza priority queue bila ML? Acceptance: CCS → decision. NO ML bado.
 - [✓] Phase 6.5   Configuration Engine      (atomic unit; F-022 bad-configs-persist; F-023 ranking)
 - [✓] **RESEARCH FOUNDATION CLOSED** (states→transitions→age→events→Event×State→Configuration→persistence)
 - [✓] Phase 7     Confidence Engine         (CCS; F-024 APPROVED; F-025 Magnitude×Availability; Principle 25)
+- [✓] Phase 8     Opportunity Engine        (hypothesis REJECTED; F-022→Core Principle; P26; reframed remove-bad-first)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 8     Opportunity Engine       *(ACTIVE — CCS → decision; Quality × Availability; priority queue; no ML; needs OHLC)*
+- [ ] Phase 9     Survivability Engine     *(ACTIVE — rolling WF durability; F-027; no ML; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 9     Portfolio Engine        *(BLOCKED — allocation; ranking ≠ allocation)*
-- [ ] Phase 10    Machine Learning         *(BLOCKED — learns Configuration Score)*
-- [ ] (parallel)  F-026 State Trajectory   *(OPEN — state momentum; next research hypothesis)*
+- [ ] Phase 10    Opportunity Engine v2   *(BLOCKED — remove bad → rank survivable → allocate)*
+- [ ] Phase 11    Portfolio Engine        *(BLOCKED — allocation)*
+- [ ] Phase 12    Machine Learning         *(BLOCKED — learns Configuration Score)*
+- [ ] (parallel)  F-026 State Trajectory   *(OPEN — state momentum)*
 
 ---
 
@@ -445,10 +458,17 @@ Status: **CLOSED — YES** (F-024 APPROVED; Phase 7)
 Evidence: `confidence_engine_report.md` — Top-25 EV vs CCS overlap 10/25; ρ ≈ +0.91.
 
 **Q-021 — Can CCS be turned into a decision system (rank → portfolio) without ML?**
-Status: OPEN (Phase 8)
-Needed: `opportunity_engine_report.md` — (1) CCS-ranked vs trade-all portfolio EV;
-(2) concentration of edge (Top 5/10/20%); (3) Availability uplift (F-025/P25:
-OppScore = Quality × Availability); (4) priority queue without ML. All out-of-sample.
+Status: **CLOSED — PARTIALLY (hypothesis rejected)** (Phase 8)
+Evidence: `opportunity_engine_report.md` — CCS-selection does NOT make the portfolio
+positive OOS (−0.757). Availability (OppScore) beats CCS-alone (3/4 budgets; only
+budget-25 positive). Priority queue works without ML. Reframed: remove-bad-first
+(F-022/P26) + survivability (Q-023).
+
+**Q-023 — Does configuration survivability exist as an independent dimension, and is it predictable?**
+Status: OPEN (F-027; Phase 9)
+Needed: `survivability_engine_report.md` — rolling walk-forward durability; median
+survival time; decay onset; survivability by event/regime/state/context; durable-
+modest configs; corr(survivability, EV/CCS) (low ⇒ independent).
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -485,6 +505,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-26 — **V5.14**: **PHASE 6 CLOSED**. **F-020 APPROVED** (edge = Event × Configuration, 4/5 events); **F-021** (no Event has universal edge — edge only inside a COMPLETE Market Configuration); **Principle 22** (opportunity = Configuration, never an Event); Market Configuration **redefined** = Event + Latent State + Pair + Regime + Direction + Execution Context (atomic trading unit); **H-07** (negative edge more stable than positive); new acceptance rule (Market Configuration → Expected Payoff, not Indicator → BUY); Phase 6.5 Configuration Engine. ML target appears but not reached.
 - 2026-06-26 — **V5.15**: **RESEARCH FOUNDATION CLOSED**. **H-07 → F-022 APPROVED** (bad configurations more persistent than good: train+→+ ≈42% vs train−→− ≈66%); **F-023** (ranking is the native language of the Opportunity Engine — population, not rule); **F-024 OPEN** (confidence as valuable as Expected Payoff); **Principle 23** (rank Configurations, don't classify Trades); **Principle 24** (no ranking by Expected Payoff alone); Configuration = final atomic unit (no component below it); pipeline Configuration → **Confidence Engine** → Opportunity Engine; Phase 7 Confidence Engine (CCS). ML target = Configuration Score.
 - 2026-06-27 — **V5.16**: **F-024 APPROVED** (CCS-ranking ≠ EV-ranking; Top-25 overlap 10/25); **F-025 APPROVED** (Edge has Magnitude AND Availability — portfolio return needs frequency, not magnitude alone); **Principle 25** (Opportunity Score = Quality × Availability); **F-026 OPEN** (state trajectory/momentum carries information beyond state value); **Gap 3 CLOSED** (absolute distributions show pair individuality); architecture gains **Portfolio Engine** (Configuration → Confidence → Opportunity → Portfolio; ranking ≠ allocation); Phase 8 Opportunity Engine (CCS → decision, no ML). From knowledge to decision.
+- 2026-06-27 — **V5.17**: **Phase 8 hypothesis REJECTED by data** (CCS-selection not positive OOS) → doctrine changes, not data. **F-022 promoted Finding → CORE PRINCIPLE**. **Principle 26** (capital preservation before opportunity discovery — answer "where NOT to trade" first). **Principle 25 enhanced**: Opportunity = Quality × Availability × **Survivability**. **F-027 OPEN** (survivability independent of quality). Opportunity Engine **reframed** (remove bad → rank survivable → allocate). Full architecture (Market Data → … → Confidence → **Survivability** → Opportunity → Portfolio → Execution). Phase 9 Survivability Engine (rolling WF, no ML).
 
 ---
 
@@ -536,6 +557,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-26 | Phase 7 Confidence Engine (CCS: EV + Confidence + Persistence + Sample Quality, no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-27 | Phase 7 APPROVED; F-024 APPROVED; F-025 (Magnitude×Availability); Principle 25; F-026 OPEN; Gap 3 CLOSED; Portfolio Engine added; doctrine V5.16 | APPROVED | Chief Quant |
 | 2026-06-27 | Phase 8 Opportunity Engine (CCS → decision, Quality × Availability, no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-27 | Phase 8 APPROVED (hypothesis rejected by data); F-022→Core Principle; Principle 26; Principle 25 +Survivability; F-027 OPEN; Opportunity Engine reframed; doctrine V5.17 | APPROVED | Chief Quant |
+| 2026-06-27 | Phase 9 Survivability Engine (rolling walk-forward durability, no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
