@@ -3,11 +3,16 @@
 **Chief Quant — Every Edge Has a Lifecycle; Edge Is Non-Stationary; Find Out WHY It Dies**
 
 Version: 5.18
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.19 (current SSOT) — carry-forward in force
 Date: 27 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.19, 27 June 2026)
 Supersedes: V5.17 (Survivability Engine → Edge Lifecycle Engine; F-027 REFORMULATED; F-028; Principle 27; Phase 10 Edge Drift Engine)
 Previous Versions: Archived (V4 … V5.17)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.19](ELITEFX%20DOCTRINE%20V5.19.md)**
+> (F-027 APPROVED "early quality ≠ future persistence"; F-029 edge decay may be
+> stochastic OPEN; Principle 28 prove edge > random before building; Edge Reality
+> Validation inserted before Opportunity; Phase 11 Edge Reality Test). V5.18 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.17 remain in force except where amended below.

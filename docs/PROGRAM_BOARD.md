@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.18.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.19.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-27 (Chief: Phase 9 APPROVED — edge non-stationary; Survivability→Edge Lifecycle Engine; F-028 every edge has lifecycle; F-027 REFORMULATED causal; Principle 27 prefer living edges; Phase 10 Edge Drift Engine — WHY edge dies).*
+*Last updated: 2026-06-27 (Chief: Phase 10 APPROVED — F-027 APPROVED (early quality ≠ future persistence); F-029 edge decay may be stochastic; Principle 28 prove edge > random; Edge Reality Validation; Phase 11 Edge Reality Test).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.18.md`
+- `ELITEFX_DOCTRINE_V5.19.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.16 (chain)
-- V5.17 (superseded by V5.18)
+- V4 … V5.17 (chain)
+- V5.18 (superseded by V5.19)
 - Patches
 
 ---
@@ -266,15 +266,23 @@ Summary: A state has velocity, not only value. State Direction (trajectory /
 momentum) may carry additional predictive information beyond current State Value.
 "State Momentum" is a parallel research hypothesis.
 
-**[F-027] Early Quality May Not Predict Future Survivability (REFORMULATED)**
-Status: REFORMULATED — OPEN (causal test; Phase 10)
-Evidence: `survivability_engine_report.md` (ρ(surv,EV)≈+0.74, ρ(surv,CCS)≈+0.79 —
-BUT whole-sample, descriptively coupled; decay shows window-1 ≠ window-2+)
-Summary: WAS "survivability independent from quality" — but the Phase 9 correlation
-came from the same sample (descriptive, not causal). REFORMULATED to "**Early
-Quality may not predict Future Survivability**", to be tested causally/temporally
-(early-window quality → later survival), not whole-sample correlation. Phase 10
-Edge Drift Engine runs the causal test.
+**[F-027] Early Edge Quality Does Not Predict Future Edge Persistence**
+Status: **APPROVED** (reworded; was REFORMULATED — Phase 10)
+Evidence: `edge_drift_report.md` (causal: Spearman(window-1 EV, survival) ≈ +0.03 —
+essentially zero; vs Phase 9 whole-sample ρ≈+0.74 which was a same-sample artifact)
+Summary: Early performance carries no information about future persistence. The clean
+causal test confirms it (ρ≈0.03). Not because edge is bad — because early quality is
+not predictive. Forces the more fundamental question (does edge exist at all?) →
+Phase 11. Q-024 partially closed (WHY unexplained by environment).
+
+**[F-029] Edge Decay May Be Stochastic, Not Deterministic (OPEN)**
+Status: OPEN — under test (Phase 11)
+Evidence: `edge_drift_report.md` (ATR/spread/activity do NOT explain decay: corr
+≈0; death not predictable one window ahead)
+Summary: Edge may not die because of a variable. It may die because participants /
+liquidity / execution change — or because it was noise (a random process, not
+deterministic). ⚠️ Do NOT assume a hidden variable before testing whether the edge
+is real at all. Tested by Phase 11 Edge Reality Test (H1 real edge vs H0 noise).
 
 **[F-028] Every Trading Edge Has a Lifecycle**
 Status: **APPROVED**
@@ -308,26 +316,26 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **10**
-Name: **Edge Drift Engine (KWA NINI edge inakufa?)**
+Phase: **11**
+Name: **Edge Reality Test (je edge ni HALISI au noise?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: Phase 9 ilionyesha WHEN; sasa **WHY**. Config dimensions zimefungwa lakini
-ATR/spread/activity HALISI zinadrift. Report ijibu: (1) edge ilikufa kwa sababu
-volatility/spread/activity/regime/event-mix zilibadilika? (2) Before→After kwa kila
-config iliyokufa; (3) transitions zinazojirudia kabla ya kifo; (4) je kifo kina-
-tabirika window MOJA kabla? (5) events zina lifespan tofauti — KWA NINI? + F-027
-(reformulated, causal): corr(window-1 EV, survival). NO ML (vinginevyo tunafundisha
-"historical corpses").
+Question: swali la msingi zaidi — **je edge ipo kweli au ni random variation?**
+H1 (edge halisi) vs H0 (sampling noise). Null models + permutation + bootstrap.
+Report ijibu: (1) shuffle outcomes → decay/survival inafanana? (2) randomized order
+→ survivability inafanana? (3) bootstrap: observed nje ya random CI? (4) permutation:
+Top survivors > random expectation? (5) P(observed edge > random) kwa kila event.
+Acceptance: H1 ikiwa survivors > random (perm p<0.05 NA nje ya null CI). NO ML, NO
+Opportunity Engine (Principle 28).
 
-> **PHASE 9 CLOSED — EDGE NON-STATIONARY.** Edge Lifecycle Engine: **F-028 APPROVED**
-> (kila edge ina lifecycle: birth→growth→decay→death; median survival 1/6 windows;
-> ~2% zinadumu zote). Phase 8 haikushindwa kwa CCS — bali assumption ya stationary-
-> edge ni FALSE. **Survivability Engine → Edge Lifecycle Engine** (framework; survival
-> = metric moja). **F-027 REFORMULATED** (early quality may not predict future
-> survival — causal, sio whole-sample). **Principle 27** (prefer LIVING edges).
-> Tunajenga **Adaptive Market Intelligence System**, sio trade-picker. NO ML.
+> **PHASE 10 CLOSED.** Edge Drift Engine: **F-027 APPROVED** — early quality
+> HAITABIRI future persistence (causal ρ≈+0.03; ile +0.74 ya Phase 9 ilikuwa
+> artifact). Mazingira (ATR/spread/activity) **HAYAELEZI** decay (corr≈0; kifo
+> hakitabiriki). **F-029 OPEN** (decay inaweza kuwa stochastic). **Principle 28**
+> (hakuna adaptive system kabla ya kuthibitisha edge > random). ⚠️ Tusiseme "kuna
+> hidden variable" — kwanza thibitisha edge ipo. Architecture: …→ Edge Lifecycle →
+> **Edge Reality Validation** → Opportunity. NO ML.
 
 ---
 
@@ -366,17 +374,18 @@ tabirika window MOJA kabla? (5) events zina lifespan tofauti — KWA NINI? + F-0
 - [✓] Phase 7     Confidence Engine         (CCS; F-024 APPROVED; F-025 Magnitude×Availability; Principle 25)
 - [✓] Phase 8     Opportunity Engine        (hypothesis REJECTED; F-022→Core Principle; P26; reframed remove-bad-first)
 - [✓] Phase 9     Edge Lifecycle Engine     (F-028 every edge has a lifecycle; edge non-stationary; survivability metric)
+- [✓] Phase 10    Edge Drift Engine         (F-027 APPROVED; environment does NOT explain decay; F-029 stochastic?)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 10    Edge Drift Engine        *(ACTIVE — WHY edge dies; F-027 causal; predict death; no ML; needs OHLC)*
+- [ ] Phase 11    Edge Reality Test        *(ACTIVE — H1 vs H0; null/permutation/bootstrap; no ML; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 11    Opportunity Engine v2   *(BLOCKED — lifecycle-aware: prefer living, remove dying)*
-- [ ] Phase 12    Portfolio Engine        *(BLOCKED — allocation)*
-- [ ] Phase 13    Machine Learning         *(BLOCKED — after market-adaptation understood)*
-- [ ] (parallel)  F-026 State Trajectory   *(OPEN — state momentum; related to drift)*
+- [ ] Phase 12    Opportunity Engine v2   *(BLOCKED — ONLY if H1 proven; Principle 28)*
+- [ ] Phase 13    Portfolio Engine        *(BLOCKED — allocation)*
+- [ ] Phase 14    Machine Learning         *(BLOCKED — only after edge reality proven)*
+- [ ] (parallel)  F-026 State Trajectory   *(OPEN — pursue only if hidden variable justified)*
 
 ---
 
@@ -482,10 +491,15 @@ Evidence: `survivability_engine_report.md` — median survival 1/6 windows; ρ(s
 to a causal test (→ Q-024).
 
 **Q-024 — WHY does an edge die, and can death be predicted one window ahead?**
-Status: OPEN (F-027 causal; F-028; Phase 10)
-Needed: `edge_drift_report.md` — environment drift (ATR/spread/activity) at death;
-before→after; recurring pre-death transitions; one-window-ahead death predictability;
-per-event lifespan + cause; causal corr(window-1 EV, survival). No ML.
+Status: **CLOSED — environment does NOT explain it; death not predictable** (Phase 10)
+Evidence: `edge_drift_report.md` — corr(Δenv, ΔEV)≈0; death not predictable one window
+ahead (lift ≈ 0); F-027 APPROVED (ρ≈0.03); opened F-029 (stochastic) → Q-025.
+
+**Q-025 — Does a real persistent edge exist beyond random expectation (H1 vs H0)?**
+Status: OPEN (F-029; Principle 28; Phase 11)
+Needed: `edge_reality_report.md` — null models (shuffle outcomes / randomized order),
+permutation, bootstrap. H1 if Top survivors exceed random (perm p<0.05 & outside null
+CI); else H0 (noise). Gate to ALL adaptive systems (Principle 28).
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -524,6 +538,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-27 — **V5.16**: **F-024 APPROVED** (CCS-ranking ≠ EV-ranking; Top-25 overlap 10/25); **F-025 APPROVED** (Edge has Magnitude AND Availability — portfolio return needs frequency, not magnitude alone); **Principle 25** (Opportunity Score = Quality × Availability); **F-026 OPEN** (state trajectory/momentum carries information beyond state value); **Gap 3 CLOSED** (absolute distributions show pair individuality); architecture gains **Portfolio Engine** (Configuration → Confidence → Opportunity → Portfolio; ranking ≠ allocation); Phase 8 Opportunity Engine (CCS → decision, no ML). From knowledge to decision.
 - 2026-06-27 — **V5.17**: **Phase 8 hypothesis REJECTED by data** (CCS-selection not positive OOS) → doctrine changes, not data. **F-022 promoted Finding → CORE PRINCIPLE**. **Principle 26** (capital preservation before opportunity discovery — answer "where NOT to trade" first). **Principle 25 enhanced**: Opportunity = Quality × Availability × **Survivability**. **F-027 OPEN** (survivability independent of quality). Opportunity Engine **reframed** (remove bad → rank survivable → allocate). Full architecture (Market Data → … → Confidence → **Survivability** → Opportunity → Portfolio → Execution). Phase 9 Survivability Engine (rolling WF, no ML).
 - 2026-06-27 — **V5.18**: **edge non-stationary** (Phase 9: median survival 1 window; ~2% survive all). **Survivability Engine → Edge Lifecycle Engine** (framework; survival = one metric). **F-028 APPROVED** (every trading edge has a lifecycle: birth→growth→decay→death). **F-027 REFORMULATED** ("Early Quality may not predict Future Survivability" — causal, not whole-sample). **Principle 27** (prefer living edges over historically profitable edges). Architecture: Confidence → **Edge Lifecycle** → Opportunity → Portfolio → Execution. Phase 10 Edge Drift Engine (WHY edge dies; no ML — else trained on "historical corpses"). Project reframed as **Adaptive Market Intelligence System**.
+- 2026-06-27 — **V5.19**: **F-027 APPROVED** (reworded: "Early Edge Quality does not predict Future Edge Persistence"; causal ρ≈0.03). Environment (ATR/spread/activity) does NOT explain decay. **F-029 OPEN** (edge decay may be stochastic, not deterministic). **Principle 28** (no adaptive system before proving persistent edge beats random expectation). ⚠️ Do not assume a hidden variable before testing edge reality. Architecture: …→ Edge Lifecycle → **Edge Reality Validation** → Opportunity. Phase 11 Edge Reality Test (H1 real vs H0 noise; null/permutation/bootstrap; no ML). Everything (Opportunity v2, ML, Portfolio) BLOCKED until edge proven real.
 
 ---
 
@@ -579,6 +594,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-27 | Phase 9 Survivability Engine (rolling walk-forward durability, no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-27 | Phase 9 APPROVED; edge non-stationary; F-028 (lifecycle); F-027 REFORMULATED; Survivability→Edge Lifecycle Engine; Principle 27; doctrine V5.18 | APPROVED | Chief Quant |
 | 2026-06-27 | Phase 10 Edge Drift Engine (WHY edge dies; causal F-027; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-27 | Phase 10 APPROVED; F-027 APPROVED (early≠future); F-029 OPEN (stochastic decay); Principle 28; Edge Reality Validation; doctrine V5.19 | APPROVED | Chief Quant |
+| 2026-06-27 | Phase 11 Edge Reality Test (null/permutation/bootstrap; H1 vs H0; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
