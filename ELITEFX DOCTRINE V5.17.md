@@ -3,11 +3,16 @@
 **Chief Quant — Capital Preservation First; Survivability as a Third Dimension of Edge**
 
 Version: 5.17
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.18 (current SSOT) — carry-forward in force
 Date: 27 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.18, 27 June 2026)
 Supersedes: V5.16 (F-022 → Core Principle; Principle 26 capital preservation; Principle 25 enhanced with Survivability; F-027; Opportunity Engine reframed; Survivability Engine; full architecture)
 Previous Versions: Archived (V4 … V5.16)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.18](ELITEFX%20DOCTRINE%20V5.18.md)**
+> (edge non-stationary; Survivability Engine → Edge Lifecycle Engine; F-028 every edge
+> has a lifecycle; F-027 REFORMULATED causal; Principle 27 prefer living edges; Phase
+> 10 Edge Drift Engine — WHY edge dies). V5.17 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.16 remain in force except where amended below.
