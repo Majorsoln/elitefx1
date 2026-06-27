@@ -1,6 +1,6 @@
 # Rare State Analysis — market configuration ya cluster nadra (Phase 5.10)
 
-*2026-06-26 16:38 | latent k=4 | rare cluster = C3 (ndogo zaidi) | profile/duration/exit/returns | NO labels za binadamu | rare bars=3,147/983,845*
+*2026-06-26 17:45 | latent k=4 | rare cluster = C3 (ndogo zaidi) | profile/duration/exit/returns | NO labels za binadamu | rare bars=3,147/983,845*
 
 > **F-017 (Chief):** rare states zinaweza kubeba INFORMATION nyingi (crash/news/liquidity = 1% lakini zinaamua performance). Trade = consequence ya MARKET CONFIGURATION, sio signal. Cluster ≠ State — tunachunguza tabia, hatuipi jina. NO ML.
 
@@ -45,7 +45,12 @@
 
 ## 5) Return distribution (|6-bar move| pips): rare vs non-rare
 
-*(close haipo kwenye state parquet — endesha market_state_engine baada ya update ya OHLC ili kupata return distribution. Structure (1–4) imekamilika.)*
+| set | n | mean | median | p95 | p99 |
+|-----|---|------|--------|-----|-----|
+| rare | 3,146 | 23.8 | 14.5 | 75 | 143 |
+| non-rare | 980,483 | 26.2 | 16.3 | 82 | 156 |
+
+→ rare/non-rare mean move ratio = **0.91×** (— sawa-sawa)
 
 ---
 *Rare cluster ni MARKET CONFIGURATION, sio jina. F-017: rare states zikiwa na dispersion/return kubwa zaidi = high information. Hatuanzi Opportunity Engine; kwanza tunajua rare state inafanya nini (Configuration thinking). Cluster ≠ State (Latent State CANDIDATE). NO ML, NO human taxonomy. Inayofuata: Cluster Robustness (5.11), Validation (5.12).*

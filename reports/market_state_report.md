@@ -1,6 +1,6 @@
 # Market State Engine v1 — pairs ZOTE × TF ZOTE (PHASE 1, CQ-003)
 
-*2026-06-22 22:14 | TF: H1, H2, H4, D1 | DESEASONALIZED (saa-ya-siku, trailing 60) | vol/activity terciles 0.33/0.67 (~mwaka 1/TF) | spread RANK top 15% (trailing 750) | no-lookahead*
+*2026-06-26 23:24 | TF: H1, H2, H4, D1 | DESEASONALIZED (saa-ya-siku, trailing 60) | vol/activity terciles 0.33/0.67 (~mwaka 1/TF) | spread RANK top 15% (trailing 750) | no-lookahead*
 
 > ⚠️ **STATE LAYER v1 (building blocks) — SIO regime engine ya mwisho.** States ni vipengele; regime za kweli (Compression/Expansion/Transition/Shock) + transitions zinajengwa baadaye. Labels RELATIVE kwa mwaka uliopita (no-lookahead).
 
