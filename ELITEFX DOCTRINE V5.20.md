@@ -3,11 +3,16 @@
 **Chief Quant — Non-Stationarity Confirmed; Every Event Is a Hypothesis to Be Proven**
 
 Version: 5.20
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.21 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.21, 28 June 2026)
 Supersedes: V5.19 (F-029 APPROVED; Principle 29; Event Reality Validation in architecture; Phase 12 Event Reality Framework)
 Previous Versions: Archived (V4 … V5.19)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.21](ELITEFX%20DOCTRINE%20V5.21.md)**
+> (Principle 30 events are contextual; F-030 edge conditional; F-031 only contextual
+> events exist; Event → Contextual Event; Proven Edge → Candidate Alpha; Contextual
+> Event Library; Phase 13 Contextual Alpha Framework). V5.20 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.19 remain in force except where amended below.

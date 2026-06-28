@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.20.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.21.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-28 (Chief: Phase 11 APPROVED — H0 not rejected; F-029 APPROVED (decay = market non-stationarity); Principle 29 every event is a hypothesis; mean_reversion-only rejected; Phase 12 Event Reality Framework).*
+*Last updated: 2026-06-28 (Chief: Phase 12 APPROVED — 0/5 universal; EURUSD = Candidate Alpha; Principle 30 events are contextual; F-030 edge conditional; F-031 only contextual events; Event→Contextual Event; Phase 13 Contextual Alpha Framework).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.20.md`
+- `ELITEFX_DOCTRINE_V5.21.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.18 (chain)
-- V5.19 (superseded by V5.20)
+- V4 … V5.19 (chain)
+- V5.20 (superseded by V5.21)
 - Patches
 
 ---
@@ -275,6 +275,23 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-030] Edge Existence Is Conditional, Not Universal**
+Status: **APPROVED**
+Evidence: `event_reality_report.md` (aggregate events 0/5 proven, yet mean_reversion×
+EURUSD +0.90 P100, deep_pullback×EURUSD +0.37 P97)
+Summary: An edge does not exist for an event universally — only under a specific market
+ecology (pair/state/regime/liquidity/execution). Drives Principle 30 and the Contextual
+Event reframing. Q-026 CLOSED.
+
+**[F-031] Only Contextual Events Exist (No Universal Events)**
+Status: **APPROVED**
+Evidence: `event_reality_report.md` (no event has edge across pairs; edge localizes to
+EURUSD; MR/DPB directional skill is cost/context-relative)
+Summary: Universal events do not exist; only Contextual Events do. Context is part of an
+event's IDENTITY, not a filter applied later. Terminology: Event → **Contextual Event**;
+Proven Edge → **Candidate Alpha** (until pre-registered OOS). spread = ecology variable.
+Architecture: Contextual Event Library.
+
 **[F-029] Edge Decay Is Driven by Market Non-Stationarity (APPROVED)**
 Status: **APPROVED** (was OPEN — Phase 11)
 Evidence: `edge_reality_report.md` (randomized-time survivors 39 ≫ observed 9 — the
@@ -317,25 +334,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **12**
-Name: **Event Reality Framework (ni events zipi zipo kweli kitakwimu?)**
+Phase: **13**
+Name: **Contextual Alpha Framework (tunatafuta Contextual Alpha Objects)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: sio mean_reversion-only (subgroup) — bali events ZOTE kwa methodology
-ileile. Report ijibu: (1) kila event null(random-direction)/bootstrap/permutation;
-(2) Bayesian P(edge exists) kwa kila event; (3) je pair fulani inabeba event? (pair×
-event); (4) je event edge inategemea market state? (5) je events mbili zikichanganywa
-zinazalisha edge? (combo vs solo). proven = Bayesian>95% NA p<0.05 NA CI-low>0.
-Principle 29: event = hypothesis. NO ML, NO Opportunity Engine bado.
+Question: sio events — bali **Contextual Alpha Objects** (event+pair+state+regime+
+liquidity+execution+session). Report ijibu: (1) kila Contextual Event + P(edge);
+(2) ukiondoa PAIR edge inapotea? (3) ukiondoa STATE edge inapotea? (4) variables
+zipi ni IDENTITY na zipi ni MODIFIERS (leave-one-out ablation)? (5) hierarchy
+(event→pair→vol→spread→session) — alpha iko ngazi gani? Candidate Alpha = Bayesian>95%
+NA null-p<0.05 NA CI-low>0 (⚠️ multiple comparisons — bado CANDIDATE). NO ML.
 
-> **PHASE 11 CLOSED.** Edge Reality Test: maswali mawili, majibu mawili — (A) aggregate
-> edge HAIJATHIBITISHWA (H0 haijakataliwa; survivors 9 vs null 4.6, p=0.050, ndani ya
-> CI); (B) market NI non-stationary. **F-029 APPROVED** (decay = non-stationarity:
-> randomized-time survivors 39 ≫ observed 9). **Principle 29** (kila event = statistical
-> hypothesis, sio signal). Chief **amekataa mean_reversion-only** (subgroup/multiple-
-> comparisons — kosa la CCS). Architecture: …→ Event Library → **Event Reality
-> Validation** → Context → Opportunity → Portfolio. NO ML.
+> **PHASE 12 CLOSED.** Event Reality: aggregate **0/5 events proven** (yote noise/
+> non-stationarity); LAKINI mean_reversion×EURUSD +0.90 (P100), deep_pullback×EURUSD
+> +0.37 (P97) → **Candidate Alpha**, sio Proven. Discovery: **event SIO universal — ni
+> CONDITIONAL OBJECT.** **Principle 30** (event haipo bila context — context = IDENTITY).
+> **F-030** (edge conditional). **F-031** (universal events hazipo). Terminology:
+> Event → **Contextual Event**; Proven Edge → **Candidate Alpha**. spread = ecology.
+> Architecture: **Contextual Event Library**. NO ML, NO Mean Reversion Strategy.
 
 ---
 
@@ -376,17 +393,18 @@ Principle 29: event = hypothesis. NO ML, NO Opportunity Engine bado.
 - [✓] Phase 9     Edge Lifecycle Engine     (F-028 every edge has a lifecycle; edge non-stationary; survivability metric)
 - [✓] Phase 10    Edge Drift Engine         (F-027 APPROVED; environment does NOT explain decay; F-029 stochastic?)
 - [✓] Phase 11    Edge Reality Test         (H0 not rejected; F-029 APPROVED — market non-stationary)
+- [✓] Phase 12    Event Reality Framework   (0/5 universal; EURUSD Candidate Alpha; F-030/F-031; Principle 30)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 12    Event Reality Framework  *(ACTIVE — prove which events exist; null/perm/bootstrap/Bayesian; no ML; needs OHLC)*
+- [ ] Phase 13    Contextual Alpha Framework *(ACTIVE — Contextual Alpha Objects; identity vs modifier; hierarchy; no ML; needs OHLC)*
+- [ ] Phase 14    Pre-registered OOS Validation *(BLOCKED — confirm Candidate Alpha out-of-sample)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 13    Opportunity Engine v2   *(BLOCKED — ONLY proven events; Principle 28/29)*
-- [ ] Phase 14    Portfolio Engine        *(BLOCKED — allocation)*
-- [ ] Phase 15    Machine Learning         *(BLOCKED — only after events proven)*
-- [ ] (parallel)  F-026 State Trajectory   *(OPEN — pursue only if hidden variable justified)*
+- [ ] Phase 15    Opportunity Engine v2   *(BLOCKED — selects validated Contextual Alpha)*
+- [ ] Phase 16    Portfolio Engine        *(BLOCKED — allocation)*
+- [ ] Phase 17    Machine Learning         *(BLOCKED — only after OOS validation)*
 
 ---
 
@@ -503,10 +521,15 @@ randomized-time 39 ≫ 9 → non-stationarity. mean_reversion P(obs>random)=100%
 not pursued alone). → Q-026.
 
 **Q-026 — Which events have repeatable statistical existence, and under what conditions?**
-Status: OPEN (Principle 29; Phase 12)
-Needed: `event_reality_report.md` — per-event null/permutation/bootstrap + Bayesian
-P(edge exists); pair × event (carrier); event × state (state-dependence); event combos
-vs solo. proven = Bayesian>95% & p<0.05 & CI-low>0. Only proven events proceed.
+Status: **CLOSED — none universal; edge is conditional (EURUSD)** (F-030/F-031; Phase 12)
+Evidence: `event_reality_report.md` — 0/5 universal; mean_reversion×EURUSD (P100) &
+deep_pullback×EURUSD (P97) Candidate Alpha; directional skill cost/context-relative. → Q-027.
+
+**Q-027 — Which context variables are an alpha's IDENTITY vs modifiers, and where in the hierarchy is the alpha born?**
+Status: OPEN (Principle 30; Phase 13)
+Needed: `contextual_alpha_report.md` — Contextual Alpha Objects (event+pair+state+regime+
+liquidity+execution+session) + P(edge); remove-pair / remove-state ablation; identity vs
+modifier (leave-one-out); hierarchy (event→pair→vol→spread→session). Candidate Alpha only.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -547,6 +570,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-27 — **V5.18**: **edge non-stationary** (Phase 9: median survival 1 window; ~2% survive all). **Survivability Engine → Edge Lifecycle Engine** (framework; survival = one metric). **F-028 APPROVED** (every trading edge has a lifecycle: birth→growth→decay→death). **F-027 REFORMULATED** ("Early Quality may not predict Future Survivability" — causal, not whole-sample). **Principle 27** (prefer living edges over historically profitable edges). Architecture: Confidence → **Edge Lifecycle** → Opportunity → Portfolio → Execution. Phase 10 Edge Drift Engine (WHY edge dies; no ML — else trained on "historical corpses"). Project reframed as **Adaptive Market Intelligence System**.
 - 2026-06-27 — **V5.19**: **F-027 APPROVED** (reworded: "Early Edge Quality does not predict Future Edge Persistence"; causal ρ≈0.03). Environment (ATR/spread/activity) does NOT explain decay. **F-029 OPEN** (edge decay may be stochastic, not deterministic). **Principle 28** (no adaptive system before proving persistent edge beats random expectation). ⚠️ Do not assume a hidden variable before testing edge reality. Architecture: …→ Edge Lifecycle → **Edge Reality Validation** → Opportunity. Phase 11 Edge Reality Test (H1 real vs H0 noise; null/permutation/bootstrap; no ML). Everything (Opportunity v2, ML, Portfolio) BLOCKED until edge proven real.
 - 2026-06-28 — **V5.20**: Phase 11 — two questions answered (aggregate edge NOT proven, H0 stands; market IS non-stationary). **F-029 APPROVED** (reworded: "Edge decay is primarily a consequence of market non-stationarity, not merely of random sampling" — randomized-time survivors 39 ≫ observed 9). **Principle 29** (every event is a statistical hypothesis, not a trading signal). mean_reversion-only **rejected** (subgroup / multiple-comparisons). Architecture: Market Data → Event Library → **Event Reality Validation** → Context → Opportunity → Portfolio. Phase 12 Event Reality Framework (prove which events exist: null/perm/bootstrap/Bayesian + pair×event×state + combos; no ML).
+- 2026-06-28 — **V5.21** (biggest doctrine change since Phase 1): Phase 12 — aggregate 0/5 universal, but mean_reversion×EURUSD (P100) & deep_pullback×EURUSD (P97). Discovery: **an event is a conditional object, not universal**. **Principle 30** (an event does not exist independently of its market context — context = IDENTITY, not a filter). **F-030** (edge existence is conditional, not universal). **F-031** (only contextual events exist). Terminology: Event → **Contextual Event**; Proven Edge → **Candidate Alpha** (until pre-registered OOS). spread = ecology variable, not just cost. Architecture: **Contextual Event Library**. Phase 13 Contextual Alpha Framework (Contextual Alpha Objects; identity vs modifier; hierarchy; no ML). Mean Reversion Strategy forbidden (subgroup).
 
 ---
 
@@ -606,6 +630,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-27 | Phase 11 Edge Reality Test (null/permutation/bootstrap; H1 vs H0; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-28 | Phase 11 APPROVED; H0 not rejected; F-029 APPROVED (non-stationarity); Principle 29; mean_reversion-only rejected; doctrine V5.20 | APPROVED | Chief Quant |
 | 2026-06-28 | Phase 12 Event Reality Framework (all events; null/perm/bootstrap/Bayesian; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-28 | Phase 12 APPROVED; 0/5 universal; EURUSD Candidate Alpha; Principle 30; F-030/F-031; Event→Contextual Event; doctrine V5.21 | APPROVED | Chief Quant |
+| 2026-06-28 | Phase 13 Contextual Alpha Framework (Contextual Alpha Objects; identity/modifier; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
