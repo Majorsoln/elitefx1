@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.23.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.24.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-28 (Chief: Phase 14 APPROVED — 0/282 survived FDR; F-032 confirmed; reframed Current Representation Failure not No Alpha; Principle 33; F-033; Phase 15 Representation Audit).*
+*Last updated: 2026-06-28 (Chief: Phase 15 verdict REJECTED — standalone≠hierarchy; Principle 34/35; F-034; variables retained; conclusion corrected; Phase 16 Representation Interaction Audit).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.23.md`
+- `ELITEFX_DOCTRINE_V5.24.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.21 (chain)
-- V5.22 (superseded by V5.23)
+- V4 … V5.22 (chain)
+- V5.23 (superseded by V5.24)
 - Patches
 
 ---
@@ -275,6 +275,15 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-034] Hierarchical Redundancy Is Expected, Not Uselessness**
+Status: **APPROVED**
+Evidence: `representation_audit_report.md` (Age↔Persistence 0.82; Transition↔Persistence
+1.00 — persistence is a derivative of age)
+Summary: High Cramér's V among hierarchical variables (age/persistence/transition)
+confirms the ontology (State→Age→Transition→Trajectory), it does not mean the variables
+are useless. Drives Principle 34/35 — standalone incremental R² is the wrong test;
+interaction/calibration/stability are the right ones (Phase 16).
+
 **[F-033] A Representation Can Fail While Structure Still Exists**
 Status: **APPROVED**
 Evidence: `contextual_alpha_confirmation_report.md` (0/282 survived FDR using ONE
@@ -351,24 +360,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **15**
-Name: **Representation Audit (je representation imefikia ukomo?)**
+Phase: **16**
+Name: **Representation Interaction Audit (je interaction/hierarchy inaongeza taarifa?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: kabla ya data/ML/strategy mpya — kagua REPRESENTATION yenyewe. (1) assumptions
-zilizofichwa; (2) doctrine variables ambazo hazijaingizwa; (3) je state age/trajectory/
-transition/persistence/activity vinaongeza INCREMENTAL information juu ya base (Event+
-Pair+Vol+Spread+Session)?; (4) redundancy (Cramér's V); (5) minimal sufficient
-representation. Mbinu: variance-explained R², incremental perm-controlled. NO ML, NO
-data mpya, NO strategy.
+Question: SI base+variable-moja tena. Pima INTERACTIONS + institutional metrics.
+(1) Age×Transition inaongeza juu ya kila moja? (2) Trajectory×Event? (3) Age×Trajectory×
+Transition bora kuliko kila moja? (4) je hierarchy (State→Age→Transition→Trajectory)
+inaonekana kwenye data? (5) interactions zipi zinanusurika permutation? Metrics mpya:
+Incremental Calibration (Brier/ECE), Stability across folds, Transferability across
+pairs, Robustness across regimes — SIO incremental R² pekee. NO ML.
 
-> **PHASE 14 CLOSED.** Confirmation: 282 pre-registered, UNKNOWN excluded, future OOS,
-> Benjamini–Hochberg FDR → **0 zilinusurika**. **F-032 CONFIRMED** (30→0 = selection
-> inflation). Chief: hii SI "No Alpha" — ni **Current Representation Failure** (tulijaribu
-> representation MOJA tu). **Principle 33** (validation failure ⇒ representation failure
-> hadi ithibitishwe). **F-033** (representation inaweza kushindwa wakati structure ipo).
-> "Hatuna ushahidi" ≠ "alpha haipo". Kataa "data zaidi" kabla ya audit. NO ML.
+> **PHASE 15 verdict REJECTED** (Chief): ilipima standalone (base+variable-moja) wakati
+> doctrine ni HIERARCHICAL (State→Age→Transition→Trajectory) — kama DNA: gene moja haina
+> effect, pamoja zinatengeneza protein. Redundancy (Age↔Persistence 0.82; Transition↔
+> Persistence 1.00) = uthibitisho wa ontology (**F-034**), SIO uselessness. **Principle
+> 34** (contribution via interaction/calibration/stability). **Principle 35** (quality ≠
+> predictive gain). Variables HAZIONDOLEWI. Conclusion ya Phase 15 imerekebishwa: "hakuna
+> ushahidi wa incremental STANDALONE contribution" (sio "representation imefikia ukomo").
 
 ---
 
@@ -412,16 +422,17 @@ data mpya, NO strategy.
 - [✓] Phase 12    Event Reality Framework   (0/5 universal; EURUSD Candidate Alpha; F-030/F-031; Principle 30)
 - [✓] Phase 13    Contextual Alpha Framework (EXPLORATORY; P30/F-030/F-031 confirmed; objects → hypotheses; F-032)
 - [✓] Phase 14    Contextual Alpha Confirmation (0/282 survive FDR; F-032 confirmed; Representation Failure)
+- [✓] Phase 15    Representation Audit      (standalone insufficient; verdict corrected; variables retained; F-034)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 15    Representation Audit     *(ACTIVE — assumptions/missing vars/incremental info/redundancy/minimal set; no ML; needs OHLC)*
-- [ ] Phase 16    Expanded-Representation Confirmation *(BLOCKED — re-run Phase 14 with audited representation)*
+- [ ] Phase 16    Representation Interaction Audit *(ACTIVE — interactions+hierarchy+calibration/stability/transfer/robust; no ML; needs OHLC)*
+- [ ] Phase 17    Expanded-Representation Confirmation *(BLOCKED — re-run OOS+FDR with interaction-aware representation)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 17    Opportunity Engine v2   *(BLOCKED — only OOS-survived hypotheses)*
-- [ ] Phase 18    Machine Learning         *(BLOCKED — only after OOS survival)*
+- [ ] Phase 18    Opportunity Engine v2   *(BLOCKED — only OOS-survived hypotheses)*
+- [ ] Phase 19    Machine Learning         *(BLOCKED — only after OOS survival)*
 
 ---
 
@@ -553,10 +564,15 @@ Evidence: `contextual_alpha_confirmation_report.md` — 0 survived BH-FDR. Refra
 Current Representation Failure (Principle 33), not absence of alpha. → Q-029.
 
 **Q-029 — Has the current representation reached its limit (or is it the bottleneck)?**
-Status: OPEN (Principle 33; F-033; Phase 15)
-Needed: `representation_audit_report.md` — hidden assumptions; missing doctrine variables;
-incremental information of age/trajectory/transition/persistence/activity over base
-(perm-controlled R²); redundancy (Cramér's V); minimal sufficient representation.
+Status: **CLOSED (partially) — no STANDALONE incremental contribution; standalone test insufficient** (Phase 15)
+Evidence: `representation_audit_report.md` — age/traj/trans/persist add no standalone R²;
+redundancy expected (F-034). Verdict corrected (NOT "near limit"). Interaction test → Q-030.
+
+**Q-030 — Do the doctrine variables gain power through INTERACTION / hierarchy / calibration / stability?**
+Status: OPEN (Principle 34/35; F-034; Phase 16)
+Needed: `representation_interaction_report.md` — Age×Transition, Trajectory×Event,
+Age×Trajectory×Transition (joint vs standalone, perm-controlled); doctrine hierarchy in
+data; surviving interactions; Brier/stability/transferability/robustness (not R² alone).
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -600,6 +616,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-28 — **V5.21** (biggest doctrine change since Phase 1): Phase 12 — aggregate 0/5 universal, but mean_reversion×EURUSD (P100) & deep_pullback×EURUSD (P97). Discovery: **an event is a conditional object, not universal**. **Principle 30** (an event does not exist independently of its market context — context = IDENTITY, not a filter). **F-030** (edge existence is conditional, not universal). **F-031** (only contextual events exist). Terminology: Event → **Contextual Event**; Proven Edge → **Candidate Alpha** (until pre-registered OOS). spread = ecology variable, not just cost. Architecture: **Contextual Event Library**. Phase 13 Contextual Alpha Framework (Contextual Alpha Objects; identity vs modifier; hierarchy; no ML). Mean Reversion Strategy forbidden (subgroup).
 - 2026-06-28 — **V5.22**: Phase 13 accepted as **EXPLORATORY only** (P30/F-030/F-031 confirmed). "30 Candidate Alpha" **rejected as alpha** (selection bias; multiple comparisons; UNKNOWN identity; leave-one-out ≠ proof, pair-as-proxy; no mechanism) → **Contextual Alpha Hypothesis / Research Candidates**. **Principle 31** (hypothesis until prospective validation). **Principle 32** (identity = independent explanatory power, not mere association). **F-032** (context refinement raises apparent edge AND false-discovery risk). Terminology: Candidate Alpha → **Contextual Alpha Hypothesis**. Phase 14 Confirmation Framework (pre-register IS → future OOS → Benjamini–Hochberg FDR → exclude UNKNOWN → independent-contribution; no ML).
 - 2026-06-28 — **V5.23**: Phase 14 — 282 pre-registered, UNKNOWN excluded, future OOS, BH-FDR → **0 survived**. **F-032 CONFIRMED** (30→0 = selection inflation). Chief reframes: this is **Current Representation Failure**, NOT "No Alpha" — only ONE representation tested (Event+Pair+Vol+Spread+Session). **Principle 33** (failure to validate ⇒ representation failure until proven otherwise). **F-033** (a representation can fail while exploitable structure exists). "More data / new ecology" rejected as premature. Phase 15 Representation Audit (assumptions, missing doctrine vars, incremental info, redundancy, minimal sufficient representation; no ML, no new data).
+- 2026-06-28 — **V5.24**: **Phase 15 verdict REJECTED** (Chief): standalone base+variable-moja test ≠ the hierarchical representation the doctrine builds (State→Age→Transition→Trajectory). **Principle 34** (a variable may contribute via interaction/calibration/stability even if standalone predictive contribution is negligible). **Principle 35** (representation quality is not judged solely by predictive gain). **F-034** (redundancy among hierarchical variables is expected, not uselessness — persistence is a derivative of age). Phase 15 conclusion corrected to "no evidence of incremental STANDALONE contribution"; variables NOT removed. Phase 16 Representation Interaction Audit (interactions, hierarchy, Brier calibration, fold-stability, cross-pair transferability, cross-regime robustness; no ML).
 
 ---
 
@@ -665,6 +682,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-28 | Phase 14 Contextual Alpha Confirmation (pre-register/OOS/BH-FDR/independent-contribution; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-28 | Phase 14 APPROVED; 0/282 survive FDR; F-032 confirmed; reframed Representation Failure; Principle 33; F-033; doctrine V5.23 | APPROVED | Chief Quant |
 | 2026-06-28 | Phase 15 Representation Audit (assumptions/incremental info/redundancy/minimal set; no ML, no data) | APPROVED (start) | Chief Quant |
+| 2026-06-28 | Phase 15 verdict REJECTED (standalone≠hierarchy); Principle 34/35; F-034; variables retained; conclusion corrected; doctrine V5.24 | APPROVED | Chief Quant |
+| 2026-06-28 | Phase 16 Representation Interaction Audit (interactions/hierarchy/calibration/stability/transfer/robust; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

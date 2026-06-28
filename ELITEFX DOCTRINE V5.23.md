@@ -3,11 +3,17 @@
 **Chief Quant — Validation Failure Is Representation Failure, Not Absence of Alpha**
 
 Version: 5.23
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.24 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.24, 28 June 2026)
 Supersedes: V5.22 (F-032 Confirmed; Principle 33; F-033; Phase 14 reframed as Representation Failure; Phase 15 Representation Audit)
 Previous Versions: Archived (V4 … V5.22)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.24](ELITEFX%20DOCTRINE%20V5.24.md)**
+> (Phase 15 verdict REJECTED — standalone ≠ hierarchy; Principle 34 contribution via
+> interaction/calibration/stability; Principle 35 representation ≠ predictive gain;
+> F-034 hierarchical redundancy expected; Phase 16 Representation Interaction Audit).
+> V5.23 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.22 remain in force except where amended below.
