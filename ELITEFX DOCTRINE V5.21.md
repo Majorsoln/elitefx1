@@ -3,11 +3,17 @@
 **Chief Quant — Events Are Contextual; Edge Existence Is Conditional, Not Universal**
 
 Version: 5.21
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.22 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.22, 28 June 2026)
 Supersedes: V5.20 (Principle 30; F-030; F-031; Event → Contextual Event; Proven Edge → Candidate Alpha; Contextual Event Library; Phase 13 Contextual Alpha Framework)
 Previous Versions: Archived (V4 … V5.20)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.22](ELITEFX%20DOCTRINE%20V5.22.md)**
+> (Phase 13 = exploratory; Principle 31 hypothesis-until-prospective-validation;
+> Principle 32 identity needs independent explanatory power; F-032 refinement raises
+> false-discovery; Candidate Alpha → Contextual Alpha Hypothesis; Phase 14 Confirmation
+> Framework). V5.21 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.20 remain in force except where amended below.

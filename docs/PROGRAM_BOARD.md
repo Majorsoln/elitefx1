@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.21.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.22.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-28 (Chief: Phase 12 APPROVED — 0/5 universal; EURUSD = Candidate Alpha; Principle 30 events are contextual; F-030 edge conditional; F-031 only contextual events; Event→Contextual Event; Phase 13 Contextual Alpha Framework).*
+*Last updated: 2026-06-28 (Chief: Phase 13 = EXPLORATORY (P30/F-030/F-031 confirmed); 30 objects rejected as alpha → Contextual Alpha Hypothesis; Principle 31/32; F-032; Phase 14 Confirmation Framework — pre-register/OOS/FDR).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.21.md`
+- `ELITEFX_DOCTRINE_V5.22.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.19 (chain)
-- V5.20 (superseded by V5.21)
+- V4 … V5.20 (chain)
+- V5.21 (superseded by V5.22)
 - Patches
 
 ---
@@ -275,6 +275,15 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-032] Context Refinement Raises Apparent Edge AND False-Discovery Risk**
+Status: **APPROVED**
+Evidence: `contextual_alpha_report.md` (EV climbs event→+pair→+vol→+spread→+session;
+30 "candidates" via top-by-Bayesian selection over many cells)
+Summary: Adding context increases apparent EV step by step — but also increases the
+chance the result is selection, not signal. Drives Principle 31 (hypothesis until
+prospective validation) and Principle 32 (identity needs independent power). The Phase
+13 objects are **Contextual Alpha Hypotheses / Research Candidates**, NOT alpha.
+
 **[F-030] Edge Existence Is Conditional, Not Universal**
 Status: **APPROVED**
 Evidence: `event_reality_report.md` (aggregate events 0/5 proven, yet mean_reversion×
@@ -334,25 +343,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **13**
-Name: **Contextual Alpha Framework (tunatafuta Contextual Alpha Objects)**
+Phase: **14**
+Name: **Contextual Alpha Confirmation Framework (je hypothesis MOJA inaishi OOS?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: sio events — bali **Contextual Alpha Objects** (event+pair+state+regime+
-liquidity+execution+session). Report ijibu: (1) kila Contextual Event + P(edge);
-(2) ukiondoa PAIR edge inapotea? (3) ukiondoa STATE edge inapotea? (4) variables
-zipi ni IDENTITY na zipi ni MODIFIERS (leave-one-out ablation)? (5) hierarchy
-(event→pair→vol→spread→session) — alpha iko ngazi gani? Candidate Alpha = Bayesian>95%
-NA null-p<0.05 NA CI-low>0 (⚠️ multiple comparisons — bado CANDIDATE). NO ML.
+Question: CONFIRMATORY (sio exploratory). (1) PRE-REGISTER hypotheses kwa IN-SAMPLE
+tu; (2) test kwenye FUTURE OOS (haikutumika kugundua); (3) Benjamini–Hochberg FDR
+kudhibiti multiple comparisons; (4) ondoa/eleza UNKNOWN (identity haijakamilika);
+(5) INDEPENDENT contribution ya Pair (baada ya kudhibiti spread/session/vol), sio
+leave-one-out. Swali moja: je hata hypothesis MOJA inaishi nje ya data iliyoigundua?
+NO ML, NO Opportunity Engine.
 
-> **PHASE 12 CLOSED.** Event Reality: aggregate **0/5 events proven** (yote noise/
-> non-stationarity); LAKINI mean_reversion×EURUSD +0.90 (P100), deep_pullback×EURUSD
-> +0.37 (P97) → **Candidate Alpha**, sio Proven. Discovery: **event SIO universal — ni
-> CONDITIONAL OBJECT.** **Principle 30** (event haipo bila context — context = IDENTITY).
-> **F-030** (edge conditional). **F-031** (universal events hazipo). Terminology:
-> Event → **Contextual Event**; Proven Edge → **Candidate Alpha**. spread = ecology.
-> Architecture: **Contextual Event Library**. NO ML, NO Mean Reversion Strategy.
+> **PHASE 13 = EXPLORATORY** (sio confirmatory). **P30/F-030/F-031 confirmed** (context↑
+> → EV↑). LAKINI "30 Candidate Alpha" **zimekataliwa kama alpha**: selection bias +
+> multiple comparisons + UNKNOWN identity + pair-as-proxy + hakuna mechanism. →
+> **Contextual Alpha Hypothesis** (Research Candidates). **Principle 31** (hypothesis
+> hadi prospective validation); **Principle 32** (identity = independent power, sio
+> association); **F-032** (refinement↑ apparent edge NA false-discovery). NO Mean
+> Reversion Strategy. NO ML.
 
 ---
 
@@ -394,17 +403,17 @@ NA null-p<0.05 NA CI-low>0 (⚠️ multiple comparisons — bado CANDIDATE). NO 
 - [✓] Phase 10    Edge Drift Engine         (F-027 APPROVED; environment does NOT explain decay; F-029 stochastic?)
 - [✓] Phase 11    Edge Reality Test         (H0 not rejected; F-029 APPROVED — market non-stationary)
 - [✓] Phase 12    Event Reality Framework   (0/5 universal; EURUSD Candidate Alpha; F-030/F-031; Principle 30)
+- [✓] Phase 13    Contextual Alpha Framework (EXPLORATORY; P30/F-030/F-031 confirmed; objects → hypotheses; F-032)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 13    Contextual Alpha Framework *(ACTIVE — Contextual Alpha Objects; identity vs modifier; hierarchy; no ML; needs OHLC)*
-- [ ] Phase 14    Pre-registered OOS Validation *(BLOCKED — confirm Candidate Alpha out-of-sample)*
+- [ ] Phase 14    Contextual Alpha Confirmation *(ACTIVE — pre-register + future OOS + BH-FDR + independent contribution; no ML; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 15    Opportunity Engine v2   *(BLOCKED — selects validated Contextual Alpha)*
+- [ ] Phase 15    Opportunity Engine v2   *(BLOCKED — only OOS-survived hypotheses)*
 - [ ] Phase 16    Portfolio Engine        *(BLOCKED — allocation)*
-- [ ] Phase 17    Machine Learning         *(BLOCKED — only after OOS validation)*
+- [ ] Phase 17    Machine Learning         *(BLOCKED — only after OOS survival)*
 
 ---
 
@@ -526,10 +535,15 @@ Evidence: `event_reality_report.md` — 0/5 universal; mean_reversion×EURUSD (P
 deep_pullback×EURUSD (P97) Candidate Alpha; directional skill cost/context-relative. → Q-027.
 
 **Q-027 — Which context variables are an alpha's IDENTITY vs modifiers, and where in the hierarchy is the alpha born?**
-Status: OPEN (Principle 30; Phase 13)
-Needed: `contextual_alpha_report.md` — Contextual Alpha Objects (event+pair+state+regime+
-liquidity+execution+session) + P(edge); remove-pair / remove-state ablation; identity vs
-modifier (leave-one-out); hierarchy (event→pair→vol→spread→session). Candidate Alpha only.
+Status: **CLOSED — exploratory only; identity test insufficient** (Phase 13)
+Evidence: `contextual_alpha_report.md` — context↑→EV↑ (supports P30); but leave-one-out
+≠ identity proof (pair may be proxy); 30 objects = selection/multiple-comparisons. → Q-028.
+
+**Q-028 — Does even one Contextual Alpha Hypothesis survive prospective OOS (pre-registered, FDR-controlled)?**
+Status: OPEN (Principle 31/32; F-032; Phase 14)
+Needed: `contextual_alpha_confirmation_report.md` — pre-register on in-sample; test on
+future OOS; Benjamini–Hochberg FDR; exclude UNKNOWN; independent-contribution ablation
+(pair after controlling spread/session/vol). One survivor = first prospective evidence.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -571,6 +585,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-27 — **V5.19**: **F-027 APPROVED** (reworded: "Early Edge Quality does not predict Future Edge Persistence"; causal ρ≈0.03). Environment (ATR/spread/activity) does NOT explain decay. **F-029 OPEN** (edge decay may be stochastic, not deterministic). **Principle 28** (no adaptive system before proving persistent edge beats random expectation). ⚠️ Do not assume a hidden variable before testing edge reality. Architecture: …→ Edge Lifecycle → **Edge Reality Validation** → Opportunity. Phase 11 Edge Reality Test (H1 real vs H0 noise; null/permutation/bootstrap; no ML). Everything (Opportunity v2, ML, Portfolio) BLOCKED until edge proven real.
 - 2026-06-28 — **V5.20**: Phase 11 — two questions answered (aggregate edge NOT proven, H0 stands; market IS non-stationary). **F-029 APPROVED** (reworded: "Edge decay is primarily a consequence of market non-stationarity, not merely of random sampling" — randomized-time survivors 39 ≫ observed 9). **Principle 29** (every event is a statistical hypothesis, not a trading signal). mean_reversion-only **rejected** (subgroup / multiple-comparisons). Architecture: Market Data → Event Library → **Event Reality Validation** → Context → Opportunity → Portfolio. Phase 12 Event Reality Framework (prove which events exist: null/perm/bootstrap/Bayesian + pair×event×state + combos; no ML).
 - 2026-06-28 — **V5.21** (biggest doctrine change since Phase 1): Phase 12 — aggregate 0/5 universal, but mean_reversion×EURUSD (P100) & deep_pullback×EURUSD (P97). Discovery: **an event is a conditional object, not universal**. **Principle 30** (an event does not exist independently of its market context — context = IDENTITY, not a filter). **F-030** (edge existence is conditional, not universal). **F-031** (only contextual events exist). Terminology: Event → **Contextual Event**; Proven Edge → **Candidate Alpha** (until pre-registered OOS). spread = ecology variable, not just cost. Architecture: **Contextual Event Library**. Phase 13 Contextual Alpha Framework (Contextual Alpha Objects; identity vs modifier; hierarchy; no ML). Mean Reversion Strategy forbidden (subgroup).
+- 2026-06-28 — **V5.22**: Phase 13 accepted as **EXPLORATORY only** (P30/F-030/F-031 confirmed). "30 Candidate Alpha" **rejected as alpha** (selection bias; multiple comparisons; UNKNOWN identity; leave-one-out ≠ proof, pair-as-proxy; no mechanism) → **Contextual Alpha Hypothesis / Research Candidates**. **Principle 31** (hypothesis until prospective validation). **Principle 32** (identity = independent explanatory power, not mere association). **F-032** (context refinement raises apparent edge AND false-discovery risk). Terminology: Candidate Alpha → **Contextual Alpha Hypothesis**. Phase 14 Confirmation Framework (pre-register IS → future OOS → Benjamini–Hochberg FDR → exclude UNKNOWN → independent-contribution; no ML).
 
 ---
 
@@ -632,6 +647,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-28 | Phase 12 Event Reality Framework (all events; null/perm/bootstrap/Bayesian; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-28 | Phase 12 APPROVED; 0/5 universal; EURUSD Candidate Alpha; Principle 30; F-030/F-031; Event→Contextual Event; doctrine V5.21 | APPROVED | Chief Quant |
 | 2026-06-28 | Phase 13 Contextual Alpha Framework (Contextual Alpha Objects; identity/modifier; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-28 | Phase 13 = EXPLORATORY (P30/F-030/F-031 confirmed); 30 objects → hypotheses; Principle 31/32; F-032; doctrine V5.22 | APPROVED | Chief Quant |
+| 2026-06-28 | Phase 14 Contextual Alpha Confirmation (pre-register/OOS/BH-FDR/independent-contribution; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
