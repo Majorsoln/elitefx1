@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.24.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.25.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-28 (Chief: Phase 15 verdict REJECTED — standalone≠hierarchy; Principle 34/35; F-034; variables retained; conclusion corrected; Phase 16 Representation Interaction Audit).*
+*Last updated: 2026-06-28 (Chief: Phase 16 APPROVED — F-035 state vars derive meaning via Events; Principle 36 Events=anchors; Principle 37 significance>effect-size; Event→Context; Phase 17 Event-Centric Representation).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.24.md`
+- `ELITEFX_DOCTRINE_V5.25.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.22 (chain)
-- V5.23 (superseded by V5.24)
+- V4 … V5.23 (chain)
+- V5.24 (superseded by V5.25)
 - Patches
 
 ---
@@ -275,6 +275,15 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-035] State Variables Derive Meaning Through Events, Not Each Other**
+Status: **APPROVED**
+Evidence: `representation_interaction_report.md` (Q5: Event×Trajectory ✅, Event×Volatility
+✅, Activity×Event ✅; but Age×Transition ❌, Age×Trajectory ❌, Transition×Trajectory ❌)
+Summary: Market state variables acquire meaning primarily through interaction with EVENTS,
+not with one another. The intuited hierarchy (State→Age→Transition→Trajectory) does not
+stand alone; context attaches to an Event. Architecture: Event → Context (each event has
+its own). Drives Principle 36/37 and Phase 17 (event-specific representations).
+
 **[F-034] Hierarchical Redundancy Is Expected, Not Uselessness**
 Status: **APPROVED**
 Evidence: `representation_audit_report.md` (Age↔Persistence 0.82; Transition↔Persistence
@@ -360,25 +369,24 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **16**
-Name: **Representation Interaction Audit (je interaction/hierarchy inaongeza taarifa?)**
+Phase: **17**
+Name: **Event-Centric Representation (kila Event ina context yake)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: SI base+variable-moja tena. Pima INTERACTIONS + institutional metrics.
-(1) Age×Transition inaongeza juu ya kila moja? (2) Trajectory×Event? (3) Age×Trajectory×
-Transition bora kuliko kila moja? (4) je hierarchy (State→Age→Transition→Trajectory)
-inaonekana kwenye data? (5) interactions zipi zinanusurika permutation? Metrics mpya:
-Incremental Calibration (Brier/ECE), Stability across folds, Transferability across
-pairs, Robustness across regimes — SIO incremental R² pekee. NO ML.
+Question: jenga representation EVENT-SPECIFIC (sio moja kwa events zote). (1) je Event
+ndiyo semantic anchor? (2) kwa kila Event, context zipi zinaongeza taarifa (within-event,
+perm-controlled)? (3) context zenye thamani kwa Event moja sio nyingine? (4) minimal
+event-specific representation; (5) je Mean Reversion vs Breakout representation
+zinatofautiana? Significance-first (Principle 37). NO ML.
 
-> **PHASE 15 verdict REJECTED** (Chief): ilipima standalone (base+variable-moja) wakati
-> doctrine ni HIERARCHICAL (State→Age→Transition→Trajectory) — kama DNA: gene moja haina
-> effect, pamoja zinatengeneza protein. Redundancy (Age↔Persistence 0.82; Transition↔
-> Persistence 1.00) = uthibitisho wa ontology (**F-034**), SIO uselessness. **Principle
-> 34** (contribution via interaction/calibration/stability). **Principle 35** (quality ≠
-> predictive gain). Variables HAZIONDOLEWI. Conclusion ya Phase 15 imerekebishwa: "hakuna
-> ushahidi wa incremental STANDALONE contribution" (sio "representation imefikia ukomo").
+> **PHASE 16 CLOSED — DISCOVERY (F-035).** Q5: Event×Trajectory/Volatility/Activity ✅
+> lakini Age×Transition/Trajectory ❌ → state variables zinapata maana kupitia **EVENTS**,
+> sio kati yao. Architecture: **Event → Context** (kila event ina yake). **Principle 36**
+> (Events = semantic anchors; context inapata thamani tu ikiwa imefungwa kwa Event).
+> **Principle 37** (low S/N: significance + OOS, sio effect size — interactions zilikuwa
+> significant ingawa R² ndogo ≈+0.0001). Hierarchy wording imerekebishwa: standalone
+> haikuonyesha taarifa; iliyounganishwa na Event ndiyo yenye taarifa (imepimwa nje ya mazingira).
 
 ---
 
@@ -423,16 +431,17 @@ pairs, Robustness across regimes — SIO incremental R² pekee. NO ML.
 - [✓] Phase 13    Contextual Alpha Framework (EXPLORATORY; P30/F-030/F-031 confirmed; objects → hypotheses; F-032)
 - [✓] Phase 14    Contextual Alpha Confirmation (0/282 survive FDR; F-032 confirmed; Representation Failure)
 - [✓] Phase 15    Representation Audit      (standalone insufficient; verdict corrected; variables retained; F-034)
+- [✓] Phase 16    Representation Interaction Audit (F-035: Event×context, not context×context; Event=anchor)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 16    Representation Interaction Audit *(ACTIVE — interactions+hierarchy+calibration/stability/transfer/robust; no ML; needs OHLC)*
-- [ ] Phase 17    Expanded-Representation Confirmation *(BLOCKED — re-run OOS+FDR with interaction-aware representation)*
+- [ ] Phase 17    Event-Centric Representation *(ACTIVE — per-event context; minimal event-specific reps; no ML; needs OHLC)*
+- [ ] Phase 18    Event-Specific Confirmation *(BLOCKED — per-event OOS + FDR; Principle 37)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 18    Opportunity Engine v2   *(BLOCKED — only OOS-survived hypotheses)*
-- [ ] Phase 19    Machine Learning         *(BLOCKED — only after OOS survival)*
+- [ ] Phase 19    Opportunity Engine v2   *(BLOCKED — only OOS-survived hypotheses)*
+- [ ] Phase 20    Machine Learning         *(BLOCKED — only after OOS survival)*
 
 ---
 
@@ -569,10 +578,15 @@ Evidence: `representation_audit_report.md` — age/traj/trans/persist add no sta
 redundancy expected (F-034). Verdict corrected (NOT "near limit"). Interaction test → Q-030.
 
 **Q-030 — Do the doctrine variables gain power through INTERACTION / hierarchy / calibration / stability?**
-Status: OPEN (Principle 34/35; F-034; Phase 16)
-Needed: `representation_interaction_report.md` — Age×Transition, Trajectory×Event,
-Age×Trajectory×Transition (joint vs standalone, perm-controlled); doctrine hierarchy in
-data; surviving interactions; Brier/stability/transferability/robustness (not R² alone).
+Status: **CLOSED — via Events, not via each other** (F-035; Phase 16)
+Evidence: `representation_interaction_report.md` — Event×Trajectory/Volatility/Activity ✅;
+context×context (Age×Transition etc.) ❌. Event is the anchor. → Q-031.
+
+**Q-031 — Does each Event have its own context, and should representations be event-specific?**
+Status: OPEN (Principle 36/37; F-035; Phase 17)
+Needed: `event_centric_representation_report.md` — Event as anchor; per-event informative
+context map; event-specific context variables; minimal event-specific representation;
+Mean Reversion vs Breakout representation. Significance-first (low S/N).
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -617,6 +631,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-28 — **V5.22**: Phase 13 accepted as **EXPLORATORY only** (P30/F-030/F-031 confirmed). "30 Candidate Alpha" **rejected as alpha** (selection bias; multiple comparisons; UNKNOWN identity; leave-one-out ≠ proof, pair-as-proxy; no mechanism) → **Contextual Alpha Hypothesis / Research Candidates**. **Principle 31** (hypothesis until prospective validation). **Principle 32** (identity = independent explanatory power, not mere association). **F-032** (context refinement raises apparent edge AND false-discovery risk). Terminology: Candidate Alpha → **Contextual Alpha Hypothesis**. Phase 14 Confirmation Framework (pre-register IS → future OOS → Benjamini–Hochberg FDR → exclude UNKNOWN → independent-contribution; no ML).
 - 2026-06-28 — **V5.23**: Phase 14 — 282 pre-registered, UNKNOWN excluded, future OOS, BH-FDR → **0 survived**. **F-032 CONFIRMED** (30→0 = selection inflation). Chief reframes: this is **Current Representation Failure**, NOT "No Alpha" — only ONE representation tested (Event+Pair+Vol+Spread+Session). **Principle 33** (failure to validate ⇒ representation failure until proven otherwise). **F-033** (a representation can fail while exploitable structure exists). "More data / new ecology" rejected as premature. Phase 15 Representation Audit (assumptions, missing doctrine vars, incremental info, redundancy, minimal sufficient representation; no ML, no new data).
 - 2026-06-28 — **V5.24**: **Phase 15 verdict REJECTED** (Chief): standalone base+variable-moja test ≠ the hierarchical representation the doctrine builds (State→Age→Transition→Trajectory). **Principle 34** (a variable may contribute via interaction/calibration/stability even if standalone predictive contribution is negligible). **Principle 35** (representation quality is not judged solely by predictive gain). **F-034** (redundancy among hierarchical variables is expected, not uselessness — persistence is a derivative of age). Phase 15 conclusion corrected to "no evidence of incremental STANDALONE contribution"; variables NOT removed. Phase 16 Representation Interaction Audit (interactions, hierarchy, Brier calibration, fold-stability, cross-pair transferability, cross-regime robustness; no ML).
+- 2026-06-28 — **V5.25**: Phase 16 discovery — Event×Trajectory/Volatility/Activity significant, but context×context (Age×Transition/Trajectory) not. **F-035** (state variables derive meaning through interaction with EVENTS, not with one another). **Principle 36** (Events are the semantic anchors; context acquires value only attached to an Event). **Principle 37** (low S/N markets: evaluate by robust significance + OOS repeatability, not effect size alone). Architecture flipped to **Event → Context** (each event has its own). Phase 16 hierarchy wording corrected (standalone showed nothing; Event-attached hierarchy carries info). Phase 17 Event-Centric Representation (per-event context; minimal event-specific reps; no ML).
 
 ---
 
@@ -684,6 +699,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-28 | Phase 15 Representation Audit (assumptions/incremental info/redundancy/minimal set; no ML, no data) | APPROVED (start) | Chief Quant |
 | 2026-06-28 | Phase 15 verdict REJECTED (standalone≠hierarchy); Principle 34/35; F-034; variables retained; conclusion corrected; doctrine V5.24 | APPROVED | Chief Quant |
 | 2026-06-28 | Phase 16 Representation Interaction Audit (interactions/hierarchy/calibration/stability/transfer/robust; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-28 | Phase 16 APPROVED; F-035 (state vars derive meaning via Events); Principle 36/37; Event→Context; doctrine V5.25 | APPROVED | Chief Quant |
+| 2026-06-28 | Phase 17 Event-Centric Representation (per-event context; minimal event-specific reps; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

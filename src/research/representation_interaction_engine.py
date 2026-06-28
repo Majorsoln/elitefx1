@@ -182,8 +182,8 @@ def run(pairs, tfs):
         adds = inc > nl and p < 0.05; hier_steps += 1 if adds else 0
         sel.append(col)
         L.append(f"| {len(sel)} | {col} | {rf:.5f} | {inc:+.6f} | {p:.3f} | {'✅' if adds else '—'} |")
-    L.append(f"\n→ hatua za hierarchy zinazoongeza taarifa: **{hier_steps}/{len(order)-1}** "
-             f"({'hierarchy inaonekana kwenye data' if hier_steps >= 2 else 'hierarchy haijathibitika wazi'}).")
+    L.append(f"\n→ hatua za hierarchy (standalone, BILA Event) zinazoongeza taarifa: **{hier_steps}/{len(order)-1}**. "
+             f"{'hierarchy inaonekana standalone' if hier_steps >= 2 else 'Standalone hierarchy haikuonyesha incremental information; hierarchy iliyounganishwa na Event ndiyo yenye taarifa (F-035) — imepimwa nje ya mazingira yake.'}")
 
     # Q5 — surviving interactions
     L.append("\n## Q5 — Interactions zenye surviving information baada ya permutation\n")

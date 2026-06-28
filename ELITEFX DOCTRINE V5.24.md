@@ -3,11 +3,16 @@
 **Chief Quant — Representation Is Not Prediction; Variables Live in a Hierarchy, Not Alone**
 
 Version: 5.24
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.25 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.25, 28 June 2026)
 Supersedes: V5.23 (Principle 34, 35; F-034; Phase 15 verdict reframed; Phase 16 Representation Interaction Audit)
 Previous Versions: Archived (V4 … V5.23)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.25](ELITEFX%20DOCTRINE%20V5.25.md)**
+> (F-035 state variables derive meaning through Events; Principle 36 Events = semantic
+> anchors; Principle 37 significance+OOS over effect size in low S/N; Event → Context
+> architecture; Phase 17 Event-Centric Representation). V5.24 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.23 remain in force except where amended below.
