@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.19.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V5.20.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-27 (Chief: Phase 10 APPROVED — F-027 APPROVED (early quality ≠ future persistence); F-029 edge decay may be stochastic; Principle 28 prove edge > random; Edge Reality Validation; Phase 11 Edge Reality Test).*
+*Last updated: 2026-06-28 (Chief: Phase 11 APPROVED — H0 not rejected; F-029 APPROVED (decay = market non-stationarity); Principle 29 every event is a hypothesis; mean_reversion-only rejected; Phase 12 Event Reality Framework).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.19.md`
+- `ELITEFX_DOCTRINE_V5.20.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.17 (chain)
-- V5.18 (superseded by V5.19)
+- V4 … V5.18 (chain)
+- V5.19 (superseded by V5.20)
 - Patches
 
 ---
@@ -275,14 +275,15 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
-**[F-029] Edge Decay May Be Stochastic, Not Deterministic (OPEN)**
-Status: OPEN — under test (Phase 11)
-Evidence: `edge_drift_report.md` (ATR/spread/activity do NOT explain decay: corr
-≈0; death not predictable one window ahead)
-Summary: Edge may not die because of a variable. It may die because participants /
-liquidity / execution change — or because it was noise (a random process, not
-deterministic). ⚠️ Do NOT assume a hidden variable before testing whether the edge
-is real at all. Tested by Phase 11 Edge Reality Test (H1 real edge vs H0 noise).
+**[F-029] Edge Decay Is Driven by Market Non-Stationarity (APPROVED)**
+Status: **APPROVED** (was OPEN — Phase 11)
+Evidence: `edge_reality_report.md` (randomized-time survivors 39 ≫ observed 9 — the
+real time-order destroys persistence; aggregate H0 not rejected)
+Summary: Edge decay is primarily a consequence of market non-stationarity, not merely
+of random sampling. If decay were sampling noise alone, randomizing the time-order
+would not change persistence so drastically — but it did (made it larger). The market
+itself destroys persistence. Two distinct answers from Phase 11: aggregate edge NOT
+proven (H0 stands), AND market is non-stationary. Q-025 CLOSED.
 
 **[F-028] Every Trading Edge Has a Lifecycle**
 Status: **APPROVED**
@@ -316,26 +317,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **11**
-Name: **Edge Reality Test (je edge ni HALISI au noise?)**
+Phase: **12**
+Name: **Event Reality Framework (ni events zipi zipo kweli kitakwimu?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: swali la msingi zaidi — **je edge ipo kweli au ni random variation?**
-H1 (edge halisi) vs H0 (sampling noise). Null models + permutation + bootstrap.
-Report ijibu: (1) shuffle outcomes → decay/survival inafanana? (2) randomized order
-→ survivability inafanana? (3) bootstrap: observed nje ya random CI? (4) permutation:
-Top survivors > random expectation? (5) P(observed edge > random) kwa kila event.
-Acceptance: H1 ikiwa survivors > random (perm p<0.05 NA nje ya null CI). NO ML, NO
-Opportunity Engine (Principle 28).
+Question: sio mean_reversion-only (subgroup) — bali events ZOTE kwa methodology
+ileile. Report ijibu: (1) kila event null(random-direction)/bootstrap/permutation;
+(2) Bayesian P(edge exists) kwa kila event; (3) je pair fulani inabeba event? (pair×
+event); (4) je event edge inategemea market state? (5) je events mbili zikichanganywa
+zinazalisha edge? (combo vs solo). proven = Bayesian>95% NA p<0.05 NA CI-low>0.
+Principle 29: event = hypothesis. NO ML, NO Opportunity Engine bado.
 
-> **PHASE 10 CLOSED.** Edge Drift Engine: **F-027 APPROVED** — early quality
-> HAITABIRI future persistence (causal ρ≈+0.03; ile +0.74 ya Phase 9 ilikuwa
-> artifact). Mazingira (ATR/spread/activity) **HAYAELEZI** decay (corr≈0; kifo
-> hakitabiriki). **F-029 OPEN** (decay inaweza kuwa stochastic). **Principle 28**
-> (hakuna adaptive system kabla ya kuthibitisha edge > random). ⚠️ Tusiseme "kuna
-> hidden variable" — kwanza thibitisha edge ipo. Architecture: …→ Edge Lifecycle →
-> **Edge Reality Validation** → Opportunity. NO ML.
+> **PHASE 11 CLOSED.** Edge Reality Test: maswali mawili, majibu mawili — (A) aggregate
+> edge HAIJATHIBITISHWA (H0 haijakataliwa; survivors 9 vs null 4.6, p=0.050, ndani ya
+> CI); (B) market NI non-stationary. **F-029 APPROVED** (decay = non-stationarity:
+> randomized-time survivors 39 ≫ observed 9). **Principle 29** (kila event = statistical
+> hypothesis, sio signal). Chief **amekataa mean_reversion-only** (subgroup/multiple-
+> comparisons — kosa la CCS). Architecture: …→ Event Library → **Event Reality
+> Validation** → Context → Opportunity → Portfolio. NO ML.
 
 ---
 
@@ -375,16 +375,17 @@ Opportunity Engine (Principle 28).
 - [✓] Phase 8     Opportunity Engine        (hypothesis REJECTED; F-022→Core Principle; P26; reframed remove-bad-first)
 - [✓] Phase 9     Edge Lifecycle Engine     (F-028 every edge has a lifecycle; edge non-stationary; survivability metric)
 - [✓] Phase 10    Edge Drift Engine         (F-027 APPROVED; environment does NOT explain decay; F-029 stochastic?)
+- [✓] Phase 11    Edge Reality Test         (H0 not rejected; F-029 APPROVED — market non-stationary)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 11    Edge Reality Test        *(ACTIVE — H1 vs H0; null/permutation/bootstrap; no ML; needs OHLC)*
+- [ ] Phase 12    Event Reality Framework  *(ACTIVE — prove which events exist; null/perm/bootstrap/Bayesian; no ML; needs OHLC)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 12    Opportunity Engine v2   *(BLOCKED — ONLY if H1 proven; Principle 28)*
-- [ ] Phase 13    Portfolio Engine        *(BLOCKED — allocation)*
-- [ ] Phase 14    Machine Learning         *(BLOCKED — only after edge reality proven)*
+- [ ] Phase 13    Opportunity Engine v2   *(BLOCKED — ONLY proven events; Principle 28/29)*
+- [ ] Phase 14    Portfolio Engine        *(BLOCKED — allocation)*
+- [ ] Phase 15    Machine Learning         *(BLOCKED — only after events proven)*
 - [ ] (parallel)  F-026 State Trajectory   *(OPEN — pursue only if hidden variable justified)*
 
 ---
@@ -496,10 +497,16 @@ Evidence: `edge_drift_report.md` — corr(Δenv, ΔEV)≈0; death not predictabl
 ahead (lift ≈ 0); F-027 APPROVED (ρ≈0.03); opened F-029 (stochastic) → Q-025.
 
 **Q-025 — Does a real persistent edge exist beyond random expectation (H1 vs H0)?**
-Status: OPEN (F-029; Principle 28; Phase 11)
-Needed: `edge_reality_report.md` — null models (shuffle outcomes / randomized order),
-permutation, bootstrap. H1 if Top survivors exceed random (perm p<0.05 & outside null
-CI); else H0 (noise). Gate to ALL adaptive systems (Principle 28).
+Status: **CLOSED — aggregate H0 not rejected; market non-stationary** (F-029; Phase 11)
+Evidence: `edge_reality_report.md` — survivors 9 vs null 4.6 (p=0.050, inside CI);
+randomized-time 39 ≫ 9 → non-stationarity. mean_reversion P(obs>random)=100% (subgroup,
+not pursued alone). → Q-026.
+
+**Q-026 — Which events have repeatable statistical existence, and under what conditions?**
+Status: OPEN (Principle 29; Phase 12)
+Needed: `event_reality_report.md` — per-event null/permutation/bootstrap + Bayesian
+P(edge exists); pair × event (carrier); event × state (state-dependence); event combos
+vs solo. proven = Bayesian>95% & p<0.05 & CI-low>0. Only proven events proceed.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -539,6 +546,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-27 — **V5.17**: **Phase 8 hypothesis REJECTED by data** (CCS-selection not positive OOS) → doctrine changes, not data. **F-022 promoted Finding → CORE PRINCIPLE**. **Principle 26** (capital preservation before opportunity discovery — answer "where NOT to trade" first). **Principle 25 enhanced**: Opportunity = Quality × Availability × **Survivability**. **F-027 OPEN** (survivability independent of quality). Opportunity Engine **reframed** (remove bad → rank survivable → allocate). Full architecture (Market Data → … → Confidence → **Survivability** → Opportunity → Portfolio → Execution). Phase 9 Survivability Engine (rolling WF, no ML).
 - 2026-06-27 — **V5.18**: **edge non-stationary** (Phase 9: median survival 1 window; ~2% survive all). **Survivability Engine → Edge Lifecycle Engine** (framework; survival = one metric). **F-028 APPROVED** (every trading edge has a lifecycle: birth→growth→decay→death). **F-027 REFORMULATED** ("Early Quality may not predict Future Survivability" — causal, not whole-sample). **Principle 27** (prefer living edges over historically profitable edges). Architecture: Confidence → **Edge Lifecycle** → Opportunity → Portfolio → Execution. Phase 10 Edge Drift Engine (WHY edge dies; no ML — else trained on "historical corpses"). Project reframed as **Adaptive Market Intelligence System**.
 - 2026-06-27 — **V5.19**: **F-027 APPROVED** (reworded: "Early Edge Quality does not predict Future Edge Persistence"; causal ρ≈0.03). Environment (ATR/spread/activity) does NOT explain decay. **F-029 OPEN** (edge decay may be stochastic, not deterministic). **Principle 28** (no adaptive system before proving persistent edge beats random expectation). ⚠️ Do not assume a hidden variable before testing edge reality. Architecture: …→ Edge Lifecycle → **Edge Reality Validation** → Opportunity. Phase 11 Edge Reality Test (H1 real vs H0 noise; null/permutation/bootstrap; no ML). Everything (Opportunity v2, ML, Portfolio) BLOCKED until edge proven real.
+- 2026-06-28 — **V5.20**: Phase 11 — two questions answered (aggregate edge NOT proven, H0 stands; market IS non-stationary). **F-029 APPROVED** (reworded: "Edge decay is primarily a consequence of market non-stationarity, not merely of random sampling" — randomized-time survivors 39 ≫ observed 9). **Principle 29** (every event is a statistical hypothesis, not a trading signal). mean_reversion-only **rejected** (subgroup / multiple-comparisons). Architecture: Market Data → Event Library → **Event Reality Validation** → Context → Opportunity → Portfolio. Phase 12 Event Reality Framework (prove which events exist: null/perm/bootstrap/Bayesian + pair×event×state + combos; no ML).
 
 ---
 
@@ -596,6 +604,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-27 | Phase 10 Edge Drift Engine (WHY edge dies; causal F-027; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-27 | Phase 10 APPROVED; F-027 APPROVED (early≠future); F-029 OPEN (stochastic decay); Principle 28; Edge Reality Validation; doctrine V5.19 | APPROVED | Chief Quant |
 | 2026-06-27 | Phase 11 Edge Reality Test (null/permutation/bootstrap; H1 vs H0; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-28 | Phase 11 APPROVED; H0 not rejected; F-029 APPROVED (non-stationarity); Principle 29; mean_reversion-only rejected; doctrine V5.20 | APPROVED | Chief Quant |
+| 2026-06-28 | Phase 12 Event Reality Framework (all events; null/perm/bootstrap/Bayesian; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

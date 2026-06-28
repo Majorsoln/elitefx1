@@ -3,11 +3,16 @@
 **Chief Quant — Does the Edge Even Exist? Prove It Beats Random Before Building Anything**
 
 Version: 5.19
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.20 (current SSOT) — carry-forward in force
 Date: 27 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.20, 28 June 2026)
 Supersedes: V5.18 (F-027 APPROVED new wording; F-029; Principle 28; Edge Reality Validation inserted; Phase 11 Edge Reality Test)
 Previous Versions: Archived (V4 … V5.18)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.20](ELITEFX%20DOCTRINE%20V5.20.md)**
+> (F-029 APPROVED — decay = market non-stationarity; Principle 29 every event is a
+> statistical hypothesis; mean_reversion-only rejected; Event Reality Validation in
+> architecture; Phase 12 Event Reality Framework). V5.19 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.18 remain in force except where amended below.
