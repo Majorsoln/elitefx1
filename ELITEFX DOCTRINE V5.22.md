@@ -3,11 +3,16 @@
 **Chief Quant — Exploration Is Not Confirmation; Survive Out-of-Sample or It Is Not Alpha**
 
 Version: 5.22
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V5.23 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V5.23, 28 June 2026)
 Supersedes: V5.21 (Phase 13 = exploratory; Principle 31, 32; F-032; Candidate Alpha → Contextual Alpha Hypothesis; Phase 14 Confirmation Framework)
 Previous Versions: Archived (V4 … V5.21)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V5.23](ELITEFX%20DOCTRINE%20V5.23.md)**
+> (F-032 Confirmed; Principle 33 validation-failure = representation-failure; F-033 a
+> representation can fail while structure exists; Phase 14 reframed as Current
+> Representation Failure; Phase 15 Representation Audit). V5.22 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.21 remain in force except where amended below.
