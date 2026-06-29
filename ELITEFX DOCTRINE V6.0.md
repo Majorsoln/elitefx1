@@ -3,11 +3,16 @@
 **Chief Quant — ELITEFX Architecture V6: No Universal Representation; Variables Are Conditional; Events May Contain Sub-Events**
 
 Version: 6.0
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.1 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.1, 28 June 2026)
 Supersedes: V5.25 (F-036; Principle 38; F-037; Market Representation → Event Representation Family; Architecture V6; Phase 18 Event Taxonomy)
 Previous Versions: Archived (V4 … V5.25)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.1](ELITEFX%20DOCTRINE%20V6.1.md)**
+> (F-037 → Partially Approved; F-038 taxonomy hierarchical & event-specific; Principle 39
+> ontology si algorithm moja; Principle 40 taxonomy ≠ alpha; Phase 19 Taxonomy Robustness
+> Audit). V6.0 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.25 remain in force except where amended below.
