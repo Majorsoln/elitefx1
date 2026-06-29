@@ -3,11 +3,16 @@
 **Chief Quant — Events Are the Semantic Anchor; Each Event Has Its Own Context**
 
 Version: 5.25
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.0 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.0, 28 June 2026)
 Supersedes: V5.24 (F-035; Principle 36, 37; Event → Context architecture; Phase 16 hierarchy wording corrected; Phase 17 Event-Centric Representation)
 Previous Versions: Archived (V4 … V5.24)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.0](ELITEFX%20DOCTRINE%20V6.0.md)**
+> (Architecture V6; F-036 variables ni conditional entities; Principle 38 hakuna
+> universal representation — Event Representation Family; F-037 events zina sub-events;
+> Phase 18 Event Taxonomy). V5.25 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V5.24 remain in force except where amended below.

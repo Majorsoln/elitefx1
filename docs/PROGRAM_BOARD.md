@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V5.25.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V6.0.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-28 (Chief: Phase 16 APPROVED — F-035 state vars derive meaning via Events; Principle 36 Events=anchors; Principle 37 significance>effect-size; Event→Context; Phase 17 Event-Centric Representation).*
+*Last updated: 2026-06-28 (Chief: Phase 17 FULLY APPROVED — ARCHITECTURE V6; F-036 conditional variables; Principle 38 no universal representation (Event Representation Family); F-037 sub-events; Phase 18 Event Taxonomy).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V5.25.md`
+- `ELITEFX_DOCTRINE_V6.0.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.23 (chain)
-- V5.24 (superseded by V5.25)
+- V4 … V5.24 (chain)
+- V5.25 (superseded by V6.0)
 - Patches
 
 ---
@@ -275,6 +275,23 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-037] Events May Contain Latent Sub-Events (OPEN)**
+Status: OPEN — under test (Phase 18)
+Evidence: conceptual + `event_centric_representation_report.md` (events show distinct
+event-specific representations; sub-structure within an event not yet measured)
+Summary: An event may consist of multiple latent sub-events with different statistical
+identities (MR-LowVol ≠ MR-HighVol). Tested by Phase 18 Event Taxonomy (unsupervised
+KMeans + outcome-identity perm test). If confirmed, alpha may live in a sub-event, not
+the whole event; ML target becomes one model per event subtype.
+
+**[F-036] Market Variables Are Conditional Entities**
+Status: **APPROVED**
+Evidence: `event_centric_representation_report.md` (activity matters for MR/pullback,
+not for breakout; each event has its own informative context set)
+Summary: A market variable's information content depends on the governing Event — it
+does not exist outside an Event. Terminology: Variable → **Conditional Variable**.
+Drives Principle 38 (no universal representation) and the Event Representation Family.
+
 **[F-035] State Variables Derive Meaning Through Events, Not Each Other**
 Status: **APPROVED**
 Evidence: `representation_interaction_report.md` (Q5: Event×Trajectory ✅, Event×Volatility
@@ -369,24 +386,26 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **17**
-Name: **Event-Centric Representation (kila Event ina context yake)**
+Phase: **18**
+Name: **Event Taxonomy (je kila Event ina sub-events?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: jenga representation EVENT-SPECIFIC (sio moja kwa events zote). (1) je Event
-ndiyo semantic anchor? (2) kwa kila Event, context zipi zinaongeza taarifa (within-event,
-perm-controlled)? (3) context zenye thamani kwa Event moja sio nyingine? (4) minimal
-event-specific representation; (5) je Mean Reversion vs Breakout representation
-zinatofautiana? Significance-first (Principle 37). NO ML.
+Question: gundua latent SUB-EVENTS ndani ya kila Event (unsupervised). (1) je Mean
+Reversion ina subtypes? (2) Breakout? (3) Pullback? (4) je representation inabadilika
+kwa subtype? (5) je baadhi ya sub-events ndizo zina alpha (sio event nzima)? Mbinu:
+KMeans (numpy) kwenye context features; feature gap vs permutation null + outcome-
+identity R²(label on y) perm-controlled; per-subtype EV. In-sample discovery (OOS =
+Phase 19). NO ML.
 
-> **PHASE 16 CLOSED — DISCOVERY (F-035).** Q5: Event×Trajectory/Volatility/Activity ✅
-> lakini Age×Transition/Trajectory ❌ → state variables zinapata maana kupitia **EVENTS**,
-> sio kati yao. Architecture: **Event → Context** (kila event ina yake). **Principle 36**
-> (Events = semantic anchors; context inapata thamani tu ikiwa imefungwa kwa Event).
-> **Principle 37** (low S/N: significance + OOS, sio effect size — interactions zilikuwa
-> significant ingawa R² ndogo ≈+0.0001). Hierarchy wording imerekebishwa: standalone
-> haikuonyesha taarifa; iliyounganishwa na Event ndiyo yenye taarifa (imepimwa nje ya mazingira).
+> **PHASE 17 FULLY APPROVED — ARCHITECTURE V6.** Discovery: context haina existence yake;
+> **Event ndiyo inayounda maana ya context** (activity ina maana kwa MR/pullback, sio
+> breakout). **F-036** (variables ni CONDITIONAL entities). **Principle 38** (hakuna
+> universal representation; kila Event ina representation space yake — **Event
+> Representation Family**: Pullback/Breakout/MR/… kila moja ontology yake). **F-037 OPEN**
+> (events zina latent sub-events). Architecture V6: Market → Event Detection → **Event
+> Taxonomy** → Event-Specific Representation → Reality Validation → Opportunity → Portfolio
+> → Execution. ML target = model moja kwa kila event subtype. NO ML bado.
 
 ---
 
@@ -432,16 +451,18 @@ zinatofautiana? Significance-first (Principle 37). NO ML.
 - [✓] Phase 14    Contextual Alpha Confirmation (0/282 survive FDR; F-032 confirmed; Representation Failure)
 - [✓] Phase 15    Representation Audit      (standalone insufficient; verdict corrected; variables retained; F-034)
 - [✓] Phase 16    Representation Interaction Audit (F-035: Event×context, not context×context; Event=anchor)
+- [✓] Phase 17    Event-Centric Representation (FULLY APPROVED; Architecture V6; F-036; Principle 38; Event Representation Family)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 17    Event-Centric Representation *(ACTIVE — per-event context; minimal event-specific reps; no ML; needs OHLC)*
-- [ ] Phase 18    Event-Specific Confirmation *(BLOCKED — per-event OOS + FDR; Principle 37)*
+- [ ] Phase 18    Event Taxonomy           *(ACTIVE — latent sub-events per event; F-037; no ML; needs OHLC)*
+- [ ] Phase 19    Event-Subtype Confirmation *(BLOCKED — per-subtype OOS + FDR; Principle 37)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 19    Opportunity Engine v2   *(BLOCKED — only OOS-survived hypotheses)*
-- [ ] Phase 20    Machine Learning         *(BLOCKED — only after OOS survival)*
+- [ ] Phase 20    Event-Specific Opportunity *(BLOCKED — only OOS-survived subtypes)*
+- [ ] Phase 21    Portfolio Engine        *(BLOCKED — allocation)*
+- [ ] Phase 22    Machine Learning         *(BLOCKED — one model per event subtype)*
 
 ---
 
@@ -583,10 +604,16 @@ Evidence: `representation_interaction_report.md` — Event×Trajectory/Volatilit
 context×context (Age×Transition etc.) ❌. Event is the anchor. → Q-031.
 
 **Q-031 — Does each Event have its own context, and should representations be event-specific?**
-Status: OPEN (Principle 36/37; F-035; Phase 17)
-Needed: `event_centric_representation_report.md` — Event as anchor; per-event informative
-context map; event-specific context variables; minimal event-specific representation;
-Mean Reversion vs Breakout representation. Significance-first (low S/N).
+Status: **CLOSED — YES (Event Representation Family)** (F-036; Principle 38; Phase 17)
+Evidence: `event_centric_representation_report.md` — Event is anchor; 5 event-specific
+context vars; MR{activity,pair,spread} ≠ Breakout{pair,session,vol,spread}. No universal
+representation. → Q-032.
+
+**Q-032 — Does each Event contain latent sub-events with distinct statistical identities?**
+Status: OPEN (F-037; Phase 18)
+Needed: `event_taxonomy_report.md` — unsupervised subtypes per event (feature gap vs null
++ outcome-identity perm test); does representation change by subtype; do some sub-events
+carry alpha (vs whole event). In-sample discovery; OOS confirmation later (Principle 37).
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -632,6 +659,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-28 — **V5.23**: Phase 14 — 282 pre-registered, UNKNOWN excluded, future OOS, BH-FDR → **0 survived**. **F-032 CONFIRMED** (30→0 = selection inflation). Chief reframes: this is **Current Representation Failure**, NOT "No Alpha" — only ONE representation tested (Event+Pair+Vol+Spread+Session). **Principle 33** (failure to validate ⇒ representation failure until proven otherwise). **F-033** (a representation can fail while exploitable structure exists). "More data / new ecology" rejected as premature. Phase 15 Representation Audit (assumptions, missing doctrine vars, incremental info, redundancy, minimal sufficient representation; no ML, no new data).
 - 2026-06-28 — **V5.24**: **Phase 15 verdict REJECTED** (Chief): standalone base+variable-moja test ≠ the hierarchical representation the doctrine builds (State→Age→Transition→Trajectory). **Principle 34** (a variable may contribute via interaction/calibration/stability even if standalone predictive contribution is negligible). **Principle 35** (representation quality is not judged solely by predictive gain). **F-034** (redundancy among hierarchical variables is expected, not uselessness — persistence is a derivative of age). Phase 15 conclusion corrected to "no evidence of incremental STANDALONE contribution"; variables NOT removed. Phase 16 Representation Interaction Audit (interactions, hierarchy, Brier calibration, fold-stability, cross-pair transferability, cross-regime robustness; no ML).
 - 2026-06-28 — **V5.25**: Phase 16 discovery — Event×Trajectory/Volatility/Activity significant, but context×context (Age×Transition/Trajectory) not. **F-035** (state variables derive meaning through interaction with EVENTS, not with one another). **Principle 36** (Events are the semantic anchors; context acquires value only attached to an Event). **Principle 37** (low S/N markets: evaluate by robust significance + OOS repeatability, not effect size alone). Architecture flipped to **Event → Context** (each event has its own). Phase 16 hierarchy wording corrected (standalone showed nothing; Event-attached hierarchy carries info). Phase 17 Event-Centric Representation (per-event context; minimal event-specific reps; no ML).
+- 2026-06-28 — **V6.0** (ELITEFX Architecture V6; major version): Phase 17 FULLY APPROVED — context has no existence of its own; the Event creates the meaning of context. **F-036** (market variables are conditional entities; info content depends on the governing Event; Variable → Conditional Variable). **Principle 38** (no universal market representation; each Event defines its own representation space). Concept **Market Representation → Event Representation Family** (Pullback/Breakout/MR/… each with its own ontology). **F-037 OPEN** (events may contain latent sub-events). Architecture V6: Market → Event Detection → **Event Taxonomy** → Event-Specific Representation → Reality Validation → Opportunity → Portfolio → Execution. ML target = one model per event subtype. Goal: family of event-dependent representations, then family of event-dependent models. Phase 18 Event Taxonomy (no ML).
 
 ---
 
@@ -701,6 +729,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-28 | Phase 16 Representation Interaction Audit (interactions/hierarchy/calibration/stability/transfer/robust; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-28 | Phase 16 APPROVED; F-035 (state vars derive meaning via Events); Principle 36/37; Event→Context; doctrine V5.25 | APPROVED | Chief Quant |
 | 2026-06-28 | Phase 17 Event-Centric Representation (per-event context; minimal event-specific reps; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-28 | Phase 17 FULLY APPROVED (Architecture Change); ARCHITECTURE V6; F-036; Principle 38; F-037 OPEN; Event Representation Family; doctrine V6.0 | APPROVED | Chief Quant |
+| 2026-06-28 | Phase 18 Event Taxonomy (latent sub-events per event; unsupervised; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
