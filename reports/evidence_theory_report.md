@@ -1,6 +1,6 @@
 # Evidence Theory — fasili Evidence Object (Decision Science D0)
 
-*2026-06-30 21:52 | 9 pairs, 40 evidence cells | Evidence Object spec + lifecycle + aggregation | NO Decision Engine | NO ML*
+*2026-06-30 21:55 | 9 pairs, 40 evidence cells | Evidence Object spec + lifecycle + aggregation | NO Decision Engine | NO ML*
 
 > **Principle 63** Evidence = contract kati ya Market & Decision Science. **P64** production-agnostic. **P65** Evidence = first-class object yenye lifecycle. **P66** kila decision itrace kwa evidence. Decision Science inaanza na **Evidence**, sio decisions. Hii ni Evidence Object (data structure), SIO Decision Engine.
 
