@@ -17,6 +17,8 @@
 
 *(fidelity ARI = je Nyström-projected labels zinakubaliana na fresh clustering ya OOS embedding. leak gap kubwa = joint-fit (leakage) inazidi sana proper-Nyström -> in-sample silhouette ilikuwa imeinuliwa na leakage. Q5: hakuna lookahead — fit kwenye PAST tu.)*
 
+> ⚠️ **HEADLINE — leakage iko KILA event (gap +0.194…+0.328, wastani +0.259).** Silhouette za in-sample/joint-fit (wastani **0.836**, kama zile za Phase 20 ~0.58–0.79) zilikuwa **zimeinuliwa na leakage**. Silhouette za kweli za OOS (no-leak, Nyström) ni wastani **0.577** — **chini kwa ~31%**. Manifold inaishi OOS lakini ni dhaifu kuliko Phase 20 ilivyoonyesha.
+
 ## Q2 + Q3 — Rolling walk-forward: je geometry inabaki thabiti future?
 
 | event | rolling silhouette (kila fold→inayofuata) | mean | last fold | thabiti? |
@@ -35,6 +37,24 @@
 
 ## VERDICT — Phase 21 Representation Operationalization
 
-→ ✅ representation **INAFANYA KAZI OOS** kwa events **trend_continuation** (1/5): Nyström inahifadhi structure (fidelity>0.6), rolling silhouette inabaki juu, na leak-gap ndogo (in-sample haikuwa imeinuliwa sana na leakage). Hii ni operational bila lookahead. Inayofuata: rebuild taxonomy kwenye representation hii + OOS edge confirmation — **mwanzo wa Alpha Discovery Era**. NO ML bado.
+*Vigezo (wazi): **full** = fidelity>0.6 **na** rolling-mean>0.25 **na** leak-gap<0.20; **marginal** = fidelity+stability zimepita ila leak-gap≥0.20 (in-sample ilikuwa imeinuliwa); **fail** = fidelity≤0.6 ama rolling silhouette imeporomoka.*
+
+| daraja | events |
+|--------|--------|
+| ✅ full operational | trend_continuation |
+| 🟡 marginal (leakage-inflated in-sample) | pullback, breakout, mean_reversion |
+| ❌ fail | deep_pullback |
+
+→ ✅ **1/5 fully operational** (**trend_continuation**): Nyström inahifadhi structure, rolling silhouette inabaki juu, **na** leak-gap ndogo (in-sample haikuinuliwa sana). 🟡 **3/5 marginal** (pullback, breakout, mean_reversion): fidelity+stability nzuri lakini leak-gap kubwa → namba zao za in-sample zilikuwa leakage-inflated; zinahitaji landmarks/normalization bora kabla ya kuaminiwa. ❌ **1/5 fail** (deep_pullback).
+
+**Next gate:** rebuild taxonomy + OOS edge confirmation **kwa events za 'full' tu**; marginal/fail zinarudi kwa representation work. **Alpha Discovery Era haijafunguliwa** hadi edge ithibitike (sio geometry tu).
+
+## Honest Caveats (kabla ya hitimisho)
+
+1. **Silhouette ≠ edge (Principle 40).** Phase hii inathibitisha representation ni stable + projectable OOS bila leakage — **haionyeshi alpha hata kidogo.** Geometry nzuri sio edge ya kibiashara.
+2. **Hakuna OOS permutation-null baseline.** Phase 20 ililinganisha silhouette na null. Hapa silhouette za OOS (wastani 0.577) hazijaonyeshwa zinashinda null kwenye OOS embedding — fidelity ARI inapima reproducibility, sio umuhimu dhidi ya bahati. Hii ni gap ya next phase.
+3. **Stability ni qualitative.** '✅ thabiti' ni threshold rahisi (mean>0.25, last>0.2); folds zinaruka (mfano pullback inashuka hadi 0.47, mean_reversion hadi 0.51) — hakuna formal stability test (variance/trend). Usisome 'thabiti' kama 'constant'.
+4. **deep_pullback fidelity ndogo** → Nyström haiwezi kurudisha clustering yake kwa uhakika; weak spot halisi inayounga mkono F-039 (event-specific geometry), sio universal manifold.
+5. **Leak-gap ni EXPECTED, sio bug** — ndiyo proper-Nyström inavyofichua leakage. Hoja sio 'gap ipo' bali 'no-leak silhouette bado iko juu kiasi gani' — na kwa events nyingi imeshuka kwenye eneo la wastani.
 
 *Nyström OOS extension (fit PAST landmarks, project FUTURE, no re-fit = no leakage). proper vs joint-fit = leakage inflation. Rolling walk-forward silhouette = stability. Principle 44: normalization = representation. F-039: event-specific geometry. NO ML. Profitable ≠ Tradable Edge.*

@@ -166,6 +166,16 @@ def run(pairs, tfs):
     L.append("\n*(fidelity ARI = je Nyström-projected labels zinakubaliana na fresh clustering ya OOS embedding. "
              "leak gap kubwa = joint-fit (leakage) inazidi sana proper-Nyström -> in-sample silhouette ilikuwa "
              "imeinuliwa na leakage. Q5: hakuna lookahead — fit kwenye PAST tu.)*")
+    # HEADLINE — leakage inflation across ALL events (the real Phase 21 finding)
+    gaps = [res[e]["sil_leak"] - res[e]["sil_nys"] for e in res]
+    avg_gap = sum(gaps) / len(gaps) if gaps else 0.0
+    avg_leak = sum(res[e]["sil_leak"] for e in res) / len(res) if res else 0.0
+    avg_nys = sum(res[e]["sil_nys"] for e in res) / len(res) if res else 0.0
+    drop_pct = 100.0 * (1 - avg_nys / avg_leak) if avg_leak else 0.0
+    L.append(f"\n> ⚠️ **HEADLINE — leakage iko KILA event (gap +{min(gaps):.3f}…+{max(gaps):.3f}, wastani +{avg_gap:.3f}).** "
+             f"Silhouette za in-sample/joint-fit (wastani **{avg_leak:.3f}**, kama zile za Phase 20 ~0.58–0.79) zilikuwa "
+             f"**zimeinuliwa na leakage**. Silhouette za kweli za OOS (no-leak, Nyström) ni wastani **{avg_nys:.3f}** — "
+             f"**chini kwa ~{drop_pct:.0f}%**. Manifold inaishi OOS lakini ni dhaifu kuliko Phase 20 ilivyoonyesha.")
 
     # Q2 + Q3
     L.append("\n## Q2 + Q3 — Rolling walk-forward: je geometry inabaki thabiti future?\n")
@@ -185,21 +195,57 @@ def run(pairs, tfs):
              f"({best})** (spread {spread:.3f})")
     L.append(f"\n→ {'✅ event-specific geometry (F-039 inaungwa mkono): events zinatofautiana sana' if spread > 0.1 else '— geometry inafanana kati ya events (universal manifold inatosha)'}.")
 
-    # VERDICT
-    ok = [e for e in res if res[e]["fidelity"] > 0.6 and res[e]["roll_mean"] > 0.25
-          and (res[e]["sil_leak"] - res[e]["sil_nys"]) < 0.2]
+    # VERDICT — graded (full / marginal / fail), thresholds wazi
+    def _grade(e):
+        r = res[e]; gap = r["sil_leak"] - r["sil_nys"]
+        if r["fidelity"] <= 0.6 or r["roll_mean"] <= 0.25:
+            return "fail"
+        return "full" if gap < 0.20 else "marginal"   # marginal = fidelity+stability OK, ila in-sample ilikuwa leakage-inflated
+    grade = {e: _grade(e) for e in res}
+    full = [e for e in grade if grade[e] == "full"]
+    marginal = [e for e in grade if grade[e] == "marginal"]
+    fail = [e for e in grade if grade[e] == "fail"]
+    ok = full  # backward-compat counter (fully operational)
     L.append("\n## VERDICT — Phase 21 Representation Operationalization\n")
-    if ok:
-        L.append(f"→ ✅ representation **INAFANYA KAZI OOS** kwa events **{', '.join(ok)}** ({len(ok)}/{len(res)}): "
-                 "Nyström inahifadhi structure (fidelity>0.6), rolling silhouette inabaki juu, na leak-gap ndogo "
-                 "(in-sample haikuwa imeinuliwa sana na leakage). Hii ni operational bila lookahead. Inayofuata: "
-                 "rebuild taxonomy kwenye representation hii + OOS edge confirmation — **mwanzo wa Alpha Discovery "
-                 "Era**. NO ML bado.")
+    L.append("*Vigezo (wazi): **full** = fidelity>0.6 **na** rolling-mean>0.25 **na** leak-gap<0.20; "
+             "**marginal** = fidelity+stability zimepita ila leak-gap≥0.20 (in-sample ilikuwa imeinuliwa); "
+             "**fail** = fidelity≤0.6 ama rolling silhouette imeporomoka.*\n")
+    L.append(f"| daraja | events |")
+    L.append(f"|--------|--------|")
+    L.append(f"| ✅ full operational | {', '.join(full) if full else '—'} |")
+    L.append(f"| 🟡 marginal (leakage-inflated in-sample) | {', '.join(marginal) if marginal else '—'} |")
+    L.append(f"| ❌ fail | {', '.join(fail) if fail else '—'} |")
+    if full:
+        L.append(f"\n→ ✅ **{len(full)}/{len(res)} fully operational** (**{', '.join(full)}**): Nyström inahifadhi "
+                 "structure, rolling silhouette inabaki juu, **na** leak-gap ndogo (in-sample haikuinuliwa sana). "
+                 f"🟡 **{len(marginal)}/{len(res)} marginal** ({', '.join(marginal) if marginal else '—'}): "
+                 "fidelity+stability nzuri lakini leak-gap kubwa → namba zao za in-sample zilikuwa leakage-inflated; "
+                 "zinahitaji landmarks/normalization bora kabla ya kuaminiwa. ❌ "
+                 f"**{len(fail)}/{len(res)} fail** ({', '.join(fail) if fail else '—'}).")
     else:
-        L.append(f"→ ⚠️ representation **HAIJATHIBITIKA OOS** kwa vigezo vyote (0/{len(res)} au chache): ama "
-                 "Nyström fidelity ndogo, ama rolling silhouette inaporomoka, ama leak-gap kubwa (manifold ya "
-                 "Phase 20 ilikuwa imeinuliwa na in-sample leakage). Representation ya manifold ni in-sample "
-                 "artifact zaidi kuliko operational — inahitaji landmarks/normalization bora kabla ya alpha.")
+        L.append(f"\n→ ⚠️ **0/{len(res)} fully operational.** 🟡 marginal: {', '.join(marginal) if marginal else '—'}; "
+                 f"❌ fail: {', '.join(fail) if fail else '—'}. Leak-gap kubwa kote → manifold ya Phase 20 ilikuwa "
+                 "imeinuliwa na in-sample leakage; ni in-sample artifact zaidi kuliko operational. Inahitaji "
+                 "landmarks/normalization bora kabla ya alpha.")
+    L.append("\n**Next gate:** rebuild taxonomy + OOS edge confirmation **kwa events za 'full' tu**; marginal/fail "
+             "zinarudi kwa representation work. **Alpha Discovery Era haijafunguliwa** hadi edge ithibitike (sio "
+             "geometry tu).")
+
+    # HONEST CAVEATS — usiseme zaidi ya data inavyoruhusu
+    L.append("\n## Honest Caveats (kabla ya hitimisho)\n")
+    L.append("1. **Silhouette ≠ edge (Principle 40).** Phase hii inathibitisha representation ni stable + "
+             "projectable OOS bila leakage — **haionyeshi alpha hata kidogo.** Geometry nzuri sio edge ya kibiashara.")
+    L.append("2. **Hakuna OOS permutation-null baseline.** Phase 20 ililinganisha silhouette na null. Hapa silhouette "
+             f"za OOS (wastani {avg_nys:.3f}) hazijaonyeshwa zinashinda null kwenye OOS embedding — fidelity ARI "
+             "inapima reproducibility, sio umuhimu dhidi ya bahati. Hii ni gap ya next phase.")
+    L.append("3. **Stability ni qualitative.** '✅ thabiti' ni threshold rahisi (mean>0.25, last>0.2); folds "
+             "zinaruka (mfano pullback inashuka hadi 0.47, mean_reversion hadi 0.51) — hakuna formal stability test "
+             "(variance/trend). Usisome 'thabiti' kama 'constant'.")
+    L.append("4. **deep_pullback fidelity ndogo** → Nyström haiwezi kurudisha clustering yake kwa uhakika; "
+             "weak spot halisi inayounga mkono F-039 (event-specific geometry), sio universal manifold.")
+    L.append("5. **Leak-gap ni EXPECTED, sio bug** — ndiyo proper-Nyström inavyofichua leakage. Hoja sio 'gap ipo' "
+             "bali 'no-leak silhouette bado iko juu kiasi gani' — na kwa events nyingi imeshuka kwenye eneo la wastani.")
+
     L.append("\n*Nyström OOS extension (fit PAST landmarks, project FUTURE, no re-fit = no leakage). proper vs "
              "joint-fit = leakage inflation. Rolling walk-forward silhouette = stability. Principle 44: "
              "normalization = representation. F-039: event-specific geometry. NO ML. Profitable ≠ Tradable Edge.*")
