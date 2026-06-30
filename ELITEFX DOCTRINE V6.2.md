@@ -3,11 +3,16 @@
 **Chief Quant — An Algorithm Cannot Rescue a Bad Representation; Audit Geometry Before Rejecting Ontology**
 
 Version: 6.2
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.3 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.3, 28 June 2026)
 Supersedes: V6.1 (Principle 41, 42, 43; F-038 → Partially Approved; breakout k=3 retracted; Phase 20 Representation Geometry Audit)
 Previous Versions: Archived (V4 … V6.1)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.3](ELITEFX%20DOCTRINE%20V6.3.md)**
+> (Principle 42/43 CONFIRMED; Principle 44 normalization = representation; F-039 events may
+> need different geometries; Representation Family / Geometry Selection architecture; end of
+> Representation Discovery Era; Phase 21 Representation Operationalization). V6.2 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.1 remain in force except where amended below.
