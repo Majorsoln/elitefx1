@@ -20,7 +20,10 @@
 | age_bucket | 3 | 0.000 | +0.000 | 0% | 0.91 | — |
 | atr_bucket | 3 | 0.000 | +0.000 | 0% | 0.62 | — |
 
-- **Q1 — variables zenye DECISION value** (DV>0.05 pip OOS): **HAKUNA** (0/9).
+- **Q1 — variables zenye SELECTION-Decision value** (DV>0.05 pip OOS): **0/9** chini ya kipimo kilichotumika
+  (OOS ΔEV kupitia train-EV>0 selection). *Hii SI "hakuna decision value" — ni "hakuna ushahidi wa
+  **Selection** Decision Value" kwa kipimo hiki (Principle 60: decision value ni decision-specific;
+  decision ni FAMILY — abstain/reduce/hedge/diversify/wait/exit/suspend hazijapimwa hapa).*
 - **Axis classification:**
   - `event`: none (candidate for removal)
   - `primitive`: Explanation
@@ -96,7 +99,7 @@ Execution (spread/cost-aware entry; capital preservation first)
 
 ## VERDICT — Phase 26 Decision Value Framework
 
-→ ⚠️ **HAKUNA variable yenye DECISION value ya OOS chini ya vipimo vya sasa** (DV≤thr kote). Hii ni discovery muhimu, sio failure: inathibitisha pengo la **decision theory** — tuna representation nzuri lakini bado hakuna variable inayobadilisha uamuzi OOS. Inayofuata: redefine 'decision' (sizing/abstention/portfolio), sio variable mpya. NO ML.
+→ ⚠️ **Hakuna ushahidi wa SELECTION Decision Value kwa kipimo kilichotumika** (OOS ΔEV kupitia train-EV>0 selection; DV≤thr kote, 0/9). Hii **SI** "hakuna decision value" — ni discovery muhimu, sio failure: (1) **Prediction ≠ Decision ≠ Explanation** ni dimensions huru (Principle 58); (2) **decision ni FAMILY**, sio selection pekee — abstain/reduce-size/hedge/diversify/wait/exit/suspend hazijapimwa (Principle 60); kushindwa chini ya decision moja hakumaanishi kushindwa chini ya zote. Pengo lililobaki ni **decision theory**, sio market structure. Inayofuata: SIO variable/representation mpya, bali **Decision Doctrine** (fasili decision/evidence/abstention/sizing/portfolio). NO ML.
 
 **Tahadhari ya kisayansi (Chief):** kushindwa kuonyesha decision value chini ya vipimo vya SASA hakuthibitishi kutokuwa na matumizi yoyote — kunathibitisha tu hakuna ushahidi kama signal/weighting/calibration ndani ya architecture ya sasa.
 

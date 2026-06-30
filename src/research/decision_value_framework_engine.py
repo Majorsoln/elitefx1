@@ -190,8 +190,10 @@ def _report(c, pairs, df, scores):
         L.append(f"| {name} | {s['nlev']} | {s['pv']:.3f} | {s['dv']:+.3f} | {s['cov']:.0%} | {s['xv']:.2f} | "
                  f"{'✅' if dec else '—'} |")
     dvars = [n for n in scores if scores[n]["dv"] > DV_THR]
-    L.append(f"\n- **Q1 — variables zenye DECISION value** (DV>{DV_THR} pip OOS): "
-             f"**{', '.join(dvars) if dvars else 'HAKUNA'}** ({len(dvars)}/{len(scores)}).")
+    L.append(f"\n- **Q1 — variables zenye SELECTION-Decision value** (DV>{DV_THR} pip OOS): "
+             f"**{', '.join(dvars) if dvars else '0'}** ({len(dvars)}/{len(scores)}) chini ya kipimo "
+             "kilichotumika (OOS ΔEV kupitia train-EV>0 selection). *Hii ni **Selection** Decision Value tu — "
+             "decision ni FAMILY (abstain/reduce/hedge/diversify/wait/exit/suspend hazijapimwa; Principle 60).*")
     # axis classification
     L.append("- **Axis classification:**")
     for name in sorted(scores, key=lambda x: -scores[x]["dv"]):
@@ -249,10 +251,12 @@ def _report(c, pairs, df, scores):
                  "findings zisizo na DV zimeorodheshwa kwa kuondolewa au kushushwa kuwa metadata. Decision Graph "
                  "imejengwa. Inayofuata: **Ecology-/Decision-aware Reality Validation** juu ya DV-variables tu. NO ML.")
     else:
-        L.append("→ ⚠️ **HAKUNA variable yenye DECISION value ya OOS chini ya vipimo vya sasa** (DV≤thr kote). Hii "
-                 "ni discovery muhimu, sio failure: inathibitisha pengo la **decision theory** — tuna representation "
-                 "nzuri lakini bado hakuna variable inayobadilisha uamuzi OOS. Inayofuata: redefine 'decision' "
-                 "(sizing/abstention/portfolio), sio variable mpya. NO ML.")
+        L.append("→ ⚠️ **Hakuna ushahidi wa SELECTION Decision Value kwa kipimo kilichotumika** (OOS ΔEV kupitia "
+                 "train-EV>0 selection; DV≤thr kote). Hii **SI** 'hakuna decision value': (1) Prediction ≠ Decision "
+                 "≠ Explanation ni dimensions huru (Principle 58); (2) **decision ni FAMILY** — abstain/reduce-size/"
+                 "hedge/diversify/wait/exit/suspend hazijapimwa (Principle 60); kushindwa chini ya decision moja "
+                 "hakumaanishi kushindwa chini ya zote. Pengo lililobaki ni **decision theory**, sio market "
+                 "structure. Inayofuata: SIO variable mpya, bali **Decision Doctrine**. NO ML.")
     L.append("\n**Tahadhari ya kisayansi (Chief):** kushindwa kuonyesha decision value chini ya vipimo vya SASA "
              "hakuthibitishi kutokuwa na matumizi yoyote — kunathibitisha tu hakuna ushahidi kama signal/weighting/"
              "calibration ndani ya architecture ya sasa.")

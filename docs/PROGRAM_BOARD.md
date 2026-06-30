@@ -2,29 +2,31 @@
 
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
-> Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V6.8.md`; board hii ndiyo state ya mradi.
+> Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
+> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V1.md`;
+> board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: Phase 25 APPROVED — F-042 REJECTED (ecology not calibration/weighting/discriminator; ΔBrier≈0, JS≈0); Principle 56 market ecology is a background property not an event discriminator; Principle 57 primitives = descriptive metadata until independent decision value; Primitive Research PAUSED; END of Market Understanding Era → Decision Theory turn; new goal = seek structure that changes DECISIONS not market structure; Phase 26 Decision Value Framework).*
+*Last updated: 2026-06-30 (Chief: Phase 26 FULLY APPROVED — END of Chapter One; Prediction≠Decision≠Explanation (0/9 Selection-DV OOS); Principle 58 three independent value dimensions; Principle 59 representations act only through evidence; Principle 60 decision value is decision-specific (Phase 26 tested SELECTION only); Principle 61 market vs decision science = separate domains; Principle 62 stop expanding representations that don't change decisions; doctrine SPLIT into Market Doctrine V6.9 + Decision Doctrine V1; market-discovery FROZEN; new frontier = Decision Science).*
 
 ---
 
 ## Current Doctrine
 
-Official:
-- `ELITEFX_DOCTRINE_V6.8.md`
+Official (TWO DOMAINS):
+- `ELITEFX_DOCTRINE_V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
+- `ELITEFX DECISION DOCTRINE V1.md` — **Decision** domain (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution; active frontier)
 
 Status:
-- ACTIVE
+- ACTIVE (both)
 
 Superseded:
-- V4 … V6.6 (chain)
-- V6.7 (superseded by V6.8)
+- V4 … V6.7 (chain)
+- V6.8 (superseded by V6.9 + Decision Doctrine V1)
 - Patches
 
 ---
@@ -430,24 +432,24 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **26**
-Name: **Decision Value Framework (structure gani inabadilisha MAAMUZI?)**
-Status: ACTIVE
-Owner: Implementer
+Phase: **DECISION DOCTRINE V1** (sio market phase — Chief amesimamisha market-discovery)
+Name: **Decision Science (Evidence → Decision → Execution)**
+Status: ACTIVE (new domain)
+Owner: Implementer + Chief
 Chief Approval: YES
-Question: lengo jipya — tafuta structure inayobadilisha DECISION, sio market structure mpya.
-(1) variables zipi zimewahi kubadilisha decision (sio prediction)? (2) kwa kila Principle, decision
-value yake? (3) findings zipi hazijawahi kubadilisha decision (ziondolewe)? (4) jenga Decision
-Graph (Representation → Decision → Execution); (5) kila variable: Prediction | Decision |
-Explanation value. DV = OOS time-split selection ΔEV. NO ML. (Alpha inasubiri DV-variable, sio
-predictive/explanatory value.)
+Question: jinsi ya kugeuza EVIDENCE kuwa ACTION. Decision ni FAMILY (select/abstain/reduce/hedge/
+diversify/wait/exit/suspend), sio "trade". Fasili: Decision · Evidence · Confidence · Abstention ·
+Sizing · Portfolio · Opportunity · Decision Quality · Decision Lifecycle · Decision Failure. NO ML.
+(Hakuna market-representation/primitive/taxonomy mpya — Principle 62, FROZEN.)
 
-> **PHASE 25 APPROVED — F-042 REJECTED.** Ecology haina decision value: JS≈0 (haibagui events),
-> ΔBrier≈0 (0/5), weighting haina decision value. **Discovery:** ecology ni **background property**
-> (kama hali ya hewa). **Principle 56** (ecology = background, sio discriminator). **Principle 57**
-> (primitives = descriptive metadata hadi decision value huru; Q2 R²0.24 = mechanical overlap,
-> imekataliwa). Primitive Research **PAUSED**. **Mwisho wa Market Understanding Era** → Decision
-> Theory. Lengo: structure inayobadilisha DECISION. Architecture: Representation → Decision → Execution. NO ML.
+> **PHASE 26 FULLY APPROVED — mwisho wa Chapter One.** 0/9 variables zenye **Selection** Decision
+> Value OOS, licha ya prediction/explanation nzuri → **Prediction ≠ Decision ≠ Explanation**.
+> **Principle 58** (dimensions tatu huru). **Principle 59** (representations → decisions kupitia
+> evidence tu). **Principle 60** (decision value ni decision-specific; Phase 26 ilipima SELECTION
+> tu). **Principle 61** (market vs decision science = domains tofauti). **Principle 62** (acha
+> kupanua representations zisizobadilisha decision). Doctrine imegawanyika **Market (V6.9) + Decision
+> (V1)**. Market-discovery **FROZEN**. Architecture: Market → Representation → Evidence → Decision →
+> Execution → Feedback. NO ML.
 
 ---
 
@@ -502,15 +504,19 @@ predictive/explanatory value.)
 - [✓] Phase 23    Semantic Consistency Audit (APPROVED; Emerging Core Vocabulary; Compression consistent cross-event; P51/52; F-041; Market Primitives; end of Semantic Engineering Era)
 - [✓] Phase 24    Market Primitive Validation (APPROVED; F-041 REJECTED; primitives = ecology not causal; P53/54/55; F-042; end of Market Primitive Discovery)
 - [✓] Phase 25    Ecology Interaction Framework (APPROVED; F-042 REJECTED; ecology = background property; P56/57; end of Market Understanding Era → Decision Theory)
+- [✓] Phase 26    Decision Value Framework (FULLY APPROVED; 0/9 Selection-DV OOS; Prediction≠Decision≠Explanation; P58–62; **END of Chapter One**; doctrine split)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 26    Decision Value Framework *(ACTIVE — PV/DV/XV scoreboard; decision audit; Decision Graph; no ML; needs OHLC)*
-- [ ] Phase 27    Decision-Aware Reality Validation *(BLOCKED — alpha on DV-variables only; OOS + FDR; Principle 40)*
-- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 28    Machine Learning         *(BLOCKED — learns decision-relevant structure; Decision Theory first)*
+> **Market-discovery FROZEN (Principle 62).** Hakuna Phase 27 ya market. Frontier mpya = **Decision Science**.
+
+- [✓] Decision Doctrine V1 *(CREATED — `ELITEFX DECISION DOCTRINE V1.md`; defines Decision/Evidence/Confidence/Abstention/Sizing/Portfolio/Opportunity/Decision Quality/Lifecycle/Failure)*
+- [ ] Decision Science D-1  Decision-family value audit *(NEXT — test non-selection decisions: abstention/sizing OOS DV; DQ-1)*
+- [ ] Decision Science D-2  Evidence object specification *(QUEUED — minimal evidence a representation must produce; DQ-2; P59)*
+- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
+- [ ] ML                    *(BLOCKED — serves a proven decision, not a representation)*
 
 ---
 
@@ -706,11 +712,19 @@ Evidence: `ecology_interaction_report.md` — JS ≈ 0 (ecology does not discrim
 conditioning layer. Primitive Research paused. → Q-040 (decision theory).
 
 **Q-040 — Which structure changes a DECISION out-of-sample (not just prediction/explanation)?**
-Status: OPEN (Phase 26; Decision Theory)
-Needed: `decision_value_framework_report.md` — per-variable Prediction/Decision/Explanation scores
-(DV = OOS time-split selection ΔEV); which variables/findings carry decision value (Q1/Q3); a
-curated principle decision-audit (Q2); a Decision Graph Representation→Decision→Execution (Q4).
-Alpha waits on a variable with demonstrated OOS decision value, not predictive/explanatory value.
+Status: **CLOSED (for the SELECTION decision) — none of 9 variables; the question was too narrow**
+(Phase 26; P58/59/60; doctrine split)
+Evidence: `decision_value_framework_report.md` — 0/9 Selection-DV OOS despite good PV/XV →
+Prediction ≠ Decision ≠ Explanation (P58). Chief: this is "no evidence of **Selection** Decision
+Value under the metric used", not "no decision value" (P60 — decision is a family). The gap is
+decision theory, not market structure → ELITEFX splits into Market + Decision domains. → Q-041.
+
+**Q-041 — Does any variable carry decision value under a NON-selection decision (abstention/sizing/…)?**
+Status: OPEN (Decision Doctrine V1; DQ-1)
+Needed: a decision-family value audit — measure OOS Decision Value for abstention (loss avoided),
+sizing (risk-adjusted improvement), and portfolio (joint EV/drawdown), not just selection. Per
+Principle 60, selection failure does not imply failure under these. No new market representation
+(Principle 62) — work entirely in the Decision domain.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -765,6 +779,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **V6.6**: Phase 23 **APPROVED** — **end of the Semantic Engineering Era**. Chief rewords "Universal Vocabulary" → **"Emerging Core Vocabulary"**: only 2/5 labels consistent; **Compression (Quiet Coil)** is the only one truly consistent cross-pair AND cross-event (within/overall ≈ 0.25); stable under threshold perturbation (ARI ≈ 0.89); data-driven recoverable (ARI ≈ 0.62, intentionally imperfect). **The real discovery:** Compression is not an event/pair/geometry — it is a **market condition** → the architecture inverts to Market → **Market Primitives** → Events → Representations. **Principle 51** (express market knowledge through reusable market primitives, not event-specific labels). **Principle 52** (a semantic system should preserve essential market concepts, not reproduce clustering exactly — the 0.62 ARI is good, not a failure). **F-041 OPEN** (a small set of universal market primitives may underlie multiple event families; candidate: Compression). **Alpha still deferred** with a new reason: unknown whether Compression is a **cause** or a **consequence**. Phase 24 Market Primitive Validation (event-free primitive construction; precedence; transitions; mechanism vs description; no ML).
 - 2026-06-30 — **V6.7**: Phase 24 **APPROVED**; **F-041 REJECTED (current formulation)** — first formally closed hypothesis. Event-free construction did NOT reproduce Compression (most primitives → Equilibrium/Balanced Flow; only Mature Persistence had identity); precedence lifts ≈ 1.0. Chief: what failed is the **Universal** primitive layer, not the primitive layer; a primitive **describes the environment** of events, it does not predict/generate them. Transition `Mature Persistence → Balanced Flow` (P≈0.74) → primitives behave like **ecological states**. **Principle 53** (primitives describe the operating environment of events; not assumed to generate events). **Principle 54** (primitives belong to the **ecological layer**, not the event layer). **Principle 55** (ecological description and event prediction are distinct objectives). **F-042 OPEN** (primitives characterize **ecological conditions**, not universal causal mechanisms — replaces F-041). Architecture: Market Ecology → Primitives ‖ Event Families → Representations (two layers). **Alpha PAUSED** (layer interaction unknown). Implementer instruction: **do not chase the hypothesis** (no tuning k/algorithm to revive Compression). Phase 25 Ecology Interaction Framework (event×primitive distribution/representation/calibration/stability/weighting; no ML).
 - 2026-06-30 — **V6.8**: Phase 25 **APPROVED**; **F-042 REJECTED** — the ecological-layer-with-value hypothesis failed. JS-divergence ≈ 0.000 (ecology does **not** discriminate events); ΔBrier ≈ 0 (0/5 events — no calibration value); weighting view → no decision value. Chief: ecology is a **background property** (like the weather), not a conditioning variable. Q2's r² ≈ 0.24 **rejected** as mechanical overlap (primitive built from same features). **Principle 56** (market ecology is a background property of the market, not an event discriminator). **Principle 57** (market primitives shall be treated as descriptive metadata unless independent decision value is demonstrated). **Primitive Research PAUSED** (further digging = hypothesis-chasing). **End of the Market Understanding Era** → **Decision Theory** turn: ELITEFX will no longer search for new market structure but for **structure that changes decisions**. Scientific caution: no decision value under current metrics ≠ proven useless. Architecture: Representation → Decision → Execution. Phase 26 Decision Value Framework (PV/DV/XV scoreboard; decision audit; Decision Graph; no ML).
+- 2026-06-30 — **V6.9 + DECISION DOCTRINE V1 (THE SPLIT)**: Phase 26 **FULLY APPROVED** — **end of Chapter One**. Scoreboard: **0/9** variables with Selection Decision Value OOS despite good prediction/explanation → **Prediction ≠ Decision ≠ Explanation**. **Principle 58** (the three value dimensions are independent and never interchangeable). **Principle 59** (representations shall influence decisions only through evidence, never directly). **Principle 60** (decision value is decision-specific; failure under one decision ≠ failure under all — Phase 26 tested **selection** only; report wording corrected to "no evidence of **Selection** Decision Value under the metric used"). **Principle 61** (market research and decision theory are separate scientific domains, evolving independently). **Principle 62** (stop expanding market representations once they fail to change decisions). **Doctrine SPLIT** into two domains: **Market Doctrine V6.9** (Representation/Taxonomy/Semantics/Geometry — mature, market-discovery **FROZEN**) and **Decision Doctrine V1** (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution — the new frontier). Architecture: Market → Representation → Evidence → Decision → Execution → Feedback. No new market phases; Decision Science begins. No ML.
 
 ---
 
@@ -852,6 +867,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | Phase 25 Ecology Interaction Framework (event×primitive distribution/representation/calibration/stability/weighting; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-30 | Phase 25 APPROVED; **F-042 REJECTED** (ecology = background property; JS≈0, ΔBrier≈0); Principle 56/57; Primitive Research PAUSED; END of Market Understanding Era → Decision Theory; doctrine V6.8 | APPROVED | Chief Quant |
 | 2026-06-30 | Phase 26 Decision Value Framework (PV/DV/XV scoreboard; decision audit; Decision Graph; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-30 | Phase 26 **FULLY APPROVED**; 0/9 Selection-DV OOS; Prediction≠Decision≠Explanation; Principle 58–62; **END of Chapter One**; doctrine SPLIT into Market Doctrine V6.9 + Decision Doctrine V1; market-discovery FROZEN | APPROVED | Chief Quant |
+| 2026-06-30 | Decision Doctrine V1 created (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution); Decision Science begins | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

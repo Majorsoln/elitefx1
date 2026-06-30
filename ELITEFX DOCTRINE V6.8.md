@@ -3,11 +3,20 @@
 **Chief Quant — The End of the Market Understanding Era; We Now Seek Structure That Changes Decisions, Not Structure That Describes the Market**
 
 Version: 6.8
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.9 (current Market-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.9, 30 June 2026)
 Supersedes: V6.7 (Phase 25 APPROVED; F-042 REJECTED; Principle 56/57; end of Market Understanding Era; Decision Theory turn; Phase 26 Decision Value Framework)
 Previous Versions: Archived (V4 … V6.7)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.9](ELITEFX%20DOCTRINE%20V6.9.md)**
+> (Market domain) + **[ELITEFX DECISION DOCTRINE V1](ELITEFX%20DECISION%20DOCTRINE%20V1.md)** (Decision
+> domain). Phase 26 **FULLY APPROVED**; **Principle 58** Prediction/Decision/Explanation ni dimensions
+> huru; **Principle 59** representations zinaathiri decisions kupitia evidence tu; **Principle 60**
+> decision value ni decision-specific (Phase 26 ilipima **selection** tu); **Principle 61** market vs
+> decision science ni domains tofauti; **Principle 62** acha kupanua representations zisizo badilisha
+> decision; **mwisho wa Chapter One** — doctrine imegawanyika Market + Decision; market-discovery
+> FROZEN. V6.8 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.7 remain in force except where amended below.
