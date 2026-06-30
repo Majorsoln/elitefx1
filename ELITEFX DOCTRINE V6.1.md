@@ -3,11 +3,16 @@
 **Chief Quant — Taxonomy Is Event-Specific; Ontology Must Be Algorithm-Independent; Taxonomy ≠ Alpha**
 
 Version: 6.1
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.2 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.2, 28 June 2026)
 Supersedes: V6.0 (F-037 → Partially Approved; F-038; Principle 39, 40; Phase 19 Taxonomy Robustness Audit)
 Previous Versions: Archived (V4 … V6.0)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.2](ELITEFX%20DOCTRINE%20V6.2.md)**
+> (Principle 41 stable≠true; Principle 42 representation precedes clustering; Principle 43
+> disagreement → audit representation; F-038 Partially Approved; breakout k=3 retracted;
+> Phase 20 Representation Geometry Audit). V6.1 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.0 remain in force except where amended below.

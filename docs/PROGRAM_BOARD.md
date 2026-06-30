@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V6.1.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V6.2.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-28 (Chief: Phase 18 APPROVED — F-037 Partial; F-038 taxonomy event-specific; Principle 39 not-one-algorithm; Principle 40 taxonomy≠alpha; Phase 19 Taxonomy Robustness Audit).*
+*Last updated: 2026-06-29 (Chief: Phase 19 APPROVED — 0 robust subtypes; Principle 41 stable≠true; Principle 42 representation-before-clustering; Principle 43 disagreement→audit-representation; F-038 Partial; Phase 20 Representation Geometry Audit).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V6.1.md`
+- `ELITEFX_DOCTRINE_V6.2.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V5.25 (chain)
-- V6.0 (superseded by V6.1)
+- V4 … V6.0 (chain)
+- V6.1 (superseded by V6.2)
 - Patches
 
 ---
@@ -275,13 +275,14 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
-**[F-038] Market Taxonomy Is Hierarchical and Event-Specific**
-Status: **APPROVED**
-Evidence: `event_taxonomy_report.md` (trend_continuation k=4; breakout k=3; pullback/
-deep_pullback/mean_reversion no detectable subtypes — different latent complexity)
-Summary: There is no universal taxonomy. Different Events possess different latent
-complexity; taxonomy is event-specific and hierarchical. Drives Phase 19 (per-event
-robustness) and the Architecture V6 Event Taxonomy layer.
+**[F-038] Market Taxonomy Shows Latent Heterogeneity but Is Not Yet Robust**
+Status: **PARTIALLY APPROVED** (downgraded — Phase 19)
+Evidence: `event_taxonomy_report.md` + `taxonomy_robustness_report.md` (cross-algo ARI
+0.08–0.30; best-k unstable 50–67%; 0 robust subtypes)
+Summary: Reworded: "Some events exhibit evidence of latent heterogeneity, but the
+current taxonomy is not yet robust to representation and clustering methodology."
+Specific complexity claims (e.g. breakout k=3) **retracted** — best-k is unstable. The
+problem is representation, not necessarily ontology (Principle 42/43); audited in Phase 20.
 
 **[F-037] Some Events Exhibit Latent Sub-Events (PARTIALLY APPROVED)**
 Status: **PARTIALLY APPROVED** (was OPEN — Phase 18)
@@ -394,23 +395,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **19**
-Name: **Taxonomy Robustness Audit (je subtypes ni algorithm-independent & stable?)**
+Phase: **20**
+Name: **Representation Geometry Audit (je feature space inaruhusu taxonomy?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: kabla ya OOS edge confirmation — thibitisha subtypes sio artifact ya KMeans.
-(1) KMeans/GMM/Agglomerative zinafanana? (ARI/NMI); (2) assignment stability (split-half
-ARI); (3) centroid stability (bootstrap); (4) subtypes zinaendelea OOS?; (5) complexity
-(best-k) thabiti? Subtype ni ROBUST ikiwa cross-algo ARI>0.5 NA split-half>0.5 NA
-OOS-persist. NO ML.
+Question: kabla ya kuboresha clustering — kagua kama FEATURE SPACE yenyewe inaruhusu
+taxonomy. (1) separability (silhouette/Davies-Bouldin/Calinski-Harabasz per event vs
+null); (2) je normalization inaficha structure (z/robust/percentile); (3) geometry
+tofauti per event; (4) manifold (Laplacian eigenmaps) vs coordinates; (5) je
+representation mpya inaongeza cross-algo agreement (ARI)? NO ML.
 
-> **PHASE 18 CLOSED.** Event Taxonomy: trend_continuation (k=4) & breakout (k=3) zina
-> sub-events; pullback/deep_pullback/mean_reversion hapana. **F-037 → PARTIALLY APPROVED**
-> (some events tu; taxonomy event-dependent). **F-038** (taxonomy hierarchical & event-
-> specific; complexity tofauti per event). **0/17 subtypes zina edge → Principle 40**
-> (taxonomy ≠ tradable alpha). **Principle 39** (ontology si algorithm moja). Kabla ya
-> OOS confirmation: Taxonomy Robustness Audit. NO ML.
+> **PHASE 19 CLOSED — 0 robust subtypes.** Cross-algo ARI dhaifu (0.08–0.30); best-k
+> unstable (50–67%). Chief: SI "KMeans artifacts" (ontology failure) bali "**current
+> representation si algorithm-invariant**" (methodology failure). Paradox: KMeans
+> split-half 0.97–0.98 LAKINI cross-algo dhaifu → **stable ≠ true**. **Principle 41**
+> (internal stability ≠ external validity). **Principle 42** (representation kabla ya
+> clustering). **Principle 43** (disagreement → audit representation, sio kukataa
+> ontology). **F-038 → Partially Approved** (breakout k=3 imefutwa). "Algorithm haiwezi
+> kuokoa representation mbaya." NO ML.
 
 ---
 
@@ -458,17 +461,17 @@ OOS-persist. NO ML.
 - [✓] Phase 16    Representation Interaction Audit (F-035: Event×context, not context×context; Event=anchor)
 - [✓] Phase 17    Event-Centric Representation (FULLY APPROVED; Architecture V6; F-036; Principle 38; Event Representation Family)
 - [✓] Phase 18    Event Taxonomy            (F-037 partial, F-038; some events have sub-events; 0/17 edge → P40)
+- [✓] Phase 19    Taxonomy Robustness Audit (0 robust subtypes; representation not algorithm-invariant; P41/42/43)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 19    Taxonomy Robustness Audit *(ACTIVE — algorithm-independence + stability + OOS persistence; no ML; needs OHLC)*
-- [ ] Phase 20    Event-Subtype Edge Confirmation *(BLOCKED — only robust subtypes; OOS + FDR; Principle 40)*
+- [ ] Phase 20    Representation Geometry Audit *(ACTIVE — separability/normalization/manifold/algo-agreement; no ML; needs OHLC)*
+- [ ] Phase 21    Improved-Representation Taxonomy *(BLOCKED — rebuild taxonomy on audited representation)*
+- [ ] Phase 22    Event-Subtype Edge Confirmation *(BLOCKED — OOS + FDR; Principle 40)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 21    Event-Specific Opportunity *(BLOCKED — only OOS-survived subtypes)*
-- [ ] Phase 22    Portfolio Engine        *(BLOCKED — allocation)*
-- [ ] Phase 23    Machine Learning         *(BLOCKED — one model per robust subtype)*
+- [ ] Phase 23    Machine Learning         *(BLOCKED — only after robust representation)*
 
 ---
 
@@ -621,10 +624,15 @@ Evidence: `event_taxonomy_report.md` — trend_continuation (k=4) & breakout (k=
 others no; 0/17 subtypes had edge (taxonomy ≠ alpha, P40). → Q-033.
 
 **Q-033 — Are the discovered subtypes robust (algorithm-independent, stable, OOS-persistent) or KMeans artifacts?**
-Status: OPEN (Principle 39; Phase 19)
-Needed: `taxonomy_robustness_report.md` — KMeans/GMM/Agglomerative ARI/NMI; split-half +
-bootstrap stability; OOS persistence; k-stability. Robust = cross-algo ARI>0.5 & split-half
->0.5 & OOS-persist. Only robust subtypes proceed to edge confirmation.
+Status: **CLOSED — NOT robust; representation not algorithm-invariant** (Principle 41/42/43; Phase 19)
+Evidence: `taxonomy_robustness_report.md` — cross-algo ARI 0.08–0.30; best-k unstable;
+0 robust subtypes; KMeans split-half 0.97 but cross-algo weak (stable≠true). → Q-034.
+
+**Q-034 — Does the current feature space (geometry) allow a true taxonomy to emerge?**
+Status: OPEN (Principle 42/43; Phase 20)
+Needed: `representation_geometry_report.md` — separability (silhouette/DB/CH vs null);
+normalization effect (z/robust/percentile); per-event geometry; manifold (Laplacian
+eigenmaps) vs coordinates; cross-algo agreement under alternative representations.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -672,6 +680,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-28 — **V5.25**: Phase 16 discovery — Event×Trajectory/Volatility/Activity significant, but context×context (Age×Transition/Trajectory) not. **F-035** (state variables derive meaning through interaction with EVENTS, not with one another). **Principle 36** (Events are the semantic anchors; context acquires value only attached to an Event). **Principle 37** (low S/N markets: evaluate by robust significance + OOS repeatability, not effect size alone). Architecture flipped to **Event → Context** (each event has its own). Phase 16 hierarchy wording corrected (standalone showed nothing; Event-attached hierarchy carries info). Phase 17 Event-Centric Representation (per-event context; minimal event-specific reps; no ML).
 - 2026-06-28 — **V6.0** (ELITEFX Architecture V6; major version): Phase 17 FULLY APPROVED — context has no existence of its own; the Event creates the meaning of context. **F-036** (market variables are conditional entities; info content depends on the governing Event; Variable → Conditional Variable). **Principle 38** (no universal market representation; each Event defines its own representation space). Concept **Market Representation → Event Representation Family** (Pullback/Breakout/MR/… each with its own ontology). **F-037 OPEN** (events may contain latent sub-events). Architecture V6: Market → Event Detection → **Event Taxonomy** → Event-Specific Representation → Reality Validation → Opportunity → Portfolio → Execution. ML target = one model per event subtype. Goal: family of event-dependent representations, then family of event-dependent models. Phase 18 Event Taxonomy (no ML).
 - 2026-06-28 — **V6.1**: Phase 18 — trend_continuation (k=4) & breakout (k=3) have sub-events; others none; 0/17 subtypes had edge. **F-037 → PARTIALLY APPROVED** (reworded: some events exhibit distinguishable sub-events; taxonomy event-dependent, not universal). **F-038** (market taxonomy is hierarchical and event-specific; different events have different latent complexity). **Principle 39** (market ontology shall never be inferred from a single clustering algorithm). **Principle 40** (a valid market taxonomy is not evidence of tradable alpha). Phase 19 Taxonomy Robustness Audit (KMeans/GMM/Agglomerative ARI/NMI + stability + OOS persistence) BEFORE any OOS edge confirmation; no ML.
+- 2026-06-29 — **V6.2**: Phase 19 — 0 robust subtypes (cross-algo ARI 0.08–0.30; best-k unstable 50–67%). Chief: NOT "KMeans artifacts/ontology failure" but "current representation is not algorithm-invariant" (methodology failure). Paradox (KMeans split-half 0.97 yet cross-algo weak) → **Principle 41** (internal stability ≠ external validity). **Principle 42** (robust clustering requires robust representation before robust algorithms). **Principle 43** (algorithm disagreement → audit the representation, not reject the ontology). **F-038 → PARTIALLY APPROVED** (reworded; breakout k=3 retracted). "An algorithm cannot rescue a bad representation." Phase 20 Representation Geometry Audit (separability/normalization/manifold/algo-agreement; no ML).
 
 ---
 
@@ -745,6 +754,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-28 | Phase 18 Event Taxonomy (latent sub-events per event; unsupervised; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-28 | Phase 18 APPROVED; F-037 Partial; F-038; Principle 39/40 (taxonomy≠alpha); doctrine V6.1 | APPROVED | Chief Quant |
 | 2026-06-28 | Phase 19 Taxonomy Robustness Audit (multi-algorithm + stability + OOS; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-29 | Phase 19 APPROVED; 0 robust subtypes; Principle 41/42/43; F-038 Partial; breakout k=3 retracted; doctrine V6.2 | APPROVED | Chief Quant |
+| 2026-06-29 | Phase 20 Representation Geometry Audit (separability/normalization/manifold/algo-agreement; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
