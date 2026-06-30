@@ -136,8 +136,11 @@ def sufficient(eo):
 
 # ---------- instantiate from real market evidence ----------
 def build_cell_evidence(pairs):
-    """Kwa kila (event × vol_state × spread_state) cell: Evidence Object kutoka EV/SE/n/recency."""
+    """Kwa kila (event × vol_state × spread_state) cell: Evidence Object kutoka EV/SE/n/recency.
+    Per-series-correct: coverage = support / jumla ya eligible bars (population), ≤1; recency =
+    bars kutoka mwisho wa series ya occurrence (min across occurrences = freshest)."""
     rows = {}
+    total_elig = 0          # jumla ya eligible bars kwenye series zote (population denominator)
     no_px = True
     for sym in pairs:
         pp = pip(sym)
@@ -157,13 +160,16 @@ def build_cell_evidence(pairs):
             for i in range(n):
                 if i + HORIZON >= n or i + VERT >= n:
                     continue
+                total_elig += 1
+                rec_age = n - i                          # bars kutoka mwisho wa series HII
                 for e in EVENTS_SET:
                     d = int(sig[e][i])
                     if d != 0:
                         key = (e, vol[i], "WIDE" if sprst[i] == "WIDE" else "tight")
                         y = float(d * (close[i + HORIZON] - close[i]) - spr[i])
-                        rec = rows.setdefault(key, {"y": [], "last": 0, "tot": 0})
-                        rec["y"].append(y); rec["last"] = max(rec["last"], i); rec["tot"] = n
+                        rec = rows.setdefault(key, {"y": [], "min_recency": 10 ** 9})
+                        rec["y"].append(y)
+                        rec["min_recency"] = min(rec["min_recency"], rec_age)
         print(f"  {sym}: cells built", flush=True)
     evid = {}
     for key, rec in rows.items():
@@ -174,8 +180,8 @@ def build_cell_evidence(pairs):
         # conflict = split-half sign disagreement
         half = len(y) // 2
         c = 0.0 if half < 5 else (0.0 if np.sign(y[:half].mean()) == np.sign(y[half:].mean()) else 1.0)
-        age = rec["tot"] - rec["last"]          # bars tangu occurrence ya mwisho
-        cov = len(y) / rec["tot"]
+        age = int(rec["min_recency"])               # bars kutoka mwisho wa series ya occurrence freshest
+        cov = len(y) / total_elig if total_elig else 0.0   # share ya population (≤1)
         evid[key] = make_evidence(ev, se, len(y), cov, age, source=f"cell:{key[0]}", conflict=c)
     return evid, no_px
 
@@ -246,6 +252,10 @@ def _report(c, pairs, evid):
     L.append("\n*aggregate ni Evidence Object yenyewe (closed): inverse-variance weighted value, "
              "combined uncertainty, summed support, min freshness, conflict = uncertainty-weighted "
              "sign-disagreement.*")
+    L.append("\n> ⚠️ **CONFIDENCE SATURATION:** kwa support kubwa (pooled cross-pair, maelfu) SE inakuwa "
+             "ndogo sana → confidence = Φ(\\|value\\|/SE) → **1.00** kwa karibu kila aggregate. Kwa hiyo "
+             "confidence=1.00 hapa ni artifact ya n kubwa, **SIO** ushahidi wa edge (Principle 58: reliability "
+             "≠ magnitude ≠ OOS edge). Sufficiency-by-confidence inahitaji ku-recalibrate-iwa OOS (sio in-sample SE).")
 
     # Q2 — conflict policy
     L.append("\n## Q2 — Conflict policy (contract-level, SIO Decision Engine)\n")
@@ -264,6 +274,11 @@ def _report(c, pairs, evid):
     L.append(f"- decision-grade tu kama: support ≥ {MIN_SUPPORT} **na** confidence ≥ {MIN_CONF} "
              f"**na** si expired **na** conflict < {CONFLICT_CEIL}.")
     L.append(f"- cells decision-grade: **{n_suff}/{len(keys)}**.")
+    grade_neg = sum(1 for k in keys if sufficient(evid[k])[0] and evid[k]["value"] < 0)
+    L.append(f"\n> ⚠️ **'Decision-grade' ≠ 'tradable'.** Kati ya {n_suff} decision-grade, **{grade_neg}** zina "
+             "**value (EV) HASI** — yaani evidence ina ubora wa kutosha KUAMUA, na uamuzi unaoungwa mkono ni "
+             "**ABSTAIN / avoid** (P26 capital preservation; F-022 bad-configs-persist), SIO *select/trade*. "
+             "Evidence ni decision-grade kwa decision ya ABSTENTION, sio selection.")
     # mifano michache
     L.append("\n| cell | value | conf | support | fresh | conflict | sufficient? |")
     L.append("|------|-------|------|---------|-------|----------|-------------|")
@@ -281,7 +296,9 @@ def _report(c, pairs, evid):
              "Engine itajengwa JUU ya object hii baada ya Chief kuidhinisha spec. **Hakuna Decision "
              "Engine bado** (maagizo ya Chief). NO ML.")
     L.append("\n**Bado Decision Science D0 — hakuna decision-action wala alpha.** Hii ni Evidence "
-             "Engineering: kufafanua contract kabla ya kujenga consumer.")
+             "Engineering: kufafanua contract kabla ya kujenga consumer. **Tahadhari:** value zote za "
+             "events ni hasi → 'decision-grade' inaunga mkono **abstention**, sio selection; na confidence=1.00 "
+             "ni saturation ya n kubwa, sio edge (Principle 58).")
 
     # HONEST CAVEATS
     L.append("\n## Honest Caveats\n")
