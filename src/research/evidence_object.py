@@ -60,20 +60,38 @@ EPS = 1e-9
 
 
 # ---------- Evidence Object (first-class; Principle 65) ----------
-def make_evidence(value, uncertainty, support, coverage, age_bars, source, conflict=0.0):
-    """Construct an Evidence Object. confidence = P(edge) = Φ(|value|/uncertainty)."""
+# THREE LAYERS (Principle 67): Claim · Evidence Quality · Operational State.
+# Flat aliases zinabaki kwa convenience; eo["layers"] ndiyo muundo rasmi wa P67.
+def make_evidence(value, uncertainty, support, coverage, age_bars, source, conflict=0.0, audit=None):
+    """Construct an Evidence Object (3-layer; Principle 67). confidence = Φ(|value|/uncertainty).
+    audit = provenance trail (Principle 66); operations huongeza entries (huwa immutable, P68)."""
     unc = float(max(uncertainty, EPS))
-    return {
-        "value": float(value),                       # effect (pips), directionful
-        "uncertainty": unc,                          # standard error
-        "confidence": float(_phi(abs(value) / unc)), # calibrated reliability (NOT magnitude)
-        "support": int(support),                     # sample size n
-        "coverage": float(coverage),                 # share of population
-        "freshness": _freshness(age_bars),           # fresh/stale/expired
-        "age_bars": int(age_bars),
-        "conflict": float(conflict),                 # sign-instability degree
-        "source": str(source),                       # provenance
+    conf = float(_phi(abs(value) / unc))
+    fresh = _freshness(age_bars)
+    direction = int(np.sign(value)) if value else 0
+    eo = {
+        # --- flat aliases (convenience) ---
+        "value": float(value), "direction": direction, "uncertainty": unc, "confidence": conf,
+        "support": int(support), "coverage": float(coverage),
+        "freshness": fresh, "age_bars": int(age_bars), "expired": fresh == "expired",
+        "conflict": float(conflict), "source": str(source),
+        "audit": list(audit) if audit else [f"make_evidence(src={source})"],
     }
+    # --- P67: three explicit layers ---
+    eo["layers"] = {
+        "claim":       {"value": eo["value"], "direction": direction, "source": eo["source"]},
+        "quality":     {"confidence": conf, "uncertainty": unc,
+                        "support": eo["support"], "coverage": eo["coverage"]},
+        "operational": {"freshness": fresh, "age_bars": eo["age_bars"],
+                        "expired": eo["expired"], "conflict": eo["conflict"]},
+    }
+    return eo
+
+
+def freeze(eo):
+    """P68: read-only immutable view ya Evidence Object (operations huzalisha objects mpya)."""
+    from types import MappingProxyType
+    return MappingProxyType(dict(eo))
 
 
 def _freshness(age_bars):
@@ -90,7 +108,9 @@ def is_expired(eo):
 
 def aggregate(eos):
     """Q4: combine independent Evidence Objects via inverse-variance weighting. Closed under
-    aggregation (rudisha Evidence Object). Conflict = sign-disagreement (uncertainty-weighted)."""
+    aggregation (rudisha Evidence Object). Conflict = sign-disagreement (uncertainty-weighted).
+    NB (Principle 68): aggregation ni OPERATION ya nje juu ya objects immutable — canonical home
+    ni evidence_operations.py (D1); hii inabaki kwa demo ya D0."""
     live = [e for e in eos if not is_expired(e)]
     if not live:
         return None
@@ -121,8 +141,10 @@ def conflict_policy(eo):
     return "PROCEED (no conflict)"
 
 
-def sufficient(eo):
-    """Q5: evidence ni decision-grade tu juu ya thresholds wazi (Principle 66 trace + P26 default)."""
+def decision_ready(eo):
+    """Q5: evidence ni DECISION-READY tu juu ya thresholds wazi (P66 trace + P26 default).
+    Principle 69: decision-ready ≠ trade-ready (object iko tayari kutumiwa na Decision Engine —
+    SIO kwamba biashara ina faida)."""
     if eo is None or is_expired(eo):
         return False, "expired/none"
     if eo["support"] < MIN_SUPPORT:
@@ -131,7 +153,11 @@ def sufficient(eo):
         return False, f"confidence {eo['confidence']:.2f}<{MIN_CONF}"
     if eo["conflict"] >= CONFLICT_CEIL:
         return False, f"conflict {eo['conflict']:.2f}≥{CONFLICT_CEIL}"
-    return True, "decision-grade"
+    return True, "decision-ready"
+
+
+# alias ya nyuma (kabla ya P69 rename)
+sufficient = decision_ready
 
 
 # ---------- instantiate from real market evidence ----------
@@ -271,14 +297,14 @@ def _report(c, pairs, evid):
 
     # Q5 — sufficiency
     L.append("\n## Q5 — Sufficiency: decision inahitaji evidence kiasi gani?\n")
-    L.append(f"- decision-grade tu kama: support ≥ {MIN_SUPPORT} **na** confidence ≥ {MIN_CONF} "
+    L.append(f"- decision-READY tu kama: support ≥ {MIN_SUPPORT} **na** confidence ≥ {MIN_CONF} "
              f"**na** si expired **na** conflict < {CONFLICT_CEIL}.")
-    L.append(f"- cells decision-grade: **{n_suff}/{len(keys)}**.")
+    L.append(f"- cells decision-ready: **{n_suff}/{len(keys)}**.")
     grade_neg = sum(1 for k in keys if sufficient(evid[k])[0] and evid[k]["value"] < 0)
-    L.append(f"\n> ⚠️ **'Decision-grade' ≠ 'tradable'.** Kati ya {n_suff} decision-grade, **{grade_neg}** zina "
+    L.append(f"\n> ⚠️ **'Decision-ready' ≠ 'trade-ready' (Principle 69).** Kati ya {n_suff} decision-ready, **{grade_neg}** zina "
              "**value (EV) HASI** — yaani evidence ina ubora wa kutosha KUAMUA, na uamuzi unaoungwa mkono ni "
              "**ABSTAIN / avoid** (P26 capital preservation; F-022 bad-configs-persist), SIO *select/trade*. "
-             "Evidence ni decision-grade kwa decision ya ABSTENTION, sio selection.")
+             "Evidence ni decision-READY kwa decision ya ABSTENTION, sio selection.")
     # mifano michache
     L.append("\n| cell | value | conf | support | fresh | conflict | sufficient? |")
     L.append("|------|-------|------|---------|-------|----------|-------------|")
@@ -292,12 +318,12 @@ def _report(c, pairs, evid):
     L.append(f"→ ✅ **Evidence Object imefafanuliwa kama first-class object** yenye fields 8, lifecycle "
              f"(fresh/stale/expired), aggregation (inverse-variance, closed), conflict policy "
              f"(→abstain), na sufficiency gate. Imeonyeshwa kwa data halisi: {len(keys)} cells, "
-             f"{n_suff} decision-grade, {expired} expired. Hii ndiyo **contract/API** (P63) — Decision "
+             f"{n_suff} decision-ready, {expired} expired. Hii ndiyo **contract/API** (P63) — Decision "
              "Engine itajengwa JUU ya object hii baada ya Chief kuidhinisha spec. **Hakuna Decision "
              "Engine bado** (maagizo ya Chief). NO ML.")
     L.append("\n**Bado Decision Science D0 — hakuna decision-action wala alpha.** Hii ni Evidence "
              "Engineering: kufafanua contract kabla ya kujenga consumer. **Tahadhari:** value zote za "
-             "events ni hasi → 'decision-grade' inaunga mkono **abstention**, sio selection; na confidence=1.00 "
+             "events ni hasi → 'decision-ready' inaunga mkono **abstention**, sio selection; na confidence=1.00 "
              "ni saturation ya n kubwa, sio edge (Principle 58).")
 
     # HONEST CAVEATS
@@ -321,7 +347,7 @@ def _report(c, pairs, evid):
     out = REPO_ROOT / c["paths"]["reports"] / "evidence_theory_report.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(L), encoding="utf-8")
-    print(f"\nRipoti: {out.relative_to(REPO_ROOT)} (cells {len(keys)}, decision-grade {n_suff}, expired {expired})")
+    print(f"\nRipoti: {out.relative_to(REPO_ROOT)} (cells {len(keys)}, decision-ready {n_suff}, expired {expired})")
     return 0
 
 

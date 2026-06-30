@@ -3,11 +3,18 @@
 **Chief Quant — Decision Science Is a Consumer of Market Science; The Evidence Object Is the Contract Between Them. Decision Science Begins With Evidence, Not Decisions.**
 
 Version: Decision Doctrine V2
-Status: APPROVED — ACTIVE (Decision-domain SSOT)
+Status: Superseded by Decision Doctrine V3 (current Decision-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth for the **Decision** domain
+Authority: Single Source of Truth (superseded by Decision Doctrine V3, 30 June 2026)
 Companion: `ELITEFX DOCTRINE V6.9.md` (the **Market** domain SSOT)
 Supersedes: Decision Doctrine V1 (adds Principle 63–66; Evidence-first restructure; Evidence Object as the inter-domain API; Chapter-2 roadmap D0–D5)
+
+> ⚠️ **IMESASISHWA:** Decision-domain SSOT rasmi sasa ni **[ELITEFX DECISION DOCTRINE V3](ELITEFX%20DECISION%20DOCTRINE%20V3.md)**
+> (D0 APPROVED + amendments: **P67** Evidence = Claim+Quality+Operational State (3 layers); **P68**
+> Evidence ni immutable, aggregation ni operation ya nje; **P69** decision-ready ≠ trade-ready
+> (rename decision-grade→decision-ready); **P70 OPEN** confidence = model sio stored fact; conflict
+> ina taxonomy (intra/cross-pair/cross-tf/cross-engine); D1 Evidence Operations KABLA ya D2 Decision
+> Families). V2 carry-forward.
 
 > Chief amendment to The Split: **Decision Science is not a continuation of Market Science — it
 > is a *consumer* of it.** The two domains meet at one object: the **Evidence Object**. Decision
