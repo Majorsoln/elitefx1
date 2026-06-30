@@ -1,6 +1,6 @@
 # Evidence Theory — fasili Evidence Object (Decision Science D0)
 
-*2026-06-30 21:20 | 9 pairs, 40 evidence cells | Evidence Object spec + lifecycle + aggregation | NO Decision Engine | NO ML*
+*2026-06-30 21:52 | 9 pairs, 40 evidence cells | Evidence Object spec + lifecycle + aggregation | NO Decision Engine | NO ML*
 
 > **Principle 63** Evidence = contract kati ya Market & Decision Science. **P64** production-agnostic. **P65** Evidence = first-class object yenye lifecycle. **P66** kila decision itrace kwa evidence. Decision Science inaanza na **Evidence**, sio decisions. Hii ni Evidence Object (data structure), SIO Decision Engine.
 
@@ -12,28 +12,30 @@
 | confidence | P(edge)=Φ(\|value\|/uncertainty); reliability, SIO magnitude | 0.67 |
 | uncertainty | standard error | 0.609 |
 | support | sample size n | 8,670 |
-| coverage | share ya population | 3.219 |
-| freshness | fresh→stale→expired (lifecycle) | stale |
+| coverage | share ya population | 0.008 |
+| freshness | fresh→stale→expired (lifecycle) | expired |
 | conflict | sign-instability (split-half) | 1.00 |
 | source | provenance | cell:mean_reversion |
 
 ## Q3 — Evidence lifecycle / expiry
 
 - TTL = 2000 bars (expired), stale > 800 bars.
-- cells: **fresh 30**, stale 5, **expired 5** (kati ya 40).
+- cells: **fresh 30**, stale 0, **expired 10** (kati ya 40).
 - expired evidence **haiwezi** kusogeza decision (P66 inahitaji live trace).
 
 ## Q4 — Aggregation (inverse-variance; closed under aggregation)
 
 | event | #cells | agg value | agg uncertainty | agg confidence | conflict |
 |-------|--------|-----------|-----------------|----------------|----------|
-| breakout | 8 | -1.831 | 0.108 | 1.00 | 0.00 |
-| deep_pullback | 8 | -0.876 | 0.070 | 1.00 | 0.01 |
-| mean_reversion | 8 | -0.222 | 0.071 | 1.00 | 0.31 |
-| pullback | 8 | -1.179 | 0.070 | 1.00 | 0.00 |
-| trend_continuation | 8 | -1.304 | 0.048 | 1.00 | 0.00 |
+| breakout | 8 | -1.819 | 0.109 | 1.00 | 0.00 |
+| deep_pullback | 8 | -0.890 | 0.070 | 1.00 | 0.00 |
+| mean_reversion | 8 | -0.221 | 0.072 | 1.00 | 0.31 |
+| pullback | 8 | -1.165 | 0.070 | 1.00 | 0.00 |
+| trend_continuation | 8 | -1.302 | 0.048 | 1.00 | 0.00 |
 
 *aggregate ni Evidence Object yenyewe (closed): inverse-variance weighted value, combined uncertainty, summed support, min freshness, conflict = uncertainty-weighted sign-disagreement.*
+
+> ⚠️ **CONFIDENCE SATURATION:** kwa support kubwa (pooled cross-pair, maelfu) SE inakuwa ndogo sana → confidence = Φ(\|value\|/SE) → **1.00** kwa karibu kila aggregate. Kwa hiyo confidence=1.00 hapa ni artifact ya n kubwa, **SIO** ushahidi wa edge (Principle 58: reliability ≠ magnitude ≠ OOS edge). Sufficiency-by-confidence inahitaji ku-recalibrate-iwa OOS (sio in-sample SE).
 
 ## Q2 — Conflict policy (contract-level, SIO Decision Engine)
 
@@ -41,7 +43,7 @@
 | event | agg conflict | policy |
 |-------|--------------|--------|
 | breakout | 0.00 | PROCEED (no conflict) |
-| deep_pullback | 0.01 | PROCEED with widened uncertainty / lowered confidence |
+| deep_pullback | 0.00 | PROCEED (no conflict) |
 | mean_reversion | 0.31 | PROCEED with widened uncertainty / lowered confidence |
 | pullback | 0.00 | PROCEED (no conflict) |
 | trend_continuation | 0.00 | PROCEED (no conflict) |
@@ -49,15 +51,17 @@
 ## Q5 — Sufficiency: decision inahitaji evidence kiasi gani?
 
 - decision-grade tu kama: support ≥ 100 **na** confidence ≥ 0.6 **na** si expired **na** conflict < 0.35.
-- cells decision-grade: **31/40**.
+- cells decision-grade: **27/40**.
+
+> ⚠️ **'Decision-grade' ≠ 'tradable'.** Kati ya 27 decision-grade, **26** zina **value (EV) HASI** — yaani evidence ina ubora wa kutosha KUAMUA, na uamuzi unaoungwa mkono ni **ABSTAIN / avoid** (P26 capital preservation; F-022 bad-configs-persist), SIO *select/trade*. Evidence ni decision-grade kwa decision ya ABSTENTION, sio selection.
 
 | cell | value | conf | support | fresh | conflict | sufficient? |
 |------|-------|------|---------|-------|----------|-------------|
-| mean_reversion×UNKNOWN×tight | -0.27 | 0.67 | 8,670 | stale | 1.00 | — (conflict 1.00≥0.35) |
-| breakout×UNKNOWN×tight | -2.62 | 1.00 | 4,036 | stale | 0.00 | ✅ |
-| pullback×UNKNOWN×tight | -2.17 | 1.00 | 8,409 | stale | 0.00 | ✅ |
-| deep_pullback×UNKNOWN×tight | +0.15 | 0.60 | 8,409 | stale | 0.00 | ✅ |
-| trend_continuation×UNKNOWN×tight | -1.49 | 1.00 | 18,481 | stale | 0.00 | ✅ |
+| mean_reversion×UNKNOWN×tight | -0.27 | 0.67 | 8,670 | expired | 1.00 | — (expired/none) |
+| breakout×UNKNOWN×tight | -2.62 | 1.00 | 4,036 | expired | 0.00 | — (expired/none) |
+| pullback×UNKNOWN×tight | -2.17 | 1.00 | 8,409 | expired | 0.00 | — (expired/none) |
+| deep_pullback×UNKNOWN×tight | +0.15 | 0.60 | 8,409 | expired | 0.00 | — (expired/none) |
+| trend_continuation×UNKNOWN×tight | -1.49 | 1.00 | 18,481 | expired | 0.00 | — (expired/none) |
 | trend_continuation×UNKNOWN×WIDE | -1.35 | 0.92 | 2,415 | expired | 1.00 | — (expired/none) |
 | mean_reversion×UNKNOWN×WIDE | -3.12 | 0.98 | 997 | expired | 0.00 | — (expired/none) |
 | pullback×UNKNOWN×WIDE | -5.09 | 1.00 | 1,103 | expired | 0.00 | — (expired/none) |
@@ -68,9 +72,9 @@
 
 ## VERDICT — D0 Evidence Theory
 
-→ ✅ **Evidence Object imefafanuliwa kama first-class object** yenye fields 8, lifecycle (fresh/stale/expired), aggregation (inverse-variance, closed), conflict policy (→abstain), na sufficiency gate. Imeonyeshwa kwa data halisi: 40 cells, 31 decision-grade, 5 expired. Hii ndiyo **contract/API** (P63) — Decision Engine itajengwa JUU ya object hii baada ya Chief kuidhinisha spec. **Hakuna Decision Engine bado** (maagizo ya Chief). NO ML.
+→ ✅ **Evidence Object imefafanuliwa kama first-class object** yenye fields 8, lifecycle (fresh/stale/expired), aggregation (inverse-variance, closed), conflict policy (→abstain), na sufficiency gate. Imeonyeshwa kwa data halisi: 40 cells, 27 decision-grade, 10 expired. Hii ndiyo **contract/API** (P63) — Decision Engine itajengwa JUU ya object hii baada ya Chief kuidhinisha spec. **Hakuna Decision Engine bado** (maagizo ya Chief). NO ML.
 
-**Bado Decision Science D0 — hakuna decision-action wala alpha.** Hii ni Evidence Engineering: kufafanua contract kabla ya kujenga consumer.
+**Bado Decision Science D0 — hakuna decision-action wala alpha.** Hii ni Evidence Engineering: kufafanua contract kabla ya kujenga consumer. **Tahadhari:** value zote za events ni hasi → 'decision-grade' inaunga mkono **abstention**, sio selection; na confidence=1.00 ni saturation ya n kubwa, sio edge (Principle 58).
 
 ## Honest Caveats
 
