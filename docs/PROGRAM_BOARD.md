@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V6.5.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V6.6.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: Phase 22 APPROVED — clusters speak market language; vocabulary repeats across events; Principle 48 semantics=interpretability not prediction (R²-drop NOT a failure); Principle 49 vocabulary must be stable across representations before doctrine; Principle 50 interpretability & predictability complementary; F-040 OPEN shared vocabulary across events (Universal Market States?); Phase 23 Semantic Consistency Audit).*
+*Last updated: 2026-06-30 (Chief: Phase 23 APPROVED — "Emerging Core Vocabulary" (Compression only true cross-event consistent); Principle 51 express market knowledge as reusable Market Primitives; Principle 52 semantics preserves concepts not clusters (Q4 ARI 0.62 is GOOD); F-041 OPEN universal market primitives may exist (candidate Compression); architecture inverted Market→Market Primitives→Events→Representations; end of Semantic Engineering Era; Phase 24 Market Primitive Validation).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V6.5.md`
+- `ELITEFX_DOCTRINE_V6.6.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V6.3 (chain)
-- V6.4 (superseded by V6.5)
+- V4 … V6.4 (chain)
+- V6.5 (superseded by V6.6)
 - Patches
 
 ---
@@ -275,6 +275,15 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-041] Universal Market Primitives May Underlie Multiple Event Families (OPEN)**
+Status: OPEN (Phase 23)
+Evidence: `semantic_consistency_report.md` (Compression = only label truly consistent
+cross-pair AND cross-event, within/overall ≈ 0.25; data-driven recoverable ARI ≈ 0.62)
+Summary: A small set of **reusable market primitives** may recur across events (candidate:
+**Compression**). Compression is a market *condition*, not an event/pair/geometry → architecture
+inverts to Market → **Market Primitives** → Events → Representations. Tested by Phase 24
+(event-free construction, precedence, transitions, mechanism vs description).
+
 **[F-040] A Shared Semantic Vocabulary May Span Events (OPEN)**
 Status: OPEN (Phase 22)
 Evidence: `semantic_taxonomy_report.md` (same labels — Compression, Balanced Flow,
@@ -412,25 +421,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **23**
-Name: **Semantic Consistency Audit (je vocabulary ni stable & universal?)**
+Phase: **24**
+Name: **Market Primitive Validation (primitive ni mechanism au description?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: thibitisha vocabulary kabla ya kuifunga doctrine (Principle 49). (1) je label ile
-ile = profile ile ile cross-pair? (2) je "Compression" Pullback = "Compression" Breakout
-(cross-event)? (3) je labels stable ukibadilisha thresholds? (4) je labels zinaweza kujengwa
-DATA-DRIVEN badala ya deterministic rules? (5) je vocabulary inaweza kuwa UNIVERSAL wakati
-geometry inabaki event-specific (F-040)? NO ML. (Hakuna semantic labels kwenye Opportunity
-Engine hadi consistency ithibitike.)
+Question: je Compression ni primitive halisi — mechanism au description (cause au consequence)?
+(1) je Compression ina tabia ile ile kwa events zote? (2) je inatokea KABLA ya breakout/
+pullback/mean_reversion (precedence)? (3) je ina transitions zake (Compression→Expansion→
+Exhaustion)? (4) je primitives zinaweza kujengwa BILA event labels kabisa? (KEY) (5) je
+primitives zinaongea lugha ya soko? NO ML. (Hakuna Alpha Reality Validation bado — cause/
+consequence haijajibiwa; hakuna primitive labels kwenye Opportunity Engine.)
 
-> **PHASE 22 APPROVED — clusters zinaongea lugha ya soko.** Chief alirekebisha verdict:
-> **R²(label) kushuka SI failure** — semantics inalenga interpretability, sio prediction.
-> **Principle 48** (semantics = understanding, not prediction). **Principle 49** (vocabulary
-> lazima iwe stable across representations kabla ya doctrine — ramani ni deterministic, thresholds
-> human-designed). **Principle 50** (interpretability & predictability complementary). **F-040
-> OPEN**: vocabulary ile ile inajirudia cross-event → labda **Universal Market States**, sio Event
-> States. Architecture: … → Semantics → **Semantic Consistency** → Reality Validation → Edge. NO ML.
+> **PHASE 23 APPROVED — "Emerging Core Vocabulary".** Chief: si "Universal" bado — 2/5 labels tu
+> consistent; **Compression** ndiyo pekee thabiti cross-event (within/overall ≈0.25). Discovery
+> kubwa: Compression si event/pair/geometry — ni **market condition** → **Market Primitives**.
+> **Principle 51** (andika market knowledge kwa reusable primitives, sio event labels). **Principle
+> 52** (semantics ihifadhi concepts, sio kurudia clustering; Q4 ARI 0.62 ni NZURI). **F-041 OPEN**
+> (universal market primitives zinaweza kuwepo; candidate Compression). Architecture imegeuka:
+> Market → **Market Primitives** → Events → Representations. Mwisho wa Semantic Engineering Era. NO ML.
 
 ---
 
@@ -482,15 +491,16 @@ Engine hadi consistency ithibitike.)
 - [✓] Phase 20    Representation Geometry Audit (manifold + robust normalization; P42/43 confirmed; P44; F-039; end of Repr. Discovery Era)
 - [✓] Phase 21    Representation Operationalization (APPROVED; representation SURVIVES OOS; F-039 approved; P45/46/47; end of Repr. Engineering Era; "Alpha Era" retracted)
 - [✓] Phase 22    Semantic Taxonomy (APPROVED; clusters → market language; vocabulary repeats cross-event; P48/49/50; F-040; R²-drop NOT a failure)
+- [✓] Phase 23    Semantic Consistency Audit (APPROVED; Emerging Core Vocabulary; Compression consistent cross-event; P51/52; F-041; Market Primitives; end of Semantic Engineering Era)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 23    Semantic Consistency Audit *(ACTIVE — cross-pair/event consistency; threshold stability; data-driven; universality F-040; no ML; needs OHLC)*
-- [ ] Phase 24    Semantic Reality Validation *(BLOCKED — alpha on stable semantic states; OOS + FDR; Principle 40)*
+- [ ] Phase 24    Market Primitive Validation *(ACTIVE — event-free primitives; precedence; transitions; mechanism vs description; F-041; no ML; needs OHLC)*
+- [ ] Phase 25    Primitive/Semantic Reality Validation *(BLOCKED — alpha on validated primitives; OOS + FDR; Principle 40)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 25    Machine Learning         *(BLOCKED — learns stable market concepts; Market Understanding Era first)*
+- [ ] Phase 26    Machine Learning         *(BLOCKED — learns validated market primitives; Market Understanding Era first)*
 
 ---
 
@@ -667,11 +677,18 @@ cluster IDs. Chief: R²-drop is NOT a failure (Principle 48 — semantics = inte
 prediction). New question: is the vocabulary the same across events? → Q-037 / F-040.
 
 **Q-037 — Is the semantic vocabulary stable and universal (cross-pair, cross-event, data-driven)?**
-Status: OPEN (Phase 23; F-040)
-Needed: `semantic_consistency_report.md` — same label = same profile cross-pair (Q1) and
-cross-event (Q2); label stability under threshold perturbation (Q3); data-driven recoverability
-vs deterministic rules (Q4); universal vocabulary while geometry stays event-specific (Q5).
-Per Principle 49, the vocabulary cannot enter doctrine until proven stable across representations.
+Status: **CLOSED — EMERGING, not universal** (Phase 23; P51/52; F-041)
+Evidence: `semantic_consistency_report.md` — 2/5 labels consistent; **Compression** the only one
+truly consistent cross-event; stable under threshold perturbation (ARI ≈ 0.89); data-driven
+recoverable (ARI ≈ 0.62, intentionally imperfect — P52). Chief: not "universal" but an **Emerging
+Core Vocabulary**; Compression is a **market primitive**, not a label. → Q-038 / F-041.
+
+**Q-038 — Is a market primitive (Compression) a mechanism or a description (cause vs consequence)?**
+Status: OPEN (Phase 24; F-041)
+Needed: `market_primitive_validation_report.md` — same behavior across events (Q1); temporal
+precedence to events (Q2, lift); primitive transitions (Q3); event-free construction without the
+Event taxonomy (Q4, the key test); market-language interpretability (Q5). Alpha stays blocked
+until cause-vs-consequence is answered.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -723,6 +740,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **V6.3**: Phase 20 FULLY APPROVED — **end of the Representation Discovery Era**. Coordinate space weak (silhouette ~0.21–0.23, near/below null); robust normalization beats z-score for every event; manifold (Laplacian eigenmaps) strong (ARI up to 0.89–0.99; silhouette ~0.58–0.79). **Principles 42 & 43 CONFIRMED** (promoted proposed → confirmed; direct data support). **Principle 44** (normalization is part of the representation, not preprocessing — robust ≈0.33–0.35 vs z ≈0.22 vs percentile ≈0.17–0.19). **F-039 OPEN** (different events may need different geometries — breakout stayed weak). Careful wording: evidence now **favors representation limitation over ontology limitation** (ontology debate not closed until manifold confirmed OOS). Architecture += **Representation Family / Geometry Selection** (normalization + geometry are choices per event). Phase 21 Representation Operationalization (Nyström OOS, rolling walk-forward stability, leakage quantification; no ML). ~~Alpha Discovery Era opens after OOS-without-leakage passes~~ *(retracted by V6.4)*.
 - 2026-06-30 — **V6.4**: Phase 21 **APPROVED** — **end of the Representation Engineering Era**. Representation **SURVIVES OOS** (Nyström silhouette 0.45–0.64, not killed by leakage). Chief: the leak gap is an **expected consequence, NOT the discovery**; the discovery is that the representation survives OOS. Chief **rejects** "the beginning of the Alpha Discovery Era" — premature; **"Alpha Discovery Era" retracted** — we remain in the **Market Understanding Era** (before Edge). **F-039 → APPROVED** (reworded: "Different Events require different geometric representations for operational deployment"; OOS silhouette range 0.452–0.640). **Principle 45** (operational robustness ≠ statistical proof of stability — say "operationally stable"; no hypothesis test of rolling stability). **Principle 46** (a market taxonomy is incomplete until its latent states are semantically interpretable). **Principle 47** (express representations in market language, not cluster identifiers). Architecture += **Semantics** layer (Taxonomy → Semantics → Reality Validation → Edge); discovery stays unsupervised, semantics is a post-hoc interpretation layer (not human theory driving clustering). Phase 22 Semantic Taxonomy (clusters → market language; interpretability/transfer/predictive value; no ML).
 - 2026-06-30 — **V6.5**: Phase 22 **APPROVED** — clusters speak market language (Compression, High-Volatility Regime, Balanced Flow…) and the vocabulary repeats across pairs. Chief **corrects the verdict**: the collapse of `R²(label)` is **NOT a semantics failure** — semantics carries **interpretation (understanding)**, the representation carries information (prediction). **Principle 48** (semantic abstraction = interpretability, not necessarily predictive power). **Principle 49** (a market vocabulary must be stable across representations before it becomes doctrine — the profile→label map uses human-designed thresholds, so the vocabulary is not yet self-standing). **Principle 50** (interpretability and predictability are complementary, not interchangeable). **F-040 OPEN** (different events may share a common semantic vocabulary despite different geometries → possibly **Universal Market States**, not Event States — the real discovery). Architecture += **Semantic Consistency** (Semantics → Semantic Consistency → Reality Validation → Edge). No semantic labels in the Opportunity Engine until stable. Phase 23 Semantic Consistency Audit (cross-pair/event consistency; threshold stability; data-driven recoverability; universality vs event-specific geometry; no ML).
+- 2026-06-30 — **V6.6**: Phase 23 **APPROVED** — **end of the Semantic Engineering Era**. Chief rewords "Universal Vocabulary" → **"Emerging Core Vocabulary"**: only 2/5 labels consistent; **Compression (Quiet Coil)** is the only one truly consistent cross-pair AND cross-event (within/overall ≈ 0.25); stable under threshold perturbation (ARI ≈ 0.89); data-driven recoverable (ARI ≈ 0.62, intentionally imperfect). **The real discovery:** Compression is not an event/pair/geometry — it is a **market condition** → the architecture inverts to Market → **Market Primitives** → Events → Representations. **Principle 51** (express market knowledge through reusable market primitives, not event-specific labels). **Principle 52** (a semantic system should preserve essential market concepts, not reproduce clustering exactly — the 0.62 ARI is good, not a failure). **F-041 OPEN** (a small set of universal market primitives may underlie multiple event families; candidate: Compression). **Alpha still deferred** with a new reason: unknown whether Compression is a **cause** or a **consequence**. Phase 24 Market Primitive Validation (event-free primitive construction; precedence; transitions; mechanism vs description; no ML).
 
 ---
 
@@ -804,6 +822,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | Phase 22 Semantic Taxonomy (clusters → market language; interpretability/transfer/predictive value; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-30 | Phase 22 APPROVED; clusters speak market language; vocabulary repeats cross-event; Principle 48 (R²-drop NOT a failure)/49/50; F-040 OPEN (Universal Market States?); doctrine V6.5 | APPROVED | Chief Quant |
 | 2026-06-30 | Phase 23 Semantic Consistency Audit (cross-pair/event consistency; threshold stability; data-driven; universality; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-30 | Phase 23 APPROVED; Emerging Core Vocabulary (Compression consistent cross-event); Principle 51 (Market Primitives)/52 (preserve concepts not clusters); F-041 OPEN; architecture inverted; end of Semantic Engineering Era; doctrine V6.6 | APPROVED | Chief Quant |
+| 2026-06-30 | Phase 24 Market Primitive Validation (event-free primitives; precedence; transitions; mechanism vs description; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

@@ -3,11 +3,19 @@
 **Chief Quant — Semantics Carries Understanding, Not Prediction; A Shared Vocabulary May Be Emerging Across Events**
 
 Version: 6.5
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.6 (current SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.6, 30 June 2026)
 Supersedes: V6.4 (Phase 22 APPROVED; Principle 48/49/50; F-040; R²-drop is NOT a semantics failure; Phase 23 Semantic Consistency Audit)
 Previous Versions: Archived (V4 … V6.4)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.6](ELITEFX%20DOCTRINE%20V6.6.md)**
+> (Phase 23 APPROVED; "Universal Vocabulary" → **"Emerging Core Vocabulary"** (2/5 consistent;
+> Compression only true cross-event); **Principle 51** express market knowledge as reusable
+> **Market Primitives**; **Principle 52** semantics preserves concepts not clusters; **F-041 OPEN**
+> universal market primitives may exist (candidate Compression); architecture inverted to
+> Market → Market Primitives → Events → Representations; end of Semantic Engineering Era; Phase 24
+> Market Primitive Validation). V6.5 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.4 remain in force except where amended below.
