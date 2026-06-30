@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V6.7.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V6.8.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: Phase 24 APPROVED — F-041 REJECTED (universal causal primitives unsupported; Compression did not emerge event-free); primitives = ECOLOGICAL layer parallel to events, not causal; Principle 53 primitives describe environment not generate events; Principle 54 ecological layer; Principle 55 ecological description ≠ event prediction; F-042 OPEN primitives = ecological conditions; architecture Market Ecology→Primitives‖Events→Representations; Alpha PAUSED; end of Market Primitive Discovery; Phase 25 Ecology Interaction Framework).*
+*Last updated: 2026-06-30 (Chief: Phase 25 APPROVED — F-042 REJECTED (ecology not calibration/weighting/discriminator; ΔBrier≈0, JS≈0); Principle 56 market ecology is a background property not an event discriminator; Principle 57 primitives = descriptive metadata until independent decision value; Primitive Research PAUSED; END of Market Understanding Era → Decision Theory turn; new goal = seek structure that changes DECISIONS not market structure; Phase 26 Decision Value Framework).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V6.7.md`
+- `ELITEFX_DOCTRINE_V6.8.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V6.5 (chain)
-- V6.6 (superseded by V6.7)
+- V4 … V6.6 (chain)
+- V6.7 (superseded by V6.8)
 - Patches
 
 ---
@@ -275,14 +275,14 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
-**[F-042] Market Primitives Characterize Ecological Conditions, Not Causal Mechanisms (OPEN)**
-Status: OPEN (Phase 24)
-Evidence: `market_primitive_validation_report.md` (event-free clustering → no Compression;
-collapse to Equilibrium/Balanced Flow; precedence lifts ≈ 1.0 → primitive describes, not predicts)
-Summary: Replaces the rejected F-041. Primitives are an **ecological layer** parallel to events
-(not causal): they describe the operating environment in which an event occurs. Architecture:
-Market Ecology → Primitives ‖ Event Families → Representations. Tested by Phase 25 (how the two
-layers interact: distribution/representation/calibration/stability/weighting).
+**[F-042] Market Primitives Characterize Ecological Conditions, Not Causal Mechanisms (REJECTED)**
+Status: **REJECTED** (Phase 25)
+Evidence: `ecology_interaction_report.md` (JS-divergence ≈ 0.000 → ecology does not discriminate
+events; ΔBrier ≈ 0, 0/5 events → no calibration value; weighting view → no decision value)
+Summary: The ecological-layer-with-value hypothesis is not supported. Ecology is a **background
+property** (like weather), not a conditioning/discriminating variable (P56); primitives are
+**descriptive metadata** until independent decision value is shown (P57). Primitive Research
+PAUSED. The remaining gap is **decision value**, not market structure → Decision Theory turn.
 
 **[F-041] Universal Market Primitives May Underlie Multiple Event Families (REJECTED)**
 Status: **REJECTED — current formulation** (Phase 24)
@@ -430,25 +430,24 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **25**
-Name: **Ecology Interaction Framework (ecology vs events zinaingilianaje?)**
+Phase: **26**
+Name: **Decision Value Framework (structure gani inabadilisha MAAMUZI?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: layer mbili (Ecology/primitives vs Events) zinaingilianaje? (1) je kila Event ina
-distribution tofauti ya primitives? (2) je Event Representation inabadilika kwa Primitive? (3)
-je Primitive inaongeza CALIBRATION (sio prediction) kwa Event? (4) je Primitive inaongeza
-STABILITY ya Event Representation? (5) je Primitive inaweza kutumika kama WEIGHTING layer badala
-ya signal? NO ML. (Alpha imesimamishwa — mwingiliano wa layers haujaeleweka. USIFUKUZE hypothesis:
-usitune k/algorithm ili Compression irudi.)
+Question: lengo jipya — tafuta structure inayobadilisha DECISION, sio market structure mpya.
+(1) variables zipi zimewahi kubadilisha decision (sio prediction)? (2) kwa kila Principle, decision
+value yake? (3) findings zipi hazijawahi kubadilisha decision (ziondolewe)? (4) jenga Decision
+Graph (Representation → Decision → Execution); (5) kila variable: Prediction | Decision |
+Explanation value. DV = OOS time-split selection ΔEV. NO ML. (Alpha inasubiri DV-variable, sio
+predictive/explanatory value.)
 
-> **PHASE 24 APPROVED — F-041 REJECTED (formulation ya sasa).** Compression haikujitokeza
-> event-free; primitives nyingi → Equilibrium/Balanced Flow; precedence lifts ≈ 1.0. Chief:
-> kilichofeli si primitive layer bali **Universal** primitive layer. Primitive **haitabiri** event —
-> inaELEZEA environment (ecology). **Principle 53** (primitives describe environment, hazizalishi
-> events). **Principle 54** (ecological layer, sio event layer). **Principle 55** (ecological
-> description ≠ event prediction). **F-042 OPEN** (primitives = ecological conditions). Architecture:
-> Market Ecology → Primitives ‖ Events → Representations. Alpha PAUSED. Mwisho wa Market Primitive Discovery. NO ML.
+> **PHASE 25 APPROVED — F-042 REJECTED.** Ecology haina decision value: JS≈0 (haibagui events),
+> ΔBrier≈0 (0/5), weighting haina decision value. **Discovery:** ecology ni **background property**
+> (kama hali ya hewa). **Principle 56** (ecology = background, sio discriminator). **Principle 57**
+> (primitives = descriptive metadata hadi decision value huru; Q2 R²0.24 = mechanical overlap,
+> imekataliwa). Primitive Research **PAUSED**. **Mwisho wa Market Understanding Era** → Decision
+> Theory. Lengo: structure inayobadilisha DECISION. Architecture: Representation → Decision → Execution. NO ML.
 
 ---
 
@@ -502,15 +501,16 @@ usitune k/algorithm ili Compression irudi.)
 - [✓] Phase 22    Semantic Taxonomy (APPROVED; clusters → market language; vocabulary repeats cross-event; P48/49/50; F-040; R²-drop NOT a failure)
 - [✓] Phase 23    Semantic Consistency Audit (APPROVED; Emerging Core Vocabulary; Compression consistent cross-event; P51/52; F-041; Market Primitives; end of Semantic Engineering Era)
 - [✓] Phase 24    Market Primitive Validation (APPROVED; F-041 REJECTED; primitives = ecology not causal; P53/54/55; F-042; end of Market Primitive Discovery)
+- [✓] Phase 25    Ecology Interaction Framework (APPROVED; F-042 REJECTED; ecology = background property; P56/57; end of Market Understanding Era → Decision Theory)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 25    Ecology Interaction Framework *(ACTIVE — event×primitive distribution/representation/calibration/stability/weighting; F-042; no ML; needs OHLC)*
-- [ ] Phase 26    Ecology-Aware Reality Validation *(BLOCKED — alpha with ecology as weighting/calibration; OOS + FDR; Principle 40)*
+- [ ] Phase 26    Decision Value Framework *(ACTIVE — PV/DV/XV scoreboard; decision audit; Decision Graph; no ML; needs OHLC)*
+- [ ] Phase 27    Decision-Aware Reality Validation *(BLOCKED — alpha on DV-variables only; OOS + FDR; Principle 40)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 27    Machine Learning         *(BLOCKED — ecology-aware; learns validated structure; Market Understanding Era first)*
+- [ ] Phase 28    Machine Learning         *(BLOCKED — learns decision-relevant structure; Decision Theory first)*
 
 ---
 
@@ -700,11 +700,17 @@ Compression; precedence lifts ≈ 1.0 (no prediction). Chief: primitives describ
 of events (ecology), they do not generate them (P53/54/55). → Q-039 / F-042.
 
 **Q-039 — How do the ecology (primitive) and event layers interact?**
-Status: OPEN (Phase 25; F-042)
-Needed: `ecology_interaction_report.md` — does each event have a distinct primitive distribution
-(Q1); does the event representation change with primitive (Q2); does primitive add calibration not
-prediction (Q3, ΔBrier); does it add stability (Q4); can primitive serve as a weighting layer, not
-a signal (Q5)? Alpha stays paused until the two-layer interaction is understood.
+Status: **CLOSED — they don't (ecology is background)** (Phase 25; F-042 rejected; P56/57)
+Evidence: `ecology_interaction_report.md` — JS ≈ 0 (ecology does not discriminate events); ΔBrier
+≈ 0 (no calibration value); no weighting decision value. Ecology is a background property, not a
+conditioning layer. Primitive Research paused. → Q-040 (decision theory).
+
+**Q-040 — Which structure changes a DECISION out-of-sample (not just prediction/explanation)?**
+Status: OPEN (Phase 26; Decision Theory)
+Needed: `decision_value_framework_report.md` — per-variable Prediction/Decision/Explanation scores
+(DV = OOS time-split selection ΔEV); which variables/findings carry decision value (Q1/Q3); a
+curated principle decision-audit (Q2); a Decision Graph Representation→Decision→Execution (Q4).
+Alpha waits on a variable with demonstrated OOS decision value, not predictive/explanatory value.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -758,6 +764,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **V6.5**: Phase 22 **APPROVED** — clusters speak market language (Compression, High-Volatility Regime, Balanced Flow…) and the vocabulary repeats across pairs. Chief **corrects the verdict**: the collapse of `R²(label)` is **NOT a semantics failure** — semantics carries **interpretation (understanding)**, the representation carries information (prediction). **Principle 48** (semantic abstraction = interpretability, not necessarily predictive power). **Principle 49** (a market vocabulary must be stable across representations before it becomes doctrine — the profile→label map uses human-designed thresholds, so the vocabulary is not yet self-standing). **Principle 50** (interpretability and predictability are complementary, not interchangeable). **F-040 OPEN** (different events may share a common semantic vocabulary despite different geometries → possibly **Universal Market States**, not Event States — the real discovery). Architecture += **Semantic Consistency** (Semantics → Semantic Consistency → Reality Validation → Edge). No semantic labels in the Opportunity Engine until stable. Phase 23 Semantic Consistency Audit (cross-pair/event consistency; threshold stability; data-driven recoverability; universality vs event-specific geometry; no ML).
 - 2026-06-30 — **V6.6**: Phase 23 **APPROVED** — **end of the Semantic Engineering Era**. Chief rewords "Universal Vocabulary" → **"Emerging Core Vocabulary"**: only 2/5 labels consistent; **Compression (Quiet Coil)** is the only one truly consistent cross-pair AND cross-event (within/overall ≈ 0.25); stable under threshold perturbation (ARI ≈ 0.89); data-driven recoverable (ARI ≈ 0.62, intentionally imperfect). **The real discovery:** Compression is not an event/pair/geometry — it is a **market condition** → the architecture inverts to Market → **Market Primitives** → Events → Representations. **Principle 51** (express market knowledge through reusable market primitives, not event-specific labels). **Principle 52** (a semantic system should preserve essential market concepts, not reproduce clustering exactly — the 0.62 ARI is good, not a failure). **F-041 OPEN** (a small set of universal market primitives may underlie multiple event families; candidate: Compression). **Alpha still deferred** with a new reason: unknown whether Compression is a **cause** or a **consequence**. Phase 24 Market Primitive Validation (event-free primitive construction; precedence; transitions; mechanism vs description; no ML).
 - 2026-06-30 — **V6.7**: Phase 24 **APPROVED**; **F-041 REJECTED (current formulation)** — first formally closed hypothesis. Event-free construction did NOT reproduce Compression (most primitives → Equilibrium/Balanced Flow; only Mature Persistence had identity); precedence lifts ≈ 1.0. Chief: what failed is the **Universal** primitive layer, not the primitive layer; a primitive **describes the environment** of events, it does not predict/generate them. Transition `Mature Persistence → Balanced Flow` (P≈0.74) → primitives behave like **ecological states**. **Principle 53** (primitives describe the operating environment of events; not assumed to generate events). **Principle 54** (primitives belong to the **ecological layer**, not the event layer). **Principle 55** (ecological description and event prediction are distinct objectives). **F-042 OPEN** (primitives characterize **ecological conditions**, not universal causal mechanisms — replaces F-041). Architecture: Market Ecology → Primitives ‖ Event Families → Representations (two layers). **Alpha PAUSED** (layer interaction unknown). Implementer instruction: **do not chase the hypothesis** (no tuning k/algorithm to revive Compression). Phase 25 Ecology Interaction Framework (event×primitive distribution/representation/calibration/stability/weighting; no ML).
+- 2026-06-30 — **V6.8**: Phase 25 **APPROVED**; **F-042 REJECTED** — the ecological-layer-with-value hypothesis failed. JS-divergence ≈ 0.000 (ecology does **not** discriminate events); ΔBrier ≈ 0 (0/5 events — no calibration value); weighting view → no decision value. Chief: ecology is a **background property** (like the weather), not a conditioning variable. Q2's r² ≈ 0.24 **rejected** as mechanical overlap (primitive built from same features). **Principle 56** (market ecology is a background property of the market, not an event discriminator). **Principle 57** (market primitives shall be treated as descriptive metadata unless independent decision value is demonstrated). **Primitive Research PAUSED** (further digging = hypothesis-chasing). **End of the Market Understanding Era** → **Decision Theory** turn: ELITEFX will no longer search for new market structure but for **structure that changes decisions**. Scientific caution: no decision value under current metrics ≠ proven useless. Architecture: Representation → Decision → Execution. Phase 26 Decision Value Framework (PV/DV/XV scoreboard; decision audit; Decision Graph; no ML).
 
 ---
 
@@ -843,6 +850,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | Phase 24 Market Primitive Validation (event-free primitives; precedence; transitions; mechanism vs description; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-30 | Phase 24 APPROVED; **F-041 REJECTED** (universal causal primitives unsupported); primitives = ecological layer (P53/54/55); F-042 OPEN; architecture Market Ecology→Primitives‖Events; Alpha PAUSED; end of Market Primitive Discovery; doctrine V6.7 | APPROVED | Chief Quant |
 | 2026-06-30 | Phase 25 Ecology Interaction Framework (event×primitive distribution/representation/calibration/stability/weighting; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-30 | Phase 25 APPROVED; **F-042 REJECTED** (ecology = background property; JS≈0, ΔBrier≈0); Principle 56/57; Primitive Research PAUSED; END of Market Understanding Era → Decision Theory; doctrine V6.8 | APPROVED | Chief Quant |
+| 2026-06-30 | Phase 26 Decision Value Framework (PV/DV/XV scoreboard; decision audit; Decision Graph; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 

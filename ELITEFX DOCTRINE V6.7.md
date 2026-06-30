@@ -3,11 +3,18 @@
 **Chief Quant — Primitives Describe the Market's Ecology, They Do Not Generate Events; Ecology and Events Are Two Layers**
 
 Version: 6.7
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.8 (current SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.8, 30 June 2026)
 Supersedes: V6.6 (Phase 24 APPROVED; F-041 REJECTED; Principle 53/54/55; F-042; ecological layer; architecture re-inverted; Alpha paused; Phase 25 Ecology Interaction Framework)
 Previous Versions: Archived (V4 … V6.6)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.8](ELITEFX%20DOCTRINE%20V6.8.md)**
+> (Phase 25 APPROVED; **F-042 REJECTED** — ecology haina decision value, ΔBrier≈0, JS≈0; **Principle
+> 56** ecology = background property, sio event discriminator; **Principle 57** primitives =
+> descriptive metadata hadi decision value huru; Primitive Research PAUSED; **end of Market
+> Understanding Era** → Decision Theory turn; lengo jipya = tafuta structure inayobadilisha
+> DECISION; Phase 26 Decision Value Framework). V6.7 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.6 remain in force except where amended below.
