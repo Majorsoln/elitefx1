@@ -3,11 +3,17 @@
 **Chief Quant — Evidence Is a Value Object; Provenance Is a Graph; Readiness Belongs to a Snapshot. Decisions Are Made on Evidence Sets, Not Single Objects.**
 
 Version: Decision Doctrine V4
-Status: APPROVED — ACTIVE (Decision-domain SSOT)
+Status: Superseded by Decision Doctrine V5 (current Decision-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth for the **Decision** domain
+Authority: Single Source of Truth (superseded by Decision Doctrine V5, 30 June 2026)
 Companion: `ELITEFX DOCTRINE V6.9.md` (the **Market** domain SSOT)
 Supersedes: Decision Doctrine V3 (adds Principle 71–75; Evidence Set layer; provenance graph; snapshot readiness; value-object identity; D2 Evidence Sets before D2-old Decision Families)
+
+> ⚠️ **IMESASISHWA:** Decision-domain SSOT rasmi sasa ni **[ELITEFX DECISION DOCTRINE V5](ELITEFX%20DECISION%20DOCTRINE%20V5.md)**
+> (D2 FULLY APPROVED + amendments: **P76** meaning order-independent, lineage kando; **P77** decisions
+> juu ya Snapshots sio raw objects; **P78 OPEN** redundancy ≠ duplication; **P79** Evidence Snapshot =
+> canonical Decision-Layer input; "Set Confidence" → "Set Reliability" hadi P70 ifungwe; D3 Evidence
+> Snapshots KABLA ya Decision Families). V4 carry-forward.
 
 > D1 FULLY APPROVED ("the first report that no longer talks about Forex — it talks about software
 > architecture"). Amendments: transformations are **pure** (P71); provenance is a **graph** (P72);

@@ -139,9 +139,9 @@ def _report(c, pairs, tagged, sets):
     L.append("- **Hitimisho:** kwa AGGREGATION ordering haina maana (set semantics); kwa **provenance/"
              "audit** ordering ina maana (graph ina mwelekeo, P72). Set = unordered kwa thamani, ordered kwa lineage.")
 
-    # Q4 — set confidence
-    L.append("\n## Q4 — Evidence Set ina confidence yake?\n")
-    L.append("| set | members(live) | set value | set uncertainty | set confidence | set conflict |")
+    # Q4 — set reliability (P70 OPEN: jina la muda, sio "confidence" rasmi)
+    L.append("\n## Q4 — Evidence Set ina RELIABILITY yake? (P70 OPEN: sio 'confidence' rasmi)\n")
+    L.append("| set | members(live) | set value | set uncertainty | set reliability | set conflict |")
     L.append("|-----|---------------|-----------|-----------------|----------------|--------------|")
     for ev in sorted(sets):
         agg = set_aggregate(sets[ev])
@@ -151,8 +151,8 @@ def _report(c, pairs, tagged, sets):
         live = sum(1 for e in sets[ev]["members"] if not is_expired(e))
         L.append(f"| {ev} | {live} | {agg['value']:+.3f} | {agg['uncertainty']:.3f} | "
                  f"{agg['confidence']:.2f} | {agg['conflict']:.2f} |")
-    L.append("\n- **Q4:** ndio — set ina confidence YAKE = aggregate ya members (P68 operation). Set-"
-             "confidence ni property ya SET, inayotokana na members + conflict kati yao.")
+    L.append("\n- **Q4:** ndio — set ina **reliability** YAKE = aggregate ya members (P68 operation). "
+             "Set-reliability ni property ya SET (jina la muda hadi confidence-model P70 ifungwe).")
 
     # Q5 — set readiness as snapshot (P73)
     L.append("\n## Q5 — Evidence Set ina readiness yake? (SNAPSHOT — P73)\n")
