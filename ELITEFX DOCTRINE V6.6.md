@@ -3,11 +3,19 @@
 **Chief Quant — The Market May Be Built From a Few Reusable Primitives; Compression Is the First Candidate**
 
 Version: 6.6
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.7 (current SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.7, 30 June 2026)
 Supersedes: V6.5 (Phase 23 APPROVED; "Universal Vocabulary" → "Emerging Core Vocabulary"; Principle 51/52; F-041; Market Primitives; architecture inverted; Phase 24 Market Primitive Validation)
 Previous Versions: Archived (V4 … V6.5)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.7](ELITEFX%20DOCTRINE%20V6.7.md)**
+> (Phase 24 APPROVED; **F-041 REJECTED** — universal causal primitives unsupported, Compression did
+> not emerge event-free; primitive LAYER ok, Universal layer failed; **Principle 53** primitives
+> describe the environment, not generate events; **Principle 54** primitives are the ecological layer;
+> **Principle 55** ecological description ≠ event prediction; **F-042 OPEN** primitives = ecological
+> conditions; architecture Market Ecology → Primitives ‖ Events → Representations; Alpha PAUSED; end of
+> Market Primitive Discovery; Phase 25 Ecology Interaction Framework). V6.6 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.5 remain in force except where amended below.
