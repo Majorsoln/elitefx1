@@ -3,11 +3,18 @@
 **Chief Quant — A Representation That Survives OOS Is a Victory, Not Alpha; A Taxonomy Is Incomplete Until It Speaks Market Language**
 
 Version: 6.4
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.5 (current SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.5, 30 June 2026)
 Supersedes: V6.3 (Phase 21 APPROVED; F-039 APPROVED; Principle 45/46/47; "Alpha Discovery Era" retracted; end of Representation Engineering Era; Phase 22 Semantic Taxonomy)
 Previous Versions: Archived (V4 … V6.3)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.5](ELITEFX%20DOCTRINE%20V6.5.md)**
+> (Phase 22 APPROVED; **Principle 48** semantics = interpretability not prediction — R²-drop is
+> NOT a failure; **Principle 49** vocabulary must be stable across representations before doctrine;
+> **Principle 50** interpretability & predictability complementary; **F-040 OPEN** events may share
+> a common semantic vocabulary despite different geometries (Universal Market States?); Phase 23
+> Semantic Consistency Audit). V6.4 carry-forward.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.3 remain in force except where amended below.

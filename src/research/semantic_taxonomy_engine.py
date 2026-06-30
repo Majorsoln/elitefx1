@@ -58,28 +58,29 @@ GENERIC = "Equilibrium / Balanced Flow"
 IVOL, IACT, ISPR, IATR, ITRAJ, IAGE, ITRN = range(7)
 
 
-def semantic_label(raw, z):
+def semantic_label(raw, z, zthr=ZTHR, trajt=0.15, actt=0.3, aget=0.6):
     """Ramani ya deterministic: profile (raw + z-score dhidi ya event) -> lugha ya soko.
-    raw = wastani halisi wa features; z = z-score ya profile dhidi ya event distribution."""
+    raw = wastani halisi wa features; z = z-score ya profile dhidi ya event distribution.
+    Thresholds zime-parametrize (default = doctrine) ili Phase 23 iweze ku-perturb (Q3)."""
     spr = raw[ISPR]; traj = raw[ITRAJ]
     vol_z, act_z, atr_z, age_z = z[IVOL], z[IACT], z[IATR], z[IAGE]
     if spr >= 0.5:
         return "Liquidity Stress (Wide Spread)"
-    if vol_z >= ZTHR and traj >= 0.15:
+    if vol_z >= zthr and traj >= trajt:
         return "Volatility Expansion"
-    if vol_z >= ZTHR and traj <= -0.15:
+    if vol_z >= zthr and traj <= -trajt:
         return "Momentum Exhaustion"
-    if vol_z >= ZTHR:
+    if vol_z >= zthr:
         return "High-Volatility Regime"
-    if vol_z <= -ZTHR and act_z <= -0.3:
+    if vol_z <= -zthr and act_z <= -actt:
         return "Compression (Quiet Coil)"
-    if vol_z <= -ZTHR and traj >= 0.15:
+    if vol_z <= -zthr and traj >= trajt:
         return "Early Expansion"
-    if vol_z <= -ZTHR:
+    if vol_z <= -zthr:
         return "Low-Volatility Drift"
-    if age_z >= 0.6:
+    if age_z >= aget:
         return "Mature Persistence"
-    if act_z >= ZTHR:
+    if act_z >= zthr:
         return "Active Balanced Flow"
     return GENERIC
 

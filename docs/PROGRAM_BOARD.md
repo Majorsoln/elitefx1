@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V6.4.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V6.5.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: Phase 21 APPROVED — representation SURVIVES OOS; end of Representation Engineering Era; F-039 APPROVED; Principle 45 operational-robustness≠statistical-stability; Principle 46 semantic interpretability; Principle 47 market language not cluster IDs; "Alpha Discovery Era" retracted — still Market Understanding Era; Phase 22 Semantic Taxonomy).*
+*Last updated: 2026-06-30 (Chief: Phase 22 APPROVED — clusters speak market language; vocabulary repeats across events; Principle 48 semantics=interpretability not prediction (R²-drop NOT a failure); Principle 49 vocabulary must be stable across representations before doctrine; Principle 50 interpretability & predictability complementary; F-040 OPEN shared vocabulary across events (Universal Market States?); Phase 23 Semantic Consistency Audit).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V6.4.md`
+- `ELITEFX_DOCTRINE_V6.5.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V6.2 (chain)
-- V6.3 (superseded by V6.4)
+- V4 … V6.3 (chain)
+- V6.4 (superseded by V6.5)
 - Patches
 
 ---
@@ -275,6 +275,15 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
+**[F-040] A Shared Semantic Vocabulary May Span Events (OPEN)**
+Status: OPEN (Phase 22)
+Evidence: `semantic_taxonomy_report.md` (same labels — Compression, Balanced Flow,
+High-Volatility Regime — appear across almost all events; cross-pair repetition)
+Summary: The same market-language labels recur across different events → possibly **Market
+semantics**, not Event semantics; we may be discovering **Universal Market States**. Bigger
+than any single alpha (a reusable vocabulary across the Event Library). Tested by Phase 23
+(consistency + data-driven recoverability + universality vs event-specific geometry).
+
 **[F-039] Different Events Require Different Geometric Representations for Operational Deployment (APPROVED)**
 Status: **APPROVED** (reworded — Phase 21)
 Evidence: `representation_operationalization_report.md` (Q4: Nyström OOS silhouette range
@@ -403,26 +412,25 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **22**
-Name: **Semantic Taxonomy (clusters zinamaanisha nini kwa lugha ya soko?)**
+Phase: **23**
+Name: **Semantic Consistency Audit (je vocabulary ni stable & universal?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: kila latent cluster ipewe MARKET INTERPRETATION, sio ID. (1) eleza vol/spread/
-activity/trajectory kwa lugha ya soko; (2) je cluster ina market interpretation (profile
-inayotofautiana)? (3) je traders wawili wanaielewa BILA cluster ID? (4) je labels zina-
-repeat cross-pair (transferable vocabulary)? (5) je semantic labels zina predictive value
-≥ cluster IDs kwa groups chache? NO ML. (Hakuna Reality Validation ya alpha mpaka semantics
-ithibitike. Discovery=unsupervised; semantics=post-hoc layer, sio human theory.)
+Question: thibitisha vocabulary kabla ya kuifunga doctrine (Principle 49). (1) je label ile
+ile = profile ile ile cross-pair? (2) je "Compression" Pullback = "Compression" Breakout
+(cross-event)? (3) je labels stable ukibadilisha thresholds? (4) je labels zinaweza kujengwa
+DATA-DRIVEN badala ya deterministic rules? (5) je vocabulary inaweza kuwa UNIVERSAL wakati
+geometry inabaki event-specific (F-040)? NO ML. (Hakuna semantic labels kwenye Opportunity
+Engine hadi consistency ithibitike.)
 
-> **PHASE 21 APPROVED — representation INASURVIVE OOS; mwisho wa Representation Engineering
-> Era.** Chief: leak gap ni *expected consequence*, SIO discovery; discovery ni "representation
-> survives OOS" (silhouette 0.45–0.64, sio 0.05). **F-039 → APPROVED** (events tofauti →
-> geometry tofauti kwa deployment). **Principle 45** (operational robustness ≠ statistical
-> stability — sema "operationally stable"). **Principle 46** (taxonomy haijakamilika hadi
-> isemantiki). **Principle 47** (lugha ya soko, sio cluster IDs). **"Alpha Discovery Era"
-> imeretractiwa — bado tuko Market Understanding Era.** Architecture: … → Taxonomy →
-> **Semantics** → Reality Validation → Edge. NO ML.
+> **PHASE 22 APPROVED — clusters zinaongea lugha ya soko.** Chief alirekebisha verdict:
+> **R²(label) kushuka SI failure** — semantics inalenga interpretability, sio prediction.
+> **Principle 48** (semantics = understanding, not prediction). **Principle 49** (vocabulary
+> lazima iwe stable across representations kabla ya doctrine — ramani ni deterministic, thresholds
+> human-designed). **Principle 50** (interpretability & predictability complementary). **F-040
+> OPEN**: vocabulary ile ile inajirudia cross-event → labda **Universal Market States**, sio Event
+> States. Architecture: … → Semantics → **Semantic Consistency** → Reality Validation → Edge. NO ML.
 
 ---
 
@@ -473,15 +481,16 @@ ithibitike. Discovery=unsupervised; semantics=post-hoc layer, sio human theory.)
 - [✓] Phase 19    Taxonomy Robustness Audit (0 robust subtypes; representation not algorithm-invariant; P41/42/43)
 - [✓] Phase 20    Representation Geometry Audit (manifold + robust normalization; P42/43 confirmed; P44; F-039; end of Repr. Discovery Era)
 - [✓] Phase 21    Representation Operationalization (APPROVED; representation SURVIVES OOS; F-039 approved; P45/46/47; end of Repr. Engineering Era; "Alpha Era" retracted)
+- [✓] Phase 22    Semantic Taxonomy (APPROVED; clusters → market language; vocabulary repeats cross-event; P48/49/50; F-040; R²-drop NOT a failure)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 22    Semantic Taxonomy *(ACTIVE — clusters → market language; interpretability/transfer/predictive value; no ML; needs OHLC)*
-- [ ] Phase 23    Semantic Reality Validation *(BLOCKED — alpha on semantic states; OOS + FDR; Principle 40)*
+- [ ] Phase 23    Semantic Consistency Audit *(ACTIVE — cross-pair/event consistency; threshold stability; data-driven; universality F-040; no ML; needs OHLC)*
+- [ ] Phase 24    Semantic Reality Validation *(BLOCKED — alpha on stable semantic states; OOS + FDR; Principle 40)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 24    Machine Learning         *(BLOCKED — learns market concepts not cluster IDs; Market Understanding Era first)*
+- [ ] Phase 25    Machine Learning         *(BLOCKED — learns stable market concepts; Market Understanding Era first)*
 
 ---
 
@@ -651,10 +660,18 @@ Evidence: `representation_operationalization_report.md` — Nyström OOS silhoue
 statistically) stable. Chief: a surviving representation is a victory, not alpha. → Q-036.
 
 **Q-036 — Are the latent clusters semantically interpretable in market language?**
-Status: OPEN (Phase 22)
-Needed: `semantic_taxonomy_report.md` — per-cluster market-language description; interpretability
-(distinctive profile); communicability without cluster ID; cross-pair label repetition
-(transferable vocabulary); predictive value of semantic labels vs cluster IDs (Principle 46/47).
+Status: **CLOSED — YES (interpretability), with a caveat on predictive value** (Phase 22; P46/47/48)
+Evidence: `semantic_taxonomy_report.md` — clusters get concrete market labels (Compression,
+High-Volatility Regime, Balanced Flow…); vocabulary repeats cross-pair; R²(label) drops vs
+cluster IDs. Chief: R²-drop is NOT a failure (Principle 48 — semantics = interpretability, not
+prediction). New question: is the vocabulary the same across events? → Q-037 / F-040.
+
+**Q-037 — Is the semantic vocabulary stable and universal (cross-pair, cross-event, data-driven)?**
+Status: OPEN (Phase 23; F-040)
+Needed: `semantic_consistency_report.md` — same label = same profile cross-pair (Q1) and
+cross-event (Q2); label stability under threshold perturbation (Q3); data-driven recoverability
+vs deterministic rules (Q4); universal vocabulary while geometry stays event-specific (Q5).
+Per Principle 49, the vocabulary cannot enter doctrine until proven stable across representations.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -705,6 +722,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-29 — **V6.2**: Phase 19 — 0 robust subtypes (cross-algo ARI 0.08–0.30; best-k unstable 50–67%). Chief: NOT "KMeans artifacts/ontology failure" but "current representation is not algorithm-invariant" (methodology failure). Paradox (KMeans split-half 0.97 yet cross-algo weak) → **Principle 41** (internal stability ≠ external validity). **Principle 42** (robust clustering requires robust representation before robust algorithms). **Principle 43** (algorithm disagreement → audit the representation, not reject the ontology). **F-038 → PARTIALLY APPROVED** (reworded; breakout k=3 retracted). "An algorithm cannot rescue a bad representation." Phase 20 Representation Geometry Audit (separability/normalization/manifold/algo-agreement; no ML).
 - 2026-06-30 — **V6.3**: Phase 20 FULLY APPROVED — **end of the Representation Discovery Era**. Coordinate space weak (silhouette ~0.21–0.23, near/below null); robust normalization beats z-score for every event; manifold (Laplacian eigenmaps) strong (ARI up to 0.89–0.99; silhouette ~0.58–0.79). **Principles 42 & 43 CONFIRMED** (promoted proposed → confirmed; direct data support). **Principle 44** (normalization is part of the representation, not preprocessing — robust ≈0.33–0.35 vs z ≈0.22 vs percentile ≈0.17–0.19). **F-039 OPEN** (different events may need different geometries — breakout stayed weak). Careful wording: evidence now **favors representation limitation over ontology limitation** (ontology debate not closed until manifold confirmed OOS). Architecture += **Representation Family / Geometry Selection** (normalization + geometry are choices per event). Phase 21 Representation Operationalization (Nyström OOS, rolling walk-forward stability, leakage quantification; no ML). ~~Alpha Discovery Era opens after OOS-without-leakage passes~~ *(retracted by V6.4)*.
 - 2026-06-30 — **V6.4**: Phase 21 **APPROVED** — **end of the Representation Engineering Era**. Representation **SURVIVES OOS** (Nyström silhouette 0.45–0.64, not killed by leakage). Chief: the leak gap is an **expected consequence, NOT the discovery**; the discovery is that the representation survives OOS. Chief **rejects** "the beginning of the Alpha Discovery Era" — premature; **"Alpha Discovery Era" retracted** — we remain in the **Market Understanding Era** (before Edge). **F-039 → APPROVED** (reworded: "Different Events require different geometric representations for operational deployment"; OOS silhouette range 0.452–0.640). **Principle 45** (operational robustness ≠ statistical proof of stability — say "operationally stable"; no hypothesis test of rolling stability). **Principle 46** (a market taxonomy is incomplete until its latent states are semantically interpretable). **Principle 47** (express representations in market language, not cluster identifiers). Architecture += **Semantics** layer (Taxonomy → Semantics → Reality Validation → Edge); discovery stays unsupervised, semantics is a post-hoc interpretation layer (not human theory driving clustering). Phase 22 Semantic Taxonomy (clusters → market language; interpretability/transfer/predictive value; no ML).
+- 2026-06-30 — **V6.5**: Phase 22 **APPROVED** — clusters speak market language (Compression, High-Volatility Regime, Balanced Flow…) and the vocabulary repeats across pairs. Chief **corrects the verdict**: the collapse of `R²(label)` is **NOT a semantics failure** — semantics carries **interpretation (understanding)**, the representation carries information (prediction). **Principle 48** (semantic abstraction = interpretability, not necessarily predictive power). **Principle 49** (a market vocabulary must be stable across representations before it becomes doctrine — the profile→label map uses human-designed thresholds, so the vocabulary is not yet self-standing). **Principle 50** (interpretability and predictability are complementary, not interchangeable). **F-040 OPEN** (different events may share a common semantic vocabulary despite different geometries → possibly **Universal Market States**, not Event States — the real discovery). Architecture += **Semantic Consistency** (Semantics → Semantic Consistency → Reality Validation → Edge). No semantic labels in the Opportunity Engine until stable. Phase 23 Semantic Consistency Audit (cross-pair/event consistency; threshold stability; data-driven recoverability; universality vs event-specific geometry; no ML).
 
 ---
 
@@ -784,6 +802,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | Phase 21 Representation Operationalization (Nyström OOS; rolling walk-forward; leakage quantification; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-30 | Phase 21 APPROVED; representation SURVIVES OOS; end of Representation Engineering Era; F-039 APPROVED; Principle 45/46/47; "Alpha Discovery Era" retracted (still Market Understanding Era); doctrine V6.4 | APPROVED | Chief Quant |
 | 2026-06-30 | Phase 22 Semantic Taxonomy (clusters → market language; interpretability/transfer/predictive value; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-30 | Phase 22 APPROVED; clusters speak market language; vocabulary repeats cross-event; Principle 48 (R²-drop NOT a failure)/49/50; F-040 OPEN (Universal Market States?); doctrine V6.5 | APPROVED | Chief Quant |
+| 2026-06-30 | Phase 23 Semantic Consistency Audit (cross-pair/event consistency; threshold stability; data-driven; universality; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
