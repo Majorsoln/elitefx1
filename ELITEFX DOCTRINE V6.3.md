@@ -3,11 +3,18 @@
 **Chief Quant — End of the Representation Discovery Era; Normalization Is Representation; Operationalize Before Alpha**
 
 Version: 6.3
-Status: APPROVED — ACTIVE (current SSOT)
+Status: Superseded by V6.4 (current SSOT) — carry-forward in force
 Date: 28 June 2026
-Authority: Single Source of Truth (SSOT)
+Authority: Single Source of Truth (superseded by V6.4, 30 June 2026)
 Supersedes: V6.2 (Principle 42/43 CONFIRMED; Principle 44; F-039; architecture += Representation Family / Geometry Selection; Phase 21 Representation Operationalization)
 Previous Versions: Archived (V4 … V6.2)
+
+> ⚠️ **IMESASISHWA:** SSOT rasmi sasa ni **[ELITEFX DOCTRINE V6.4](ELITEFX%20DOCTRINE%20V6.4.md)**
+> (Phase 21 APPROVED — representation SURVIVES OOS; F-039 APPROVED; Principle 45 operational
+> robustness ≠ statistical stability; Principle 46 taxonomy must be semantically interpretable;
+> Principle 47 express clusters in market language; **"Alpha Discovery Era" retracted** — still
+> Market Understanding Era; end of Representation Engineering Era; Phase 22 Semantic Taxonomy).
+> V6.3 carry-forward. **NOTE:** the V6.3 wording "the Alpha Discovery Era opens" is retracted.
 
 > Live program status lives in `docs/PROGRAM_BOARD.md`. This file is the doctrine
 > of record; V5.0–V6.2 remain in force except where amended below.

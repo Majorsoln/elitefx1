@@ -3,28 +3,28 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine ya kina iko
-> `ELITEFX_DOCTRINE_V6.3.md`; board hii ndiyo state ya mradi.
+> `ELITEFX_DOCTRINE_V6.4.md`; board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
 > APPROVED/REJECTED → PROGRAM_BOARD update → Next Phase.**
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: Phase 20 FULLY APPROVED — end of Representation Discovery Era; Principle 42/43 CONFIRMED; Principle 44 normalization=representation; F-039; Phase 21 Representation Operationalization).*
+*Last updated: 2026-06-30 (Chief: Phase 21 APPROVED — representation SURVIVES OOS; end of Representation Engineering Era; F-039 APPROVED; Principle 45 operational-robustness≠statistical-stability; Principle 46 semantic interpretability; Principle 47 market language not cluster IDs; "Alpha Discovery Era" retracted — still Market Understanding Era; Phase 22 Semantic Taxonomy).*
 
 ---
 
 ## Current Doctrine
 
 Official:
-- `ELITEFX_DOCTRINE_V6.3.md`
+- `ELITEFX_DOCTRINE_V6.4.md`
 
 Status:
 - ACTIVE
 
 Superseded:
-- V4 … V6.1 (chain)
-- V6.2 (superseded by V6.3)
+- V4 … V6.2 (chain)
+- V6.3 (superseded by V6.4)
 - Patches
 
 ---
@@ -275,13 +275,13 @@ causal test confirms it (ρ≈0.03). Not because edge is bad — because early q
 not predictive. Forces the more fundamental question (does edge exist at all?) →
 Phase 11. Q-024 partially closed (WHY unexplained by environment).
 
-**[F-039] Different Events May Require Different Geometric Representations (OPEN)**
-Status: OPEN (Phase 20)
-Evidence: `representation_geometry_report.md` (manifold helped most events strongly but
-breakout stayed weak — ARI(manifold) 0.45 vs 0.89–0.99 for others)
-Summary: An extension of Principle 38 to geometry: Mean Reversion may have a simple
-manifold, Breakout a harder one. Representation is a family; geometry is part of the
-per-event choice. Tested further by Phase 21 (Q4) and beyond.
+**[F-039] Different Events Require Different Geometric Representations for Operational Deployment (APPROVED)**
+Status: **APPROVED** (reworded — Phase 21)
+Evidence: `representation_operationalization_report.md` (Q4: Nyström OOS silhouette range
+0.452 deep_pullback … 0.640 trend_continuation; spread 0.189); `representation_geometry_report.md`
+Summary: An operational extension of Principle 38 to geometry. Phase 20 showed events differ in
+manifold quality; Phase 21 confirmed the difference persists OOS (deployment), so the choice of
+geometry is event-specific. Representation is a family; geometry is part of the per-event choice.
 
 **[F-038] Market Taxonomy Shows Latent Heterogeneity but Is Not Yet Robust**
 Status: **PARTIALLY APPROVED** (downgraded — Phase 19)
@@ -403,24 +403,26 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **21**
-Name: **Representation Operationalization (je manifold inafanya kazi OOS bila leakage?)**
+Phase: **22**
+Name: **Semantic Taxonomy (clusters zinamaanisha nini kwa lugha ya soko?)**
 Status: ACTIVE
 Owner: Implementer
 Chief Approval: YES
-Question: representation ya manifold ifanye kazi PRODUCTION/OOS bila lookahead. (1)
-Nyström extension inaproject OOS bila kupoteza structure? (2) geometry thabiti kwenye
-rolling walk-forward? (3) ARI/silhouette zinaendelea juu future? (4) universal au event-
-specific (F-039)? (5) leakage check — fit PAST tu, project FUTURE. NO ML. (Hakuna
-taxonomy mpya mpaka hii ipite.)
+Question: kila latent cluster ipewe MARKET INTERPRETATION, sio ID. (1) eleza vol/spread/
+activity/trajectory kwa lugha ya soko; (2) je cluster ina market interpretation (profile
+inayotofautiana)? (3) je traders wawili wanaielewa BILA cluster ID? (4) je labels zina-
+repeat cross-pair (transferable vocabulary)? (5) je semantic labels zina predictive value
+≥ cluster IDs kwa groups chache? NO ML. (Hakuna Reality Validation ya alpha mpaka semantics
+ithibitike. Discovery=unsupervised; semantics=post-hoc layer, sio human theory.)
 
-> **PHASE 20 FULLY APPROVED — mwisho wa Representation Discovery Era.** Coordinate
-> separability dhaifu; robust normalization + manifold (Laplacian eigenmaps) ARI hadi
-> 0.89–0.99, silhouette hadi 0.79. **Principle 42/43 → CONFIRMED.** **Principle 44**
-> (normalization ni SEHEMU ya representation, sio preprocessing). **F-039 OPEN** (events
-> tofauti → geometry tofauti; breakout dhaifu). Wording: "evidence favors representation
-> limitation over ontology limitation" (sio "si ontology"). Architecture: Market →
-> Representation Family → Geometry Selection → Taxonomy → Reality Validation. NO ML.
+> **PHASE 21 APPROVED — representation INASURVIVE OOS; mwisho wa Representation Engineering
+> Era.** Chief: leak gap ni *expected consequence*, SIO discovery; discovery ni "representation
+> survives OOS" (silhouette 0.45–0.64, sio 0.05). **F-039 → APPROVED** (events tofauti →
+> geometry tofauti kwa deployment). **Principle 45** (operational robustness ≠ statistical
+> stability — sema "operationally stable"). **Principle 46** (taxonomy haijakamilika hadi
+> isemantiki). **Principle 47** (lugha ya soko, sio cluster IDs). **"Alpha Discovery Era"
+> imeretractiwa — bado tuko Market Understanding Era.** Architecture: … → Taxonomy →
+> **Semantics** → Reality Validation → Edge. NO ML.
 
 ---
 
@@ -470,16 +472,16 @@ taxonomy mpya mpaka hii ipite.)
 - [✓] Phase 18    Event Taxonomy            (F-037 partial, F-038; some events have sub-events; 0/17 edge → P40)
 - [✓] Phase 19    Taxonomy Robustness Audit (0 robust subtypes; representation not algorithm-invariant; P41/42/43)
 - [✓] Phase 20    Representation Geometry Audit (manifold + robust normalization; P42/43 confirmed; P44; F-039; end of Repr. Discovery Era)
+- [✓] Phase 21    Representation Operationalization (APPROVED; representation SURVIVES OOS; F-039 approved; P45/46/47; end of Repr. Engineering Era; "Alpha Era" retracted)
 
 ---
 
 ## Next Phase Queue
 
-- [ ] Phase 21    Representation Operationalization *(ACTIVE — Nyström OOS, rolling stability, leakage; no ML; needs OHLC)*
-- [ ] Phase 22    Improved-Representation Taxonomy *(BLOCKED — rebuild on operationalized representation)*
-- [ ] Phase 23    Event-Subtype Edge Confirmation *(BLOCKED — OOS + FDR; Principle 40)*
+- [ ] Phase 22    Semantic Taxonomy *(ACTIVE — clusters → market language; interpretability/transfer/predictive value; no ML; needs OHLC)*
+- [ ] Phase 23    Semantic Reality Validation *(BLOCKED — alpha on semantic states; OOS + FDR; Principle 40)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06)*
-- [ ] Phase 24    Machine Learning         *(BLOCKED — Alpha Discovery Era, after operationalization)*
+- [ ] Phase 24    Machine Learning         *(BLOCKED — learns market concepts not cluster IDs; Market Understanding Era first)*
 
 ---
 
@@ -642,10 +644,17 @@ Evidence: `representation_geometry_report.md` — coordinate separability weak; 
 0.89–0.99 & silhouette to 0.79; robust > z-score. Representation limitation, not ontology. → Q-035.
 
 **Q-035 — Does the manifold representation operationalize OOS without leakage (Nyström, rolling)?**
-Status: OPEN (Phase 21)
-Needed: `representation_operationalization_report.md` — Nyström OOS fidelity; rolling
-walk-forward silhouette/ARI stability; per-event vs universal (F-039); proper-Nyström vs
-joint-fit leakage gap; live-usability (fit past, project future, no lookahead).
+Status: **CLOSED — YES, the representation SURVIVES OOS** (Phase 21; F-039 approved; P45)
+Evidence: `representation_operationalization_report.md` — Nyström OOS silhouette 0.45–0.64
+(survives; not killed by leakage); leak gap +0.19…+0.33 everywhere (in-sample was inflated);
+1 full (trend_continuation) / 3 marginal / 1 fail (deep_pullback); operationally (not
+statistically) stable. Chief: a surviving representation is a victory, not alpha. → Q-036.
+
+**Q-036 — Are the latent clusters semantically interpretable in market language?**
+Status: OPEN (Phase 22)
+Needed: `semantic_taxonomy_report.md` — per-cluster market-language description; interpretability
+(distinctive profile); communicability without cluster ID; cross-pair label repetition
+(transferable vocabulary); predictive value of semantic labels vs cluster IDs (Principle 46/47).
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -694,7 +703,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-28 — **V6.0** (ELITEFX Architecture V6; major version): Phase 17 FULLY APPROVED — context has no existence of its own; the Event creates the meaning of context. **F-036** (market variables are conditional entities; info content depends on the governing Event; Variable → Conditional Variable). **Principle 38** (no universal market representation; each Event defines its own representation space). Concept **Market Representation → Event Representation Family** (Pullback/Breakout/MR/… each with its own ontology). **F-037 OPEN** (events may contain latent sub-events). Architecture V6: Market → Event Detection → **Event Taxonomy** → Event-Specific Representation → Reality Validation → Opportunity → Portfolio → Execution. ML target = one model per event subtype. Goal: family of event-dependent representations, then family of event-dependent models. Phase 18 Event Taxonomy (no ML).
 - 2026-06-28 — **V6.1**: Phase 18 — trend_continuation (k=4) & breakout (k=3) have sub-events; others none; 0/17 subtypes had edge. **F-037 → PARTIALLY APPROVED** (reworded: some events exhibit distinguishable sub-events; taxonomy event-dependent, not universal). **F-038** (market taxonomy is hierarchical and event-specific; different events have different latent complexity). **Principle 39** (market ontology shall never be inferred from a single clustering algorithm). **Principle 40** (a valid market taxonomy is not evidence of tradable alpha). Phase 19 Taxonomy Robustness Audit (KMeans/GMM/Agglomerative ARI/NMI + stability + OOS persistence) BEFORE any OOS edge confirmation; no ML.
 - 2026-06-29 — **V6.2**: Phase 19 — 0 robust subtypes (cross-algo ARI 0.08–0.30; best-k unstable 50–67%). Chief: NOT "KMeans artifacts/ontology failure" but "current representation is not algorithm-invariant" (methodology failure). Paradox (KMeans split-half 0.97 yet cross-algo weak) → **Principle 41** (internal stability ≠ external validity). **Principle 42** (robust clustering requires robust representation before robust algorithms). **Principle 43** (algorithm disagreement → audit the representation, not reject the ontology). **F-038 → PARTIALLY APPROVED** (reworded; breakout k=3 retracted). "An algorithm cannot rescue a bad representation." Phase 20 Representation Geometry Audit (separability/normalization/manifold/algo-agreement; no ML).
-- 2026-06-30 — **V6.3**: Phase 20 FULLY APPROVED — **end of the Representation Discovery Era**. Coordinate space weak (silhouette ~0.21–0.23, near/below null); robust normalization beats z-score for every event; manifold (Laplacian eigenmaps) strong (ARI up to 0.89–0.99; silhouette ~0.58–0.79). **Principles 42 & 43 CONFIRMED** (promoted proposed → confirmed; direct data support). **Principle 44** (normalization is part of the representation, not preprocessing — robust ≈0.33–0.35 vs z ≈0.22 vs percentile ≈0.17–0.19). **F-039 OPEN** (different events may need different geometries — breakout stayed weak). Careful wording: evidence now **favors representation limitation over ontology limitation** (ontology debate not closed until manifold confirmed OOS). Architecture += **Representation Family / Geometry Selection** (normalization + geometry are choices per event). Phase 21 Representation Operationalization (Nyström OOS, rolling walk-forward stability, leakage quantification; no ML). Alpha Discovery Era opens only after OOS-without-leakage passes.
+- 2026-06-30 — **V6.3**: Phase 20 FULLY APPROVED — **end of the Representation Discovery Era**. Coordinate space weak (silhouette ~0.21–0.23, near/below null); robust normalization beats z-score for every event; manifold (Laplacian eigenmaps) strong (ARI up to 0.89–0.99; silhouette ~0.58–0.79). **Principles 42 & 43 CONFIRMED** (promoted proposed → confirmed; direct data support). **Principle 44** (normalization is part of the representation, not preprocessing — robust ≈0.33–0.35 vs z ≈0.22 vs percentile ≈0.17–0.19). **F-039 OPEN** (different events may need different geometries — breakout stayed weak). Careful wording: evidence now **favors representation limitation over ontology limitation** (ontology debate not closed until manifold confirmed OOS). Architecture += **Representation Family / Geometry Selection** (normalization + geometry are choices per event). Phase 21 Representation Operationalization (Nyström OOS, rolling walk-forward stability, leakage quantification; no ML). ~~Alpha Discovery Era opens after OOS-without-leakage passes~~ *(retracted by V6.4)*.
+- 2026-06-30 — **V6.4**: Phase 21 **APPROVED** — **end of the Representation Engineering Era**. Representation **SURVIVES OOS** (Nyström silhouette 0.45–0.64, not killed by leakage). Chief: the leak gap is an **expected consequence, NOT the discovery**; the discovery is that the representation survives OOS. Chief **rejects** "the beginning of the Alpha Discovery Era" — premature; **"Alpha Discovery Era" retracted** — we remain in the **Market Understanding Era** (before Edge). **F-039 → APPROVED** (reworded: "Different Events require different geometric representations for operational deployment"; OOS silhouette range 0.452–0.640). **Principle 45** (operational robustness ≠ statistical proof of stability — say "operationally stable"; no hypothesis test of rolling stability). **Principle 46** (a market taxonomy is incomplete until its latent states are semantically interpretable). **Principle 47** (express representations in market language, not cluster identifiers). Architecture += **Semantics** layer (Taxonomy → Semantics → Reality Validation → Edge); discovery stays unsupervised, semantics is a post-hoc interpretation layer (not human theory driving clustering). Phase 22 Semantic Taxonomy (clusters → market language; interpretability/transfer/predictive value; no ML).
 
 ---
 
@@ -772,6 +782,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-29 | Phase 20 Representation Geometry Audit (separability/normalization/manifold/algo-agreement; no ML) | APPROVED (start) | Chief Quant |
 | 2026-06-30 | Phase 20 FULLY APPROVED; end of Representation Discovery Era; Principle 42/43 CONFIRMED; Principle 44 (normalization = representation); F-039 OPEN; representation limitation favored over ontology; Representation Family/Geometry Selection; doctrine V6.3 | APPROVED | Chief Quant |
 | 2026-06-30 | Phase 21 Representation Operationalization (Nyström OOS; rolling walk-forward; leakage quantification; no ML) | APPROVED (start) | Chief Quant |
+| 2026-06-30 | Phase 21 APPROVED; representation SURVIVES OOS; end of Representation Engineering Era; F-039 APPROVED; Principle 45/46/47; "Alpha Discovery Era" retracted (still Market Understanding Era); doctrine V6.4 | APPROVED | Chief Quant |
+| 2026-06-30 | Phase 22 Semantic Taxonomy (clusters → market language; interpretability/transfer/predictive value; no ML) | APPROVED (start) | Chief Quant |
 
 ### Archived (from current edge research)
 
