@@ -3,10 +3,17 @@
 **Chief Quant — The Decision Doctrine. Market Science Tells Us What Is; Decision Science Tells Us What To Do.**
 
 Version: Decision Doctrine V1
-Status: APPROVED — ACTIVE (new domain SSOT)
+Status: Superseded by Decision Doctrine V2 (current Decision-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth for the **Decision** domain
+Authority: Single Source of Truth (superseded by Decision Doctrine V2, 30 June 2026)
 Companion: `ELITEFX DOCTRINE V6.9.md` (the **Market** domain SSOT)
+
+> ⚠️ **IMESASISHWA:** Decision-domain SSOT rasmi sasa ni **[ELITEFX DECISION DOCTRINE V2](ELITEFX%20DECISION%20DOCTRINE%20V2.md)**
+> (Chief amendment: Decision Science ni **consumer** wa Market Science; **Evidence Object** ndiyo
+> contract/API kati ya domains — **Principle 63**; **P64** production-agnostic; **P65** evidence ni
+> first-class object yenye lifecycle; **P66** decisions traceable to evidence; restructure: **Part 1
+> Evidence Theory KABLA ya Decision Theory**; roadmap Chapter 2 D0 Evidence Theory → D1…D5; Decision
+> Family Audit DEFERRED). V1 carry-forward.
 
 > ELITEFX is now two independent sciences (Principle 61):
 > **A. Market Doctrine** — Representation · Event Taxonomy · Semantics · Geometry (mature).

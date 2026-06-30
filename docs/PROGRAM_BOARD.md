@@ -3,7 +3,7 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
-> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V1.md`;
+> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V2.md`;
 > board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: Phase 26 FULLY APPROVED — END of Chapter One; Prediction≠Decision≠Explanation (0/9 Selection-DV OOS); Principle 58 three independent value dimensions; Principle 59 representations act only through evidence; Principle 60 decision value is decision-specific (Phase 26 tested SELECTION only); Principle 61 market vs decision science = separate domains; Principle 62 stop expanding representations that don't change decisions; doctrine SPLIT into Market Doctrine V6.9 + Decision Doctrine V1; market-discovery FROZEN; new frontier = Decision Science).*
+*Last updated: 2026-06-30 (Chief: The Split APPROVED WITH AMENDMENT — Decision Science is a CONSUMER of Market Science; the EVIDENCE OBJECT is the contract/API between domains; Principle 63 evidence = contractual interface; Principle 64 decision science is production-agnostic; Principle 65 evidence = first-class object with lifecycle; Principle 66 decisions traceable to evidence; Decision Doctrine restructured Evidence-first → V2; roadmap Chapter 2 D0 Evidence Theory→D1…D5; Decision Family Audit DEFERRED; D0 Evidence Theory ACTIVE).*
 
 ---
 
@@ -19,14 +19,15 @@
 
 Official (TWO DOMAINS):
 - `ELITEFX_DOCTRINE_V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
-- `ELITEFX DECISION DOCTRINE V1.md` — **Decision** domain (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution; active frontier)
+- `ELITEFX DECISION DOCTRINE V2.md` — **Decision** domain (Evidence-first: Evidence Object = inter-domain API; then Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution; active frontier)
 
 Status:
 - ACTIVE (both)
 
 Superseded:
 - V4 … V6.7 (chain)
-- V6.8 (superseded by V6.9 + Decision Doctrine V1)
+- V6.8 (superseded by V6.9 + Decision Doctrine V1→V2)
+- Decision Doctrine V1 (superseded by V2 — Evidence-first amendment)
 - Patches
 
 ---
@@ -432,24 +433,24 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **DECISION DOCTRINE V1** (sio market phase — Chief amesimamisha market-discovery)
-Name: **Decision Science (Evidence → Decision → Execution)**
-Status: ACTIVE (new domain)
+Phase: **D0 — Evidence Theory** (Decision Science; sio market phase — market-discovery FROZEN)
+Name: **Evidence Object Specification (the contract/API)**
+Status: ACTIVE (Decision domain)
 Owner: Implementer + Chief
 Chief Approval: YES
-Question: jinsi ya kugeuza EVIDENCE kuwa ACTION. Decision ni FAMILY (select/abstain/reduce/hedge/
-diversify/wait/exit/suspend), sio "trade". Fasili: Decision · Evidence · Confidence · Abstention ·
-Sizing · Portfolio · Opportunity · Decision Quality · Decision Lifecycle · Decision Failure. NO ML.
-(Hakuna market-representation/primitive/taxonomy mpya — Principle 62, FROZEN.)
+Question: fasili **Evidence Object** kabla ya Decision yoyote (Principle 63). (1) fields gani
+(value/confidence/uncertainty/support/coverage/freshness/conflict/source)? (2) evidence mbili
+zikipingana — sera gani (contract-level)? (3) evidence inaisha lini (lifecycle fresh→stale→
+expired)? (4) inaaggregate vipi (inverse-variance, closed)? (5) decision inahitaji evidence kiasi
+gani (sufficiency)? NO Decision Engine hadi spec iidhinishwe. NO ML.
 
-> **PHASE 26 FULLY APPROVED — mwisho wa Chapter One.** 0/9 variables zenye **Selection** Decision
-> Value OOS, licha ya prediction/explanation nzuri → **Prediction ≠ Decision ≠ Explanation**.
-> **Principle 58** (dimensions tatu huru). **Principle 59** (representations → decisions kupitia
-> evidence tu). **Principle 60** (decision value ni decision-specific; Phase 26 ilipima SELECTION
-> tu). **Principle 61** (market vs decision science = domains tofauti). **Principle 62** (acha
-> kupanua representations zisizobadilisha decision). Doctrine imegawanyika **Market (V6.9) + Decision
-> (V1)**. Market-discovery **FROZEN**. Architecture: Market → Representation → Evidence → Decision →
-> Execution → Feedback. NO ML.
+> **THE SPLIT APPROVED WITH AMENDMENT.** Chief: Decision Science ni **consumer** wa Market Science,
+> sio extension. **Evidence Object** ndiyo contract/API kati ya domains. **Principle 63** (evidence
+> = contract). **Principle 64** (production-agnostic). **Principle 65** (evidence = first-class
+> object yenye lifecycle). **Principle 66** (decisions traceable to evidence). Decision Doctrine
+> restructured **Evidence-first → V2**: Part 1 Evidence Theory KABLA ya Part 2 Decision Theory.
+> Decision Family Audit **DEFERRED**. Architecture: Market Science (Market→Representation→Evidence
+> Object) ══API══ Decision Science (Evidence Object→Decision Engine→Execution→Feedback). NO ML.
 
 ---
 
@@ -510,13 +511,18 @@ Sizing · Portfolio · Opportunity · Decision Quality · Decision Lifecycle · 
 
 ## Next Phase Queue
 
-> **Market-discovery FROZEN (Principle 62).** Hakuna Phase 27 ya market. Frontier mpya = **Decision Science**.
+> **Market-discovery FROZEN (Principle 62).** Hakuna Phase ya market. Frontier = **Decision Science (Chapter 2)**.
+> Chief amendment: Decision Science **inaanza na Evidence**, sio decisions.
 
-- [✓] Decision Doctrine V1 *(CREATED — `ELITEFX DECISION DOCTRINE V1.md`; defines Decision/Evidence/Confidence/Abstention/Sizing/Portfolio/Opportunity/Decision Quality/Lifecycle/Failure)*
-- [ ] Decision Science D-1  Decision-family value audit *(NEXT — test non-selection decisions: abstention/sizing OOS DV; DQ-1)*
-- [ ] Decision Science D-2  Evidence object specification *(QUEUED — minimal evidence a representation must produce; DQ-2; P59)*
+- [✓] Decision Doctrine V1 → **V2** *(Evidence-first; Evidence Object = inter-domain API; P63–66)*
+- [✓] **D0  Evidence Theory** *(ACTIVE — `evidence_object.py` + `reports/evidence_theory_report.md`; Evidence Object spec/lifecycle/aggregation/conflict/sufficiency)*
+- [ ] D1  Decision Objects *(BLOCKED — after D0 approved)*
+- [ ] D2  Decision Families *(BLOCKED — select/abstain/size/hedge/…; decision-specific value; was "D-1 Decision Family Audit", DEFERRED by Chief until after D0)*
+- [ ] D3  Decision Quality *(BLOCKED — per-decision OOS + FDR)*
+- [ ] D4  Portfolio Decisions *(BLOCKED — allocation; ranking ≠ allocation)*
+- [ ] D5  Live Decision Engine *(BLOCKED — consumes Evidence Objects; production-agnostic)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
-- [ ] ML                    *(BLOCKED — serves a proven decision, not a representation)*
+- [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
 
 ---
 
@@ -719,12 +725,17 @@ Prediction ≠ Decision ≠ Explanation (P58). Chief: this is "no evidence of **
 Value under the metric used", not "no decision value" (P60 — decision is a family). The gap is
 decision theory, not market structure → ELITEFX splits into Market + Decision domains. → Q-041.
 
+**Q-042 — How is the Evidence Object specified (fields, lifecycle, conflict, aggregation, sufficiency)?**
+Status: OPEN (D0 Evidence Theory; P63–66) — ACTIVE
+Needed: `evidence_theory_report.md` — Evidence Object fields (Q1); conflict policy (Q2, →abstain);
+expiry/lifecycle (Q3); aggregation (Q4, inverse-variance, closed); sufficiency thresholds (Q5).
+This is the contract/API between Market and Decision Science; no Decision Engine until approved.
+
 **Q-041 — Does any variable carry decision value under a NON-selection decision (abstention/sizing/…)?**
-Status: OPEN (Decision Doctrine V1; DQ-1)
-Needed: a decision-family value audit — measure OOS Decision Value for abstention (loss avoided),
-sizing (risk-adjusted improvement), and portfolio (joint EV/drawdown), not just selection. Per
-Principle 60, selection failure does not imply failure under these. No new market representation
-(Principle 62) — work entirely in the Decision domain.
+Status: **DEFERRED** (Chief — until after D0 Evidence Theory; was DQ-1)
+Needed: a decision-family value audit (D2) — OOS Decision Value for abstention/sizing/portfolio, not
+just selection (Principle 60). Deferred because the decision family is not yet defined; Evidence
+Theory (D0) comes first.
 
 **Q-022 — Does state trajectory (momentum) carry information beyond current state?**
 Status: OPEN (F-026; after Phase 8)
@@ -780,6 +791,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **V6.7**: Phase 24 **APPROVED**; **F-041 REJECTED (current formulation)** — first formally closed hypothesis. Event-free construction did NOT reproduce Compression (most primitives → Equilibrium/Balanced Flow; only Mature Persistence had identity); precedence lifts ≈ 1.0. Chief: what failed is the **Universal** primitive layer, not the primitive layer; a primitive **describes the environment** of events, it does not predict/generate them. Transition `Mature Persistence → Balanced Flow` (P≈0.74) → primitives behave like **ecological states**. **Principle 53** (primitives describe the operating environment of events; not assumed to generate events). **Principle 54** (primitives belong to the **ecological layer**, not the event layer). **Principle 55** (ecological description and event prediction are distinct objectives). **F-042 OPEN** (primitives characterize **ecological conditions**, not universal causal mechanisms — replaces F-041). Architecture: Market Ecology → Primitives ‖ Event Families → Representations (two layers). **Alpha PAUSED** (layer interaction unknown). Implementer instruction: **do not chase the hypothesis** (no tuning k/algorithm to revive Compression). Phase 25 Ecology Interaction Framework (event×primitive distribution/representation/calibration/stability/weighting; no ML).
 - 2026-06-30 — **V6.8**: Phase 25 **APPROVED**; **F-042 REJECTED** — the ecological-layer-with-value hypothesis failed. JS-divergence ≈ 0.000 (ecology does **not** discriminate events); ΔBrier ≈ 0 (0/5 events — no calibration value); weighting view → no decision value. Chief: ecology is a **background property** (like the weather), not a conditioning variable. Q2's r² ≈ 0.24 **rejected** as mechanical overlap (primitive built from same features). **Principle 56** (market ecology is a background property of the market, not an event discriminator). **Principle 57** (market primitives shall be treated as descriptive metadata unless independent decision value is demonstrated). **Primitive Research PAUSED** (further digging = hypothesis-chasing). **End of the Market Understanding Era** → **Decision Theory** turn: ELITEFX will no longer search for new market structure but for **structure that changes decisions**. Scientific caution: no decision value under current metrics ≠ proven useless. Architecture: Representation → Decision → Execution. Phase 26 Decision Value Framework (PV/DV/XV scoreboard; decision audit; Decision Graph; no ML).
 - 2026-06-30 — **V6.9 + DECISION DOCTRINE V1 (THE SPLIT)**: Phase 26 **FULLY APPROVED** — **end of Chapter One**. Scoreboard: **0/9** variables with Selection Decision Value OOS despite good prediction/explanation → **Prediction ≠ Decision ≠ Explanation**. **Principle 58** (the three value dimensions are independent and never interchangeable). **Principle 59** (representations shall influence decisions only through evidence, never directly). **Principle 60** (decision value is decision-specific; failure under one decision ≠ failure under all — Phase 26 tested **selection** only; report wording corrected to "no evidence of **Selection** Decision Value under the metric used"). **Principle 61** (market research and decision theory are separate scientific domains, evolving independently). **Principle 62** (stop expanding market representations once they fail to change decisions). **Doctrine SPLIT** into two domains: **Market Doctrine V6.9** (Representation/Taxonomy/Semantics/Geometry — mature, market-discovery **FROZEN**) and **Decision Doctrine V1** (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution — the new frontier). Architecture: Market → Representation → Evidence → Decision → Execution → Feedback. No new market phases; Decision Science begins. No ML.
+- 2026-06-30 — **DECISION DOCTRINE V2 (Evidence-first amendment)**: Chief **APPROVES The Split WITH ONE MAJOR AMENDMENT** — Decision Science is a **consumer** of Market Science, not an extension; the two meet at one object, the **Evidence Object**, which is the contractual **API** between domains. **Principle 63** (evidence is the contractual interface between Market and Decision Science — first principle of the domain). **Principle 64** (Decision Science shall not depend on how evidence was produced, only on its validity and uncertainty — production-agnostic). **Principle 65** (evidence is a first-class object with its own lifecycle, independent of representations). **Principle 66** (every decision must be traceable to explicit evidence objects — institutional auditability). Decision Doctrine restructured **Evidence-first**: **Part 1 Evidence Theory** precedes **Part 2 Decision Theory**. Inter-domain architecture: Market Science (Market→Representation→**Evidence Object**) ══API══ Decision Science (Evidence Object→Decision Engine→Execution→Feedback). Chapter-2 roadmap: **D0 Evidence Theory** → D1 Decision Objects → D2 Decision Families → D3 Decision Quality → D4 Portfolio Decisions → D5 Live Decision Engine. **Decision Family Audit DEFERRED** until after D0. **No Decision Engine until the Evidence Object spec is approved.** D0 delivers `evidence_object.py` (Evidence Object + lifecycle + inverse-variance aggregation + abstain-on-conflict + sufficiency) and `reports/evidence_theory_report.md`. No ML.
 
 ---
 
