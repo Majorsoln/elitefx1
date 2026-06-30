@@ -3,11 +3,17 @@
 **Chief Quant — The Evidence Object Has Three Layers and Is Immutable; Operations Move Evidence Through the System. Decision-Ready Is Not Trade-Ready.**
 
 Version: Decision Doctrine V3
-Status: APPROVED — ACTIVE (Decision-domain SSOT)
+Status: Superseded by Decision Doctrine V4 (current Decision-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth for the **Decision** domain
+Authority: Single Source of Truth (superseded by Decision Doctrine V4, 30 June 2026)
 Companion: `ELITEFX DOCTRINE V6.9.md` (the **Market** domain SSOT)
 Supersedes: Decision Doctrine V2 (adds Principle 67–70; three-layer Evidence Object; Evidence Object vs Evidence Operations; conflict taxonomy; D1 Evidence Operations before D2 Decision Families)
+
+> ⚠️ **IMESASISHWA:** Decision-domain SSOT rasmi sasa ni **[ELITEFX DECISION DOCTRINE V4](ELITEFX%20DECISION%20DOCTRINE%20V4.md)**
+> (D1 FULLY APPROVED + amendments: **P71** transformations pure/deterministic/side-effect-free; **P72**
+> provenance = directed graph; **P73** readiness = Evidence Snapshot, sio object; **P74 OPEN** temporal vs
+> structural conflict; **P75** Evidence = value objects wenye immutable identity; **Evidence Sets** —
+> decisions juu ya collection sio object moja; D2 Evidence Sets KABLA ya Decision Families). V3 carry-forward.
 
 > D0 APPROVED. Chief amendments before the Decision Doctrine is closed: the Evidence Object has
 > **three layers** (Claim / Quality / Operational State), it is an **immutable contract**, and

@@ -62,14 +62,28 @@ EPS = 1e-9
 # ---------- Evidence Object (first-class; Principle 65) ----------
 # THREE LAYERS (Principle 67): Claim · Evidence Quality · Operational State.
 # Flat aliases zinabaki kwa convenience; eo["layers"] ndiyo muundo rasmi wa P67.
-def make_evidence(value, uncertainty, support, coverage, age_bars, source, conflict=0.0, audit=None):
-    """Construct an Evidence Object (3-layer; Principle 67). confidence = Φ(|value|/uncertainty).
-    audit = provenance trail (Principle 66); operations huongeza entries (huwa immutable, P68)."""
+def _identity(value, unc, support, coverage, source):
+    """P75: immutable value-object identity = content hash ya CLAIM+QUALITY+source (sio operational
+    state — readiness inabadilika kwa muda, P73, kwa hiyo haijumuishwi kwenye identity)."""
+    import hashlib
+    key = f"{value:.6f}|{unc:.6f}|{int(support)}|{coverage:.6f}|{source}"
+    return hashlib.sha1(key.encode()).hexdigest()[:10]
+
+
+def make_evidence(value, uncertainty, support, coverage, age_bars, source, conflict=0.0, audit=None,
+                  parents=None, op="make"):
+    """Construct an Evidence Object (3-layer value object; P67/P75). confidence = Φ(|value|/uncertainty).
+    audit = chronological trail (P66); parents+op = provenance GRAPH edges (P72); id = immutable
+    value-object identity (P75). Operations huzalisha objects mpya (pure, P71; immutable, P68)."""
     unc = float(max(uncertainty, EPS))
     conf = float(_phi(abs(value) / unc))
     fresh = _freshness(age_bars)
     direction = int(np.sign(value)) if value else 0
     eo = {
+        # --- identity + provenance (P75 / P72) ---
+        "id": _identity(value, unc, support, coverage, source),
+        "parents": list(parents) if parents else [],     # provenance-graph in-edges
+        "op": str(op),                                    # producing operation
         # --- flat aliases (convenience) ---
         "value": float(value), "direction": direction, "uncertainty": unc, "confidence": conf,
         "support": int(support), "coverage": float(coverage),

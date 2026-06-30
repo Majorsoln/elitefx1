@@ -3,7 +3,7 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
-> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V3.md`;
+> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V4.md`;
 > board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: D0 Evidence Theory APPROVED + amendments — Principle 67 Evidence = Claim+Quality+Operational State (3 layers); Principle 68 Evidence immutable, aggregation is an external operation; Principle 69 decision-ready ≠ trade-ready (rename decision-grade→decision-ready); Principle 70 OPEN confidence = model not stored fact; conflict has a taxonomy (intra/cross-pair/cross-tf/cross-engine); Decision Doctrine → V3; D1 Evidence Operations ACTIVE; D2 Decision Families DEFERRED).*
+*Last updated: 2026-06-30 (Chief: D1 Evidence Operations FULLY APPROVED + amendments — Principle 71 transformations pure/deterministic/side-effect-free; Principle 72 provenance = directed graph; Principle 73 readiness belongs to Evidence Snapshot not the immutable object; Principle 74 OPEN temporal vs structural conflict; Principle 75 Evidence = value objects with immutable identity; decisions made on Evidence SETS not single objects; Decision Doctrine → V4; D2 Evidence Sets ACTIVE; Decision Families DEFERRED).*
 
 ---
 
@@ -19,15 +19,15 @@
 
 Official (TWO DOMAINS):
 - `ELITEFX_DOCTRINE_V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
-- `ELITEFX DECISION DOCTRINE V3.md` — **Decision** domain (3-layer immutable Evidence Object + Evidence Operations; then Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution; active frontier)
+- `ELITEFX DECISION DOCTRINE V4.md` — **Decision** domain (Evidence Layer: value-object Evidence + Operations + Sets; then Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution; active frontier)
 
 Status:
 - ACTIVE (both)
 
 Superseded:
 - V4 … V6.7 (chain)
-- V6.8 (superseded by V6.9 + Decision Doctrine V1→V2→V3)
-- Decision Doctrine V1 → V2 → V3 (V1 Evidence-first; V2 split; V3 3-layer/immutable/operations)
+- V6.8 (superseded by V6.9 + Decision Doctrine V1→V2→V3→V4)
+- Decision Doctrine V1→V2→V3→V4 (V1 Evidence-first; V2 split; V3 3-layer/immutable/operations; V4 value-object/graph/snapshot/sets)
 - Patches
 
 ---
@@ -433,22 +433,21 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **D1 — Evidence Operations** (Decision Science; market-discovery FROZEN)
-Name: **Operations on the immutable Evidence Object**
+Phase: **D2 — Evidence Sets** (Decision Science; market-discovery FROZEN)
+Name: **Evidence Collection (the unit the Decision Engine consumes)**
 Status: ACTIVE (Decision domain)
 Owner: Implementer + Chief
 Chief Approval: YES
-Question: Evidence inatembeaje ndani ya mfumo (sio tu inaonekanaje)? (1) operations gani (aggregate/
-filter/merge/expire/split)? (2) zipi zinahifadhi audit trail (P66)? (3) Evidence Object ni immutable
-kweli (P68)? (4) conflict ina taxonomy gani (intra/cross-pair/cross-tf/cross-engine)? (5) operations
-gani zinabadilisha decision-readiness? NO Decision Engine hadi Object+Operations zifungwe. NO ML.
+Question: Decision hutokea juu ya COLLECTION, sio object moja. (1) Evidence Collection ni nini? (2)
+ordering ina maana? (3) duplicate inatibiwa vipi? (4) set ina confidence yake? (5) set ina readiness
+yake (snapshot — P73)? NO Decision Engine hadi Evidence Layer (Object+Operations+Set) ifungwe. NO ML.
 
-> **D0 Evidence Theory APPROVED + amendments.** Chief: Evidence Object ina **layers 3** (Claim/
-> Quality/Operational State — **P67**); ni **immutable**, aggregation ni **operation ya nje** (**P68**);
-> **decision-ready ≠ trade-ready** (**P69**, rename decision-grade→decision-ready); confidence ni
-> **model**, sio stored fact (**P70 OPEN**); conflict ina **taxonomy**, sio scalar. Decision Doctrine
-> → **V3**. **D2 Decision Families DEFERRED** hadi Object+Operations zifungwe. Operations = functions
-> PURE juu ya objects immutable + audit trail. NO Decision Engine. NO ML.
+> **D1 Evidence Operations FULLY APPROVED + amendments.** Chief: "report ya kwanza isiyozungumzia
+> Forex — inazungumzia software architecture." **P71** transformations pure/deterministic/side-effect-
+> free. **P72** provenance = **graph**, sio log. **P73** readiness = **snapshot**, sio object. **P74
+> OPEN** temporal vs structural conflict. **P75** Evidence = **value objects** wenye immutable identity.
+> Decisions juu ya **Evidence Sets**, sio objects. Decision Doctrine → **V4**. Decision Families
+> **DEFERRED**. Architecture: Evidence Objects → **Evidence Sets** → Decision → Execution. NO ML.
 
 ---
 
@@ -513,13 +512,14 @@ gani zinabadilisha decision-readiness? NO Decision Engine hadi Object+Operations
 > Chief amendment: Decision Science **inaanza na Evidence**, sio decisions.
 
 - [✓] Decision Doctrine V1 → V2 → **V3** *(Evidence-first; split; 3-layer immutable object + operations; P63–70)*
-- [✓] **D0  Evidence Theory** *(APPROVED — `evidence_object.py` + `reports/evidence_theory_report.md`; 3-layer Evidence Object/lifecycle/sufficiency)*
-- [✓] **D1  Evidence Operations** *(ACTIVE — `evidence_operations.py` + `reports/evidence_operations_report.md`; aggregate/filter/merge/expire/split; audit trail; conflict taxonomy; readiness)*
-- [ ] D2  Decision Families *(BLOCKED/DEFERRED — select/abstain/size/hedge/…; after Object+Operations closed)*
-- [ ] D3  Decision Quality *(BLOCKED — per-decision OOS + FDR)*
-- [ ] D4  Portfolio Decisions *(BLOCKED — allocation; ranking ≠ allocation)*
-- [ ] D5  Live Decision Engine *(BLOCKED — consumes Evidence Objects; production-agnostic)*
-- [ ] P70  Confidence model *(OPEN — explicit, recalibratable; not a stored fact)*
+- [✓] **D0  Evidence Theory** *(APPROVED — `evidence_object.py`; 3-layer value-object Evidence/lifecycle/sufficiency)*
+- [✓] **D1  Evidence Operations** *(APPROVED — `evidence_operations.py`; pure ops; provenance graph; conflict taxonomy; readiness)*
+- [✓] **D2  Evidence Sets** *(ACTIVE — `evidence_set.py` + `reports/evidence_set_report.md`; collection/identity/dedup; order-invariance; set confidence; snapshot readiness)*
+- [ ] D3  Decision Families *(BLOCKED/DEFERRED — select/abstain/size/… on Evidence Sets; after Evidence Layer closed)*
+- [ ] D4  Decision Quality *(BLOCKED — per-decision OOS + FDR)*
+- [ ] D5  Portfolio Decisions *(BLOCKED — allocation; ranking ≠ allocation)*
+- [ ] D6  Live Decision Engine *(BLOCKED — consumes Evidence Sets; production-agnostic)*
+- [ ] P70  Confidence model · P74  Temporal-vs-structural conflict *(OPEN — design)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
 - [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
 
@@ -731,11 +731,18 @@ sufficiency. Chief amendments: P67 (3 layers), P68 (immutable; aggregation = ope
 (decision-ready ≠ trade-ready), P70 OPEN (confidence = model). Bug fixed (coverage ≤1). → Q-043.
 
 **Q-043 — How does evidence MOVE through the system (operations on the immutable object)?**
-Status: OPEN (D1 Evidence Operations) — ACTIVE
-Needed: `evidence_operations.md` — operations (aggregate/filter/merge/expire/split; Q1); audit-trail
-preservation (Q2, P66); immutability check (Q3, P68); conflict taxonomy intra/cross-pair/cross-tf/
-cross-engine (Q4); which operations change decision-readiness (Q5). No Decision Engine until Object
-+ Operations are closed.
+Status: **CLOSED — APPROVED with amendments** (D1; P71–75)
+Evidence: `evidence_operations_report.md` — pure ops (aggregate/filter/merge/expire/split), audit-
+trail preserved, immutability (by-convention + freeze), conflict taxonomy, readiness-change. Chief:
+transformations pure (P71); provenance = graph (P72); readiness = snapshot (P73); temporal conflict
+OPEN (P74); Evidence = value objects (P75). → Q-044.
+
+**Q-044 — What is an Evidence Set, and does it have its own confidence and readiness?**
+Status: OPEN (D2 Evidence Sets) — ACTIVE
+Needed: `evidence_set_report.md` — Evidence Collection (Q1, keyed by value-object identity); ordering
+(Q2, aggregate order-invariant); duplicates (Q3, dedup by id); set confidence (Q4, aggregate); set
+readiness as snapshot (Q5, P73). Decision Engine consumes Evidence Sets, not single objects; built
+only after the Evidence Layer is closed.
 
 **Q-041 — Does any variable carry decision value under a NON-selection decision (abstention/sizing/…)?**
 Status: **DEFERRED** (Chief — until after D0 Evidence Theory; was DQ-1)
@@ -799,6 +806,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **V6.9 + DECISION DOCTRINE V1 (THE SPLIT)**: Phase 26 **FULLY APPROVED** — **end of Chapter One**. Scoreboard: **0/9** variables with Selection Decision Value OOS despite good prediction/explanation → **Prediction ≠ Decision ≠ Explanation**. **Principle 58** (the three value dimensions are independent and never interchangeable). **Principle 59** (representations shall influence decisions only through evidence, never directly). **Principle 60** (decision value is decision-specific; failure under one decision ≠ failure under all — Phase 26 tested **selection** only; report wording corrected to "no evidence of **Selection** Decision Value under the metric used"). **Principle 61** (market research and decision theory are separate scientific domains, evolving independently). **Principle 62** (stop expanding market representations once they fail to change decisions). **Doctrine SPLIT** into two domains: **Market Doctrine V6.9** (Representation/Taxonomy/Semantics/Geometry — mature, market-discovery **FROZEN**) and **Decision Doctrine V1** (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution — the new frontier). Architecture: Market → Representation → Evidence → Decision → Execution → Feedback. No new market phases; Decision Science begins. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V2 (Evidence-first amendment)**: Chief **APPROVES The Split WITH ONE MAJOR AMENDMENT** — Decision Science is a **consumer** of Market Science, not an extension; the two meet at one object, the **Evidence Object**, which is the contractual **API** between domains. **Principle 63** (evidence is the contractual interface between Market and Decision Science — first principle of the domain). **Principle 64** (Decision Science shall not depend on how evidence was produced, only on its validity and uncertainty — production-agnostic). **Principle 65** (evidence is a first-class object with its own lifecycle, independent of representations). **Principle 66** (every decision must be traceable to explicit evidence objects — institutional auditability). Decision Doctrine restructured **Evidence-first**: **Part 1 Evidence Theory** precedes **Part 2 Decision Theory**. Inter-domain architecture: Market Science (Market→Representation→**Evidence Object**) ══API══ Decision Science (Evidence Object→Decision Engine→Execution→Feedback). Chapter-2 roadmap: **D0 Evidence Theory** → D1 Decision Objects → D2 Decision Families → D3 Decision Quality → D4 Portfolio Decisions → D5 Live Decision Engine. **Decision Family Audit DEFERRED** until after D0. **No Decision Engine until the Evidence Object spec is approved.** D0 delivers `evidence_object.py` (Evidence Object + lifecycle + inverse-variance aggregation + abstain-on-conflict + sufficiency) and `reports/evidence_theory_report.md`. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V3 (D0 APPROVED + amendments)**: Chief approves D0 ("best methodology report since we began — for the first time we defined a contract, not tried to prove the market"). Amendments before the doctrine closes: **Principle 67** (every Evidence Object consists of three layers — **Claim** [value/direction/source] + **Evidence Quality** [confidence/uncertainty/support/coverage] + **Operational State** [freshness/conflict/expiry]; the Decision Engine reads categories, not a flat list). **Principle 68** (Evidence Objects are immutable contracts; **aggregation is an external operation**, not part of the object — so Bayesian/Dempster-Shafer/voting can replace inverse-variance without changing the object). **Principle 69** (**decision-ready ≠ trade-ready**; terminology "decision-grade" → "decision-ready"). **Principle 70 OPEN** (confidence should come from an explicit, recalibratable **confidence model**, not be stored as a primitive fact — today's Φ(EV/SE) saturates at large n). **Conflict has a taxonomy** (intra/split-half · cross-pair · cross-timeframe · cross-engine), measured controlling for the other dimensions — not a scalar. D0 coverage bug fixed (coverage ≤1; per-series recency). **D1 Evidence Operations** opened (pure ops on immutable objects: aggregate/filter/merge/expire/split + audit trail + conflict taxonomy + readiness-change); **D2 Decision Families DEFERRED** until Object+Operations are closed. Delivers `evidence_operations.py` + `reports/evidence_operations_report.md`. No Decision Engine yet. No ML.
+- 2026-06-30 — **DECISION DOCTRINE V4 (D1 FULLY APPROVED + amendments)**: Chief: "D1 is the first report that no longer talks about Forex — it talks about software architecture." D0+D1 = the formal **Evidence Layer**. **Principle 71** (evidence transformations shall be pure, deterministic and side-effect-free — Evidence behaves like a functional-programming object; the Decision Engine has no side effects). **Principle 72** (provenance shall be a **directed graph**, not a chronological log — aggregate/merge have parents, split has children). **Principle 73** (decision-readiness belongs to an **Evidence Snapshot**, not the immutable object — readiness changes over time; the object does not). **Principle 74 OPEN** (conflict shall distinguish **temporal contradiction** [yesterday bullish vs today bearish] from structural disagreement). **Principle 75** (Evidence Objects are **value objects with immutable identity** — content-derived id; enables dedup, graph nodes, language-independence). Logic gap closed: operations went Evidence→Evidence but never Evidence→**Set**; decisions are made on **Evidence Sets**, not single objects. **D2 Evidence Sets** opened (collection/identity/dedup; order-invariant aggregate; set confidence; snapshot readiness); **Decision Families DEFERRED** until the Evidence Layer is closed. Architecture: Evidence Objects → **Evidence Sets** → Decision → Execution. Delivers `evidence_set.py` + `reports/evidence_set_report.md` (+ value-object id & provenance-graph fields added to `evidence_object`/`evidence_operations`). No Decision Engine yet. No ML.
 
 ---
 
@@ -890,6 +898,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | Decision Doctrine V1 created (Evidence/Decision/Risk/Opportunity/Abstention/Sizing/Portfolio/Execution); Decision Science begins | APPROVED (start) | Chief Quant |
 | 2026-06-30 | The Split APPROVED WITH AMENDMENT (Decision Science = consumer; Evidence Object = API); P63–66; Decision Doctrine V2 (Evidence-first); D0 Evidence Theory start | APPROVED | Chief Quant |
 | 2026-06-30 | D0 Evidence Theory APPROVED + amendments (3-layer object P67; immutable + aggregation-as-operation P68; decision-ready≠trade-ready P69; confidence-as-model P70 OPEN; conflict taxonomy); Decision Doctrine V3; D1 Evidence Operations start; D2 DEFERRED | APPROVED | Chief Quant |
+| 2026-06-30 | D1 Evidence Operations FULLY APPROVED + amendments (pure transformations P71; provenance graph P72; readiness=snapshot P73; temporal-conflict P74 OPEN; value objects P75); Decision Doctrine V4; D2 Evidence Sets start; Decision Families DEFERRED | APPROVED | Chief Quant |
 
 ### Archived (from current edge research)
 

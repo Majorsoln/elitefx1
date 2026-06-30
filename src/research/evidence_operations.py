@@ -55,20 +55,23 @@ MIN_OCC = 20
 
 # ---------- Evidence Operations (P68: external ops on immutable objects) ----------
 def _tag(eo, op):
-    """Rudisha COPY mpya na audit entry (input haibadiliki — immutability, P68/Q3)."""
-    new = {k: (list(v) if k == "audit" else v) for k, v in eo.items() if k != "layers"}
-    new["audit"] = list(eo.get("audit", [])) + [op]
-    return make_evidence(new["value"], new["uncertainty"], new["support"], new["coverage"],
-                         new["age_bars"], new["source"], conflict=new["conflict"], audit=new["audit"])
+    """Rudisha COPY mpya na audit entry + provenance edge (input haibadiliki — P68/P71/P72)."""
+    audit = list(eo.get("audit", [])) + [op]
+    base = op.split("(")[0].split("[")[0]
+    return make_evidence(eo["value"], eo["uncertainty"], eo["support"], eo["coverage"],
+                         eo["age_bars"], eo["source"], conflict=eo["conflict"], audit=audit,
+                         parents=[eo["id"]], op=base)
 
 
 def op_aggregate(eos):
     """Aggregate (inverse-variance) — closed; audit trail. P68."""
+    live = [e for e in eos if not is_expired(e)]
     agg = _agg_obj(eos)
     if agg is None:
         return None
-    agg["audit"] = [f"aggregate(n={len([e for e in eos if not is_expired(e)])})"]
-    agg["layers"]["operational"]["audit_len"] = len(agg["audit"])
+    agg["audit"] = [f"aggregate(n={len(live)})"]
+    agg["parents"] = [e["id"] for e in live]      # provenance graph: many parents (P72)
+    agg["op"] = "aggregate"
     return agg
 
 
@@ -82,6 +85,7 @@ def op_merge(eo_a, eo_b):
     m = op_aggregate([eo_a, eo_b])
     if m is not None:
         m["audit"] = [f"merge({eo_a['source']}|{eo_b['source']})"]
+        m["parents"] = [eo_a["id"], eo_b["id"]]; m["op"] = "merge"
     return m
 
 
