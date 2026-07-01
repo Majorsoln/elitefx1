@@ -3,11 +3,18 @@
 **Chief Quant — Evidence Meaning Is Order-Independent; The Evidence Snapshot Is the Canonical Input to the Decision Layer.**
 
 Version: Decision Doctrine V5
-Status: APPROVED — ACTIVE (Decision-domain SSOT)
+Status: Superseded by Decision Doctrine V6 (current Decision-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth for the **Decision** domain
+Authority: Single Source of Truth (superseded by Decision Doctrine V6, 30 June 2026)
 Companion: `ELITEFX DOCTRINE V6.9.md` (the **Market** domain SSOT)
 Supersedes: Decision Doctrine V4 (adds Principle 76–79; Evidence Snapshot as canonical Decision input; Set Confidence → Set Reliability; D3 Evidence Snapshots before Decision Families)
+
+> ⚠️ **IMESASISHWA:** Decision-domain SSOT rasmi sasa ni **[ELITEFX DECISION DOCTRINE V6](ELITEFX%20DECISION%20DOCTRINE%20V6.md)**
+> (D3 FULLY APPROVED; **Evidence Layer FROZEN** kama stable architecture; **P80** Snapshot = complete
+> decision context; **P81 OPEN** internal-evidence vs external-execution conflict; **P82** readiness =
+> state machine (READY→STALE→EXPIRED→INVALID); **P83** decisions ni immutable first-class objects;
+> **P84** kila decision inareference exact Snapshot ID; D4 Decision Objects KABLA ya Decision Engine).
+> V5 carry-forward.
 
 > D2 FULLY APPROVED. Amendments: evidence meaning is **order-independent**, lineage is separate
 > (P76); decisions operate on **snapshots**, not raw objects (P77); statistical redundancy ≠ identity

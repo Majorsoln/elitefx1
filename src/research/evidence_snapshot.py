@@ -94,18 +94,43 @@ def make_snapshot(evset, as_of, tagged=None):
         why_final = why
     else:
         why_final = "ready"
+    # P82: readiness ni STATE MACHINE (READY→STALE→EXPIRED→INVALID), sio score.
+    struct_max = max([v for k, v in struct.items()], default=0.0)
+    state = readiness_state(len(live), agg, snap_ready, tcf, struct_max)
+    label = evset.get("label", "set")
+    sid = _snapshot_id(label, as_of, agg, len(live), state)
     return {
-        "as_of": int(as_of), "set": evset.get("label", "set"),
+        "id": sid,                                              # P84: exact snapshot identity
+        "as_of": int(as_of), "set": label,
         "n_total": len(resolved), "n_live": len(live),
         "reliability": (agg["confidence"] if agg else 0.0),     # Set RELIABILITY (P70 OPEN: sio "confidence")
         "value": (agg["value"] if agg else 0.0),
         "uncertainty": (agg["uncertainty"] if agg else float("inf")),
         "aggregate": agg,
-        "readiness": snap_ready, "why": why_final,
+        "readiness": snap_ready, "readiness_state": state, "why": why_final,
         "temporal_conflict": tcf, "older_mean": mo, "newer_mean": mn,
         "structural_conflict": struct,
         "provenance": {"nodes": len(nodes), "edges": len(edges)},
     }
+
+
+def readiness_state(n_live, agg, ready, tcf, struct_max):
+    """P82: state machine ya decision-readiness (SIO score). READY→STALE→EXPIRED→INVALID.
+    Priority: conflict → INVALID; hakuna live → EXPIRED; ready → READY; vinginevyo → STALE."""
+    if tcf >= CONFLICT_CEIL or struct_max >= CONFLICT_CEIL:
+        return "INVALID"          # contradictory evidence — haiwezi kuamua
+    if n_live == 0 or agg is None:
+        return "EXPIRED"          # hakuna live evidence
+    if ready:
+        return "READY"
+    return "STALE"                # live lakini haijafikia threshold (support/reliability/aging)
+
+
+def _snapshot_id(label, as_of, agg, n_live, state):
+    import hashlib
+    v = agg["value"] if agg else 0.0; u = agg["uncertainty"] if agg else 0.0
+    key = f"{label}|{int(as_of)}|{v:.6f}|{u:.6f}|{n_live}|{state}"
+    return "snap:" + hashlib.sha1(key.encode()).hexdigest()[:10]
 
 
 # Q5: the canonical Decision-Layer input is the Snapshot (P79).
