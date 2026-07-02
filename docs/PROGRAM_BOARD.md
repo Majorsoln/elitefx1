@@ -3,7 +3,7 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
-> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V7.md`;
+> **Market** = `ELITEFX DOCTRINE V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V8.md`;
 > board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
@@ -11,23 +11,23 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: D4 Decision Objects FULLY APPROVED — Principle 85 decisions form the permanent decision history; Principle 86 cancellation ≠ rejection (CANCELLED state); Principle 87 Decision Integrity ≠ Outcome (Quality→Integrity); Principle 88 every decision references its Decision Policy; Principle 89 OPEN Execution = immutable object independent of Decision; Decision Doctrine → V7; D5 Decision Policy Framework ACTIVE; D6 Decision Engine next; roadmap Object→Policy→Engine→Execution).*
+*Last updated: 2026-07-02 (Chief: **Architecture Audit #1 APPROVED** (`docs/CHIEF_GAP_REVIEW.md`) — G-1: D5 report pending, **D5 bado ACTIVE** (sio approved); **Principle 90** frozen = interface stability, sio implementation immutability; **Principle 91** progression by eligibility — Decision Engine = **NOT YET ELIGIBLE**, sio BLOCKED; Decision Doctrine → **V8**; role mpya: **Architecture Auditor** (drift guard; Layer-Drift Matrix + Future Risk Assessment kila review — `docs/ARCHITECTURE_AUDIT.md`); G-7: conflict = explicit policy input, policies → @v2; G-8: P86 CANCELLED self-test; hygiene G-2…G-6 kwa commit tofauti.)*
 
 ---
 
 ## Current Doctrine
 
 Official (TWO DOMAINS):
-- `ELITEFX_DOCTRINE_V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
-- `ELITEFX DECISION DOCTRINE V7.md` — **Decision** domain (Evidence Layer FROZEN; Decision Layer: Object → Policy → Engine → Execution; active frontier)
+- `ELITEFX DOCTRINE V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
+- `ELITEFX DECISION DOCTRINE V8.md` — **Decision** domain (Evidence Layer FROZEN kwa **interface** (P90); Decision Layer: Object → Policy → Engine → Execution; active frontier)
 
 Status:
 - ACTIVE (both)
 
 Superseded:
 - V4 … V6.7 (chain)
-- V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V7)
-- Decision Doctrine V1→…→V7 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89)
+- V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V8)
+- Decision Doctrine V1→…→V7 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89; V8 P90–91 interface-freeze + eligibility + Architecture Auditor)
 - Patches
 
 ---
@@ -449,6 +449,12 @@ policy_id (P88). Rule-based, NO alpha. NO Decision Engine bado. NO ML.
 > tofauti na Decision. Decision Doctrine → **V7**. Decision Engine **DEFERRED** (generic orchestrator).
 > Architecture: Object → **Policy** → Engine → Execution. NO ML.
 
+> **Chief review 2026-07-02 (Architecture Audit #1 — APPROVED):** D5 inabaki **ACTIVE** hadi
+> `reports/decision_policy_report.md` iwasilishwe (G-1; inahitaji data run ya Japhet — script iko tayari)
+> na Chief Review ifanyike. **Amendment (G-7):** conflict = **explicit policy input** (V7 Q3) — kila policy
+> ina conflict tolerance yake; policies → **@v2** (P88). **P90** frozen = interface. **P91** eligibility:
+> D6 = **NOT YET ELIGIBLE** (sio BLOCKED). Decision Doctrine → **V8**.
+
 ---
 
 ## Completed Phases
@@ -517,11 +523,11 @@ policy_id (P88). Rule-based, NO alpha. NO Decision Engine bado. NO ML.
 - [✓] **D2  Evidence Sets** *(APPROVED — `evidence_set.py`; collection/identity/dedup; order-invariance; set reliability)*
 - [✓] **D3  Evidence Snapshots** *(APPROVED — `evidence_snapshot.py`; canonical Decision input; temporal conflict; readiness state machine)* — **EVIDENCE LAYER FROZEN**
 - [✓] **D4  Decision Objects** *(APPROVED — `decision_object.py`; immutable object; lifecycle incl. CANCELLED (P86); integrity (P87); provenance→Snapshot ID; policy_id (P88); audit)*
-- [✓] **D5  Decision Policy Framework** *(ACTIVE — `decision_policy.py` + `reports/decision_policy_report.md`; versioned rule Snapshot→action; swappable; Engine↔Policy contract)*
-- [ ] D6  Decision Engine *(BLOCKED — generic orchestrator: apply policy to snapshot; after Policy closed)*
-- [ ] D7  Execution Object *(BLOCKED — P89; immutable; fills/slippage/rejects)*
-- [ ] D8  Decision Quality/Outcome *(BLOCKED — per-decision OOS + FDR; separate from Integrity P87)*
-- [ ] D9  Portfolio / Live *(BLOCKED)*
+- [~] **D5  Decision Policy Framework** *(ACTIVE — `decision_policy.py` (@v2, conflict = explicit input) tayari; **REPORT PENDING** (G-1): `reports/decision_policy_report.md` inahitaji data run ya Japhet; kisha Chief Review)*
+- [ ] D6  Decision Engine *(NOT YET ELIGIBLE (P91) — generic orchestrator: apply policy to snapshot; inafunguka D5 ikifungwa)*
+- [ ] D7  Execution Object *(NOT YET ELIGIBLE (P91) — P89; immutable; fills/slippage/rejects)*
+- [ ] D8  Decision Quality/Outcome *(NOT YET ELIGIBLE (P91) — per-decision OOS + FDR; separate from Integrity P87)*
+- [ ] D9  Portfolio / Live *(NOT YET ELIGIBLE (P91))*
 - [ ] P70 Confidence model · P74 Temporal-vs-structural · P78 Redundancy-vs-duplication · P81 Internal-vs-external · P89 Execution Object *(OPEN — design)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
 - [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
@@ -833,6 +839,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **DECISION DOCTRINE V5 (D2 FULLY APPROVED + amendments)**: **Principle 76** (evidence meaning is independent of insertion order — D2's order-invariant aggregate is "the first theorem of Decision Science": a Set is a *mathematical set*, not a sequence; historical lineage is represented separately via the provenance graph → Evidence **Semantics** vs Evidence **History**). **Principle 77** (decisions shall operate on **Evidence Snapshots**, not raw Evidence Objects). **Principle 78 OPEN** (statistical **redundancy ≠ identity duplication** — EURUSD H1 vs H4 are distinct ids but near-identical info; redundancy management still needed). **Principle 79** (the **Evidence Snapshot is the canonical input to the Decision Layer**). Terminology: "Set Confidence" → **"Set Reliability"** until the confidence model (P70) is closed. **D3 Evidence Snapshots** opened (immutable as-of-T view; fields; readiness @T; temporal conflict per P74; canonical input per P79) — this **completes the Evidence Layer** (Object→Operations→Set→Snapshot); **Decision Families DEFERRED** until D3 approved. Delivers `evidence_snapshot.py` + `reports/evidence_snapshot_report.md`. No Decision Engine yet. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V6 (D3 FULLY APPROVED — EVIDENCE LAYER FROZEN)**: Chief approves D3 with **no amendments** ("D3 is the end of Evidence Engineering; the architecture is complete"). **The Evidence Layer (Object · Operations · Set · Snapshot) is declared FROZEN as stable architecture** — no new Object/Operation/Set/Snapshot unless data shows a large logic gap ("if we keep changing the foundation, Decision Science never begins"). **Principle 80** (the Evidence Snapshot defines the **complete decision context** available to the Decision Layer — it sees nothing else). **Principle 81 OPEN** (distinguish **internal** evidence conflicts from **external** execution constraints — broker outage/news halt/execution failure affect the decision but are not evidence). **Principle 82** (decision-readiness is an explicit **state machine** — READY→STALE→EXPIRED→INVALID — not a numeric score; states are more auditable). **Principle 83** (decisions are **immutable first-class objects** — like Evidence). **Principle 84** (every Decision Object references the **exact Evidence Snapshot ID** it originated from → fully auditable Decision→Snapshot→Set→Operations→Objects). Snapshot gains `readiness_state` (P82) and `id` (P84). **D4 Decision Objects** opened (define the Decision before the Engine, as Event was defined before algorithms): immutable Decision Object with fields/lifecycle-state-machine/provenance/structural-quality/audit; action defaults to **ABSTAIN** (P26) — no engine logic. **Decision Engine DEFERRED** (it will be a small consumer: snapshot→action). Delivers `decision_object.py` + `reports/decision_object_report.md`. No Decision Engine yet. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V7 (D4 FULLY APPROVED + amendments)**: **Principle 85** (Decision Objects collectively form the **permanent decision history** — with immutability/lifecycle/provenance/audit, decisions become records; later we learn from decision history, not the market alone). **Principle 86** (**cancellation ≠ rejection** — a decision stopped pre-execution by news/broker/manual is **CANCELLED**, not REJECTED; CANCELLED reachable only from PROPOSED/VALIDATED). **Principle 87** (**Decision Integrity ≠ Outcome** — pre-execution structural metrics are *Integrity*; whether the decision was right is *Outcome*, a later OOS matter; "Decision Quality" → "Decision Integrity"). **Principle 88** (**every Decision references its Decision Policy** — same Snapshot → different decisions under Conservative/Aggressive/Capital-Preservation; record policy_id `name@vN` → reproducible). **Principle 89 OPEN** (**Execution is a separate immutable object** — `Decision: BUY` ≠ `Trade Executed`; delay/reject/partial-fill/no-price). **D5 Decision Policy Framework** opened (versioned rule Snapshot→action; swappable via injection; Engine↔Policy contract = policy.decide(snapshot); policies rule-based & conservative, NO alpha). **Decision Engine DEFERRED** (D6, generic orchestrator). Delivers `decision_policy.py` + `reports/decision_policy_report.md` (+ CANCELLED/integrity/policy_id added to `decision_object`). No Decision Engine yet. No ML.
+- 2026-07-02 — **DECISION DOCTRINE V8 (Architecture Audit #1 APPROVED + P90/91)**: Chief anaidhinisha Architecture Audit ya kwanza (`docs/CHIEF_GAP_REVIEW.md` — Doctrine ⇄ Implementation ⇄ Documents). **G-1 APPROVED**: D5 haiwezi kufungwa bila `reports/decision_policy_report.md` — workflow (Research → Report → Chief Review → Approval) haivunjwi; **D5 inabaki ACTIVE**. **Principle 90** (*a frozen layer guarantees interface stability, not implementation immutability* — Evidence Layer imefreeze kwa **interface**; performance/storage/serialization zinaweza kuboreshwa, contract haitikisiki). **Principle 91** (*progression between phases shall be governed by eligibility criteria rather than implementation readiness* — Decision Engine = **NOT YET ELIGIBLE**, sio BLOCKED; block ina maana kuna tatizo, hapa tunafuata governance). **G-7 amendment**: V7 Q3 inasema policy inachagua kutoka readiness + reliability + **conflict** → conflict sasa ni **explicit policy input** (per-policy tolerance: capital_preservation 0.00; conservative/aggressive CONFLICT_CEIL); logic imebadilika → policies → **@v2** (P88 versioning). **G-8**: P86 CANCELLED self-test imeongezwa (`decision_object.py`). **Hygiene G-2…G-6** zimerekebishwa kwa **commit tofauti** na research (agizo la Chief). **Governance roles tatu**: Chief Quant (direction/doctrine/architecture) · Implementer (doctrine→implementation+reports) · **Architecture Auditor** (drift guard: Doctrine⇄Architecture⇄Implementation⇄Tests⇄Reports; kila review inamalizika na **Layer-Drift Matrix** + **Future Risk Assessment** — `docs/ARCHITECTURE_AUDIT.md`). Muhimu zaidi (Chief): *"Evidence Layer FROZEN haikuguswa" ndiyo metric muhimu zaidi — architecture imeanza kuwa stable.* No Decision Engine yet. No ML.
 
 ---
 
@@ -928,6 +935,9 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | D2 Evidence Sets FULLY APPROVED + amendments (order-independence/set≠sequence P76; decisions on snapshots P77; redundancy≠duplication P78 OPEN; snapshot=canonical input P79; confidence→reliability); Decision Doctrine V5; D3 Evidence Snapshots start; Decision Families DEFERRED | APPROVED | Chief Quant |
 | 2026-06-30 | D3 Evidence Snapshots FULLY APPROVED (no amendments); **EVIDENCE LAYER FROZEN**; complete-context P80; internal-vs-external P81 OPEN; readiness state-machine P82; decisions=immutable objects P83; reference exact Snapshot ID P84; Decision Doctrine V6; D4 Decision Objects start; Decision Engine DEFERRED | APPROVED | Chief Quant |
 | 2026-06-30 | D4 Decision Objects FULLY APPROVED + amendments (decision history P85; cancelled≠rejected P86; integrity≠outcome P87; reference policy P88; Execution Object P89 OPEN); Decision Doctrine V7; D5 Decision Policy start; Decision Engine DEFERRED | APPROVED | Chief Quant |
+| 2026-07-02 | Architecture Audit #1 (`docs/CHIEF_GAP_REVIEW.md`); G-1 D5 report pending → D5 bado ACTIVE (sio approved) | APPROVED | Chief Quant |
+| 2026-07-02 | Principle 90 (frozen = interface stability) + Principle 91 (eligibility governs progression; D6 = NOT YET ELIGIBLE); Decision Doctrine V8; Architecture Auditor role (Layer-Drift Matrix + Future Risk Assessment kila review) | APPROVED | Chief Quant |
+| 2026-07-02 | G-7 conflict = explicit policy input (V7 Q3; policies → @v2); G-8 P86 CANCELLED self-test; hygiene G-2…G-6 (commit tofauti na research) | APPROVED | Chief Quant |
 
 ### Archived (from current edge research)
 

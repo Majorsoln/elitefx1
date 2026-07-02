@@ -7,6 +7,12 @@ Decision V1→V7), MWONGOZO, PROGRAM_BOARD, Event Library, config, na `src/` yot
 > gaps zilizopo. Ripoti hii ni **assessment tu** — hakuna code/board iliyobadilishwa (governance:
 > hakuna mabadiliko bila Chief Approval).
 
+> **STATUS: REVIEWED — Chief verdict 2026-07-02: APPROVED.** G-1 inasimama (D5 bado ACTIVE, report
+> pending); G-2…G-6 hygiene (commit tofauti); G-7 → conflict kuwa **explicit policy input** (sio kufuta);
+> G-8 → CANCELLED self-test. Review hii ilizaa **P90** (frozen = interface) na **P91** (eligibility) —
+> tazama `ELITEFX DECISION DOCTRINE V8.md` + PROGRAM_BOARD Approval Log. Role mpya: **Architecture
+> Auditor** — audits zinazofuata ziko `docs/ARCHITECTURE_AUDIT.md`.
+
 ---
 
 ## 1 — Muhtasari (TL;DR)
