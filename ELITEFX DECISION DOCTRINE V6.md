@@ -3,11 +3,17 @@
 **Chief Quant — The Evidence Layer Is Frozen. Decisions Are Immutable Objects That Reference Their Snapshot. Define the Decision Before Its Engine.**
 
 Version: Decision Doctrine V6
-Status: APPROVED — ACTIVE (Decision-domain SSOT)
+Status: Superseded by Decision Doctrine V7 (current Decision-domain SSOT) — carry-forward in force
 Date: 30 June 2026
-Authority: Single Source of Truth for the **Decision** domain
+Authority: Single Source of Truth (superseded by Decision Doctrine V7, 30 June 2026)
 Companion: `ELITEFX DOCTRINE V6.9.md` (the **Market** domain SSOT)
 Supersedes: Decision Doctrine V5 (adds Principle 80–84; FREEZES the Evidence Layer; readiness state machine; Decision Objects; D4 Decision Objects before the Decision Engine)
+
+> ⚠️ **IMESASISHWA:** Decision-domain SSOT rasmi sasa ni **[ELITEFX DECISION DOCTRINE V7](ELITEFX%20DECISION%20DOCTRINE%20V7.md)**
+> (D4 FULLY APPROVED; **P85** decisions = permanent decision history; **P86** cancellation ≠ rejection
+> (CANCELLED state); **P87** Decision Integrity ≠ Outcome (Quality→Integrity); **P88** kila decision
+> inareference Policy; **P89 OPEN** Execution ni immutable object tofauti; D5 Decision Policy Framework
+> KABLA ya Decision Engine; roadmap Object→Policy→Engine→Execution). V6 carry-forward.
 
 > D3 FULLY APPROVED — no amendments needed. **The Evidence Layer is now frozen as stable
 > architecture.** Amendments: the Snapshot is the complete decision context (P80); internal vs

@@ -12,15 +12,15 @@ iwe *consumer* wa architecture, sio sehemu inayolazimisha ibadilike.
   Principle 83: **maamuzi ni immutable first-class objects** (kama Evidence).
   Principle 84: kila Decision Object inareference **exact Evidence Snapshot ID** iliyotoka.
 
-Hii ni **Decision Object** (data structure + lifecycle + provenance + quality + audit), SIO
+Hii ni **Decision Object** (data structure + lifecycle + provenance + integrity + audit), SIO
 Decision Engine. Hakuna logic inayomap snapshot→action (hiyo ni engine). Demo inatumia action ya
 default **ABSTAIN** (P26 capital preservation) — hakuna decision inayofanywa hapa. NO ML.
 
 Maswali (Chief, D4):
   Q1. Decision Object ina fields gani? (id, action, reason, reliability, risk, evidence_refs, timestamp)
-  Q2. Decision ina lifecycle gani? (PROPOSED→VALIDATED→EXECUTED→SETTLED; side EXPIRED/REJECTED)
+  Q2. Decision ina lifecycle gani? (PROPOSED→VALIDATED→EXECUTED→SETTLED; side EXPIRED/REJECTED/CANCELLED)
   Q3. Decision ina provenance yake? (snapshot → decision graph; P84)
-  Q4. Decision ina quality metrics gani? (structural; SIO OOS bado)
+  Q4. Decision ina integrity metrics gani? (structural; SIO OOS bado; P87)
   Q5. Decision ina audit trail gani? (P66)
 
 Reuse: evidence_snapshot (make_snapshot, readiness_state), evidence_operations (build_tagged_evidence),
@@ -49,23 +49,26 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 ACTIONS = ["SELECT", "ABSTAIN", "REDUCE", "HEDGE", "DIVERSIFY", "WAIT", "EXIT", "SUSPEND"]
 # Decision lifecycle state machine (Q2; mirrors P82 for decisions)
 LIFECYCLE = ["PROPOSED", "VALIDATED", "EXECUTED", "SETTLED"]
-LIFECYCLE_SIDE = ["EXPIRED", "REJECTED"]
+# side states: REJECTED (integrity fail) · EXPIRED (evidence expired) · CANCELLED (P86: stopped
+# before execution by news/broker/manual — DISTINCT from rejection)
+LIFECYCLE_SIDE = ["EXPIRED", "REJECTED", "CANCELLED"]
 
 
-def _decision_id(snapshot_id, action, as_of):
+def _decision_id(snapshot_id, action, as_of, policy_id):
     import hashlib
-    return "dec:" + hashlib.sha1(f"{snapshot_id}|{action}|{int(as_of)}".encode()).hexdigest()[:10]
+    return "dec:" + hashlib.sha1(f"{snapshot_id}|{action}|{int(as_of)}|{policy_id}".encode()).hexdigest()[:10]
 
 
-def make_decision(snapshot, action="ABSTAIN", reason=None, audit=None):
-    """Construct an immutable Decision Object (P83) inayoreference exact Snapshot ID (P84).
-    NB: hakuna engine-logic hapa — action ni INPUT (demo = ABSTAIN default, P26)."""
+def make_decision(snapshot, action="ABSTAIN", reason=None, audit=None, policy_id="policy:default@v0"):
+    """Construct an immutable Decision Object (P83) inayoreference exact Snapshot ID (P84) NA
+    Decision Policy ID (P88). NB: hakuna engine-logic hapa — action ni INPUT (demo = ABSTAIN, P26).
+    Decision Objects kwa pamoja = permanent decision history (P85)."""
     assert action in ACTIONS, f"action lazima iwe {ACTIONS}"
     sid = snapshot["id"]
     rstate = snapshot["readiness_state"]
-    # quality metrics (Q4) — STRUCTURAL tu, SIO outcome/OOS
+    # INTEGRITY metrics (Q4; P87) — uhalali wa object KABLA ya execution; STRUCTURAL, SIO outcome/OOS
     struct_max = max([v for v in snapshot["structural_conflict"].values()], default=0.0)
-    quality = {
+    integrity = {
         "evidence_readiness_state": rstate,               # P82
         "evidence_reliability": round(snapshot["reliability"], 4),   # P70 OPEN (sio confidence rasmi)
         "temporal_conflict": round(snapshot["temporal_conflict"], 4),
@@ -75,30 +78,32 @@ def make_decision(snapshot, action="ABSTAIN", reason=None, audit=None):
     }
     dec = {
         # --- Claim (Q1) ---
-        "id": _decision_id(sid, action, snapshot["as_of"]),
+        "id": _decision_id(sid, action, snapshot["as_of"], policy_id),
         "action": action,
         "reason": reason or f"snapshot={rstate}; default capital-preservation (P26)",
         "reliability": round(snapshot["reliability"], 4),      # inherits snapshot (P70 OPEN)
         "risk": round(snapshot["uncertainty"], 4) if np.isfinite(snapshot["uncertainty"]) else None,
-        # --- provenance (Q3; P84) ---
+        # --- references (Q3; P84 + P88) ---
         "evidence_refs": [sid],                                # references SNAPSHOT ID, sio objects
+        "policy_id": policy_id,                                # P88: policy iliyounda decision hii
         "parents": [sid],                                      # snapshot → decision (graph, P72 style)
         # --- operational (Q2) ---
         "timestamp": int(snapshot["as_of"]),
         "lifecycle": "PROPOSED",
-        # --- quality (Q4) + audit (Q5) ---
-        "quality": quality,
-        "audit": list(audit) if audit else [f"make_decision(action={action}, snapshot={sid})"],
+        # --- integrity (Q4; P87) + audit (Q5) ---
+        "integrity": integrity,
+        "audit": list(audit) if audit else [f"make_decision(action={action}, snapshot={sid}, policy={policy_id})"],
     }
     return dec
 
 
 def transition(dec, to_state):
-    """Q2: lifecycle transition (immutable — rudisha object mpya + audit). P83."""
-    valid = {"PROPOSED": {"VALIDATED", "REJECTED", "EXPIRED"},
-             "VALIDATED": {"EXECUTED", "REJECTED", "EXPIRED"},
-             "EXECUTED": {"SETTLED"},
-             "SETTLED": set(), "REJECTED": set(), "EXPIRED": set()}
+    """Q2: lifecycle transition (immutable — rudisha object mpya + audit). P83.
+    CANCELLED (P86) inaruhusiwa KABLA ya execution tu (PROPOSED/VALIDATED) — tofauti na REJECTED."""
+    valid = {"PROPOSED": {"VALIDATED", "REJECTED", "EXPIRED", "CANCELLED"},
+             "VALIDATED": {"EXECUTED", "REJECTED", "EXPIRED", "CANCELLED"},
+             "EXECUTED": {"SETTLED"},                          # baada ya execution huwezi CANCEL
+             "SETTLED": set(), "REJECTED": set(), "EXPIRED": set(), "CANCELLED": set()}
     if to_state not in valid.get(dec["lifecycle"], set()):
         raise ValueError(f"transition batili {dec['lifecycle']} → {to_state}")
     new = {k: (list(v) if isinstance(v, list) else v) for k, v in dec.items()}
@@ -155,6 +160,7 @@ def _report(c, pairs, decisions):
     L.append(f"| reliability | kutoka snapshot (P70 OPEN: sio 'confidence') | {d0['reliability']} |")
     L.append(f"| risk | uncertainty ya evidence | {d0['risk']} |")
     L.append(f"| evidence_refs | **Snapshot ID** (P84), sio objects | {d0['evidence_refs']} |")
+    L.append(f"| policy_id | **Decision Policy** iliyounda (P88) | {d0['policy_id']} |")
     L.append(f"| timestamp | as-of | {d0['timestamp']} |")
     L.append(f"| lifecycle | state (Q2) | {d0['lifecycle']} |")
 
@@ -162,7 +168,7 @@ def _report(c, pairs, decisions):
     L.append("\n## Q2 — Decision lifecycle (state machine)\n")
     L.append("```text")
     L.append("PROPOSED → VALIDATED → EXECUTED → SETTLED")
-    L.append("   ↘ REJECTED / EXPIRED (side states)")
+    L.append("   ↘ REJECTED / EXPIRED / CANCELLED (side states; P86: CANCELLED ≠ REJECTED)")
     L.append("```")
     chain = d0
     steps = [chain["lifecycle"]]
@@ -180,16 +186,16 @@ def _report(c, pairs, decisions):
     L.append("\n- kila Decision inareference **Snapshot ID** halisi (P84), sio Evidence Object moja kwa "
              "moja → mfumo fully auditable (Decision → Snapshot → Set → Operations → Objects).")
 
-    # Q4 — quality metrics
-    L.append("\n## Q4 — Decision quality metrics (STRUCTURAL — sio OOS bado)\n")
+    # Q4 — integrity metrics (P87)
+    L.append("\n## Q4 — Decision INTEGRITY metrics (P87: uhalali KABLA ya execution; SIO outcome/OOS)\n")
     L.append("| decision | evidence state | reliability | temporal-cf | struct-cf | support | abstention? |")
     L.append("|----------|----------------|-------------|-------------|-----------|---------|-------------|")
     for ev in sorted(decisions):
-        q = decisions[ev]["quality"]
+        q = decisions[ev]["integrity"]
         L.append(f"| {ev} | {q['evidence_readiness_state']} | {q['evidence_reliability']} | "
                  f"{q['temporal_conflict']} | {q['structural_conflict_max']} | {q['support_behind']:,} | "
                  f"{'✅' if q['is_abstention'] else '—'} |")
-    L.append("\n- quality metrics ni **structural** (zinatoka snapshot) — SIO outcome/OOS quality (hiyo ni "
+    L.append("\n- **integrity** metrics (P87) ni **structural** (zinatoka snapshot) — zinapima uhalali wa decision KABLA ya execution, SIO outcome/OOS quality (hiyo ni "
              "D5 Decision Quality baadaye, per-decision OOS + FDR). Decision-ready ≠ trade-ready (P69).")
 
     # Q5 — audit trail
@@ -202,8 +208,8 @@ def _report(c, pairs, decisions):
     L.append("\n## VERDICT — D4 Decision Objects\n")
     L.append("→ ✅ **Decision Object imefafanuliwa** kama **immutable first-class value object** (P83) yenye "
              "fields (Q1: action/reason/reliability/risk/evidence_refs/timestamp), **lifecycle state machine** "
-             "(Q2), **provenance** inayoreference **exact Snapshot ID** (Q3, P84), **quality metrics** "
-             "structural (Q4), na **audit trail** (Q5, P66). Snapshot = complete decision context (P80). "
+             "(Q2), **provenance** inayoreference **exact Snapshot ID** (Q3, P84), **integrity metrics** "
+             "structural (Q4; P87), na **audit trail** (Q5, P66). Snapshot = complete decision context (P80). "
              "Sasa Decision Engine itakuwa *consumer* mdogo: snapshot → action, ikijaza Decision Object. "
              "**Hakuna Decision Engine bado.** NO ML.")
     L.append("\n**Bado Decision Science D4 — hakuna decision-LOGIC wala alpha.** Action zote ni ABSTAIN "
@@ -223,7 +229,7 @@ def _report(c, pairs, decisions):
              "enforcement kamili (frozen dataclass) ni engineering ya baadaye, kama Evidence Object.")
 
     L.append("\n*Decision Object: immutable value object (P83) referencing exact Snapshot ID (P84); action "
-             "family (P60); lifecycle state machine; structural quality; audit trail. Evidence Layer FROZEN. "
+             "family (P60); lifecycle state machine; structural integrity; audit trail. Evidence Layer FROZEN. "
              "NO Decision Engine. NO ML. Profitable ≠ Tradable Edge.*")
 
     out = REPO_ROOT / c["paths"]["reports"] / "decision_object_report.md"
@@ -265,9 +271,9 @@ def self_test():
     print(f"audit trail: create={len(d['audit'])} →validate={len(dv['audit'])} refs-snap={snap['id'] in d['audit'][0]} -> {'OK' if ok_audit else 'FAIL'}")
 
     # (5) quality metrics structural
-    q = d["quality"]
+    q = d["integrity"]
     ok_q = q["evidence_readiness_state"] == "READY" and q["is_abstention"] and "support_behind" in q
-    print(f"quality (structural): state={q['evidence_readiness_state']} abstain={q['is_abstention']} -> {'OK' if ok_q else 'FAIL'}")
+    print(f"integrity (structural): state={q['evidence_readiness_state']} abstain={q['is_abstention']} -> {'OK' if ok_q else 'FAIL'}")
 
     ok = ok_fields and ok_immut and ok_life and ok_bad and ok_audit and ok_q
     print(f"\nSELF-TEST: {'PASS' if ok else 'FAIL'}")

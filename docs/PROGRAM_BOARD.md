@@ -3,7 +3,7 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
-> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V6.md`;
+> **Market** = `ELITEFX_DOCTRINE_V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V7.md`;
 > board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-06-30 (Chief: D3 Evidence Snapshots FULLY APPROVED — **Evidence Layer FROZEN** as stable architecture; Principle 80 Snapshot = complete decision context; Principle 81 OPEN internal-evidence vs external-execution conflict; Principle 82 readiness = state machine (READY→STALE→EXPIRED→INVALID); Principle 83 decisions are immutable first-class objects; Principle 84 every decision references its exact Snapshot ID; Decision Doctrine → V6; D4 Decision Objects ACTIVE; Decision Engine deferred).*
+*Last updated: 2026-06-30 (Chief: D4 Decision Objects FULLY APPROVED — Principle 85 decisions form the permanent decision history; Principle 86 cancellation ≠ rejection (CANCELLED state); Principle 87 Decision Integrity ≠ Outcome (Quality→Integrity); Principle 88 every decision references its Decision Policy; Principle 89 OPEN Execution = immutable object independent of Decision; Decision Doctrine → V7; D5 Decision Policy Framework ACTIVE; D6 Decision Engine next; roadmap Object→Policy→Engine→Execution).*
 
 ---
 
@@ -19,15 +19,15 @@
 
 Official (TWO DOMAINS):
 - `ELITEFX_DOCTRINE_V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
-- `ELITEFX DECISION DOCTRINE V6.md` — **Decision** domain (Evidence Layer FROZEN: Object+Operations+Set+Snapshot; Decision Layer: Decision Object → Decision Engine → Execution; active frontier)
+- `ELITEFX DECISION DOCTRINE V7.md` — **Decision** domain (Evidence Layer FROZEN; Decision Layer: Object → Policy → Engine → Execution; active frontier)
 
 Status:
 - ACTIVE (both)
 
 Superseded:
 - V4 … V6.7 (chain)
-- V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V6)
-- Decision Doctrine V1→V2→V3→V4→V5→V6 (V1 Evidence-first; V2 split; V3 operations; V4 sets; V5 snapshots; V6 Evidence-Layer FROZEN + Decision Objects)
+- V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V7)
+- Decision Doctrine V1→…→V7 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89)
 - Patches
 
 ---
@@ -433,22 +433,21 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **D4 — Decision Objects** (Decision Science; Evidence Layer FROZEN; market-discovery FROZEN)
-Name: **Decision Object (immutable value object; define Decision before Engine)**
+Phase: **D5 — Decision Policy Framework** (Decision Science; Evidence Layer FROZEN)
+Name: **Decision Policy (the layer between Object and Engine)**
 Status: ACTIVE (Decision domain)
 Owner: Implementer + Chief
 Chief Approval: YES
-Question: fafanua Decision Object kabla ya Decision Engine. (1) fields gani (action/reason/reliability/
-risk/evidence_refs/timestamp)? (2) lifecycle gani (PROPOSED→VALIDATED→EXECUTED→SETTLED)? (3) provenance
-(→ Snapshot ID, P84)? (4) quality metrics gani (structural)? (5) audit trail gani? Decision inareference
-**Snapshot ID**, sio Evidence Object. Immutable value object (P83). NO Decision Engine bado. NO ML.
+Question: fafanua Decision Policy kabla ya Decision Engine, ili Engine ibaki generic. (1) Policy ni
+nini? (2) policy ina version? (3) inachagua action vipi? (4) inabadilishwa bila kubadilisha Engine? (5)
+Engine na Policy zinawasiliana vipi? Policy = versioned rule Snapshot→action; kila Decision inareference
+policy_id (P88). Rule-based, NO alpha. NO Decision Engine bado. NO ML.
 
-> **D3 Evidence Snapshots FULLY APPROVED — EVIDENCE LAYER FROZEN.** **P80** Snapshot = complete decision
-> context. **P81 OPEN** internal-evidence vs external-execution conflict. **P82** readiness = **state
-> machine** (READY→STALE→EXPIRED→INVALID). **P83** decisions ni **immutable first-class objects**. **P84**
-> kila decision inareference **exact Snapshot ID**. Decision Doctrine → **V6**. Decision Engine
-> **DEFERRED** (itakuwa consumer mdogo: snapshot→action). Architecture: Evidence Layer [FROZEN] ══
-> Decision Object → Decision Engine → Execution. NO ML.
+> **D4 Decision Objects FULLY APPROVED.** **P85** decisions = permanent **decision history**. **P86**
+> cancellation ≠ rejection (**CANCELLED** state). **P87** Decision **Integrity** ≠ Outcome (Quality→
+> Integrity). **P88** kila decision inareference **Policy**. **P89 OPEN** Execution ni immutable object
+> tofauti na Decision. Decision Doctrine → **V7**. Decision Engine **DEFERRED** (generic orchestrator).
+> Architecture: Object → **Policy** → Engine → Execution. NO ML.
 
 ---
 
@@ -517,12 +516,13 @@ risk/evidence_refs/timestamp)? (2) lifecycle gani (PROPOSED→VALIDATED→EXECUT
 - [✓] **D1  Evidence Operations** *(APPROVED — `evidence_operations.py`; pure ops; provenance graph; conflict taxonomy; readiness)*
 - [✓] **D2  Evidence Sets** *(APPROVED — `evidence_set.py`; collection/identity/dedup; order-invariance; set reliability)*
 - [✓] **D3  Evidence Snapshots** *(APPROVED — `evidence_snapshot.py`; canonical Decision input; temporal conflict; readiness state machine)* — **EVIDENCE LAYER FROZEN**
-- [✓] **D4  Decision Objects** *(ACTIVE — `decision_object.py` + `reports/decision_object_report.md`; immutable Decision Object; lifecycle; provenance→Snapshot ID; quality; audit)*
-- [ ] D5  Decision Engine *(BLOCKED — Snapshot → action; small consumer; after Decision Object closed)*
-- [ ] D6  Decision Quality *(BLOCKED — per-decision OOS + FDR)*
-- [ ] D7  Portfolio Decisions *(BLOCKED — allocation; ranking ≠ allocation)*
-- [ ] D8  Live Decision Engine *(BLOCKED — consumes Snapshots; production-agnostic)*
-- [ ] P70 Confidence model · P74 Temporal-vs-structural conflict · P78 Redundancy-vs-duplication · P81 Internal-vs-external constraints *(OPEN — design)*
+- [✓] **D4  Decision Objects** *(APPROVED — `decision_object.py`; immutable object; lifecycle incl. CANCELLED (P86); integrity (P87); provenance→Snapshot ID; policy_id (P88); audit)*
+- [✓] **D5  Decision Policy Framework** *(ACTIVE — `decision_policy.py` + `reports/decision_policy_report.md`; versioned rule Snapshot→action; swappable; Engine↔Policy contract)*
+- [ ] D6  Decision Engine *(BLOCKED — generic orchestrator: apply policy to snapshot; after Policy closed)*
+- [ ] D7  Execution Object *(BLOCKED — P89; immutable; fills/slippage/rejects)*
+- [ ] D8  Decision Quality/Outcome *(BLOCKED — per-decision OOS + FDR; separate from Integrity P87)*
+- [ ] D9  Portfolio / Live *(BLOCKED)*
+- [ ] P70 Confidence model · P74 Temporal-vs-structural · P78 Redundancy-vs-duplication · P81 Internal-vs-external · P89 Execution Object *(OPEN — design)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
 - [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
 
@@ -754,12 +754,18 @@ machine, P82); temporal conflict (P74); Snapshot = complete decision context (P8
 input (P79). Chief froze the Evidence Layer; decisions are immutable objects (P83) referencing the
 Snapshot ID (P84). → Q-046.
 
-**Q-046 — What is a Decision Object (fields, lifecycle, provenance, quality, audit)?**
-Status: OPEN (D4 Decision Objects) — ACTIVE
-Needed: `decision_object_report.md` — fields incl. action/reason/reliability/risk/evidence_refs/
-timestamp (Q1); lifecycle state machine PROPOSED→VALIDATED→EXECUTED→SETTLED (Q2); provenance → exact
-Snapshot ID (Q3, P84); structural quality metrics (Q4); audit trail (Q5, P66). Immutable value object
-(P83). The Decision Engine (D5) is built only after the Decision Object is closed.
+**Q-046 — What is a Decision Object (fields, lifecycle, provenance, integrity, audit)?**
+Status: **CLOSED — APPROVED with amendments** (D4; P85–89)
+Evidence: `decision_object_report.md` — immutable object; lifecycle; provenance → Snapshot ID;
+structural metrics; audit. Chief: decisions = history (P85); CANCELLED ≠ REJECTED (P86); Integrity ≠
+Outcome (P87, Quality→Integrity); reference the Policy (P88); Execution is separate (P89 OPEN). → Q-047.
+
+**Q-047 — What is a Decision Policy (definition, versioning, action choice, swappability, contract)?**
+Status: OPEN (D5 Decision Policy) — ACTIVE
+Needed: `decision_policy_report.md` — policy = versioned rule Snapshot→action (Q1/Q2); how it chooses
+an action from readiness/reliability/conflict (Q3); swappable without changing the Engine (Q4);
+Engine↔Policy contract = policy.decide(snapshot) (Q5). Every Decision references policy_id (P88). The
+Decision Engine (D6) is a generic orchestrator built only after the Policy layer is closed.
 
 **Q-041 — Does any variable carry decision value under a NON-selection decision (abstention/sizing/…)?**
 Status: **DEFERRED** (Chief — until after D0 Evidence Theory; was DQ-1)
@@ -826,6 +832,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **DECISION DOCTRINE V4 (D1 FULLY APPROVED + amendments)**: Chief: "D1 is the first report that no longer talks about Forex — it talks about software architecture." D0+D1 = the formal **Evidence Layer**. **Principle 71** (evidence transformations shall be pure, deterministic and side-effect-free — Evidence behaves like a functional-programming object; the Decision Engine has no side effects). **Principle 72** (provenance shall be a **directed graph**, not a chronological log — aggregate/merge have parents, split has children). **Principle 73** (decision-readiness belongs to an **Evidence Snapshot**, not the immutable object — readiness changes over time; the object does not). **Principle 74 OPEN** (conflict shall distinguish **temporal contradiction** [yesterday bullish vs today bearish] from structural disagreement). **Principle 75** (Evidence Objects are **value objects with immutable identity** — content-derived id; enables dedup, graph nodes, language-independence). Logic gap closed: operations went Evidence→Evidence but never Evidence→**Set**; decisions are made on **Evidence Sets**, not single objects. **D2 Evidence Sets** opened (collection/identity/dedup; order-invariant aggregate; set confidence; snapshot readiness); **Decision Families DEFERRED** until the Evidence Layer is closed. Architecture: Evidence Objects → **Evidence Sets** → Decision → Execution. Delivers `evidence_set.py` + `reports/evidence_set_report.md` (+ value-object id & provenance-graph fields added to `evidence_object`/`evidence_operations`). No Decision Engine yet. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V5 (D2 FULLY APPROVED + amendments)**: **Principle 76** (evidence meaning is independent of insertion order — D2's order-invariant aggregate is "the first theorem of Decision Science": a Set is a *mathematical set*, not a sequence; historical lineage is represented separately via the provenance graph → Evidence **Semantics** vs Evidence **History**). **Principle 77** (decisions shall operate on **Evidence Snapshots**, not raw Evidence Objects). **Principle 78 OPEN** (statistical **redundancy ≠ identity duplication** — EURUSD H1 vs H4 are distinct ids but near-identical info; redundancy management still needed). **Principle 79** (the **Evidence Snapshot is the canonical input to the Decision Layer**). Terminology: "Set Confidence" → **"Set Reliability"** until the confidence model (P70) is closed. **D3 Evidence Snapshots** opened (immutable as-of-T view; fields; readiness @T; temporal conflict per P74; canonical input per P79) — this **completes the Evidence Layer** (Object→Operations→Set→Snapshot); **Decision Families DEFERRED** until D3 approved. Delivers `evidence_snapshot.py` + `reports/evidence_snapshot_report.md`. No Decision Engine yet. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V6 (D3 FULLY APPROVED — EVIDENCE LAYER FROZEN)**: Chief approves D3 with **no amendments** ("D3 is the end of Evidence Engineering; the architecture is complete"). **The Evidence Layer (Object · Operations · Set · Snapshot) is declared FROZEN as stable architecture** — no new Object/Operation/Set/Snapshot unless data shows a large logic gap ("if we keep changing the foundation, Decision Science never begins"). **Principle 80** (the Evidence Snapshot defines the **complete decision context** available to the Decision Layer — it sees nothing else). **Principle 81 OPEN** (distinguish **internal** evidence conflicts from **external** execution constraints — broker outage/news halt/execution failure affect the decision but are not evidence). **Principle 82** (decision-readiness is an explicit **state machine** — READY→STALE→EXPIRED→INVALID — not a numeric score; states are more auditable). **Principle 83** (decisions are **immutable first-class objects** — like Evidence). **Principle 84** (every Decision Object references the **exact Evidence Snapshot ID** it originated from → fully auditable Decision→Snapshot→Set→Operations→Objects). Snapshot gains `readiness_state` (P82) and `id` (P84). **D4 Decision Objects** opened (define the Decision before the Engine, as Event was defined before algorithms): immutable Decision Object with fields/lifecycle-state-machine/provenance/structural-quality/audit; action defaults to **ABSTAIN** (P26) — no engine logic. **Decision Engine DEFERRED** (it will be a small consumer: snapshot→action). Delivers `decision_object.py` + `reports/decision_object_report.md`. No Decision Engine yet. No ML.
+- 2026-06-30 — **DECISION DOCTRINE V7 (D4 FULLY APPROVED + amendments)**: **Principle 85** (Decision Objects collectively form the **permanent decision history** — with immutability/lifecycle/provenance/audit, decisions become records; later we learn from decision history, not the market alone). **Principle 86** (**cancellation ≠ rejection** — a decision stopped pre-execution by news/broker/manual is **CANCELLED**, not REJECTED; CANCELLED reachable only from PROPOSED/VALIDATED). **Principle 87** (**Decision Integrity ≠ Outcome** — pre-execution structural metrics are *Integrity*; whether the decision was right is *Outcome*, a later OOS matter; "Decision Quality" → "Decision Integrity"). **Principle 88** (**every Decision references its Decision Policy** — same Snapshot → different decisions under Conservative/Aggressive/Capital-Preservation; record policy_id `name@vN` → reproducible). **Principle 89 OPEN** (**Execution is a separate immutable object** — `Decision: BUY` ≠ `Trade Executed`; delay/reject/partial-fill/no-price). **D5 Decision Policy Framework** opened (versioned rule Snapshot→action; swappable via injection; Engine↔Policy contract = policy.decide(snapshot); policies rule-based & conservative, NO alpha). **Decision Engine DEFERRED** (D6, generic orchestrator). Delivers `decision_policy.py` + `reports/decision_policy_report.md` (+ CANCELLED/integrity/policy_id added to `decision_object`). No Decision Engine yet. No ML.
 
 ---
 
@@ -920,6 +927,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-06-30 | D1 Evidence Operations FULLY APPROVED + amendments (pure transformations P71; provenance graph P72; readiness=snapshot P73; temporal-conflict P74 OPEN; value objects P75); Decision Doctrine V4; D2 Evidence Sets start; Decision Families DEFERRED | APPROVED | Chief Quant |
 | 2026-06-30 | D2 Evidence Sets FULLY APPROVED + amendments (order-independence/set≠sequence P76; decisions on snapshots P77; redundancy≠duplication P78 OPEN; snapshot=canonical input P79; confidence→reliability); Decision Doctrine V5; D3 Evidence Snapshots start; Decision Families DEFERRED | APPROVED | Chief Quant |
 | 2026-06-30 | D3 Evidence Snapshots FULLY APPROVED (no amendments); **EVIDENCE LAYER FROZEN**; complete-context P80; internal-vs-external P81 OPEN; readiness state-machine P82; decisions=immutable objects P83; reference exact Snapshot ID P84; Decision Doctrine V6; D4 Decision Objects start; Decision Engine DEFERRED | APPROVED | Chief Quant |
+| 2026-06-30 | D4 Decision Objects FULLY APPROVED + amendments (decision history P85; cancelled≠rejected P86; integrity≠outcome P87; reference policy P88; Execution Object P89 OPEN); Decision Doctrine V7; D5 Decision Policy start; Decision Engine DEFERRED | APPROVED | Chief Quant |
 
 ### Archived (from current edge research)
 
