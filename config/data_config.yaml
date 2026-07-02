@@ -3,7 +3,7 @@
 #  Inatumika na src/data/*. Japhet anabadilisha values; mfumo unasoma tu.
 # ============================================================
 
-# --- Pairs 9 kuu (kama MFUMO.md) ---
+# --- Pairs 9 kuu (za mfumo; rejea docs/PROGRAM_BOARD.md) ---
 pairs:
   - EURUSD
   - GBPUSD
@@ -20,7 +20,7 @@ pairs:
 # (Regime, Sehemu 2 — pamoja na H2). 5m ni nyongeza ya analyst kwa entry.
 timeframes: [1m, 5m, 15m, 30m, H1, H2, H4, D1]
 
-# --- Kipindi cha mafunzo (MFUMO.md: 2016–2024) ---
+# --- Kipindi cha mafunzo (2016–2024) ---
 # 2025–2026-04 = HOLDOUT YA MWISHO isiyoguswa (final OOS — itumike MARA MOJA tu
 # mwishoni). Walk-forward ya Sehemu 7 (train 2016–2022, test 2023–2024) ni tofauti
 # na hii: ni validation ya ndani ya kipindi cha mafunzo. dataset.train_oos_split

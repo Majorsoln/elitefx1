@@ -54,7 +54,7 @@ Note: age ni **calibrator**, sio predictor (accuracy flat, ECE ↓).
 **[F-005] Context Improves Event Quality**
 Status: APPROVED
 Evidence: `context_value_report.md` *(full-metric re-run pending; matokeo ya
-awali: `state_context_value_report.md`, run ya Japhet 2026-06-23)*
+awali: `state_context_report.md`, run ya Japhet 2026-06-23)*
 Note (uaminifu wa ledger): faida ni **EV-SELECTION, sio prediction** —
 median ΔEV chanya (vol +1.26 / spr +0.67 / act +0.59 pips), lakini ΔLogLoss ≈ 0
 (P(win) haibadiliki). Hii inaunga mkono Principle 12 (Context = filter). Robustness
@@ -957,4 +957,4 @@ Reason: *Hatutaki ML kutafuta alpha kabla market structure haijathibitishwa.*
 
 *Governance kuanzia 2026-06-23: hakuna phase inayoanza bila Chief Approval
 hapa juu; hakuna hypothesis iliyokataliwa (Rejected Findings) kurudiwa; doctrine
-moja rasmi = V5.2.*
+rasmi = tazama sehemu ya **Current Doctrine** hapo juu (Market V6.9 + Decision V8).*
