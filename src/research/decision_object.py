@@ -275,7 +275,25 @@ def self_test():
     ok_q = q["evidence_readiness_state"] == "READY" and q["is_abstention"] and "support_behind" in q
     print(f"integrity (structural): state={q['evidence_readiness_state']} abstain={q['is_abstention']} -> {'OK' if ok_q else 'FAIL'}")
 
-    ok = ok_fields and ok_immut and ok_life and ok_bad and ok_audit and ok_q
+    # (6) P86: CANCELLED ≠ REJECTED — inafikika KABLA ya execution tu (PROPOSED/VALIDATED);
+    # baada ya EXECUTED huwezi CANCEL; CANCELLED ni terminal
+    c1 = transition(make_decision(snap), "CANCELLED")                       # PROPOSED → CANCELLED
+    c2 = transition(transition(make_decision(snap), "VALIDATED"), "CANCELLED")  # VALIDATED → CANCELLED
+    try:
+        transition(transition(transition(make_decision(snap), "VALIDATED"), "EXECUTED"), "CANCELLED")
+        ok_no_exec_cancel = False                                           # EXECUTED → CANCELLED batili
+    except ValueError:
+        ok_no_exec_cancel = True
+    try:
+        transition(c1, "VALIDATED"); ok_terminal = False                    # CANCELLED ni terminal
+    except ValueError:
+        ok_terminal = True
+    ok_cancel = (c1["lifecycle"] == "CANCELLED" and c2["lifecycle"] == "CANCELLED"
+                 and ok_no_exec_cancel and ok_terminal)
+    print(f"P86 CANCELLED: proposed→{c1['lifecycle']} validated→{c2['lifecycle']} "
+          f"executed-blocked={ok_no_exec_cancel} terminal={ok_terminal} -> {'OK' if ok_cancel else 'FAIL'}")
+
+    ok = ok_fields and ok_immut and ok_life and ok_bad and ok_audit and ok_q and ok_cancel
     print(f"\nSELF-TEST: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 

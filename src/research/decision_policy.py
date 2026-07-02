@@ -16,6 +16,11 @@ Hii ni **Decision Policy Framework**, SIO Decision Engine (D6). Policy = sheria 
 **Tahadhari:** policies ni RULE-based na conservative — hazithibitishi alpha (P26 default = ABSTAIN;
 value halisi ni hasi → mostly ABSTAIN/AVOID). Decision-ready ≠ trade-ready (P69).
 
+AMENDMENT (Chief review 2026-07-02, G-7): V7 Q3 — policy inachagua action kutoka readiness_state +
+reliability + **conflict**. Conflict sasa ni EXPLICIT policy input (kila policy ina tolerance yake;
+capital_preservation = 0.00, conservative/aggressive = CONFLICT_CEIL). Logic imebadilika → policies
+zime-bump hadi @v2 (P88 versioning: version mpya = policy_id mpya = decision id mpya).
+
 Maswali (Chief, D5):
   Q1. Policy ni nini?
   Q2. Policy ina version?
@@ -57,32 +62,41 @@ def _policy(name, version, decide_fn):
     return {"name": name, "version": version, "id": f"policy:{name}@v{version}", "decide": decide_fn}
 
 
+def _max_conflict(snap):
+    """G-7 (V7 Q3): conflict ni EXPLICIT policy input — max ya temporal (P74) na structural (D1
+    taxonomy). Kila policy inaisoma moja kwa moja na ina tolerance yake (sio kupitia readiness tu)."""
+    return max(float(snap["temporal_conflict"]),
+               max((float(v) for v in snap["structural_conflict"].values()), default=0.0))
+
+
 def _capital_preservation(snap):
-    """Conservative kabisa: SELECT tu kama READY + reliability juu sana + hakuna conflict; vinginevyo
-    ABSTAIN (P26). Ndiyo default doctrine-aligned policy."""
-    st = snap["readiness_state"]; rel = snap["reliability"]
+    """Conservative kabisa: SELECT tu kama READY + reliability juu sana + ZERO conflict; vinginevyo
+    ABSTAIN (P26). Conflict tolerance = 0.00 (G-7). Ndiyo default doctrine-aligned policy."""
+    st = snap["readiness_state"]; rel = snap["reliability"]; cf = _max_conflict(snap)
     if st == "INVALID":
         return "ABSTAIN", "invalid evidence (conflict) → protect capital (P26)"
+    if cf > 0.0:
+        return "ABSTAIN", f"conflict {cf:.2f} > 0.00 tolerance → protect capital (P26; G-7)"
     if st == "READY" and rel >= HI:
-        return "SELECT", f"READY + reliability {rel:.2f}≥{HI}"
+        return "SELECT", f"READY + reliability {rel:.2f}≥{HI} + zero conflict"
     return "ABSTAIN", f"{st}, reliability {rel:.2f} < {HI} → abstain (P26)"
 
 
 def _conservative(snap):
-    st = snap["readiness_state"]; rel = snap["reliability"]
-    if st == "INVALID":
-        return "ABSTAIN", "invalid evidence"
+    st = snap["readiness_state"]; rel = snap["reliability"]; cf = _max_conflict(snap)
+    if st == "INVALID" or cf >= CONFLICT_CEIL:
+        return "ABSTAIN", f"invalid/conflicted evidence (conflict {cf:.2f} ≥ {CONFLICT_CEIL})"
     if st == "READY" and rel >= MID:
-        return "SELECT", f"READY + reliability {rel:.2f}≥{MID}"
+        return "SELECT", f"READY + reliability {rel:.2f}≥{MID} + conflict {cf:.2f}<{CONFLICT_CEIL}"
     if st == "STALE":
         return "WAIT", "stale evidence → wait for refresh"
     return "ABSTAIN", f"{st}, reliability {rel:.2f} < {MID}"
 
 
 def _aggressive(snap):
-    st = snap["readiness_state"]; rel = snap["reliability"]
-    if st == "INVALID":
-        return "HEDGE", "conflict → hedge instead of abstain"
+    st = snap["readiness_state"]; rel = snap["reliability"]; cf = _max_conflict(snap)
+    if st == "INVALID" or cf >= CONFLICT_CEIL:
+        return "HEDGE", f"conflict {cf:.2f} ≥ {CONFLICT_CEIL} → hedge instead of abstain"
     if st in ("READY", "STALE") and rel >= LO:
         return "SELECT", f"{st} + reliability {rel:.2f}≥{LO}"
     if st == "EXPIRED":
@@ -90,10 +104,11 @@ def _aggressive(snap):
     return "REDUCE", f"{st}, reliability {rel:.2f} < {LO} → reduce"
 
 
+# @v2: G-7 amendment — conflict = explicit input (P88: logic mpya → version mpya)
 POLICIES = {
-    "capital_preservation": _policy("capital_preservation", 1, _capital_preservation),
-    "conservative": _policy("conservative", 1, _conservative),
-    "aggressive": _policy("aggressive", 1, _aggressive),
+    "capital_preservation": _policy("capital_preservation", 2, _capital_preservation),
+    "conservative": _policy("conservative", 2, _conservative),
+    "aggressive": _policy("aggressive", 2, _aggressive),
 }
 
 
@@ -136,11 +151,12 @@ def _report(c, pairs, snaps):
     L.append("Policy = **kanuni iliyopewa jina na version** inayomap **Evidence Snapshot (complete context, "
              "P80) → action** kutoka decision family (P60). Ni **decision LOGIC**, tofauti na Decision Engine "
              "(orchestrator). Engine inaita policy; policy inaamua. NO ML — rule-based tu.")
-    L.append("\n| policy | id (versioned) | tabia |")
-    L.append("|--------|----------------|-------|")
-    L.append("| capital_preservation | policy:capital_preservation@v1 | ABSTAIN isipokuwa READY + reliability juu sana (P26) |")
-    L.append("| conservative | policy:conservative@v1 | SELECT kwa READY+mid; STALE→WAIT |")
-    L.append("| aggressive | policy:aggressive@v1 | SELECT kwa READY/STALE+low; INVALID→HEDGE |")
+    L.append("\n| policy | id (versioned) | conflict tolerance (G-7) | tabia |")
+    L.append("|--------|----------------|--------------------------|-------|")
+    L.append("| capital_preservation | policy:capital_preservation@v2 | 0.00 | ABSTAIN isipokuwa READY + reliability juu sana + zero conflict (P26) |")
+    L.append(f"| conservative | policy:conservative@v2 | {CONFLICT_CEIL} | SELECT kwa READY+mid+low-conflict; STALE→WAIT |")
+    L.append(f"| aggressive | policy:aggressive@v2 | {CONFLICT_CEIL} | SELECT kwa READY/STALE+low; conflict≥ceiling→HEDGE |")
+    L.append("\n- *@v2: G-7 amendment (conflict = explicit input) ilibadilisha logic → version bump (P88).*")
 
     # Q2 — versioning
     L.append("\n## Q2 — Policy ina version?\n")
@@ -157,7 +173,8 @@ def _report(c, pairs, snaps):
         a2, _ = POLICIES["conservative"]["decide"](s)
         a3, _ = POLICIES["aggressive"]["decide"](s)
         L.append(f"| {ev} | {s['readiness_state']} | {s['reliability']:.2f} | {a1} | {a2} | {a3} |")
-    L.append("\n- action inatoka **readiness_state (P82) + reliability + conflict** — SIO market prediction. "
+    L.append("\n- action inatoka **readiness_state (P82) + reliability + conflict (EXPLICIT input — G-7: "
+             "temporal+structural max, per-policy tolerance)** — SIO market prediction. "
              "Default = ABSTAIN (P26). *value halisi ni hasi → mostly ABSTAIN/AVOID; hii SI alpha (P69).*")
 
     # Q4 — swappable without engine change
@@ -236,22 +253,30 @@ def self_test():
 
     # (3) decision references policy_id (P88) + snapshot_id (P84); reproducible
     d1 = apply_policy(POLICIES["conservative"], s); d2 = apply_policy(POLICIES["conservative"], s)
-    ok_ref = (d1["policy_id"] == "policy:conservative@v1" and d1["evidence_refs"] == ["snap:x"]
+    ok_ref = (d1["policy_id"] == "policy:conservative@v2" and d1["evidence_refs"] == ["snap:x"]
               and d1["id"] == d2["id"])
     print(f"policy_id + reproducible: policy={d1['policy_id']} id-stable={d1['id']==d2['id']} -> {'OK' if ok_ref else 'FAIL'}")
 
     # (4) version change → different policy_id → different decision id
-    v2 = _policy("conservative", 2, _conservative)
-    d3 = apply_policy(v2, s)
-    ok_ver = d3["policy_id"] == "policy:conservative@v2" and d3["id"] != d1["id"]
-    print(f"versioning: v2 policy={d3['policy_id']} diff-id={d3['id']!=d1['id']} -> {'OK' if ok_ver else 'FAIL'}")
+    v3 = _policy("conservative", 3, _conservative)
+    d3 = apply_policy(v3, s)
+    ok_ver = d3["policy_id"] == "policy:conservative@v3" and d3["id"] != d1["id"]
+    print(f"versioning: v3 policy={d3['policy_id']} diff-id={d3['id']!=d1['id']} -> {'OK' if ok_ver else 'FAIL'}")
 
     # (5) INVALID snapshot → conservative ABSTAIN, aggressive HEDGE (conflict handling)
     inv = snap("INVALID", 0.9)
     ok_inv = POLICIES["conservative"]["decide"](inv)[0] == "ABSTAIN" and POLICIES["aggressive"]["decide"](inv)[0] == "HEDGE"
     print(f"invalid handling: conservative=ABSTAIN aggressive=HEDGE -> {'OK' if ok_inv else 'FAIL'}")
 
-    ok = ok_choose and ok_swap and ok_ref and ok_ver and ok_inv
+    # (6) G-7: conflict ni EXPLICIT input — READY + reliability juu LAKINI conflict ndogo (< ceiling,
+    # kwa hiyo readiness bado READY) → capital_preservation (tolerance 0) ABSTAIN; conservative SELECT
+    s_cf = snap("READY", 0.95); s_cf["structural_conflict"] = {"cross-pair": 0.20}
+    a_cp2, why_cp2 = POLICIES["capital_preservation"]["decide"](s_cf)
+    a_cons2, _ = POLICIES["conservative"]["decide"](s_cf)
+    ok_cf = a_cp2 == "ABSTAIN" and "conflict" in why_cp2 and a_cons2 == "SELECT"
+    print(f"explicit conflict input (G-7): cap-pres={a_cp2} conservative={a_cons2} -> {'OK' if ok_cf else 'FAIL'}")
+
+    ok = ok_choose and ok_swap and ok_ref and ok_ver and ok_inv and ok_cf
     print(f"\nSELF-TEST: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 
