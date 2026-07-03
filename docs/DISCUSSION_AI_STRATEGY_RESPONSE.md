@@ -235,13 +235,18 @@ magari yatabadilika kila mwaka.*
 
 ---
 
-# ADDENDUM (2026-07-03) — Majibu kwa mchango wa Technical Supervisor / AI Architect
+# ADDENDUM (2026-07-03) — Majibu kwa mchango wa pili wa Chief #1 (kofia ya AI Architect)
 
-Technical Supervisor ameongeza mambo matatu kwenye discussion. Msimamo wangu:
+> *Correction ya attribution (Custodian): addendum hii awali ilimtaja "Technical Supervisor"
+> kama mtu tofauti — mchango ule ulikuwa wa **Chief #1** mwenyewe (role yake ni moja: Chief
+> Scientist + AI Architect + Technical Supervisor). Japhet ni **Project Director**. Imesahihishwa
+> 2026-07-03 siku ile ile.*
+
+Chief #1 (kwa kofia ya AI Architect) ameongeza mambo matatu kwenye discussion. Msimamo wangu:
 
 ## A1 — Root-cause pipeline (Research → … → Continuous Learning): NAKUBALI, na marekebisho mawili
 
-Pipeline yake ndiyo **lifecycle ya Track B iliyoandikwa kwa ukamilifu** — inaonyesha hasa pale
+Pipeline ya Chief #1 ndiyo **lifecycle ya Track B iliyoandikwa kwa ukamilifu** — inaonyesha hasa pale
 mnyororo wetu wa sasa unapokatikia (`Finding → Doctrine → [MWISHO]`). Marekebisho mawili ya
 kiufundi:
 
@@ -254,8 +259,8 @@ kiufundi:
 
 ## A2 — CHAPTER 4: KNOWLEDGE SCIENCE — synthesis: **LAYER SASA, CHAPTER BAADAYE**
 
-Response yangu ya awali (Q8) ilisema "parallel layer, sio chapter"; Technical Supervisor anasema
-"siku moja Chapter 4". Zote mbili ni sahihi — zinajibu maswali mawili tofauti:
+Response yangu ya awali (Q8) ilisema "parallel layer, sio chapter"; Chief #1 anasema "siku moja
+Chapter 4". Zote mbili ni sahihi — zinajibu maswali mawili tofauti:
 
 ```text
 SASA (layer):      Kukusanya lessons ni by-product ya kila phase — ikianza leo haipotezi
@@ -271,7 +276,7 @@ Kwa hiyo napendekeza kwa Chief #1: **collection layer ianze sasa (pilot LESSON-0
 Chapter 4 iingie kwenye roadmap kama chapter rasmi baada ya E4** — na hapo ndipo "AI Science"
 (Model Training/Continuous Learning) itakapopimwa dhidi ya ML-block kama chapter ya tano.
 
-## A3 — Knowledge Architecture ownership → Chief #2: NAIKUBALI (pending ratification ya Chief #1)
+## A3 — Knowledge Architecture ownership → Chief #2: NAIKUBALI (assignment ya Chief #1; inakuwa rasmi na uamuzi wa discussion hii)
 
 Naikubali kazi hii (lesson specification · knowledge schema · corpus structure · dataset
 versioning · evaluation benchmark · knowledge-graph layout) — ni extension ya asili ya G-01
@@ -279,8 +284,9 @@ versioning · evaluation benchmark · knowledge-graph layout) — ni extension y
 
 - **Sitazai principle wala doctrine ya Knowledge Science** — na-design specs; approval ni ya Chief #1.
 - **Sitafundisha model yoyote** — ML-block inabaki hadi Chief #1 aifungue (GAP 4 ya paper hii).
-- Deliverable ya kwanza (baada ya ratification): **Lesson Specification** (schema ya Q3, document-first
-  kwa utamaduni wa D6) → review ya Chief #1 → ndipo corpus inaanza.
+- Deliverable ya kwanza (uamuzi wa discussion ukipita): **Lesson Specification** (schema ya Q3,
+  document-first kwa utamaduni wa D6) → review ya Chief #1 → ndipo corpus inaanza.
 
-*Roles sasa zinakaa hivi: Technical Supervisor analinda ramani ya safari; Chief #1 anaamua njia;
-mimi natunza maarifa ya kila hatua; Implementer anajenga gari; Japhet (data) analisha mfumo ukweli.*
+*Roles sasa zinakaa hivi: Chief #1 anaamua njia na kulinda ramani (Scientist + AI Architect +
+Supervisor); mimi natunza maarifa ya kila hatua; Implementer anajenga gari; Project Director
+(Japhet) anamiliki safari, data, na uzalishaji.*

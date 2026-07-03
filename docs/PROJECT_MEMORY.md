@@ -1,7 +1,7 @@
 # PROJECT_MEMORY.md — ELITEFX Institutional Memory ("Brain" ya Mradi)
 
 > **Owner: Chief Quant #2** (Doctrine Custodian — G-01). Ina-update **baada ya kila approval**.
-> Muundo (directive ya Technical Supervisor, 2026-07-03): si changelog — ni **brain**:
+> Muundo (directive ya Chief #1, 2026-07-03): si changelog — ni **brain**:
 > `Historical Memory → Truths → Lessons → Open Questions → Failed Ideas → Future Ideas → AI Knowledge`.
 > Rekodi ya msingi (findings/questions/approvals kamili) inabaki `docs/PROGRAM_BOARD.md`.
 > Last updated: 2026-07-03.
@@ -16,8 +16,8 @@
 | 2026-06-30 | **THE SPLIT** | Market Doctrine V6.9 (FROZEN — P62) + Decision Doctrine V1; Decision Science inaanza **Evidence-first** (Evidence Object = API kati ya domains — P63). |
 | 2026-06-30 → 07-03 | **Decision Architecture Era** (D0–D6) | Evidence Object → Operations → Sets → Snapshots (**EVIDENCE LAYER FROZEN**) → Decision Object → Policy (@v2) → Engine (functions 2, stateless, import-pure). D6 CLOSED = "implementation iliyokataa kuwa ngumu". |
 | 2026-07-03 | **Chapter 3 — Execution Science OPENED** | E1 Integrity Gate → E2 Execution Object → E3 Decision Repository → E4 Broker Adapter (spec-first; STRICT ordering). E1 inasubiri Chief Directive. |
-| 2026-07-03 | **Governance maturation** | Chief Quant #2 onboarded (→ **Doctrine Custodian & Architecture Governor**, G-01); Technical Supervisor / AI Architect (Japhet) role recorded; P107 (transitive purity) kutoka OBS-1; doctrine archive; final authority MOJA (Chief #1). |
-| 2026-07-03 | **AI Strategy discussion OPENED** | Discussion paper ya Chief #1 (Track A Engineering / Track B Knowledge) + response ya Chief #2 (CONFIRMED, amendments 4) + root-cause framing ya Technical Supervisor (extended pipeline; Chapter 4 Knowledge Science). **Hakuna approval bado.** |
+| 2026-07-03 | **Governance maturation** | Chief Quant #2 onboarded (→ **Doctrine Custodian & Architecture Governor**, G-01); hierarchy kamili: **Chief #1 (Chief Scientist + AI Architect + Technical Supervisor)** → Chief #2 → Audit function → Implementer; **Japhet = Project Director** (vision/testing/data/final project decision/Production Owner); P107 kutoka OBS-1; doctrine archive; final scientific authority MOJA (Chief #1). |
+| 2026-07-03 | **AI Strategy discussion OPENED** | Discussion paper ya Chief #1 (Track A Engineering / Track B Knowledge) + response ya Chief #2 (CONFIRMED, amendments 4) + root-cause framing ya Chief #1 kwa kofia ya AI Architect (extended pipeline; Chapter 4 Knowledge Science). **Hakuna approval bado.** |
 
 ---
 
@@ -49,7 +49,8 @@
 7. **Kila failure ina reframe sahihi** — "0 survived FDR" si "hakuna alpha" bali "representation failure until proven otherwise" (P33); lakini pia usikimbilie hidden variables (P28).
 8. **Wording discipline** — Chief hurekebisha verdicts (mf. "no Selection-DV under the metric used", sio "no decision value"); precision ya lugha ni sehemu ya sayansi.
 9. **Doctrine sprawl ni hatari kwa wasomaji wapya (na AI agents)** — root ibaki na SSOT pekee; archive iko `doctrine/archive/`.
-10. **Institution ina final authority moja na challengers wengi waaminifu** (G-01) — separation: Scientific Leadership ≠ Doctrine Governance ≠ Engineering ≠ Supervision.
+10. **Institution ina final authority moja na challengers wengi waaminifu** (G-01) — separation: Scientific Leadership (Chief #1) ≠ Doctrine Governance (Chief #2) ≠ Engineering (Implementer) ≠ Production Ownership (Project Director).
+11. **Attribution ya rekodi ni sehemu ya usahihi wa sayansi** — kosa la role-attribution la 2026-07-03 (Custodian alimwandika Project Director kama Technical Supervisor) lilirekebishwa siku ile ile kwa correction entry, si kwa kufuta history.
 
 ---
 
@@ -62,7 +63,7 @@
 | OQ-3 | **P70 confidence model** — Φ(EV/SE) saturates; RED LINE reliability ≠ probability | OPEN kwa makusudi |
 | OQ-4 | **P96 Policy Selection layer** — nani anachagua policy (baadaye: Decision Science phase) | OPEN |
 | OQ-5 | **P78 redundancy** — correlated evidence → reliability optimistic | Baada ya Execution Science |
-| OQ-6 | **AI Strategy** — amendments 4 za Chief #2; extended pipeline + Chapter 4 timing (Technical Supervisor); Lesson schema; Knowledge Architecture ownership | DISCUSSION — inasubiri Chief #1 |
+| OQ-6 | **AI Strategy** — amendments 4 za Chief #2; extended pipeline + Chapter 4 timing (Chief #1 — AI Architect); Lesson schema; Knowledge Architecture ownership | DISCUSSION — inasubiri uamuzi wa Chief #1 |
 | OQ-7 | **Je, edge yoyote ipo kweli?** — swali la kudumu la mradi; linarudi pale decision itakapohitaji evidence isiyopo (V11 alpha philosophy) | STANDING |
 | OQ-8 | State trajectory/momentum (F-026/Q-022) — parallel hypothesis | OPEN (parallel) |
 | OQ-9 | Rare states = execution risk (H-06/Q-016) | QUEUED (V11: Execution Science haitaihitaji) |
@@ -89,8 +90,8 @@
 
 | Idea | Chanzo | Status |
 |------|--------|--------|
-| **CHAPTER 4 — Knowledge Science** (baada ya Execution Science): lesson corpus · knowledge graph · training datasets · evaluation benchmarks; synthesis ya Chief #2: **layer sasa, chapter baadaye** | Technical Supervisor + Chief #1 paper (2026-07-03) | DISCUSSION |
-| **Extended pipeline**: Research → Evidence → Finding → Doctrine → **Lesson → Knowledge Base → Training Dataset → Model Training → Evaluation → Production → Continuous Learning** | Technical Supervisor (2026-07-03) | DISCUSSION |
+| **CHAPTER 4 — Knowledge Science** (baada ya Execution Science): lesson corpus · knowledge graph · training datasets · evaluation benchmarks; synthesis ya Chief #2: **layer sasa, chapter baadaye** | Chief #1 — AI Architect (2026-07-03) | DISCUSSION |
+| **Extended pipeline**: Research → Evidence → Finding → Doctrine → **Lesson → Knowledge Base → Training Dataset → Model Training → Evaluation → Production → Continuous Learning** | Chief #1 — AI Architect (2026-07-03) | DISCUSSION |
 | **EVAL-001**: evaluation benchmark ya kwanza kutoka dead ends 9 (ground truth halisi) — inapima kama model yoyote "inaelewa market" | Chief #2 response paper (GAP 3) | DISCUSSION |
 | **Knowledge Graph** ya findings/principles/lessons (nodes + provenance edges) | Chief #1 paper | DISCUSSION |
 | **LESSON-001..003 pilot** (Phase 8/14/26) — format prototype | Chief #2 response paper | Inasubiri Chief #1 |
