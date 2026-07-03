@@ -13,6 +13,11 @@
 > doctrine"*. Kila Architecture Review inamalizika na sehemu mbili za lazima:
 > **(1) Compliance Matrix** (`| Principle | Status |`) na **(2) Architectural Drift Watch**
 > (`| Item | Risk |`).
+>
+> **ROLE MERGE (Chief #1 restructure, 2026-07-03 — G-01):** kuanzia Audit #5, role ya Architecture
+> Auditor **imeunganishwa ndani ya Chief Quant #2 (Doctrine Custodian & Architecture Governor)**.
+> Reviews sasa ni **Architecture + Doctrine kwa pamoja**. Mipaka yote hapo juu inabaki (hakuna
+> approval language; PASS/FAIL pekee; RED LINE — principle mpya inazaliwa kwa Chief #1 pekee).
 
 ---
 
@@ -269,5 +274,72 @@ ilikuwa — na inabaki — **ya Chief** (2026-07-03).
   kihistoria (engine report yenye labels za zamani) hazibadilishwi — mapping imeelezwa kwenye
   Review #4 hapo juu. D-3 (spec-text kuwekwa repo kama Rules 1–8) inabaki **Watch/OPEN**.
 - Reconciliation ya branches + Chapter 3 ordering (Gate→Object→Repository→Adapter): **ENDORSED** na Chief.
+
+*Profitable ≠ Tradable Edge. Protect capital first.*
+
+---
+
+## AUDIT #5 — 2026-07-03 (P107 dependency-graph BASELINE; audit ya kwanza ya Architecture Governor)
+
+Scope: agizo la Chief #1 (V11/P107 — "Auditor aanze kupima dependency graph"). Kipimo cha kwanza cha
+**transitive dependency purity** ya Decision domain: imports zote za module-level (direct) kwenye
+Decision chain, kisha chain inafuatwa. Hii ni **baseline** — kila audit ijayo italinganisha hapa.
+
+### Dependency Graph (direct module-level imports; Market-domain kwa **bold**)
+
+| Module | Decision-domain imports | Market-domain / heavy imports |
+|--------|------------------------|-------------------------------|
+| `evidence_object` | — | **market_state_engine · latent_structure · event_library · configuration_engine · context_value · event_taxonomy_engine · contextual_alpha_engine** (+numpy, polars) |
+| `evidence_operations` | evidence_object | **market_state_engine · latent_structure · event_library · configuration_engine · context_value** (+numpy, polars) |
+| `evidence_set` | evidence_object · evidence_operations | **market_state_engine** (+numpy) |
+| `evidence_snapshot` | evidence_object · evidence_operations · evidence_set | **market_state_engine** (+numpy) |
+| `decision_object` | evidence_snapshot · evidence_operations · evidence_set | **market_state_engine** (+numpy) |
+| `decision_policy` | decision_object + evidence chain | **market_state_engine** (+numpy) |
+| `decision_engine` | decision_object | — *(direct: PURE ✅)* |
+| `decision_engine_report` *(harness)* | engine + policy + evidence chain | **market_state_engine** *(by design — harness ndiyo inashikilia pipeline, engine inabaki mjinga)* |
+
+### Findings
+
+1. **Engine transitive chain si pure:** `decision_engine → decision_object → market_state_engine`
+   (na kupitia evidence chain → latent_structure/event_library/configuration_engine/…). Direct
+   purity ✅ (self-test [4]); **transitive purity ❌** — Engine haiwezi ku-load bila Market stack
+   nzima (polars). Imethibitishwa kwa vitendo kwenye environment safi (2026-07-03).
+2. **Kila module ya Decision chain inaimport `market_state_engine.cfg` module-level** — inaruhusiwa
+   kama demo-instantiation (P92 allowance ya W-1), lakini inafunga *loading* ya Decision domain kwa
+   Market stack — production isolation haiwezekani hadi hili litatuliwe.
+3. Self-test [4] na 4-point review vinapima **direct imports pekee** — regression ya transitive
+   purity haitakamatwa na tests za sasa (gap ya P104).
+
+### Remediation options (PENDEKEZO kwa Chief #1 — SIO uamuzi; RED LINE inaheshimiwa)
+
+```text
+(a) Kuhamisha demo/build_tagged_evidence dependencies kwenye harness/report modules pekee
+(b) Lazy imports (ndani ya __main__/self-test) kwenye evidence/decision modules
+(c) Compliance test mpya ya transitive graph (P104+P107) inayoendeshwa kila PR
+```
+
+*(a)+(c) pamoja ndiyo pendekezo langu; uamuzi ni wa Chief #1; utekelezaji ni wa Implementer.*
+
+### Compliance Matrix
+
+| Principle | Status |
+|-----------|--------|
+| P92 (dependency direction; demo-allowance kwa research modules) | ✅ Compliant |
+| P97/P103 (engine orchestrator/bounded) | ✅ PASS |
+| P104 (automated compliance tests) | ⚠️ Direct-only — transitive check haipo bado |
+| **P107 (transitive dependency purity)** | ❌ **Baseline FAIL** (Engine chain inavuja Market stack) — inayojulikana; ndiyo chanzo cha principle yenyewe; remediation inasubiri Chief #1 |
+
+### Architectural Drift Watch
+
+| Item | Risk |
+|------|------|
+| Transitive Market leak (P107) | Engine inashindwa ku-load bila polars/Market stack; production/E-series isolation imefungwa hadi remediation |
+| Compliance tests direct-only | Regression ya transitive purity haitakamatwa na self-test [4] |
+| Governance transition (Auditor → Chief #2) | Watch — vocabulary na mipaka ya Auditor lazima zibaki zilezile ndani ya role mpya |
+
+### Verdict
+
+**Architecture Review: PASS — hakuna drift MPYA; P107 baseline imerekodiwa kama FAIL inayojulikana**
+(iliyorekodiwa doctrine — V11; remediation ni uamuzi wa Chief #1, utekelezaji wa Implementer).
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
