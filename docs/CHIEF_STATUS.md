@@ -50,7 +50,7 @@ BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
 
 | Item | Nani | Status |
 |------|------|--------|
-| **AI Strategy discussion (Track A Engineering / Track B Knowledge)** — discussion paper ya Chief #1 + response ya Chief #2 (`docs/DISCUSSION_AI_STRATEGY_RESPONSE.md`: CONFIRMED na amendments 4 + pilot LESSON-001..003) | Chief #1 (uamuzi) | **DISCUSSION — hakuna approval bado**; roadmap/doctrine hazijaguswa |
+| **AI Strategy discussion (Track A Engineering / Track B Knowledge)** — paper ya Chief #1 + response ya Chief #2 (CONFIRMED, amendments 4, pilot LESSON-001..003) + **addendum**: root-cause pipeline ya Technical Supervisor (nakubali, marekebisho 2) · **Chapter 4 Knowledge Science: layer SASA, chapter BAADA ya E4** · Knowledge Architecture ownership → Chief #2 (nimekubali, ratification PENDING) | Chief #1 (uamuzi) | **DISCUSSION — hakuna approval bado**; roadmap/doctrine hazijaguswa |
 | E1 Chief Directive (kufungua phase) | Chief #1 | PENDING |
 | P107 remediation (options a/b/c — Audit #5) | Chief #1 (uamuzi) → Implementer | PENDING |
 | F-005 full-metric re-run | Japhet (data run ijayo) | DEBT (V11) |

@@ -47,7 +47,7 @@ scientific direction, principles, roadmap, and final approval.
 | **Chief Quant #1 — Scientific Director** | Final Authority · Roadmap Owner · Principle Authority · Final Approval. Anaamua: phase inayofuata · hypothesis mpya · principle mpya · chapter mpya · approval ya mwisho. **Hafikirii formatting/numbering/logs.** |
 | **Chief Quant #2 — Doctrine Custodian & Architecture Governor** | (1) Kusoma implementation na **kutafsiri discoveries** (je, doctrine imeathirika? ndiyo → anaandika amendment); (2) **Kutekeleza maamuzi ya Chief #1 kwenye doctrine** — kuongeza principles zilizoamuliwa, references, numbering, board, amendment/approval logs, conflict-check; (3) **Repository governance** — merge doctrine · organize archive · maintain `PROGRAM_BOARD.md` · **owner wa `PROJECT_MEMORY.md`** (lessons learned/dead ends/permanent truths/timeline — baada ya kila approval) · **owner wa `CHIEF_STATUS.md`** (current phase/risks/roadmap); (4) **Architecture + Doctrine reviews kwa pamoja** — role ya Architecture Auditor **imeunganishwa hapa** (Compliance Matrix + Drift Watch + 4-point review + dependency graph P107). **RED LINE: haruhusiwi kuzaa principle mpya kwa maamuzi yake — anapendekeza tu; principle inazaliwa kwa Chief #1, kisha Chief #2 anaiandika kwenye doctrine.** |
 | **Implementer** | Code · reports · tests. **Hana burden ya doctrine.** |
-| **Japhet** | Data runs + validation za data halisi (~26GB nje ya git). |
+| **Technical Supervisor / AI Architect (Japhet)** | **Hulinda long-term architecture na roadmap** · hutambua logic gaps · hutengeneza future design proposals · hufuatilia consistency ya mradi kutoka Research hadi Production · data runs + validation za data halisi (~26GB nje ya git). **Mipaka (kwa maneno yake mwenyewe, 2026-07-03): hatoi approval · hafanyi implementation ya kila siku · hafanyi compliance audit.** |
 
 **Workflow rasmi (2026-07-03):**
 
@@ -1015,6 +1015,9 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-03 | **Decision Doctrine V11** | APPROVED | Chief Quant #1 |
 | 2026-07-03 | **G-01 + governance restructure**: Chief #2 = Doctrine Custodian & Architecture Governor (Auditor merged; owner `PROJECT_MEMORY.md` + `CHIEF_STATUS.md`; RED LINE — principle mpya = Chief #1 pekee); workflow mpya; Implementer = code/reports/tests pekee | APPROVED | Chief Quant #1 |
 | 2026-07-03 | `docs/PROJECT_MEMORY.md` (initial) + `docs/CHIEF_STATUS.md` (initial) + Architecture Audit #5 (P107 dependency-graph baseline) | RECORDED (custodian duty) | Chief Quant #2 |
+| 2026-07-03 | **Technical Supervisor / AI Architect (Japhet)** — role imeandikwa rasmi kwenye Governance Roles (mipaka: hatoi approval, hafanyi implementation, hafanyi compliance audit; hulinda roadmap/long-term architecture) | RECORDED (directive ya Technical Supervisor) | Chief Quant #2 |
+| 2026-07-03 | **Knowledge Architecture ownership → Chief #2** (lesson spec · knowledge schema · corpus structure · dataset versioning · eval benchmark · knowledge-graph layout) — pendekezo la Technical Supervisor; utekelezaji unasubiri uamuzi wa AI Strategy discussion | PROPOSED (ratification ya Chief #1 PENDING) | Technical Supervisor |
+| 2026-07-03 | `PROJECT_MEMORY.md` imepanuliwa kuwa "brain" ya mradi (Historical Memory · Truths · Lessons · Open Questions · Failed Ideas · Future Ideas · AI Knowledge) — directive ya Technical Supervisor | RECORDED (custodian duty) | Chief Quant #2 |
 
 ### Archived (from current edge research)
 

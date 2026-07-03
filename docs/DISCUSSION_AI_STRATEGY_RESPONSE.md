@@ -232,3 +232,55 @@ nionyeshe evidence, nitarekebisha msimamo.
 magari yatabadilika kila mwaka.*
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
+
+---
+
+# ADDENDUM (2026-07-03) — Majibu kwa mchango wa Technical Supervisor / AI Architect
+
+Technical Supervisor ameongeza mambo matatu kwenye discussion. Msimamo wangu:
+
+## A1 — Root-cause pipeline (Research → … → Continuous Learning): NAKUBALI, na marekebisho mawili
+
+Pipeline yake ndiyo **lifecycle ya Track B iliyoandikwa kwa ukamilifu** — inaonyesha hasa pale
+mnyororo wetu wa sasa unapokatikia (`Finding → Doctrine → [MWISHO]`). Marekebisho mawili ya
+kiufundi:
+
+1. **Evaluation inapaswa kuonekana MARA MBILI** — kabla ya Model Training (gate: corpus quality +
+   je, model ya sasa tayari inafaulu evals bila training?) NA baada (validation). Evaluation ya
+   mwisho pekee ni kupima baada ya kununua — ni kinyume cha utamaduni wetu wa specification-first.
+2. **Continuous Learning ina prerequisite ya kimwili**: E3 Decision Repository + E2 Execution
+   Object — bila hizo, hakuna outcome data ya kujifunzia. Kwa hiyo pipeline hii inaimarisha STRICT
+   ordering ya Execution Science; hailegezi.
+
+## A2 — CHAPTER 4: KNOWLEDGE SCIENCE — synthesis: **LAYER SASA, CHAPTER BAADAYE**
+
+Response yangu ya awali (Q8) ilisema "parallel layer, sio chapter"; Technical Supervisor anasema
+"siku moja Chapter 4". Zote mbili ni sahihi — zinajibu maswali mawili tofauti:
+
+```text
+SASA (layer):      Kukusanya lessons ni by-product ya kila phase — ikianza leo haipotezi
+                   chochote na haisimamishi E1. Kusubiri chapter = kupoteza freshness ya
+                   context ya phases 26 tulizonazo vichwani.
+BAADAYE (chapter): Knowledge SCIENCE halisi — schema research, knowledge graph, corpus
+                   engineering, evaluation benchmarks kama research program yenye phases,
+                   specs, na Chief approvals — hiyo ni CHAPTER 4 kamili baada ya Execution
+                   Science, kwa gate ile ile ya P91.
+```
+
+Kwa hiyo napendekeza kwa Chief #1: **collection layer ianze sasa (pilot LESSON-001..003);
+Chapter 4 iingie kwenye roadmap kama chapter rasmi baada ya E4** — na hapo ndipo "AI Science"
+(Model Training/Continuous Learning) itakapopimwa dhidi ya ML-block kama chapter ya tano.
+
+## A3 — Knowledge Architecture ownership → Chief #2: NAIKUBALI (pending ratification ya Chief #1)
+
+Naikubali kazi hii (lesson specification · knowledge schema · corpus structure · dataset
+versioning · evaluation benchmark · knowledge-graph layout) — ni extension ya asili ya G-01
+(custodian wa maarifa ya mradi). Mipaka niliyojiwekea, sawa na RED LINE za sasa:
+
+- **Sitazai principle wala doctrine ya Knowledge Science** — na-design specs; approval ni ya Chief #1.
+- **Sitafundisha model yoyote** — ML-block inabaki hadi Chief #1 aifungue (GAP 4 ya paper hii).
+- Deliverable ya kwanza (baada ya ratification): **Lesson Specification** (schema ya Q3, document-first
+  kwa utamaduni wa D6) → review ya Chief #1 → ndipo corpus inaanza.
+
+*Roles sasa zinakaa hivi: Technical Supervisor analinda ramani ya safari; Chief #1 anaamua njia;
+mimi natunza maarifa ya kila hatua; Implementer anajenga gari; Japhet (data) analisha mfumo ukweli.*

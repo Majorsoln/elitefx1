@@ -1,13 +1,14 @@
-# PROJECT_MEMORY.md — ELITEFX Institutional Memory
+# PROJECT_MEMORY.md — ELITEFX Institutional Memory ("Brain" ya Mradi)
 
 > **Owner: Chief Quant #2** (Doctrine Custodian — G-01). Ina-update **baada ya kila approval**.
-> Hii ni **synthesis** ya kumbukumbu (lessons learned · dead ends · permanent truths · timeline);
-> rekodi ya msingi (findings/questions/approvals kamili) inabaki `docs/PROGRAM_BOARD.md`.
+> Muundo (directive ya Technical Supervisor, 2026-07-03): si changelog — ni **brain**:
+> `Historical Memory → Truths → Lessons → Open Questions → Failed Ideas → Future Ideas → AI Knowledge`.
+> Rekodi ya msingi (findings/questions/approvals kamili) inabaki `docs/PROGRAM_BOARD.md`.
 > Last updated: 2026-07-03.
 
 ---
 
-## 1 — Timeline (eras)
+## 1 — HISTORICAL MEMORY (timeline ya eras)
 
 | Kipindi | Era | Kilichotokea |
 |---------|-----|--------------|
@@ -15,11 +16,12 @@
 | 2026-06-30 | **THE SPLIT** | Market Doctrine V6.9 (FROZEN — P62) + Decision Doctrine V1; Decision Science inaanza **Evidence-first** (Evidence Object = API kati ya domains — P63). |
 | 2026-06-30 → 07-03 | **Decision Architecture Era** (D0–D6) | Evidence Object → Operations → Sets → Snapshots (**EVIDENCE LAYER FROZEN**) → Decision Object → Policy (@v2) → Engine (functions 2, stateless, import-pure). D6 CLOSED = "implementation iliyokataa kuwa ngumu". |
 | 2026-07-03 | **Chapter 3 — Execution Science OPENED** | E1 Integrity Gate → E2 Execution Object → E3 Decision Repository → E4 Broker Adapter (spec-first; STRICT ordering). E1 inasubiri Chief Directive. |
-| 2026-07-03 | **Governance maturation** | Chief Quant #2 onboarded (Scientific Reviewer → **Doctrine Custodian & Architecture Governor**, G-01); P107 (transitive purity) kutoka OBS-1; doctrine archive; two-Chief structure yenye final authority MOJA. |
+| 2026-07-03 | **Governance maturation** | Chief Quant #2 onboarded (→ **Doctrine Custodian & Architecture Governor**, G-01); Technical Supervisor / AI Architect (Japhet) role recorded; P107 (transitive purity) kutoka OBS-1; doctrine archive; final authority MOJA (Chief #1). |
+| 2026-07-03 | **AI Strategy discussion OPENED** | Discussion paper ya Chief #1 (Track A Engineering / Track B Knowledge) + response ya Chief #2 (CONFIRMED, amendments 4) + root-cause framing ya Technical Supervisor (extended pipeline; Chapter 4 Knowledge Science). **Hakuna approval bado.** |
 
 ---
 
-## 2 — Permanent Truths (doctrine-grade; zimefungwa kwa evidence)
+## 2 — PERMANENT TRUTHS (doctrine-grade; zimefungwa kwa evidence)
 
 1. **Prediction, Decision, na Explanation ni dimensions huru** — variable inaweza kutabiri na kueleza bila kubadilisha decision (P58; Phase 26).
 2. **Edge ni non-stationary; kila edge ina lifecycle** (birth→growth→decay→death) — median survival 1/6 windows; market yenyewe inaua persistence (F-028/F-029).
@@ -36,10 +38,41 @@
 
 ---
 
-## 3 — Dead Ends (ZISIRUDIWE bila uamuzi mpya wa Chief #1)
+## 3 — LESSONS LEARNED (methodology ya taasisi)
 
-| Dead end | Kwa nini ilikufa | Rekodi |
-|----------|------------------|--------|
+1. **Specification-before-code inafanya kazi** — D6 (spec → architecture review → implementation) ilitoa implementation safi zaidi ya mradi.
+2. **Contract > proof** — discovery kubwa ya D0 ilikuwa kudefine contract (Evidence Object), sio kuthibitisha market; ya D5 ilikuwa Contract ya Engine–Policy (P94).
+3. **Versioning inaokoa provenance** — P88 kesi ya kwanza halisi: report @v1 vs code @v2 bila confusion (Audit #3 D-1).
+4. **Same-sample correlation hudanganya** — Phase 9 whole-sample ρ≈+0.74 → Phase 10 causal ρ≈+0.03 (artifact).
+5. **Hygiene commits tofauti na research commits** (agizo la Chief, V8).
+6. **Self-tests zisizohitaji data** = mitigation ya R-1 (data ~26GB kwenye PC moja).
+7. **Kila failure ina reframe sahihi** — "0 survived FDR" si "hakuna alpha" bali "representation failure until proven otherwise" (P33); lakini pia usikimbilie hidden variables (P28).
+8. **Wording discipline** — Chief hurekebisha verdicts (mf. "no Selection-DV under the metric used", sio "no decision value"); precision ya lugha ni sehemu ya sayansi.
+9. **Doctrine sprawl ni hatari kwa wasomaji wapya (na AI agents)** — root ibaki na SSOT pekee; archive iko `doctrine/archive/`.
+10. **Institution ina final authority moja na challengers wengi waaminifu** (G-01) — separation: Scientific Leadership ≠ Doctrine Governance ≠ Engineering ≠ Supervision.
+
+---
+
+## 4 — OPEN QUESTIONS (synthesis ya zinazoishi sasa — rekodi kamili: board)
+
+| # | Swali | Status |
+|---|-------|--------|
+| OQ-1 | **E1 Integrity Gate spec** — eligibility checks zipi hasa; traceability ya PROPOSED→VALIDATED (Decision ID mpya inahitaji parent link? — watch item ya Chief #2) | Inasubiri Chief Directive |
+| OQ-2 | **P107 remediation** — options a/b/c (Audit #5); transitive compliance test | Inasubiri Chief #1 |
+| OQ-3 | **P70 confidence model** — Φ(EV/SE) saturates; RED LINE reliability ≠ probability | OPEN kwa makusudi |
+| OQ-4 | **P96 Policy Selection layer** — nani anachagua policy (baadaye: Decision Science phase) | OPEN |
+| OQ-5 | **P78 redundancy** — correlated evidence → reliability optimistic | Baada ya Execution Science |
+| OQ-6 | **AI Strategy** — amendments 4 za Chief #2; extended pipeline + Chapter 4 timing (Technical Supervisor); Lesson schema; Knowledge Architecture ownership | DISCUSSION — inasubiri Chief #1 |
+| OQ-7 | **Je, edge yoyote ipo kweli?** — swali la kudumu la mradi; linarudi pale decision itakapohitaji evidence isiyopo (V11 alpha philosophy) | STANDING |
+| OQ-8 | State trajectory/momentum (F-026/Q-022) — parallel hypothesis | OPEN (parallel) |
+| OQ-9 | Rare states = execution risk (H-06/Q-016) | QUEUED (V11: Execution Science haitaihitaji) |
+
+---
+
+## 5 — FAILED IDEAS (dead ends — ZISIRUDIWE bila uamuzi mpya wa Chief #1)
+
+| Failed idea | Kwa nini ilikufa | Rekodi |
+|-------------|------------------|--------|
 | Human taxonomy kama "mechanism discovery" | Verification, sio discovery (NO HUMAN MARKET THEORY) | Phase 5.9 NOT APPROVED |
 | Universal interaction rules (cell-space) | 0/20 zilisurvive cross-market | F-014 |
 | Algorithm-independence kama acceptance criterion | ARI ndogo ≠ representation mbaya; decision quality ndiyo kipimo | old P18 REMOVED (V5.12) |
@@ -52,23 +85,43 @@
 
 ---
 
-## 4 — Lessons Learned (methodology ya taasisi)
+## 6 — FUTURE IDEAS (parking lot — HAKUNA iliyoidhinishwa; kila moja inahitaji Chief #1)
 
-1. **Specification-before-code inafanya kazi** — D6 (spec → architecture review → implementation) ilitoa implementation safi zaidi ya mradi.
-2. **Contract > proof** — discovery kubwa ya D0 ilikuwa kudefine contract (Evidence Object), sio kuthibitisha market; ya D5 ilikuwa Contract ya Engine–Policy (P94).
-3. **Versioning inaokoa provenance** — P88 kesi ya kwanza halisi: report @v1 vs code @v2 bila confusion (Audit #3 D-1).
-4. **Same-sample correlation hudanganya** — Phase 9 whole-sample ρ≈+0.74 → Phase 10 causal ρ≈+0.03 (artifact).
-5. **Hygiene commits tofauti na research commits** (agizo la Chief, V8).
-6. **Self-tests zisizohitaji data** = mitigation ya R-1 (data ~26GB kwenye PC moja).
-7. **Kila failure ina reframe sahihi** — "0 survived FDR" si "hakuna alpha" bali "representation failure until proven otherwise" (P33); lakini pia usikimbilie hidden variables (P28).
-8. **Wording discipline** — Chief hurekebisha verdicts (mf. "no Selection-DV under the metric used", sio "no decision value"); precision ya lugha ni sehemu ya sayansi.
-9. **Doctrine sprawl ni hatari kwa wasomaji wapya (na AI agents)** — root ibaki na SSOT pekee; archive iko `doctrine/archive/`.
+| Idea | Chanzo | Status |
+|------|--------|--------|
+| **CHAPTER 4 — Knowledge Science** (baada ya Execution Science): lesson corpus · knowledge graph · training datasets · evaluation benchmarks; synthesis ya Chief #2: **layer sasa, chapter baadaye** | Technical Supervisor + Chief #1 paper (2026-07-03) | DISCUSSION |
+| **Extended pipeline**: Research → Evidence → Finding → Doctrine → **Lesson → Knowledge Base → Training Dataset → Model Training → Evaluation → Production → Continuous Learning** | Technical Supervisor (2026-07-03) | DISCUSSION |
+| **EVAL-001**: evaluation benchmark ya kwanza kutoka dead ends 9 (ground truth halisi) — inapima kama model yoyote "inaelewa market" | Chief #2 response paper (GAP 3) | DISCUSSION |
+| **Knowledge Graph** ya findings/principles/lessons (nodes + provenance edges) | Chief #1 paper | DISCUSSION |
+| **LESSON-001..003 pilot** (Phase 8/14/26) — format prototype | Chief #2 response paper | Inasubiri Chief #1 |
+| INTENT migration (ACTIONS → ENTER/WAIT/EXIT/ABSTAIN/HEDGE/REDUCE; policies @v3) | V9 direction | Inasubiri uamuzi (kabla ya E-series code) |
+| Frozen dataclasses / immutability enforcement | Audit A-4 | Imepangwa E2 |
+| Sample dataset ndogo ya CI (R-1 mitigation) | Audit R-1 | Haijapangwa |
+| Continuous-learning loop kupitia E3 Decision Repository (decision history + execution outcomes = training data ya baadaye) | Chief #2 response paper (§1.4) | Inasubiri E3 |
+| Doctrine linter (automated reference/numbering checks kwa kila PR ya docs) | Chief #2 | Pendekezo tu |
 
 ---
 
-## 5 — Rekodi za msingi
+## 7 — AI KNOWLEDGE (hali ya corpus)
+
+```text
+Status:  DISCUSSION — hakuna corpus rasmi bado (inasubiri uamuzi wa Chief #1 kwenye AI Strategy)
+Prototype: LESSON-001@v1 (static ranking does not generalize OOS) —
+           ndani ya docs/DISCUSSION_AI_STRATEGY_RESPONSE.md §5
+Schema pendekezwa: id@vN · claim · type (METHOD/MARKET-CONDITIONAL/GOVERNANCE) · evidence ·
+           counter_evidence · validity_conditions · when(-not)-to-use · provenance · lifecycle
+Mahali patakapoishi: docs/lessons/ + LESSON_INDEX.md (registry; owner: Chief #2)
+Retroactive backlog: findings 42 + dead ends 9 + phases 26 ≈ lessons 40–60 (hakuna research mpya)
+Kanuni zinazolinda corpus: METHOD ≠ MARKET (F-028 — maiti za kihistoria haziruhusiwi kuwa "truths");
+           Value criterion = citations; Evals kabla ya training; ML-block haiguswi na Track B
+```
+
+---
+
+## 8 — Rekodi za msingi
 
 - Findings/Questions/Amendments/Approvals: `docs/PROGRAM_BOARD.md` (SSOT ya governance)
 - Doctrine hai: `ELITEFX DOCTRINE V6.9.md` (Market) · `ELITEFX DECISION DOCTRINE V11.md` (Decision)
 - Audits: `docs/ARCHITECTURE_AUDIT.md` · `docs/CHIEF_GAP_REVIEW.md`
 - Status hai: `docs/CHIEF_STATUS.md`
+- AI Strategy: discussion paper ya Chief #1 (ujumbe, 2026-07-03) + `docs/DISCUSSION_AI_STRATEGY_RESPONSE.md`
