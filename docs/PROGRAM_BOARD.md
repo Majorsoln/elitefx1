@@ -3,7 +3,7 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
-> **Market** = `ELITEFX DOCTRINE V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V9.md`;
+> **Market** = `ELITEFX DOCTRINE V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V10.md`;
 > board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-07-03 (Chief: **Decision Engine Specification APPROVED as architecture**; D6 IMPLEMENTATION authorized under Rules 1–8 — no doctrine changes during coding; compliance checklist per PR (P92–P102); engine small/stateless/ignorant (Snapshot·Policy·Decision Object only); correctness first; self-test per step; report format Implementation→Self Tests→Known Limitations→Open Questions. NEW GOVERNANCE WORKFLOW: Chief → Doctrine → Architecture Auditor → Architecture PASS → Implementer → Implementation → Self Tests → Architecture Compliance Review → Chief Review → Approval.)*
+*Last updated: 2026-07-03 (Chief: **D6 Decision Engine Implementation APPROVED — CLOSED** (approval ya implementation, SI matokeo ya biashara) — engine = functions mbili, core ~72 lines, stateless, import-pure; **P103** engine complexity bounded (features mpya = layers, sio Engine); **P104** architectural purity kwa automated compliance tests (ya kudumu); **P105 OPEN** Integrity Gate kabla ya execution (nani anafanya VALIDATED? — Engine hapana, Policy hapana → layer mpya); **P106 OPEN** Decision Repository (persistence nje ya Engine); Auditor: **4-point compliance review kila PR** (engine size · forbidden imports · stateless · policy leakage); Decision Doctrine → **V10**; ⚠️ principle-numbering collision (V8/V9 P90–P97 vs spec-text P92–P102) imerekodiwa — reconciliation OPEN kwa Chief; **CHAPTER 3: EXECUTION SCIENCE OPENED** (E1 Integrity Gate · E2 Execution Object (P89) · E3 Decision Repository · E4 Broker Adapter; spec-first, Chief phase-start kwa kila moja).)*
 
 ---
 
@@ -19,15 +19,15 @@
 
 Official (TWO DOMAINS):
 - `ELITEFX DOCTRINE V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
-- `ELITEFX DECISION DOCTRINE V9.md` — **Decision** domain (Evidence Layer FROZEN kwa **interface** (P90); Decision Architecture Era CLOSED (D0–D5); frontier = D6 Engine, specification-first)
+- `ELITEFX DECISION DOCTRINE V10.md` — **Decision** domain (Evidence Layer FROZEN kwa **interface** (P90); D0–D6 CLOSED; frontier = **Execution Science** (E1 Integrity Gate · E2 Execution Object · E3 Decision Repository · E4 Broker Adapter))
 
 Status:
 - ACTIVE (both)
 
 Superseded:
 - V4 … V6.7 (chain)
-- V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V9)
-- Decision Doctrine V1→…→V8 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89; V8 P90–91 interface-freeze + eligibility + Architecture Auditor; V9 P92–97 + D5 CLOSED + D6 spec-first)
+- V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V10)
+- Decision Doctrine V1→…→V9 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89; V8 P90–91 interface-freeze + eligibility + Architecture Auditor; V9 P92–97 + D5 CLOSED + D6 spec-first; V10 P103–106 + D6 CLOSED + Execution Science)
 - Patches
 
 ---
@@ -529,8 +529,12 @@ singleton/memory; (6) correctness kwanza, hakuna optimization; (7) self-test kil
 - [✓] **D3  Evidence Snapshots** *(APPROVED — `evidence_snapshot.py`; canonical Decision input; temporal conflict; readiness state machine)* — **EVIDENCE LAYER FROZEN**
 - [✓] **D4  Decision Objects** *(APPROVED — `decision_object.py`; immutable object; lifecycle incl. CANCELLED (P86); integrity (P87); provenance→Snapshot ID; policy_id (P88); audit)*
 - [✓] **D5  Decision Policy Framework** *(FULLY APPROVED — CLOSED; `decision_policy.py` (@v2) + `reports/decision_policy_report.md` (run ya Japhet, @v1) + Chief Review; **END of Decision Architecture Era**)*
-- [✓] **D6  Decision Engine** *(ACTIVE/IMPLEMENTATION — `decision_engine.py` (pure, stateless) + `decision_engine_report.py` (harness) + `reports/decision_engine_report.md`; Rules 1–8; compliance checklist P92–P102; repo pia ina `reports/decision_engine_specification.md`)*
-- [ ] D7  Execution Object *(NOT YET ELIGIBLE (P91) — P89; immutable; fills/slippage/rejects)*
+- [✓] **D6  Decision Engine** *(**APPROVED — CLOSED 2026-07-03** — `decision_engine.py` (functions 2, core ~72 lines, stateless, import-pure) + report + Chief Review; approval ya implementation, SI matokeo ya biashara; **hakuna features mpya ndani ya Engine — P103**)*
+- **CHAPTER 3 — EXECUTION SCIENCE (OPENED 2026-07-03; kila phase = Chief phase-start + spec-first):**
+- [ ] E1  Integrity Gate *(P105 OPEN — structural/compliance check kabla ya execution; nani anafanya VALIDATED)*
+- [ ] E2  Execution Object *(P89 OPEN — immutable; fills/slippage/rejects)*
+- [ ] E3  Decision Repository *(P106 OPEN — persistence nje ya Engine)*
+- [ ] E4  Broker Adapter *(baadaye — mazingira halisi)*
 - [ ] D8  Decision Quality/Outcome *(NOT YET ELIGIBLE (P91) — per-decision OOS + FDR; separate from Integrity P87)*
 - [ ] D9  Portfolio / Live *(NOT YET ELIGIBLE (P91))*
 - [ ] SPEC: commit Decision Engine Specification (P90–P102) text to repo *(OPEN — Chief/Japhet; checklist inahitaji matini kamili)*
@@ -780,7 +784,7 @@ readiness/reliability/conflict (Q3; conflict explicit per G-7); swappable withou
 Science**. Chief: Q4 inathibitisha Decision Science imejitegemea. → Q-048.
 
 **Q-048 — Does the Decision Engine (spec + implementation) comply with the approved architecture?**
-Status: OPEN (D6) — **implementation delivered; inasubiri Chief Review**
+Status: **CLOSED — APPROVED** (D6; Chief Review 2026-07-03 — implementation approval, si biashara)
 Evidence (mikondo miwili, zote za kweli): (a) `reports/decision_engine_specification.md` (maswali 8;
 Architecture Review 2026-07-03: PASS — compliant with V9) — session ya branch; (b) `decision_engine.py`
 + `decision_engine_report.md` (Rules 1–8; compliance checklist P92–P102 ya spec-text ya Chief ambayo
@@ -857,6 +861,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-07-02 — **DECISION DOCTRINE V8 (Architecture Audit #1 APPROVED + P90/91)**: Chief anaidhinisha Architecture Audit ya kwanza (`docs/CHIEF_GAP_REVIEW.md` — Doctrine ⇄ Implementation ⇄ Documents). **G-1 APPROVED**: D5 haiwezi kufungwa bila `reports/decision_policy_report.md` — workflow (Research → Report → Chief Review → Approval) haivunjwi; **D5 inabaki ACTIVE**. **Principle 90** (*a frozen layer guarantees interface stability, not implementation immutability* — Evidence Layer imefreeze kwa **interface**; performance/storage/serialization zinaweza kuboreshwa, contract haitikisiki). **Principle 91** (*progression between phases shall be governed by eligibility criteria rather than implementation readiness* — Decision Engine = **NOT YET ELIGIBLE**, sio BLOCKED; block ina maana kuna tatizo, hapa tunafuata governance). **G-7 amendment**: V7 Q3 inasema policy inachagua kutoka readiness + reliability + **conflict** → conflict sasa ni **explicit policy input** (per-policy tolerance: capital_preservation 0.00; conservative/aggressive CONFLICT_CEIL); logic imebadilika → policies → **@v2** (P88 versioning). **G-8**: P86 CANCELLED self-test imeongezwa (`decision_object.py`). **Hygiene G-2…G-6** zimerekebishwa kwa **commit tofauti** na research (agizo la Chief). **Governance roles tatu**: Chief Quant (direction/doctrine/architecture) · Implementer (doctrine→implementation+reports) · **Architecture Auditor** (drift guard: Doctrine⇄Architecture⇄Implementation⇄Tests⇄Reports; kila review inamalizika na **Layer-Drift Matrix** + **Future Risk Assessment** — `docs/ARCHITECTURE_AUDIT.md`). Muhimu zaidi (Chief): *"Evidence Layer FROZEN haikuguswa" ndiyo metric muhimu zaidi — architecture imeanza kuwa stable.* No Decision Engine yet. No ML.
 
 - 2026-07-02 — **DECISION DOCTRINE V9 (D5 FULLY APPROVED — END of the Decision Architecture Era)**: `reports/decision_policy_report.md` (run ya Japhet) imewasilishwa na kureviewiwa — **D5 CLOSED**. Chief: report iliheshimu kila red line (NO ML · NO alpha claims · NO Decision Engine · policy versioned · Engine generic · logic ndani ya Policy). Discovery kubwa = **Contract, sio Policy**: **Principle 94** (*the Engine–Policy contract shall be the only mechanism through which decision logic is executed* — Engine → policy.decide(snapshot) → (action, reason) → Decision Object; kesho Rule/Bayesian/ML Policy zinabadilishana bila Engine kujua). **Principle 92** (*Decision Science shall depend only on the Evidence interface and never directly on Market Science implementations* — dependency direction rasmi; ilianzia W-1 ya Audit #2). **Principle 93 OPEN** (*Canonical Domain Objects*: Evidence/Decision/Execution/Portfolio — contract moja: immutable identity · provenance · lifecycle · auditability; architectural inheritance, sio code inheritance). **Principle 95 OPEN** (reproducibility vector = policy version + evidence schema version + doctrine version). **Principle 96 OPEN** (*policy selection shall be external to individual decision policies* — nani anachagua policy? sio policy yenyewe, sio Engine). **Principle 97** (*the Decision Engine shall orchestrate decisions but shall never contain decision policy logic* — Receive Snapshot → Receive Policy → Call Policy → Create Decision Object; BASI). **RED LINE** (Chief): Engine isitumie reliability kama probability hadi **P70** ifungwe. **Terminology direction (D6)**: action → **INTENT** (ENTER/WAIT/EXIT/ABSTAIN/HEDGE/REDUCE). **Risk taxonomy**: Architecture / Research / Governance (R-1 = Research Infrastructure Risk); kila audit iwe na **Architectural Maturity** table. **D6 Decision Engine OPENED — SPECIFICATION FIRST**: deliverable `reports/decision_engine_specification.md` (maswali 8: responsibilities/boundaries/inputs/outputs/errors/audit/injection/validation); coding baada ya spec kupitishwa. Ledger honesty: report ya D5 ilizalishwa na policies **@v1** (main wakati wa run); code ya sasa **@v2** (G-7) — P88 inatunza provenance (re-run @v2 optional). Chief: *"Tumeanza kujenga taasisi, si project."* NO ML.
+
+- 2026-07-03 — **DECISION DOCTRINE V10 (D6 IMPLEMENTATION APPROVED — CLOSED; EXECUTION SCIENCE OPENED)**: Chief: "D6 ndiyo implementation safi zaidi ambayo mradi umewahi kutoa — si kwa sababu ni ngumu, bali kwa sababu **imekataa kuwa ngumu**." Approval ni ya **implementation**, SI matokeo ya biashara. **Principle 103** (*engine complexity bounded* — helpers/business-logic/caches ndani ya Engine = architecture inapotoka; retry/persistence/execution/broker = **layers mpya**). **Principle 104** (*architectural purity continuously verified by automated compliance tests* — self-test [4] `bad-imports=[]` ni requirement ya kudumu). **Principle 105 OPEN** (*Integrity Gate* — logic gap: nani anafanya VALIDATED? Engine hapana, Policy hapana → layer mpya kabla ya Execution). **Principle 106 OPEN** (*Decision Repository* — decision history si sehemu ya Engine). **Auditor 4-point compliance review kila PR**: engine size · forbidden imports · stateless · policy leakage. ⚠️ **Principle-numbering collision** imerekodiwa (V8/V9 P90–P97 [mkondo wa branch] vs spec-text P92–P102 [mkondo wa main — matini bado haiko repo]); maudhui hayagongani, nambari zinagongana; reconciliation **OPEN kwa Chief** (V10 ina pendekezo). **CHAPTER 3 — EXECUTION SCIENCE OPENED**: E1 Integrity Gate → E2 Execution Object (P89) → E3 Decision Repository → E4 Broker Adapter; kila phase spec-first + Chief phase-start. NO ML.
 
 ---
 
@@ -963,6 +969,10 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-03 | Architecture Review ya D6 Specification — imekubaliwa **kama ukaguzi wa architecture** (PASS); approval ya spec yenyewe (Q-048) bado ni ya Chief | NOTED | Chief Quant |
 | 2026-07-03 | D5 Decision Policy APPROVED; **Decision Engine Specification APPROVED as architecture**; D6 IMPLEMENTATION authorized under Rules 1–8 (no doctrine-during-coding; checklist P92–P102; small/ignorant/stateless engine; correctness first; self-test per step; Rule-8 report format) | APPROVED | Chief Quant |
 | 2026-07-03 | NEW GOVERNANCE WORKFLOW: Chief → Doctrine → Architecture Auditor → Architecture PASS → Implementer → Implementation → Self Tests → Architecture Compliance Review → Chief Review → Approval | APPROVED | Chief Quant |
+| 2026-07-03 | **D6 Decision Engine Implementation — APPROVED, CLOSED** (implementation, si biashara); Q-048 CLOSED; hakuna features mpya ndani ya Engine | APPROVED | Chief Quant |
+| 2026-07-03 | Principle 103 (bounded engine complexity) + Principle 104 (continuous compliance tests); Principle 105/106 OPEN (Integrity Gate; Decision Repository); Auditor 4-point compliance review kila PR; Decision Doctrine V10 | APPROVED | Chief Quant |
+| 2026-07-03 | CHAPTER 3 — EXECUTION SCIENCE opened (E1 Integrity Gate · E2 Execution Object · E3 Decision Repository · E4 Broker Adapter; spec-first; Chief phase-start kwa kila phase) | APPROVED (chapter) | Chief Quant |
+| 2026-07-03 | Principle-numbering collision (V8/V9 P90–P97 vs spec-text P92–P102) — imerekodiwa V10; reconciliation | OPEN (Chief) | Architecture Auditor (flag) |
 
 ### Archived (from current edge research)
 

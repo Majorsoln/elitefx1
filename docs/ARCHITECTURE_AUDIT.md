@@ -186,3 +186,72 @@ Wording note (mstari wa role): hii ni **ukaguzi wa architecture tu**. Approval y
 migration) — ni **jukumu la Chief**. Implementation ya D6 haianzi hadi Chief apitishe spec.
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
+
+---
+
+## ARCHITECTURE COMPLIANCE REVIEW #4 — `decision_engine.py` — 2026-07-03
+
+Scope: 4-point compliance review (amri ya Chief kwa kila PR ya Engine) + hali baada ya merge ya
+mikondo miwili (branch V8/V9/spec + main engine-implementation) na Chief review ya D6.
+
+### 4-Point Compliance Review (mandate mpya ya Chief)
+
+| # | Check | Kipimo | Verdict |
+|---|-------|--------|---------|
+| 1 | **Engine size** (P103) | File 159 lines; engine core (kabla ya self-tests) ~72 lines; functions 2 (`decide`, `decide_batch`) + validators 2 | **PASS** |
+| 2 | **Forbidden imports** (Rule 4) | Imports za engine core: `__future__`, `argparse`, `decision_object` PEKEE; self-test [4] `bad-imports=[]`, `forbidden-words=[]` — nimeiendesha upya leo: PASS | **PASS** |
+| 3 | **Stateless compliance** (Rule 5) | Hakuna module-level dict/list/set (self-test [3] `module-mutables=[]`); hakuna cache/singleton; deterministic (id-stable) | **PASS** |
+| 4 | **Policy leakage** (Rule 3/P97) | Hakuna threshold/heuristic yoyote ndani ya engine; `decide` = validate → `policy.decide` → `make_decision`; hakuna `if reliability...` popote | **PASS** |
+
+Self-tests zote (decision_object, decision_policy @v2, decision_engine) zimeendeshwa upya kwenye
+merged tree leo: **PASS 3/3.**
+
+### Compliance Matrix (dhidi ya doctrine ya repo)
+
+| Principle | Status | Ushahidi |
+|-----------|--------|----------|
+| P92-V9 (hakuna Market imports) | PASS | import-purity self-test [4] |
+| P94-V9 (contract = njia pekee) | PASS | `policy["decide"](snapshot)` pekee; surface 2 (`id`, `decide`) |
+| P97-V9 (orchestrator only) | PASS | hakuna decision logic |
+| P84/P88 (refs) | PASS | self-test [2] |
+| P71/P100 (pure/deterministic) | PASS | self-test [3] |
+| RED LINE (reliability ≠ probability) | PASS | engine haisomi `reliability` kabisa (inapita ndani ya `make_decision` kama rekodi) |
+| P103 (bounded complexity) | PASS | leo; itapimwa kila PR |
+| P104 (continuous compliance tests) | PASS | tests zipo module-ndani; zinaendeshwa kila run |
+
+### Architectural Drift Watch
+
+| Item | Risk |
+|------|------|
+| Market imports | **None** |
+| Policy leakage | **None** |
+| Engine growth | **Watch** (P103 — kila PR itapimwa; leo core ~72 lines = baseline) |
+| **D-2: Principle-numbering collision** | **Watch — OPEN kwa Chief** (V8/V9 P90–P97 vs spec-text P92–P102; maudhui yanakamilishana, nambari zinagongana; V10 ina pendekezo la reconciliation; engine report inatumia nambari za spec-text) |
+| D-3: Spec-text ya Chief (P90–P102) haiko repo | **Watch** (queue item OPEN; compliance checklist ya Rule 2 inahitaji matini kamili) |
+| D-4: Specs mbili za D6 kwenye repo | **None (informational)** — `decision_engine_specification.md` (branch, maswali 8) na Rules 1–8 (spec-text ya Chief); engine inatimiza ZOTE mbili kwa maudhui (ContractError≈EngineError; structural validation; stateless; SELECT vocabulary imebaki — INTENT migration bado uamuzi wa Chief) |
+| VALIDATED transition (nani?) | **Resolved kama P105 OPEN** — Integrity Gate (E1); Engine na Policy hazifanyi |
+
+### Architectural Maturity
+
+| Layer | Maturity |
+|-------|----------|
+| Market Science | **Stable** (FROZEN — P62) |
+| Evidence Layer | **Frozen** (interface — P90) |
+| Decision Objects | **Stable** |
+| Decision Policy | **Stable** (@v2; illustrative — si validated economically) |
+| Decision Engine | **Stable** (D6 CLOSED 2026-07-03; baseline core ~72 lines) |
+| Integrity Gate (E1) | **Not Started** (P105 OPEN) |
+| Execution Object (E2) | **Not Started** (P89 OPEN) |
+| Decision Repository (E3) | **Not Started** (P106 OPEN) |
+| Broker Adapter (E4) | **Not Started** |
+
+### Verdict ya Auditor
+
+**Architecture Review: PASS — Compliant with current doctrine (V10).**
+
+4/4 compliance checks PASS; baseline ya engine size imerekodiwa (core ~72 lines) kwa ajili ya
+review za baadaye (P103). Drift pekee inayosubiri uamuzi ni **D-2 (numbering collision)** na **D-3
+(spec-text kuwekwa repo)** — zote zimeflagiwa kwa Chief kwenye V10 na board. Approval ya D6
+ilikuwa — na inabaki — **ya Chief** (2026-07-03).
+
+*Profitable ≠ Tradable Edge. Protect capital first.*
