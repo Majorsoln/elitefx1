@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-07-03 (Chief #1: **Decision Doctrine → V11** — majibu rasmi kwa onboarding review ya **Chief Quant #2** (`docs/CHIEF2_ONBOARDING_REVIEW.md`). **Two-Chief governance**: Chief #1 = Scientific Director (FINAL APPROVAL zote) · Chief #2 = Scientific Reviewer (independent challenge; hakuna approval) — "institution haiwezi kuwa na final authority mbili". **P107 APPROVED** (transitive dependency purity — chanzo: OBS-1 ya Chief #2; Auditor ameagizwa kupima dependency graph). **E1 pre-spec rulings**: E1 HAIJAFUNGULIWA (inasubiri Chief Directive); Engine=STRUCTURE vs Gate=ELIGIBILITY; **FTMO = Execution Constraint** (MWONGOZO unaingia kupitia Execution Science — P81); VALIDATED = Decision Object MPYA (id mpya, sio mutation); ordering E1→E2→E3→E4 STRICT; A-4 immutability inafungwa E2. **Scheduling**: P70 haitafungwi sasa; P96 = Decision Science ya baadaye; P78 baada ya Execution Science. **Alpha**: tunarudi Market Science pale TU Decision Layer itakapohitaji evidence isiyopo; F-005 re-run = debt; D5 @v2 si lazima; Phase 5.12 bado. **Hygiene**: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md`; asset.zip/report.zip zimetolewa; `doctrine/archive/` imeundwa.)*
+*Last updated: 2026-07-03 (Chief #1: **GOVERNANCE RESTRUCTURE — G-01**: Chief #2 = **Doctrine Custodian & Architecture Governor** (role ya Architecture Auditor imeunganishwa; owner wa `PROJECT_MEMORY.md` + `CHIEF_STATUS.md`; anatekeleza maamuzi ya Chief #1 kwenye doctrine; RED LINE — haruhusiwi kuzaa principle mpya); Chief #1 anabaki Scientific Director/final authority pekee; workflow mpya Chief #1 → Chief #2 (doctrine) → Audit → Implementer → Chief #2 (compliance) → Chief #1 (approval); Audit #5 = P107 dependency-graph baseline (Engine chain: transitive FAIL — inayojulikana; remediation inasubiri Chief #1). Kabla ya hapo siku hii hii: **Decision Doctrine → V11** — majibu rasmi kwa onboarding review ya **Chief Quant #2** (`docs/CHIEF2_ONBOARDING_REVIEW.md`). **Two-Chief governance**: Chief #1 = Scientific Director (FINAL APPROVAL zote) · Chief #2 = Scientific Reviewer (independent challenge; hakuna approval) — "institution haiwezi kuwa na final authority mbili". **P107 APPROVED** (transitive dependency purity — chanzo: OBS-1 ya Chief #2; Auditor ameagizwa kupima dependency graph). **E1 pre-spec rulings**: E1 HAIJAFUNGULIWA (inasubiri Chief Directive); Engine=STRUCTURE vs Gate=ELIGIBILITY; **FTMO = Execution Constraint** (MWONGOZO unaingia kupitia Execution Science — P81); VALIDATED = Decision Object MPYA (id mpya, sio mutation); ordering E1→E2→E3→E4 STRICT; A-4 immutability inafungwa E2. **Scheduling**: P70 haitafungwi sasa; P96 = Decision Science ya baadaye; P78 baada ya Execution Science. **Alpha**: tunarudi Market Science pale TU Decision Layer itakapohitaji evidence isiyopo; F-005 re-run = debt; D5 @v2 si lazima; Phase 5.12 bado. **Hygiene**: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md`; asset.zip/report.zip zimetolewa; `doctrine/archive/` imeundwa.)*
 
 ---
 
@@ -32,16 +32,31 @@ Superseded:
 
 ---
 
-## Governance Roles (Chief review 2026-07-03; Decision Doctrine V11)
+## Governance Roles (Chief #1 restructure, 2026-07-03 — inasupersede muundo wa V11 wa asubuhi)
+
+**Governance Principle G-01 (APPROVED — inaishi kwenye GOVERNANCE, SIO Decision Doctrine):**
+
+```text
+The Chief Quant #2 is the custodian of doctrine, project memory, governance records,
+and architectural consistency. The Chief Quant #1 remains the sole authority for
+scientific direction, principles, roadmap, and final approval.
+```
 
 | Role | Authority |
 |------|-----------|
-| **Chief Quant #1 — Scientific Director** | Doctrine · Final Approval · Scientific Direction · Architecture. **Final decisions ZOTE zinatoka hapa.** |
-| **Chief Quant #2 — Scientific Reviewer** | Independent scientific review · counter-analysis · alternative hypotheses · blind review · challenge assumptions · strategic advice. Anaweza kupinga na kupendekeza — **APPROVAL ni ya Chief #1 pekee.** |
-| **Implementer** | Doctrine → implementation + reports (self-test kila module). |
-| **Architecture Auditor** | Compliance pekee (`Architecture Review: PASS/FAIL`; hakuna approval language); Compliance Matrix + Drift Watch + 4-point review kila PR + **dependency graph (P107)**. |
+| **Chief Quant #1 — Scientific Director** | Final Authority · Roadmap Owner · Principle Authority · Final Approval. Anaamua: phase inayofuata · hypothesis mpya · principle mpya · chapter mpya · approval ya mwisho. **Hafikirii formatting/numbering/logs.** |
+| **Chief Quant #2 — Doctrine Custodian & Architecture Governor** | (1) Kusoma implementation na **kutafsiri discoveries** (je, doctrine imeathirika? ndiyo → anaandika amendment); (2) **Kutekeleza maamuzi ya Chief #1 kwenye doctrine** — kuongeza principles zilizoamuliwa, references, numbering, board, amendment/approval logs, conflict-check; (3) **Repository governance** — merge doctrine · organize archive · maintain `PROGRAM_BOARD.md` · **owner wa `PROJECT_MEMORY.md`** (lessons learned/dead ends/permanent truths/timeline — baada ya kila approval) · **owner wa `CHIEF_STATUS.md`** (current phase/risks/roadmap); (4) **Architecture + Doctrine reviews kwa pamoja** — role ya Architecture Auditor **imeunganishwa hapa** (Compliance Matrix + Drift Watch + 4-point review + dependency graph P107). **RED LINE: haruhusiwi kuzaa principle mpya kwa maamuzi yake — anapendekeza tu; principle inazaliwa kwa Chief #1, kisha Chief #2 anaiandika kwenye doctrine.** |
+| **Implementer** | Code · reports · tests. **Hana burden ya doctrine.** |
+| **Japhet** | Data runs + validation za data halisi (~26GB nje ya git). |
 
-*Institution haiwezi kuwa na final authority mbili.*
+**Workflow rasmi (2026-07-03):**
+
+```text
+Chief #1 → Scientific Decision → Chief #2 → Doctrine Update → Architecture Audit →
+Implementer → Implementation → Chief #2 → Compliance Review → Chief #1 → Final Approval
+```
+
+*Institution haiwezi kuwa na final authority mbili. Scientific Leadership ≠ Doctrine Governance ≠ Engineering.*
 
 ---
 
@@ -879,6 +894,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 
 - 2026-07-03 — **DECISION DOCTRINE V11 (TWO-CHIEF GOVERNANCE + P107 + E1 PRE-SPEC RULINGS)**: Chief #1 anajibu maswali 20 ya onboarding ya **Chief Quant #2** (`docs/CHIEF2_ONBOARDING_REVIEW.md`; uelewa ">95% sahihi"). **Governance**: roles nne rasmi — Chief #1 **Scientific Director** (Doctrine · Final Approval · Direction · Architecture; final decisions ZOTE) · Chief #2 **Scientific Reviewer** (independent review, counter-analysis, blind review, challenge; anaweza kupinga/kupendekeza — APPROVAL ni ya Chief #1 pekee) · Implementer · Auditor — *"institution haiwezi kuwa na final authority mbili."* **Principle 107 APPROVED** (*architectural purity shall include transitive dependency purity, not only direct imports* — chanzo: OBS-1 ya Chief #2: `decision_object.py` inaimport `market_state_engine` → Engine haiwezi ku-load bila Market stack; direct purity ≠ transitive purity; **Auditor ameagizwa kupima dependency graph**). **E1 pre-spec rulings**: E1 HAIJAFUNGULIWA (itafunguliwa kwa Chief Directive; Implementer ataandika spec kama D6); **Engine=STRUCTURE vs Gate=ELIGIBILITY** (validation ≠ eligibility = msingi wa E1: "policy hii inaruhusiwa leo? risk budget ipo? compliance imekidhi? correlation imekubalika?"); **FTMO = Execution Constraint** (SI Policy, SI Engine — MWONGOZO unaingia kupitia Execution Science; ndiyo sababu P81 ilifunguliwa mapema); **VALIDATED** = Decision Object **MPYA** (immutable, id mpya; history PROPOSED→VALIDATED — sio mutation); **ordering E1→E2→E3→E4 STRICT** (dependency; hakuna parallel); A-4 immutability enforcement inafungwa **E2** (P89). **Scheduling ya open principles**: P70 haitafungwi sasa ("sitaruhusu ifungwe kwa kubahatisha"; Execution Science haiihitaji); P96 Policy Selection = **Decision Science phase ya baadaye** (sio Execution Science; kwa sasa Japhet anachagua policy kwa mkono — sahihi); P78 baada ya Execution Science. **Alpha philosophy**: tunarudi Market Science pale TU Decision Layer itakaposema *"nahitaji evidence mpya ambayo haipo"* — siyo kabla; freeze ni ya dhati. **F-005 re-run = debt (ifanywe)**; D5 @v2 re-run si lazima (P88 history ipo); Phase 5.12 bado. **MWONGOZO** = Operational Manual; Decision Science = Research Architecture; zinakutana **E4** (FTMO values = judgement, siyo evidence — hazimo doctrine, zinaweza kupimwa baadaye). **Hygiene approvals**: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md` (operational spec); `asset.zip`/`report.zip` kutolewa repo; `doctrine/archive/` kuundwa (root = current doctrines pekee). NO ML.
 
+- 2026-07-03 — **GOVERNANCE RESTRUCTURE (G-01)**: baada ya kuona kazi ya Chief #2 (onboarding review + V11 recording + hygiene), Chief #1 anabadilisha role yake kwa mipaka wazi: **Scientific Reviewer → Doctrine Custodian & Architecture Governor** (role moja; Architecture Auditor imeunganishwa ndani yake). Majukumu: (1) kusoma implementation na kutafsiri discoveries → amendments; (2) kutekeleza maamuzi ya Chief #1 kwenye doctrine (principles zilizoamuliwa, references, numbering, board, logs, conflict-check); (3) repository governance (merge doctrine, archive, `PROGRAM_BOARD.md`, **owner wa `PROJECT_MEMORY.md`** — lessons/dead-ends/truths/timeline baada ya kila approval, **owner wa `CHIEF_STATUS.md`** — current phase/risks/roadmap); (4) Architecture + Doctrine reviews kwa pamoja. **RED LINE: principle mpya inazaliwa kwa Chief #1 PEKEE** — Chief #2 anapendekeza na kuandika, hazai. **Governance Principle G-01** (inaishi kwenye Governance, SIO Decision Doctrine): *"The Chief Quant #2 is the custodian of doctrine, project memory, governance records, and architectural consistency. The Chief Quant #1 remains the sole authority for scientific direction, principles, roadmap, and final approval."* Workflow mpya: Chief #1 → Scientific Decision → Chief #2 → Doctrine Update → Architecture Audit → Implementer → Implementation → Chief #2 → Compliance Review → Chief #1 → Final Approval. Implementer: code/reports/tests pekee (hana burden ya doctrine). Maono: Scientific Leadership ≠ Doctrine Governance ≠ Engineering. Deliverables za leo: `docs/PROJECT_MEMORY.md` (initial) + `docs/CHIEF_STATUS.md` (initial) + Audit #5 (P107 dependency-graph baseline).
+
 ---
 
 ## Approval Log
@@ -996,6 +1013,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-03 | Scheduling: P70 stays OPEN (deliberate); P96 = Decision Science ya baadaye; P78 baada ya Execution Science; F-005 re-run (debt); D5 @v2 si lazima; Phase 5.12 bado | APPROVED (direction) | Chief Quant #1 |
 | 2026-07-03 | Hygiene: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md`; asset.zip/report.zip kutolewa; `doctrine/archive/` | APPROVED | Chief Quant #1 |
 | 2026-07-03 | **Decision Doctrine V11** | APPROVED | Chief Quant #1 |
+| 2026-07-03 | **G-01 + governance restructure**: Chief #2 = Doctrine Custodian & Architecture Governor (Auditor merged; owner `PROJECT_MEMORY.md` + `CHIEF_STATUS.md`; RED LINE — principle mpya = Chief #1 pekee); workflow mpya; Implementer = code/reports/tests pekee | APPROVED | Chief Quant #1 |
+| 2026-07-03 | `docs/PROJECT_MEMORY.md` (initial) + `docs/CHIEF_STATUS.md` (initial) + Architecture Audit #5 (P107 dependency-graph baseline) | RECORDED (custodian duty) | Chief Quant #2 |
 
 ### Archived (from current edge research)
 
