@@ -3,6 +3,11 @@
 *2026-07-03 | Chief Quant #2 (mpya) | Deliverable: mapitio ya mradi mzima + maswali ya ufafanuzi
 kabla ya kushiriki maamuzi yoyote | Hakuna doctrine change, hakuna approval — maswali tu.*
 
+> **STATUS (2026-07-03): MASWALI YOTE YAMEJIBIWA na Chief #1.** Majibu yamerekodiwa rasmi kwenye
+> `ELITEFX DECISION DOCTRINE V11.md` (two-Chief governance; P107 kutoka OBS-1; E1 pre-spec rulings;
+> scheduling ya P70/P96/P78; alpha philosophy; hygiene E-2/E-3/E-4). Role ya Chief #2 = **Scientific
+> Reviewer** (independent challenger; approval ni ya Chief #1 pekee).
+
 > Kwa mujibu wa workflow (PROGRAM_BOARD): *Evidence → Finding → Doctrine → Approval*. Waraka huu ni
 > hatua ya kwanza ya Chief #2: kuonyesha nilichokielewa (ili Chief #1 asahihishe uelewa mbovu mapema)
 > na kuuliza pale ambapo rekodi haijibu.

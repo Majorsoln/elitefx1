@@ -3,7 +3,7 @@
 > **Single Source of Truth ya GOVERNANCE.** Chief Quant + Implementer wanaisoma
 > HII kwanza kabla ya kuendelea. Ndani: Chief Memory · Project Status · Research
 > Ledger · Doctrine Amendments · Approval Log. Doctrine imegawanyika domains mbili:
-> **Market** = `ELITEFX DOCTRINE V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V10.md`;
+> **Market** = `ELITEFX DOCTRINE V6.9.md`; **Decision** = `ELITEFX DECISION DOCTRINE V11.md`;
 > board hii ndiyo state ya mradi.
 >
 > Workflow (lazima, hakuna kuruka): **Research → Report → Chief Review →
@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-07-03 (Chief: **D6 Decision Engine Implementation APPROVED — CLOSED** (approval ya implementation, SI matokeo ya biashara) — engine = functions mbili, core ~72 lines, stateless, import-pure; **P103** engine complexity bounded (features mpya = layers, sio Engine); **P104** architectural purity kwa automated compliance tests (ya kudumu); **P105 OPEN** Integrity Gate kabla ya execution (nani anafanya VALIDATED? — Engine hapana, Policy hapana → layer mpya); **P106 OPEN** Decision Repository (persistence nje ya Engine); Auditor: **4-point compliance review kila PR** (engine size · forbidden imports · stateless · policy leakage); Decision Doctrine → **V10**; ⚠️ principle-numbering collision (V8/V9 P90–P97 vs spec-text P92–P102) imerekodiwa — reconciliation OPEN kwa Chief; **CHAPTER 3: EXECUTION SCIENCE OPENED** (E1 Integrity Gate · E2 Execution Object (P89) · E3 Decision Repository · E4 Broker Adapter; spec-first, Chief phase-start kwa kila moja).)*
+*Last updated: 2026-07-03 (Chief #1: **Decision Doctrine → V11** — majibu rasmi kwa onboarding review ya **Chief Quant #2** (`docs/CHIEF2_ONBOARDING_REVIEW.md`). **Two-Chief governance**: Chief #1 = Scientific Director (FINAL APPROVAL zote) · Chief #2 = Scientific Reviewer (independent challenge; hakuna approval) — "institution haiwezi kuwa na final authority mbili". **P107 APPROVED** (transitive dependency purity — chanzo: OBS-1 ya Chief #2; Auditor ameagizwa kupima dependency graph). **E1 pre-spec rulings**: E1 HAIJAFUNGULIWA (inasubiri Chief Directive); Engine=STRUCTURE vs Gate=ELIGIBILITY; **FTMO = Execution Constraint** (MWONGOZO unaingia kupitia Execution Science — P81); VALIDATED = Decision Object MPYA (id mpya, sio mutation); ordering E1→E2→E3→E4 STRICT; A-4 immutability inafungwa E2. **Scheduling**: P70 haitafungwi sasa; P96 = Decision Science ya baadaye; P78 baada ya Execution Science. **Alpha**: tunarudi Market Science pale TU Decision Layer itakapohitaji evidence isiyopo; F-005 re-run = debt; D5 @v2 si lazima; Phase 5.12 bado. **Hygiene**: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md`; asset.zip/report.zip zimetolewa; `doctrine/archive/` imeundwa.)*
 
 ---
 
@@ -19,7 +19,7 @@
 
 Official (TWO DOMAINS):
 - `ELITEFX DOCTRINE V6.9.md` — **Market** domain (Representation/Taxonomy/Semantics/Geometry; mature, FROZEN)
-- `ELITEFX DECISION DOCTRINE V10.md` — **Decision** domain (Evidence Layer FROZEN kwa **interface** (P90); D0–D6 CLOSED; frontier = **Execution Science** (E1 Integrity Gate · E2 Execution Object · E3 Decision Repository · E4 Broker Adapter))
+- `ELITEFX DECISION DOCTRINE V11.md` — **Decision** domain (Evidence Layer FROZEN kwa **interface** (P90); D0–D6 CLOSED; frontier = **Execution Science** (E1 Integrity Gate · E2 Execution Object · E3 Decision Repository · E4 Broker Adapter — E1 inasubiri Chief Directive))
 
 Status:
 - ACTIVE (both)
@@ -27,8 +27,21 @@ Status:
 Superseded:
 - V4 … V6.7 (chain)
 - V6.8 (superseded by V6.9 + Decision Doctrine V1→…→V10)
-- Decision Doctrine V1→…→V9 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89; V8 P90–91 interface-freeze + eligibility + Architecture Auditor; V9 P92–97 + D5 CLOSED + D6 spec-first; V10 P103–106 + D6 CLOSED + Execution Science)
+- Decision Doctrine V1→…→V10 (V6 Evidence-Layer FROZEN + Decision Objects; V7 Decision Policy + P85–89; V8 P90–91 interface-freeze + eligibility + Architecture Auditor; V9 P92–97 + D5 CLOSED + D6 spec-first; V10 P103–106 + D6 CLOSED + Execution Science; V11 two-Chief governance + P107 + E1 rulings)
 - Patches
+
+---
+
+## Governance Roles (Chief review 2026-07-03; Decision Doctrine V11)
+
+| Role | Authority |
+|------|-----------|
+| **Chief Quant #1 — Scientific Director** | Doctrine · Final Approval · Scientific Direction · Architecture. **Final decisions ZOTE zinatoka hapa.** |
+| **Chief Quant #2 — Scientific Reviewer** | Independent scientific review · counter-analysis · alternative hypotheses · blind review · challenge assumptions · strategic advice. Anaweza kupinga na kupendekeza — **APPROVAL ni ya Chief #1 pekee.** |
+| **Implementer** | Doctrine → implementation + reports (self-test kila module). |
+| **Architecture Auditor** | Compliance pekee (`Architecture Review: PASS/FAIL`; hakuna approval language); Compliance Matrix + Drift Watch + 4-point review kila PR + **dependency graph (P107)**. |
+
+*Institution haiwezi kuwa na final authority mbili.*
 
 ---
 
@@ -531,15 +544,15 @@ singleton/memory; (6) correctness kwanza, hakuna optimization; (7) self-test kil
 - [✓] **D5  Decision Policy Framework** *(FULLY APPROVED — CLOSED; `decision_policy.py` (@v2) + `reports/decision_policy_report.md` (run ya Japhet, @v1) + Chief Review; **END of Decision Architecture Era**)*
 - [✓] **D6  Decision Engine** *(**APPROVED — CLOSED 2026-07-03** — `decision_engine.py` (functions 2, core ~72 lines, stateless, import-pure) + report + Chief Review; approval ya implementation, SI matokeo ya biashara; **hakuna features mpya ndani ya Engine — P103**)*
 - **CHAPTER 3 — EXECUTION SCIENCE (OPENED 2026-07-03; kila phase = Chief phase-start + spec-first):**
-- [ ] E1  Integrity Gate *(P105 OPEN — structural/compliance check kabla ya execution; nani anafanya VALIDATED)*
+- [ ] E1  Integrity Gate *(P105 OPEN — **HAIJAFUNGULIWA; inasubiri Chief Directive** (V11). Pre-spec rulings: Engine=STRUCTURE vs Gate=ELIGIBILITY (validation ≠ eligibility = msingi wa E1); VALIDATED = Decision Object MPYA (id mpya; PROPOSED→VALIDATED history, sio mutation); FTMO = Execution Constraint (P81); ordering E1→E2→E3→E4 STRICT)*
 - [ ] E2  Execution Object *(P89 OPEN — immutable; fills/slippage/rejects)*
 - [ ] E3  Decision Repository *(P106 OPEN — persistence nje ya Engine)*
 - [ ] E4  Broker Adapter *(baadaye — mazingira halisi)*
 - [ ] D8  Decision Quality/Outcome *(NOT YET ELIGIBLE (P91) — per-decision OOS + FDR; separate from Integrity P87)*
 - [ ] D9  Portfolio / Live *(NOT YET ELIGIBLE (P91))*
-- [ ] SPEC: commit D6 Implementation Rules 1–8 (spec-text ya Chief) to repo — **kama Rules, SIO P-numbers** (numbering resolution 2026-07-03) *(OPEN — Chief/Japhet)*
-- [ ] P70 Confidence model · P74 Temporal-vs-structural · P78 Redundancy-vs-duplication · P81 Internal-vs-external · P89 Execution Object *(OPEN — design)*
-- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
+- [✓] SPEC: D6 Implementation Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md` — **operational specification** (siyo doctrine, siyo report; Chief approval V11 E-2; kama Rules, SIO P-numbers)
+- [ ] P70 Confidence model · P74 Temporal-vs-structural · P78 Redundancy-vs-duplication · P81 Internal-vs-external · P89 Execution Object *(OPEN — design; **V11 scheduling**: P70 haitafungwi sasa — Execution Science haiihitaji, RED LINE inabaki; P96 = Decision Science phase ya baadaye, kwa sasa Japhet anachagua policy kwa mkono; P78 baada ya Execution Science; A-4 immutability enforcement inafungwa E2 kupitia P89)*
+- [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it; V11: bado — Execution Science haitaihitaji)*
 - [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
 
 ---
@@ -864,6 +877,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 
 - 2026-07-03 — **DECISION DOCTRINE V10 (D6 IMPLEMENTATION APPROVED — CLOSED; EXECUTION SCIENCE OPENED)**: Chief: "D6 ndiyo implementation safi zaidi ambayo mradi umewahi kutoa — si kwa sababu ni ngumu, bali kwa sababu **imekataa kuwa ngumu**." Approval ni ya **implementation**, SI matokeo ya biashara. **Principle 103** (*engine complexity bounded* — helpers/business-logic/caches ndani ya Engine = architecture inapotoka; retry/persistence/execution/broker = **layers mpya**). **Principle 104** (*architectural purity continuously verified by automated compliance tests* — self-test [4] `bad-imports=[]` ni requirement ya kudumu). **Principle 105 OPEN** (*Integrity Gate* — logic gap: nani anafanya VALIDATED? Engine hapana, Policy hapana → layer mpya kabla ya Execution). **Principle 106 OPEN** (*Decision Repository* — decision history si sehemu ya Engine). **Auditor 4-point compliance review kila PR**: engine size · forbidden imports · stateless · policy leakage. ⚠️ **Principle-numbering collision** imerekodiwa (V8/V9 P90–P97 [mkondo wa branch] vs spec-text P92–P102 [mkondo wa main — matini bado haiko repo]); maudhui hayagongani, nambari zinagongana; reconciliation **OPEN kwa Chief** (V10 ina pendekezo). **CHAPTER 3 — EXECUTION SCIENCE OPENED**: E1 Integrity Gate → E2 Execution Object (P89) → E3 Decision Repository → E4 Broker Adapter; kila phase spec-first + Chief phase-start. NO ML.
 
+- 2026-07-03 — **DECISION DOCTRINE V11 (TWO-CHIEF GOVERNANCE + P107 + E1 PRE-SPEC RULINGS)**: Chief #1 anajibu maswali 20 ya onboarding ya **Chief Quant #2** (`docs/CHIEF2_ONBOARDING_REVIEW.md`; uelewa ">95% sahihi"). **Governance**: roles nne rasmi — Chief #1 **Scientific Director** (Doctrine · Final Approval · Direction · Architecture; final decisions ZOTE) · Chief #2 **Scientific Reviewer** (independent review, counter-analysis, blind review, challenge; anaweza kupinga/kupendekeza — APPROVAL ni ya Chief #1 pekee) · Implementer · Auditor — *"institution haiwezi kuwa na final authority mbili."* **Principle 107 APPROVED** (*architectural purity shall include transitive dependency purity, not only direct imports* — chanzo: OBS-1 ya Chief #2: `decision_object.py` inaimport `market_state_engine` → Engine haiwezi ku-load bila Market stack; direct purity ≠ transitive purity; **Auditor ameagizwa kupima dependency graph**). **E1 pre-spec rulings**: E1 HAIJAFUNGULIWA (itafunguliwa kwa Chief Directive; Implementer ataandika spec kama D6); **Engine=STRUCTURE vs Gate=ELIGIBILITY** (validation ≠ eligibility = msingi wa E1: "policy hii inaruhusiwa leo? risk budget ipo? compliance imekidhi? correlation imekubalika?"); **FTMO = Execution Constraint** (SI Policy, SI Engine — MWONGOZO unaingia kupitia Execution Science; ndiyo sababu P81 ilifunguliwa mapema); **VALIDATED** = Decision Object **MPYA** (immutable, id mpya; history PROPOSED→VALIDATED — sio mutation); **ordering E1→E2→E3→E4 STRICT** (dependency; hakuna parallel); A-4 immutability enforcement inafungwa **E2** (P89). **Scheduling ya open principles**: P70 haitafungwi sasa ("sitaruhusu ifungwe kwa kubahatisha"; Execution Science haiihitaji); P96 Policy Selection = **Decision Science phase ya baadaye** (sio Execution Science; kwa sasa Japhet anachagua policy kwa mkono — sahihi); P78 baada ya Execution Science. **Alpha philosophy**: tunarudi Market Science pale TU Decision Layer itakaposema *"nahitaji evidence mpya ambayo haipo"* — siyo kabla; freeze ni ya dhati. **F-005 re-run = debt (ifanywe)**; D5 @v2 re-run si lazima (P88 history ipo); Phase 5.12 bado. **MWONGOZO** = Operational Manual; Decision Science = Research Architecture; zinakutana **E4** (FTMO values = judgement, siyo evidence — hazimo doctrine, zinaweza kupimwa baadaye). **Hygiene approvals**: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md` (operational spec); `asset.zip`/`report.zip` kutolewa repo; `doctrine/archive/` kuundwa (root = current doctrines pekee). NO ML.
+
 ---
 
 ## Approval Log
@@ -975,6 +990,12 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-03 | Principle-numbering collision — **RESOLVED**: numbers unique mradi mzima; doctrine = P90–P106 (V8/V9/V10 as-is); spec-text = **Rules 1–8** (si principles); rekodi za kihistoria hazibadilishwi | APPROVED | Chief Quant (architecture review) |
 | 2026-07-03 | **P103 reworded**: "The Decision Engine shall remain minimal and bounded in responsibility" — doctrine haifungi line counts (implementation detail); vipimo vya ukubwa = benchmark za Architecture Audit tu | APPROVED (amendment) | Chief Quant (architecture review) |
 | 2026-07-03 | Reconciliation ya branches (merge, histories zote mbili, self-tests PASS) + Chapter 3 ordering (Gate→Object→Repository→Adapter) | ENDORSED | Chief Quant (architecture review) |
+| 2026-07-03 | **Two-Chief governance**: Chief #1 Scientific Director (final approval ZOTE) · Chief #2 Scientific Reviewer (independent challenge; hakuna approval); roles 4 kwenye board | APPROVED | Chief Quant #1 |
+| 2026-07-03 | **Principle 107** — transitive dependency purity (chanzo: OBS-1 ya Chief #2); Auditor ameagizwa kupima dependency graph | APPROVED | Chief Quant #1 |
+| 2026-07-03 | E1 pre-spec rulings: validation ≠ eligibility (Engine=structure, Gate=eligibility); FTMO = Execution Constraint (P81); VALIDATED = Decision Object mpya (id mpya); E-ordering STRICT; E1 inasubiri Chief Directive | APPROVED (direction) | Chief Quant #1 |
+| 2026-07-03 | Scheduling: P70 stays OPEN (deliberate); P96 = Decision Science ya baadaye; P78 baada ya Execution Science; F-005 re-run (debt); D5 @v2 si lazima; Phase 5.12 bado | APPROVED (direction) | Chief Quant #1 |
+| 2026-07-03 | Hygiene: Rules 1–8 → `docs/D6_IMPLEMENTATION_RULES.md`; asset.zip/report.zip kutolewa; `doctrine/archive/` | APPROVED | Chief Quant #1 |
+| 2026-07-03 | **Decision Doctrine V11** | APPROVED | Chief Quant #1 |
 
 ### Archived (from current edge research)
 
@@ -994,4 +1015,4 @@ Reason: *Hatutaki ML kutafuta alpha kabla market structure haijathibitishwa.*
 
 *Governance kuanzia 2026-06-23: hakuna phase inayoanza bila Chief Approval
 hapa juu; hakuna hypothesis iliyokataliwa (Rejected Findings) kurudiwa; doctrine
-rasmi = tazama sehemu ya **Current Doctrine** hapo juu (Market V6.9 + Decision V8).*
+rasmi = tazama sehemu ya **Current Doctrine** hapo juu (Market V6.9 + Decision V11).*
