@@ -11,7 +11,7 @@
 > Kila kitu: *Evidence → Finding → Doctrine → Approval.* Hakuna "nafikiri" /
 > "inaonekana".
 
-*Last updated: 2026-07-02 (Chief: **D5 FULLY APPROVED — CLOSED** (`reports/decision_policy_report.md` delivered + reviewed) — **END of the Decision Architecture Era (D0–D5)**; **P92** dependency direction (Decision Science → Evidence interface pekee); **P93 OPEN** Canonical Domain Objects; **P94** Engine–Policy contract = API rasmi ya Decision Science; **P95 OPEN** reproducibility vector (policy+schema+doctrine versions); **P96 OPEN** Policy Selection ni external; **P97** Engine = orchestrator only; **RED LINE**: reliability ≠ probability hadi P70 ifungwe; INTENT terminology = direction ya D6; risk taxonomy (Architecture/Research/Governance) + **Architectural Maturity** kila audit; Decision Doctrine → **V9**; **D6 Decision Engine ACTIVE — SPECIFICATION FIRST** (`reports/decision_engine_specification.md`, maswali 8; coding baada ya spec kupitishwa).)*
+*Last updated: 2026-07-03 (Chief: **Decision Engine Specification APPROVED as architecture**; D6 IMPLEMENTATION authorized under Rules 1–8 — no doctrine changes during coding; compliance checklist per PR (P92–P102); engine small/stateless/ignorant (Snapshot·Policy·Decision Object only); correctness first; self-test per step; report format Implementation→Self Tests→Known Limitations→Open Questions. NEW GOVERNANCE WORKFLOW: Chief → Doctrine → Architecture Auditor → Architecture PASS → Implementer → Implementation → Self Tests → Architecture Compliance Review → Chief Review → Approval.)*
 
 ---
 
@@ -433,18 +433,23 @@ Status: UNPROVEN.* (Volume Bars HAZIJAFA — swali la INFORMATION ni Phase 2.1.)
 
 ## Current Phase
 
-Phase: **D6 — Decision Engine (SPECIFICATION FIRST)** (Decision Science; Decision Architecture Era CLOSED)
-Name: **Decision Engine Specification (document kabla ya code)**
-Status: ACTIVE (Decision domain) — eligibility imetimia (P91: D5 CLOSED + Chief approval)
-Owner: Implementer + Chief
-Chief Approval: YES (2026-07-02 — "Ninaidhinisha rasmi. Lakini kwa masharti.")
-Deliverable: **`reports/decision_engine_specification.md`** — DOCUMENT, SIO code. Coding inaanza TU
-baada ya spec kupitishwa na Chief.
-Maswali 8 (Chief): (1) Engine responsibilities. (2) Engine boundaries. (3) Inputs. (4) Outputs.
-(5) Error handling. (6) Audit responsibilities. (7) Policy injection. (8) Snapshot validation.
-Masharti: Engine = orchestrator only (P97: Receive Snapshot → Receive Policy → Call Policy → Create
-Decision Object — BASI); hakuna import ya Market Science (P92); **RED LINE**: reliability ≠ probability
-hadi P70 ifungwe; policy selection ni external (P96 OPEN); INTENT terminology inafafanuliwa hapa. NO ML.
+Phase: **D6 — Decision Engine (IMPLEMENTATION)** (Decision Science; Evidence Layer FROZEN)
+Name: **Generic orchestrator: decide(snapshot, policy) → Decision Object**
+Status: ACTIVE — implementation chini ya Chief Rules 1–8
+Owner: Implementer (+ Architecture Compliance Review kabla ya Chief Review)
+Chief Approval: YES (Decision Engine Specification approved as architecture)
+Rules: (1) hakuna doctrine changes wakati wa coding; (2) compliance checklist kila PR (P92–P102);
+(3) engine ndogo — logic ya maamuzi ni ya Policy; (4) engine inajua TU Snapshot·Policy·Decision
+Object (hakuna Market/Events/State/Representation/Features); (5) stateless — no cache/globals/
+singleton/memory; (6) correctness kwanza, hakuna optimization; (7) self-test kila sehemu; (8) ripoti
+= Implementation Report → Self Tests → Known Limitations → Open Questions. NO ML.
+
+> **D5 Decision Policy Framework APPROVED; Decision Engine Specification APPROVED as architecture.**
+> Governance workflow mpya (Chief): Chief → Doctrine → **Architecture Auditor** → Architecture PASS →
+> Implementer → Implementation → Self Tests → **Architecture Compliance Review** → Chief Review →
+> Approval. Implementation: `decision_engine.py` (pure — imports decision_object + stdlib PEKEE,
+> import-purity self-tested) + `decision_engine_report.py` (harness; evidence pipeline iko huko, sio
+> kwenye engine). NB: matini ya Spec (P90–P102) bado haijawekwa kwenye repo — Open Question kwa Chief.
 
 > **D5 FULLY APPROVED — CLOSED (2026-07-02).** Report (`decision_policy_report.md`, run ya Japhet)
 > iliheshimu kila red line: hakuna ML, hakuna alpha claims, hakuna Decision Engine, policy versioned,
@@ -523,11 +528,12 @@ hadi P70 ifungwe; policy selection ni external (P96 OPEN); INTENT terminology in
 - [✓] **D2  Evidence Sets** *(APPROVED — `evidence_set.py`; collection/identity/dedup; order-invariance; set reliability)*
 - [✓] **D3  Evidence Snapshots** *(APPROVED — `evidence_snapshot.py`; canonical Decision input; temporal conflict; readiness state machine)* — **EVIDENCE LAYER FROZEN**
 - [✓] **D4  Decision Objects** *(APPROVED — `decision_object.py`; immutable object; lifecycle incl. CANCELLED (P86); integrity (P87); provenance→Snapshot ID; policy_id (P88); audit)*
-- [✓] **D5  Decision Policy Framework** *(FULLY APPROVED — CLOSED 2026-07-02; `decision_policy.py` (@v2) + `reports/decision_policy_report.md` (run ya Japhet, @v1) + Chief Review; **END of Decision Architecture Era**)*
-- [~] **D6  Decision Engine** *(ACTIVE — **SPECIFICATION FIRST**: `reports/decision_engine_specification.md` (maswali 8); orchestrator only (P97); coding baada ya spec kupitishwa)*
+- [✓] **D5  Decision Policy Framework** *(FULLY APPROVED — CLOSED; `decision_policy.py` (@v2) + `reports/decision_policy_report.md` (run ya Japhet, @v1) + Chief Review; **END of Decision Architecture Era**)*
+- [✓] **D6  Decision Engine** *(ACTIVE/IMPLEMENTATION — `decision_engine.py` (pure, stateless) + `decision_engine_report.py` (harness) + `reports/decision_engine_report.md`; Rules 1–8; compliance checklist P92–P102; repo pia ina `reports/decision_engine_specification.md`)*
 - [ ] D7  Execution Object *(NOT YET ELIGIBLE (P91) — P89; immutable; fills/slippage/rejects)*
 - [ ] D8  Decision Quality/Outcome *(NOT YET ELIGIBLE (P91) — per-decision OOS + FDR; separate from Integrity P87)*
 - [ ] D9  Portfolio / Live *(NOT YET ELIGIBLE (P91))*
+- [ ] SPEC: commit Decision Engine Specification (P90–P102) text to repo *(OPEN — Chief/Japhet; checklist inahitaji matini kamili)*
 - [ ] P70 Confidence model · P74 Temporal-vs-structural · P78 Redundancy-vs-duplication · P81 Internal-vs-external · P89 Execution Object *(OPEN — design)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
 - [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
@@ -773,14 +779,13 @@ readiness/reliability/conflict (Q3; conflict explicit per G-7); swappable withou
 (Q4); Engine↔Policy contract = policy.decide(snapshot) (Q5) → **P94: contract = API rasmi ya Decision
 Science**. Chief: Q4 inathibitisha Decision Science imejitegemea. → Q-048.
 
-**Q-048 — What is the Decision Engine specification (responsibilities, boundaries, I/O, errors, audit, injection, validation)?**
-Status: OPEN (D6) — **SPEC DELIVERED; Architecture Review: PASS; inasubiri Chief approval**
-Evidence: `reports/decision_engine_specification.md` (maswali 8 yamejibiwa; DOCUMENT, hakuna code) +
-Architecture Review (2026-07-03, `docs/ARCHITECTURE_AUDIT.md`): **PASS — Compliant with current
-doctrine (V9)**; Compliance Matrix 14/14 PASS; Drift Watch: Market imports None · Policy leakage
-None · Engine growth Watch · INTENT migration Watch (inagusa ACTIONS enum ya D4 — uamuzi wa Chief) ·
-EngineError-vs-ABSTAIN (design choice — uamuzi wa Chief). NB: Architecture Review ≠ approval —
-**approval ni ya Chief pekee**; implementation inaanza baada ya Chief kupitisha spec.
+**Q-048 — Does the Decision Engine (spec + implementation) comply with the approved architecture?**
+Status: OPEN (D6) — **implementation delivered; inasubiri Chief Review**
+Evidence (mikondo miwili, zote za kweli): (a) `reports/decision_engine_specification.md` (maswali 8;
+Architecture Review 2026-07-03: PASS — compliant with V9) — session ya branch; (b) `decision_engine.py`
++ `decision_engine_report.md` (Rules 1–8; compliance checklist P92–P102 ya spec-text ya Chief ambayo
+bado haiko repo) — session ya main. ⚠️ Numbering collision (V9 P92–P97 vs spec-text P92–P102)
+imerekodiwa kwenye `docs/ARCHITECTURE_AUDIT.md` — inasubiri reconciliation ya Chief.
 
 **Q-041 — Does any variable carry decision value under a NON-selection decision (abstention/sizing/…)?**
 Status: **DEFERRED** (Chief — until after D0 Evidence Theory; was DQ-1)
@@ -847,6 +852,7 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 - 2026-06-30 — **DECISION DOCTRINE V4 (D1 FULLY APPROVED + amendments)**: Chief: "D1 is the first report that no longer talks about Forex — it talks about software architecture." D0+D1 = the formal **Evidence Layer**. **Principle 71** (evidence transformations shall be pure, deterministic and side-effect-free — Evidence behaves like a functional-programming object; the Decision Engine has no side effects). **Principle 72** (provenance shall be a **directed graph**, not a chronological log — aggregate/merge have parents, split has children). **Principle 73** (decision-readiness belongs to an **Evidence Snapshot**, not the immutable object — readiness changes over time; the object does not). **Principle 74 OPEN** (conflict shall distinguish **temporal contradiction** [yesterday bullish vs today bearish] from structural disagreement). **Principle 75** (Evidence Objects are **value objects with immutable identity** — content-derived id; enables dedup, graph nodes, language-independence). Logic gap closed: operations went Evidence→Evidence but never Evidence→**Set**; decisions are made on **Evidence Sets**, not single objects. **D2 Evidence Sets** opened (collection/identity/dedup; order-invariant aggregate; set confidence; snapshot readiness); **Decision Families DEFERRED** until the Evidence Layer is closed. Architecture: Evidence Objects → **Evidence Sets** → Decision → Execution. Delivers `evidence_set.py` + `reports/evidence_set_report.md` (+ value-object id & provenance-graph fields added to `evidence_object`/`evidence_operations`). No Decision Engine yet. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V5 (D2 FULLY APPROVED + amendments)**: **Principle 76** (evidence meaning is independent of insertion order — D2's order-invariant aggregate is "the first theorem of Decision Science": a Set is a *mathematical set*, not a sequence; historical lineage is represented separately via the provenance graph → Evidence **Semantics** vs Evidence **History**). **Principle 77** (decisions shall operate on **Evidence Snapshots**, not raw Evidence Objects). **Principle 78 OPEN** (statistical **redundancy ≠ identity duplication** — EURUSD H1 vs H4 are distinct ids but near-identical info; redundancy management still needed). **Principle 79** (the **Evidence Snapshot is the canonical input to the Decision Layer**). Terminology: "Set Confidence" → **"Set Reliability"** until the confidence model (P70) is closed. **D3 Evidence Snapshots** opened (immutable as-of-T view; fields; readiness @T; temporal conflict per P74; canonical input per P79) — this **completes the Evidence Layer** (Object→Operations→Set→Snapshot); **Decision Families DEFERRED** until D3 approved. Delivers `evidence_snapshot.py` + `reports/evidence_snapshot_report.md`. No Decision Engine yet. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V6 (D3 FULLY APPROVED — EVIDENCE LAYER FROZEN)**: Chief approves D3 with **no amendments** ("D3 is the end of Evidence Engineering; the architecture is complete"). **The Evidence Layer (Object · Operations · Set · Snapshot) is declared FROZEN as stable architecture** — no new Object/Operation/Set/Snapshot unless data shows a large logic gap ("if we keep changing the foundation, Decision Science never begins"). **Principle 80** (the Evidence Snapshot defines the **complete decision context** available to the Decision Layer — it sees nothing else). **Principle 81 OPEN** (distinguish **internal** evidence conflicts from **external** execution constraints — broker outage/news halt/execution failure affect the decision but are not evidence). **Principle 82** (decision-readiness is an explicit **state machine** — READY→STALE→EXPIRED→INVALID — not a numeric score; states are more auditable). **Principle 83** (decisions are **immutable first-class objects** — like Evidence). **Principle 84** (every Decision Object references the **exact Evidence Snapshot ID** it originated from → fully auditable Decision→Snapshot→Set→Operations→Objects). Snapshot gains `readiness_state` (P82) and `id` (P84). **D4 Decision Objects** opened (define the Decision before the Engine, as Event was defined before algorithms): immutable Decision Object with fields/lifecycle-state-machine/provenance/structural-quality/audit; action defaults to **ABSTAIN** (P26) — no engine logic. **Decision Engine DEFERRED** (it will be a small consumer: snapshot→action). Delivers `decision_object.py` + `reports/decision_object_report.md`. No Decision Engine yet. No ML.
+- 2026-07-03 — **D6 IMPLEMENTATION AUTHORIZED (Decision Engine Specification approved as architecture)**: Chief closes architecture research and authorizes implementation under **Rules 1–8**: (1) no doctrine changes during coding — stop and bring an amendment first; (2) every D6 PR carries a **Compliance Checklist** (P92–P102); (3) engine stays SMALL — any decision logic belongs to Policy; (4) engine knows ONLY Snapshot·Policy·Decision Object — nothing about Market/Events/State/Representation/Features; (5) STATELESS — no cache/globals/singleton/memory; (6) correctness first, no optimization; (7) self-test per implementation step; (8) deliverable format = Implementation Report → Self Tests → Known Limitations → Open Questions (no conclusions). **New governance workflow**: Chief → Doctrine → Architecture Auditor → Architecture PASS → Implementer → Implementation → Self Tests → Architecture Compliance Review → Chief Review → Approval. Implementation delivered: `decision_engine.py` (pure engine; imports decision_object + stdlib only — import-purity self-tested; deterministic; stateless) + `decision_engine_report.py` (demo harness holding the evidence pipeline, keeping the engine ignorant) + `reports/decision_engine_report.md`. **Open**: the Specification text (P90–P102) is not yet committed to the repo — flagged to Chief so compliance reviews can cite exact wording. No ML.
 - 2026-06-30 — **DECISION DOCTRINE V7 (D4 FULLY APPROVED + amendments)**: **Principle 85** (Decision Objects collectively form the **permanent decision history** — with immutability/lifecycle/provenance/audit, decisions become records; later we learn from decision history, not the market alone). **Principle 86** (**cancellation ≠ rejection** — a decision stopped pre-execution by news/broker/manual is **CANCELLED**, not REJECTED; CANCELLED reachable only from PROPOSED/VALIDATED). **Principle 87** (**Decision Integrity ≠ Outcome** — pre-execution structural metrics are *Integrity*; whether the decision was right is *Outcome*, a later OOS matter; "Decision Quality" → "Decision Integrity"). **Principle 88** (**every Decision references its Decision Policy** — same Snapshot → different decisions under Conservative/Aggressive/Capital-Preservation; record policy_id `name@vN` → reproducible). **Principle 89 OPEN** (**Execution is a separate immutable object** — `Decision: BUY` ≠ `Trade Executed`; delay/reject/partial-fill/no-price). **D5 Decision Policy Framework** opened (versioned rule Snapshot→action; swappable via injection; Engine↔Policy contract = policy.decide(snapshot); policies rule-based & conservative, NO alpha). **Decision Engine DEFERRED** (D6, generic orchestrator). Delivers `decision_policy.py` + `reports/decision_policy_report.md` (+ CANCELLED/integrity/policy_id added to `decision_object`). No Decision Engine yet. No ML.
 - 2026-07-02 — **DECISION DOCTRINE V8 (Architecture Audit #1 APPROVED + P90/91)**: Chief anaidhinisha Architecture Audit ya kwanza (`docs/CHIEF_GAP_REVIEW.md` — Doctrine ⇄ Implementation ⇄ Documents). **G-1 APPROVED**: D5 haiwezi kufungwa bila `reports/decision_policy_report.md` — workflow (Research → Report → Chief Review → Approval) haivunjwi; **D5 inabaki ACTIVE**. **Principle 90** (*a frozen layer guarantees interface stability, not implementation immutability* — Evidence Layer imefreeze kwa **interface**; performance/storage/serialization zinaweza kuboreshwa, contract haitikisiki). **Principle 91** (*progression between phases shall be governed by eligibility criteria rather than implementation readiness* — Decision Engine = **NOT YET ELIGIBLE**, sio BLOCKED; block ina maana kuna tatizo, hapa tunafuata governance). **G-7 amendment**: V7 Q3 inasema policy inachagua kutoka readiness + reliability + **conflict** → conflict sasa ni **explicit policy input** (per-policy tolerance: capital_preservation 0.00; conservative/aggressive CONFLICT_CEIL); logic imebadilika → policies → **@v2** (P88 versioning). **G-8**: P86 CANCELLED self-test imeongezwa (`decision_object.py`). **Hygiene G-2…G-6** zimerekebishwa kwa **commit tofauti** na research (agizo la Chief). **Governance roles tatu**: Chief Quant (direction/doctrine/architecture) · Implementer (doctrine→implementation+reports) · **Architecture Auditor** (drift guard: Doctrine⇄Architecture⇄Implementation⇄Tests⇄Reports; kila review inamalizika na **Layer-Drift Matrix** + **Future Risk Assessment** — `docs/ARCHITECTURE_AUDIT.md`). Muhimu zaidi (Chief): *"Evidence Layer FROZEN haikuguswa" ndiyo metric muhimu zaidi — architecture imeanza kuwa stable.* No Decision Engine yet. No ML.
 
@@ -955,6 +961,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-02 | D6 Decision Engine start — **SPECIFICATION FIRST** (`reports/decision_engine_specification.md`, maswali 8; coding baada ya spec approval) | APPROVED (start) | Chief Quant |
 | 2026-07-03 | Auditor role boundaries: hakubali research/haanzishi doctrine/ha-design implementation; **hakuna approval language** (vocabulary: `Architecture Review: PASS/FAIL`, "Compliant with current doctrine"); kila review + **Compliance Matrix** + **Architectural Drift Watch** | APPROVED (directive) | Chief Quant |
 | 2026-07-03 | Architecture Review ya D6 Specification — imekubaliwa **kama ukaguzi wa architecture** (PASS); approval ya spec yenyewe (Q-048) bado ni ya Chief | NOTED | Chief Quant |
+| 2026-07-03 | D5 Decision Policy APPROVED; **Decision Engine Specification APPROVED as architecture**; D6 IMPLEMENTATION authorized under Rules 1–8 (no doctrine-during-coding; checklist P92–P102; small/ignorant/stateless engine; correctness first; self-test per step; Rule-8 report format) | APPROVED | Chief Quant |
+| 2026-07-03 | NEW GOVERNANCE WORKFLOW: Chief → Doctrine → Architecture Auditor → Architecture PASS → Implementer → Implementation → Self Tests → Architecture Compliance Review → Chief Review → Approval | APPROVED | Chief Quant |
 
 ### Archived (from current edge research)
 
