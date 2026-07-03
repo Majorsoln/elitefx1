@@ -774,12 +774,13 @@ readiness/reliability/conflict (Q3; conflict explicit per G-7); swappable withou
 Science**. Chief: Q4 inathibitisha Decision Science imejitegemea. → Q-048.
 
 **Q-048 — What is the Decision Engine specification (responsibilities, boundaries, I/O, errors, audit, injection, validation)?**
-Status: OPEN (D6) — ACTIVE
-Needed: `reports/decision_engine_specification.md` (DOCUMENT kabla ya code) — (1) responsibilities;
-(2) boundaries; (3) inputs; (4) outputs; (5) error handling; (6) audit responsibilities; (7) policy
-injection (P94); (8) snapshot validation. Masharti: P92 (hakuna Market imports), P97 (orchestration
-only), RED LINE (reliability ≠ probability hadi P70), P96 OPEN (policy selection external), INTENT
-terminology. Implementation inaanza baada ya spec kupitishwa na Chief.
+Status: OPEN (D6) — **SPEC DELIVERED; Architecture Review: PASS; inasubiri Chief approval**
+Evidence: `reports/decision_engine_specification.md` (maswali 8 yamejibiwa; DOCUMENT, hakuna code) +
+Architecture Review (2026-07-03, `docs/ARCHITECTURE_AUDIT.md`): **PASS — Compliant with current
+doctrine (V9)**; Compliance Matrix 14/14 PASS; Drift Watch: Market imports None · Policy leakage
+None · Engine growth Watch · INTENT migration Watch (inagusa ACTIONS enum ya D4 — uamuzi wa Chief) ·
+EngineError-vs-ABSTAIN (design choice — uamuzi wa Chief). NB: Architecture Review ≠ approval —
+**approval ni ya Chief pekee**; implementation inaanza baada ya Chief kupitisha spec.
 
 **Q-041 — Does any variable carry decision value under a NON-selection decision (abstention/sizing/…)?**
 Status: **DEFERRED** (Chief — until after D0 Evidence Theory; was DQ-1)
@@ -952,6 +953,8 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-02 | **D5 Decision Policy Framework — FULLY APPROVED, CLOSED** (`decision_policy_report.md` delivered + reviewed); Q-047 CLOSED; END of the Decision Architecture Era (D0–D5) | APPROVED | Chief Quant |
 | 2026-07-02 | Principle 92 (dependency direction) + Principle 94 (Engine–Policy contract = API) + Principle 97 (Engine = orchestration only); Principle 93/95/96 OPEN; RED LINE reliability ≠ probability (hadi P70); INTENT direction; risk taxonomy + Architectural Maturity; Decision Doctrine V9 | APPROVED | Chief Quant |
 | 2026-07-02 | D6 Decision Engine start — **SPECIFICATION FIRST** (`reports/decision_engine_specification.md`, maswali 8; coding baada ya spec approval) | APPROVED (start) | Chief Quant |
+| 2026-07-03 | Auditor role boundaries: hakubali research/haanzishi doctrine/ha-design implementation; **hakuna approval language** (vocabulary: `Architecture Review: PASS/FAIL`, "Compliant with current doctrine"); kila review + **Compliance Matrix** + **Architectural Drift Watch** | APPROVED (directive) | Chief Quant |
+| 2026-07-03 | Architecture Review ya D6 Specification — imekubaliwa **kama ukaguzi wa architecture** (PASS); approval ya spec yenyewe (Q-048) bado ni ya Chief | NOTED | Chief Quant |
 
 ### Archived (from current edge research)
 

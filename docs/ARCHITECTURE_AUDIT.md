@@ -5,6 +5,14 @@
 > Kila audit inamalizika na **Layer-Drift Matrix**, **Architectural Maturity** (amri ya Chief,
 > 2026-07-02) na **Future Risk Assessment** iliyogawanywa **Architecture / Research / Governance**
 > risks (taxonomy ya Chief, V9). Audit #1 = `docs/CHIEF_GAP_REVIEW.md` (APPROVED 2026-07-02).
+>
+> **MIPAKA YA ROLE (amri ya Chief, 2026-07-03):** Auditor **hakubali research · haanzishi doctrine ·
+> ha-design implementation**. Anakagua compliance tu. Kwa hiyo Auditor **KAMWE hatumii** maneno ya
+> approval ("APPROVED" ni la Chief pekee). Vocabulary rasmi ya verdicts za Auditor:
+> **`Architecture Review: PASS`** / **`Architecture Review: FAIL`** / *"Compliant with current
+> doctrine"*. Kila Architecture Review inamalizika na sehemu mbili za lazima:
+> **(1) Compliance Matrix** (`| Principle | Status |`) na **(2) Architectural Drift Watch**
+> (`| Item | Risk |`).
 
 ---
 
@@ -124,5 +132,57 @@ iliyobaki ni **Policy Selection (P96)** — Chief ameiona kabla haijawa tatizo; 
 audit. D6 inaanza na specification — mstari wangu mwekundu wa kwanza kwenye review ya spec/code:
 **hakuna import ya Market Science (P92), hakuna logic ndani ya Engine (P97), hakuna reliability-
 kama-probability (RED LINE).**
+
+*Profitable ≠ Tradable Edge. Protect capital first.*
+
+---
+
+## ARCHITECTURE REVIEW — D6 Decision Engine Specification — 2026-07-03
+
+Scope: `reports/decision_engine_specification.md` (deliverable ya Q-048) dhidi ya Decision Doctrine
+V9 na architecture iliyofungwa (D0–D5). Muundo mpya kwa amri ya Chief: Compliance Matrix +
+Architectural Drift Watch; vocabulary ya Auditor (hakuna approval language).
+
+Nini kimekaguliwa: consistency ya spec na doctrine · dependency direction · governance · principles.
+Nini HAKIJAKAGULIWA (nje ya role): ubora wa research · design choices (hizo ni za Implementer na
+uamuzi ni wa Chief — mf. EngineError-vs-ABSTAIN, INTENT migration).
+
+### Compliance Matrix
+
+| Principle | Status | Ushahidi kwenye spec |
+|-----------|--------|----------------------|
+| P77/P79 (Snapshot = canonical input pekee) | **PASS** | Q3 + Q8/S5 — Object/Set ghafi zinakataliwa |
+| P80 (complete context; hakuna evidence calc) | **PASS** | Q2 — "Hakuna evidence calculations" |
+| P82 (readiness = state machine; states ≠ errors) | **PASS** | Q5 — INVALID/STALE/EXPIRED = input ya policy, sio EngineError |
+| P83/P84/P85 (immutable Decision; snapshot ref; history append-only) | **PASS** | Q4 |
+| P86 (external constraints → CANCELLED lifecycle, sio Engine) | **PASS** | Q5 (P81 nje ya scope) |
+| P88 (policy_id inarekodiwa) | **PASS** | Q4 + Q7 |
+| P91 (eligibility; specification-first imeheshimiwa) | **PASS** | Hakuna code; deliverable ni document |
+| **P92** (hakuna Market imports ndani ya Engine) | **PASS** | Q2 boundary + mchoro wa mwisho |
+| **P94** (contract = njia pekee ya decision logic) | **PASS** | Q1/Q7 — surface mbili tu: `id` + `decide` |
+| P95 (reproducibility vector — OPEN) | **PASS (noted)** | Q6 roadmap; haitekelezwi bila Chief |
+| **P96** (policy selection external; hakuna hidden default) | **PASS** | Q3/Q7 — "Engine kamwe haina default policy iliyofichwa" |
+| **P97** (orchestration only; hakuna logic) | **PASS** | Q1 (majukumu 4) + Q2 + Q8 (validation structural tu) |
+| **RED LINE** (reliability ≠ probability hadi P70) | **PASS** | Q2 — reliability inapitishwa kama rekodi tu |
+| P69 (decision-ready ≠ trade-ready; hakuna alpha claims) | **PASS** | Honest Caveat 5 |
+
+### Architectural Drift Watch
+
+| Item | Risk |
+|------|------|
+| Market imports (ndani ya Engine spec) | **None** |
+| Policy logic leakage (thresholds/heuristics ndani ya Engine) | **None** |
+| Reliability-as-probability | **None** |
+| Engine growth (scope creep zaidi ya majukumu 4) | **Watch** — EngineError log ni artifact mpya (ndogo, yenye sababu); kila nyongeza ijayo ipimwe dhidi ya P97 |
+| INTENT migration (inagusa ACTIONS enum ya D4 iliyoapproved) | **Watch** — inahitaji uamuzi wa Chief kabla ya code (spec Caveat 2) |
+| Policy Selection pressure (P96 OPEN — layer haipo) | **Watch** — bila layer, chaguo la policy litajaribu kuingia ndani ya Engine au caller ad-hoc |
+
+### Verdict ya Auditor
+
+**Architecture Review: PASS — Compliant with current doctrine (V9).**
+
+Wording note (mstari wa role): hii ni **ukaguzi wa architecture tu**. Approval ya specification
+(Q-048) — pamoja na maamuzi ya design yaliyo wazi ndani yake (EngineError-vs-ABSTAIN; INTENT
+migration) — ni **jukumu la Chief**. Implementation ya D6 haianzi hadi Chief apitishe spec.
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
