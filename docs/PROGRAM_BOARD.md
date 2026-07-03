@@ -537,7 +537,7 @@ singleton/memory; (6) correctness kwanza, hakuna optimization; (7) self-test kil
 - [ ] E4  Broker Adapter *(baadaye — mazingira halisi)*
 - [ ] D8  Decision Quality/Outcome *(NOT YET ELIGIBLE (P91) — per-decision OOS + FDR; separate from Integrity P87)*
 - [ ] D9  Portfolio / Live *(NOT YET ELIGIBLE (P91))*
-- [ ] SPEC: commit Decision Engine Specification (P90–P102) text to repo *(OPEN — Chief/Japhet; checklist inahitaji matini kamili)*
+- [ ] SPEC: commit D6 Implementation Rules 1–8 (spec-text ya Chief) to repo — **kama Rules, SIO P-numbers** (numbering resolution 2026-07-03) *(OPEN — Chief/Japhet)*
 - [ ] P70 Confidence model · P74 Temporal-vs-structural · P78 Redundancy-vs-duplication · P81 Internal-vs-external · P89 Execution Object *(OPEN — design)*
 - [ ] Phase 5.12  Liquidity Event Validation *(QUEUED — H-06; market, reopen only if a decision needs it)*
 - [ ] ML *(BLOCKED — serves a proven decision, not a representation)*
@@ -972,7 +972,9 @@ Status: **CLOSED — APPROVED → F-022** (Phase 6.5). Confirmed: train-positive
 | 2026-07-03 | **D6 Decision Engine Implementation — APPROVED, CLOSED** (implementation, si biashara); Q-048 CLOSED; hakuna features mpya ndani ya Engine | APPROVED | Chief Quant |
 | 2026-07-03 | Principle 103 (bounded engine complexity) + Principle 104 (continuous compliance tests); Principle 105/106 OPEN (Integrity Gate; Decision Repository); Auditor 4-point compliance review kila PR; Decision Doctrine V10 | APPROVED | Chief Quant |
 | 2026-07-03 | CHAPTER 3 — EXECUTION SCIENCE opened (E1 Integrity Gate · E2 Execution Object · E3 Decision Repository · E4 Broker Adapter; spec-first; Chief phase-start kwa kila phase) | APPROVED (chapter) | Chief Quant |
-| 2026-07-03 | Principle-numbering collision (V8/V9 P90–P97 vs spec-text P92–P102) — imerekodiwa V10; reconciliation | OPEN (Chief) | Architecture Auditor (flag) |
+| 2026-07-03 | Principle-numbering collision — **RESOLVED**: numbers unique mradi mzima; doctrine = P90–P106 (V8/V9/V10 as-is); spec-text = **Rules 1–8** (si principles); rekodi za kihistoria hazibadilishwi | APPROVED | Chief Quant (architecture review) |
+| 2026-07-03 | **P103 reworded**: "The Decision Engine shall remain minimal and bounded in responsibility" — doctrine haifungi line counts (implementation detail); vipimo vya ukubwa = benchmark za Architecture Audit tu | APPROVED (amendment) | Chief Quant (architecture review) |
+| 2026-07-03 | Reconciliation ya branches (merge, histories zote mbili, self-tests PASS) + Chapter 3 ordering (Gate→Object→Repository→Adapter) | ENDORSED | Chief Quant (architecture review) |
 
 ### Archived (from current edge research)
 

@@ -32,16 +32,21 @@ hazijathibitishwa OOS — "hii ni sayansi nzuri; hakuna madai yasiyoungwa mkono"
 
 ---
 
-# PRINCIPLE 103 — Engine Complexity Is Bounded (APPROVED)
+# PRINCIPLE 103 — The Engine Remains Minimal and Bounded in Responsibility (APPROVED; reworded 2026-07-03)
 
 ```text
-The complexity of the Decision Engine shall remain bounded; new business behavior
-belongs in policies or domain objects, not in the engine.
+The Decision Engine shall remain minimal and bounded in responsibility;
+new business behavior belongs in policies or domain objects, not in the engine.
 ```
 
 Chief: ukiona Engine inaanza kuwa na helpers nyingi / business logic / caches — **ujue architecture
 inaanza kupotoka.** Retry, persistence, execution, broker — zote ni **layers mpya**, sio nyongeza
 ndani ya Engine.
+
+> **NB (review ya architecture, 2026-07-03):** doctrine **haifungi idadi ya mistari ya code** — hiyo
+> ni implementation detail. Vipimo vya ukubwa (mf. core ~72 lines ya leo) ni **benchmark za
+> Architecture Audit**, sio doctrine. Implementation inaweza kuboreshwa bila kubadilisha doctrine —
+> ilmradi **responsibility** ya Engine haiongezeki.
 
 # PRINCIPLE 104 — Continuous Architectural Purity (APPROVED)
 
@@ -94,7 +99,7 @@ Hii ni nyongeza juu ya Compliance Matrix + Architectural Drift Watch za kila rev
 
 ---
 
-# PRINCIPLE-NUMBERING RECONCILIATION (ledger honesty — OPEN kwa Chief)
+# PRINCIPLE-NUMBERING RECONCILIATION (RESOLVED — review ya 2026-07-03)
 
 Mikondo miwili ya 2026-07-02/03 ilizalisha numbering mbili:
 
@@ -107,12 +112,22 @@ Mkondo B (spec-text ya Chief,  P92 no-logic-in-engine · P94 knows-only-S/P/D ·
                                P101 refs · P102 report-format
 ```
 
-Maudhui hayagongani (yanakamilishana); **nambari zinagongana** (P92/P94/P97). Chief ameendelea na
-P103+. Hadi Chief atoe uamuzi: (a) V8/V9 zinabaki doctrine-of-record kwa P90–P97; (b) maudhui ya
-Mkondo B yanatambuliwa kama **Implementation Rules 1–8 za D6** (kama board ilivyorekodi) na spec-text
-kamili inasubiriwa kuwekwa repo (queue item OPEN); (c) P98–P102 zinachukuliwa kwa maudhui ya Mkondo B
-(hayana mgongano na chochote); (d) P103–P106 = hapa (maneno ya Chief verbatim). **Reconciliation ya
-mwisho ni uamuzi wa Chief.**
+**UAMUZI (approved 2026-07-03):** principle numbers ni **unique kwenye mradi mzima** — P mbili zenye
+maana tofauti haziruhusiwi kuishi pamoja.
+
+```text
+DOCTRINE (unique):    P90–P97  = V8/V9 kama zilivyo (doctrine-of-record)
+                      P98–P106 = V10 kuendelea (P98–P102 hazijatumika na doctrine —
+                                 zimehifadhiwa; P103–P106 = hapa)
+SPECIFICATION:        maudhui ya Mkondo B = **D6 Implementation Rules 1–8** (spec, SIO principles):
+                      R1 no-doctrine-during-coding · R2 compliance checklist · R3 small engine ·
+                      R4 knows-only-Snapshot/Policy/Decision · R5 stateless · R6 correctness-first ·
+                      R7 self-test-per-step · R8 report format
+```
+
+Rekodi za kihistoria (engine report ya 2026-07-03 yenye labels P92–P102 za spec-text) hazibadilishwi —
+Architecture Audit inaeleza mapping. Kuanzia sasa references mpya zitumie Rules 1–8 kwa spec na
+P-numbers za doctrine-of-record pekee.
 
 ---
 
@@ -154,8 +169,8 @@ Persistence ndani ya Engine (P106) · ML · live deployment
 ```text
 E1 (P105)  Integrity Gate — nani anafanya VALIDATED; structural/compliance checks zipi?    OPEN
 E3 (P106)  Decision Repository — persistence contract nje ya Engine.                        OPEN
-SPEC-TEXT  Decision Engine Specification (P90–P102 ya Chief) kuwekwa repo.                  OPEN
-NUMBERING  Principle-numbering reconciliation (Mkondo A vs B).                              OPEN (Chief)
+SPEC-TEXT  D6 Implementation Rules 1–8 (spec-text ya Chief) kuwekwa repo kama Rules, si P#. OPEN
+NUMBERING  Principle-numbering reconciliation.                     ✅ RESOLVED (2026-07-03)
 P89 · P81 · P70 · P74 · P78 · P93 · P95 · P96                                               OPEN
 ```
 

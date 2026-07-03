@@ -255,3 +255,19 @@ review za baadaye (P103). Drift pekee inayosubiri uamuzi ni **D-2 (numbering col
 ilikuwa — na inabaki — **ya Chief** (2026-07-03).
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
+
+---
+
+## ADDENDUM ya Review #4 — 2026-07-03 (architecture review ya Chief juu ya V10)
+
+- **P103 imerekebishwa** (kabla haijawa reference ya kudumu): principle sasa inasomeka *"The Decision
+  Engine shall remain minimal and bounded in responsibility"* — doctrine **haifungi idadi ya mistari**.
+  Kipimo cha core ~72 lines kinabaki HAPA (Architecture Audit) kama **benchmark ya leo tu**;
+  implementation inaweza kuboreshwa bila kugusa doctrine ilmradi responsibility haiongezeki.
+- **D-2 (numbering collision) — RESOLVED**: numbers ni unique mradi mzima; doctrine = P90–P106
+  (V8/V9/V10 as-is); spec-text ya D6 = **Rules 1–8** (specification, si principles). Rekodi za
+  kihistoria (engine report yenye labels za zamani) hazibadilishwi — mapping imeelezwa kwenye
+  Review #4 hapo juu. D-3 (spec-text kuwekwa repo kama Rules 1–8) inabaki **Watch/OPEN**.
+- Reconciliation ya branches + Chapter 3 ordering (Gate→Object→Repository→Adapter): **ENDORSED** na Chief.
+
+*Profitable ≠ Tradable Edge. Protect capital first.*
