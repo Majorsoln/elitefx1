@@ -21,7 +21,7 @@ when_not_to_use: exploratory research probes ambapo SWALI (sio interface) ndiyo 
   compliance value (precedent ya Chapter One); spec-first pia si kinga ya version races (angalia
   LESSON-014 / D-1)
 provenance: {phase: D6 (Decision Architecture), doctrine: Decision Doctrine V10→V11, principle: P90–P102 (spec-defined)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-04
 ```
 
 **Maelezo kwa mwanafunzi (binadamu au model):** discovery kubwa ya D6 haikuwa engine — ilikuwa

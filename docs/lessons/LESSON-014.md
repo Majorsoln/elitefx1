@@ -19,7 +19,7 @@ when_not_to_use: versioning si mbadala wa merge discipline (mitigation ya G-2 ni
   rebase mara kwa mara); usitumie 'provenance iko wazi' kama kisingizio cha kutokuregenerate
   artifact iliyopitwa pale decision inapoitegemea
 provenance: {phase: D5→D6 (Audit #3), doctrine: Decision Doctrine V9, principle: P88/P84}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-04
 ```
 
 **Maelezo kwa mwanafunzi:** thamani ya P88 haikuonekana siku ilipoandikwa — ilionekana siku

@@ -19,7 +19,7 @@ when_not_to_use: drafts ambazo hazijaingia kwenye rekodi ya pamoja hazihitaji co
   kanuni inalinda SHARED record, sio work-in-progress; pia hairuhusiwi kama kisingizio cha
   kutopanga repo (archiving/reorganizing na history preserved ni halali)
 provenance: {phase: governance 2026-07-03, principle: G-01 (custodianship), doctrine: LESSON_SPEC (K0) rule 1}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-04
 ```
 
 **Maelezo kwa mwanafunzi:** rekodi inayofutwa-futwa haiaminiki hata pale iliponyooka — mtu hawezi

@@ -20,7 +20,7 @@ when_not_to_use: haimaanishi mtu mmoja anaamua KILA kitu — authority ni per DO
   production ≠ doctrine custody); wala hainyamazishi challengers — review/contest ni LAZIMA
   (Chief #2 alizaa P107 kwa kupinga), approval pekee ndiyo singular
 provenance: {principle: G-01, doctrine: Decision Doctrine V11 (two-chief governance), phase: governance 2026-07-03/04}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-04
 ```
 
 **Maelezo kwa mwanafunzi:** thamani ya muundo huu ni pande mbili kwa pamoja: authority moja

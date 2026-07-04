@@ -1,7 +1,7 @@
 # LESSON INDEX — ELITEFX Knowledge Corpus Registry
 
 *Owner: Chief Quant (Unified) | Spec: `LESSON_SPEC.md` | Master Architecture V1 §3*
-*Last updated: 2026-07-04 (batch 3 — RESEARCHER-K) | Lessons: 12 ACTIVE + 6 CANDIDATE (METHOD 9 · MARKET-CONDITIONAL 5 · GOVERNANCE 4) | Backlog (K1): findings/phases zilizobaki ≈ 25–40*
+*Last updated: 2026-07-04 (batch 3 — RESEARCHER-K) | Lessons: 16 ACTIVE + 2 CANDIDATE (017/018 - OOS gate) (METHOD 9 · MARKET-CONDITIONAL 5 · GOVERNANCE 4) | Backlog (K1): findings/phases zilizobaki ≈ 25–40*
 
 | ID | Type | Claim (fupi) | Lifecycle | Provenance |
 |----|------|--------------|-----------|------------|
@@ -17,10 +17,10 @@
 | LESSON-010@v1 | METHOD | Assume non-stationarity; re-prove edge per window (negatives DO persist) | ACTIVE | F-027/28/29+F-022/Phase 9-11 |
 | LESSON-011@v1 | MARKET-COND | Context lifts EV via payoff asymmetry, not win probability | ACTIVE | F-008/F-010/F-011/Phase 3.5-5.5 |
 | LESSON-012@v1 | METHOD | Audit the representation before declaring structure absent (bounded) | ACTIVE | F-033/F-039/Phase 14-21 |
-| LESSON-013@v1 | GOVERNANCE | Spec-before-code yields smaller, more compliant implementations | CANDIDATE | D6/V10→V11/P90-P102 |
-| LESSON-014@v1 | GOVERNANCE | Embedded version ids turn version races into documented provenance | CANDIDATE | Audit#3 D-1/V9/P88+P84 |
-| LESSON-015@v1 | GOVERNANCE | Record errors are fixed by dated correction entries, never deletion | CANDIDATE | Board 2026-07-03/G-01/K0 rule 1 |
-| LESSON-016@v1 | GOVERNANCE | One final authority per domain; challengers contest, don't approve | CANDIDATE | G-01/V11/2026-07-03·04 |
+| LESSON-013@v1 | GOVERNANCE | Spec-before-code yields smaller, more compliant implementations | ACTIVE | D6/V10→V11/P90-P102 |
+| LESSON-014@v1 | GOVERNANCE | Embedded version ids turn version races into documented provenance | ACTIVE | Audit#3 D-1/V9/P88+P84 |
+| LESSON-015@v1 | GOVERNANCE | Record errors are fixed by dated correction entries, never deletion | ACTIVE | Board 2026-07-03/G-01/K0 rule 1 |
+| LESSON-016@v1 | GOVERNANCE | One final authority per domain; challengers contest, don't approve | ACTIVE | G-01/V11/2026-07-03·04 |
 | LESSON-017@v1 | MARKET-COND | MR positive net EV on EURUSD only (+0.90, P100) — in-sample candidate | CANDIDATE | F-030/F-031/Phase 12/V5.21/P30 |
 | LESSON-018@v1 | MARKET-COND | DPB positive net EV on EURUSD only (+0.37, P97) — in-sample candidate | CANDIDATE | F-030/F-031/Phase 12/V5.21/P30 |
 
