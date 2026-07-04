@@ -26,3 +26,10 @@ OPEN QUESTIONS (kwa Chief — ndani ya `reports/integrity_gate_report.md` §Open
      mpya; direct imports safi. Remediation moja itaponya Engine+Gate. Sijaipreempt (Rule 1).
 NOTE (env): self-tests zinahitaji `numpy polars duckdb pyyaml` (chain iliyopo). Nilifunga hapa kuverify;
 PC ya Operator ina stack. NAMING drift RESOLVED na Chief: doctrine-of-record = ELITEFX DECISION DOCTRINE V12.md.
+
+CHIEF REVIEW (2026-07-04): **E1 IMPLEMENTATION APPROVED** — self-tests 3/3 PASS (imeendeshwa
+na Chief); imports Rule-4 compliant; rulings Q1-Q5 zimetekelezwa. E1 CLOSED.
+CURRENT TASK MPYA: **E2 EXECUTION OBJECT SPEC** (document-first, maswali 8): P89 (immutable;
+fills/slippage/rejects/partial-fills); A-4 immutability enforcement (frozen structures kwa
+objects ZOTE za domain); VALIDATED→EXECUTED crossing (nani anaifanya? — mirror ya E1 pattern:
+object mpya + parent id); Execution ≠ Decision (P87/P89); broker interface bado E4.
