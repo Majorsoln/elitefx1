@@ -9,16 +9,19 @@
 ## Current Phase
 
 ```text
-Chapter 3 — EXECUTION SCIENCE
-Phase ya sasa:  E1 Integrity Gate — HAIJAFUNGULIWA (inasubiri Chief Directive ya Chief #1)
-Kazi hai:       hakuna implementation inayoendelea; governance restructure imekamilika
+MASTER ARCHITECTURE V1 — TRACKS MBILI SAMBAMBA (2026-07-04)
+TRACK A (Engineering):    E1 Integrity Gate — spec inafuata (Chief Quant Unified)
+TRACK B (Knowledge & AI): K0 Lesson Spec ✅ · K1 pilot LESSON-001..003 ✅ ACTIVE ·
+                          K1 backlog retroactive (≈40–60) ndiyo kazi hai
+Governance:               Chief #1 + #2 = Chief Quant (Unified) — directive ya Project Director
 ```
 
 ## Doctrine of Record
 
 | Domain | File | Status |
 |--------|------|--------|
-| Market | `ELITEFX DOCTRINE V6.9.md` | FROZEN (P62) |
+| **Supreme** | `ELITEFX MASTER ARCHITECTURE V1.md` | ACTIVE (Tracks A+B; governance §6; mabadiliko §8) |
+| Market | `ELITEFX DOCTRINE V6.9.md` | FROZEN → reopenable-by-knowledge-need (V1 §8.2) |
 | Decision | `ELITEFX DECISION DOCTRINE V11.md` | ACTIVE |
 | Governance | `docs/PROGRAM_BOARD.md` (G-01 + roles + workflow) | ACTIVE |
 
@@ -50,7 +53,8 @@ BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
 
 | Item | Nani | Status |
 |------|------|--------|
-| **AI Strategy discussion (Track A Engineering / Track B Knowledge)** — paper ya Chief #1 + response ya Chief #2 (CONFIRMED, amendments 4, pilot LESSON-001..003) + **addendum**: root-cause pipeline ya Chief #1/AI Architect (nakubali, marekebisho 2) · **Chapter 4 Knowledge Science: layer SASA, chapter BAADA ya E4** · Knowledge Architecture ownership → Chief #2 (nimekubali; inakuwa rasmi na uamuzi wa discussion) | Chief #1 (uamuzi) | **DISCUSSION — hakuna approval bado**; roadmap/doctrine hazijaguswa |
+| AI Strategy discussion | — | **CLOSED (2026-07-04)** — Master Architecture V1; amendments 4 zimeingizwa; Tracks A+B sambamba |
+| K1 retroactive backlog (lessons ≈40–60 kutoka rekodi) | Chief Quant (Unified) | ACTIVE — kazi hai ya Track B |
 | E1 Chief Directive (kufungua phase) | Chief #1 | PENDING |
 | P107 remediation (options a/b/c — Audit #5) | Chief #1 (uamuzi) → Implementer | PENDING |
 | F-005 full-metric re-run | Japhet (data run ijayo) | DEBT (V11) |
@@ -59,12 +63,11 @@ BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
 ## Governance
 
 ```text
-Chief #1  Chief Scientist + AI Architect + Technical Supervisor — final scientific authority
-          (principles/roadmap/approvals/AI architecture/supervision)
-Chief #2  Doctrine Custodian & Architecture Governor — doctrine/memory/status/board/audits
-Implementer — research engines/implementation/reports/experiments/production code
-Project Director (Japhet) — vision/testing/local runs/data/final project decision/Production Owner
-Workflow: Chief #1 → Chief #2 (doctrine) → Audit → Implementer → Chief #2 (compliance) → Chief #1 (approval)
+Project Director (Japhet)  — vision/data/testing/FINAL project+production decision/Production Owner
+Chief Quant (Unified)      — science + doctrine + architecture + knowledge (aliyekuwa #1 + #2);
+                             audit functions ndani yake
+Implementer                — engines/implementation/reports/experiments/production code
+Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance) → Project Director
 ```
 
 *Profitable ≠ Tradable Edge. Protect capital first.*

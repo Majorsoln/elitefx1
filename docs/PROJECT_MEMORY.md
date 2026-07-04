@@ -17,7 +17,8 @@
 | 2026-06-30 → 07-03 | **Decision Architecture Era** (D0–D6) | Evidence Object → Operations → Sets → Snapshots (**EVIDENCE LAYER FROZEN**) → Decision Object → Policy (@v2) → Engine (functions 2, stateless, import-pure). D6 CLOSED = "implementation iliyokataa kuwa ngumu". |
 | 2026-07-03 | **Chapter 3 — Execution Science OPENED** | E1 Integrity Gate → E2 Execution Object → E3 Decision Repository → E4 Broker Adapter (spec-first; STRICT ordering). E1 inasubiri Chief Directive. |
 | 2026-07-03 | **Governance maturation** | Chief Quant #2 onboarded (→ **Doctrine Custodian & Architecture Governor**, G-01); hierarchy kamili: **Chief #1 (Chief Scientist + AI Architect + Technical Supervisor)** → Chief #2 → Audit function → Implementer; **Japhet = Project Director** (vision/testing/data/final project decision/Production Owner); P107 kutoka OBS-1; doctrine archive; final scientific authority MOJA (Chief #1). |
-| 2026-07-03 | **AI Strategy discussion OPENED** | Discussion paper ya Chief #1 (Track A Engineering / Track B Knowledge) + response ya Chief #2 (CONFIRMED, amendments 4) + root-cause framing ya Chief #1 kwa kofia ya AI Architect (extended pipeline; Chapter 4 Knowledge Science). **Hakuna approval bado.** |
+| 2026-07-03 | **AI Strategy discussion OPENED** | Discussion paper ya Chief #1 (Track A Engineering / Track B Knowledge) + response ya Chief #2 (CONFIRMED, amendments 4) + root-cause framing ya Chief #1 kwa kofia ya AI Architect (extended pipeline; Chapter 4 Knowledge Science). |
+| 2026-07-04 | **MASTER ARCHITECTURE V1 — Knowledge System era** | Project Director aliunganisha mamlaka ya Chief #1+#2 → **Chief Quant (Unified)**. Tracks A (E1→E4) + B (K0→K6) sambamba, zinakutana E3↔K6. AI Strategy discussion CLOSED — amendments 4 zimeingizwa. **K0 Lesson Spec + K1 pilot (LESSON-001..003) LIVE.** ML two-tier; P62 reopenable-by-knowledge-need. |
 
 ---
 
