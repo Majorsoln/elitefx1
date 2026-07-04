@@ -1,4 +1,4 @@
-# ELITEFX_DECISION_DOCTRINE_V11.md
+# ELITEFX_DECISION_DOCTRINE_V12.md
 
 **Chief Quant — Two-Chief Governance; Validation ≠ Eligibility; Purity Extends to the Graph; the Reviewer Arrives.**
 
