@@ -2,7 +2,7 @@
 
 **Chief Quant — Two-Chief Governance; Validation ≠ Eligibility; Purity Extends to the Graph; the Reviewer Arrives.**
 
-Version: Decision Doctrine V11
+Version: Decision Doctrine V12
 Status: APPROVED — ACTIVE (Decision-domain SSOT)
 Date: 3 July 2026
 Authority: Single Source of Truth for the **Decision** domain

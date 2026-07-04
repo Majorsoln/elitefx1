@@ -22,7 +22,7 @@ Governance:               Chief #1 + #2 = Chief Quant (Unified) — directive ya
 |--------|------|--------|
 | **Supreme** | `ELITEFX MASTER ARCHITECTURE V1.md` | ACTIVE (Tracks A+B; governance §6; mabadiliko §8) |
 | Market | `ELITEFX DOCTRINE V6.9.md` | FROZEN → reopenable-by-knowledge-need (V1 §8.2) |
-| Decision | `ELITEFX DECISION DOCTRINE V11.md` | ACTIVE |
+| Decision | `ELITEFX DECISION DOCTRINE V12.md` | ACTIVE |
 | Governance | `docs/PROGRAM_BOARD.md` (G-01 + roles + workflow) | ACTIVE |
 
 ## Roadmap (STRICT ordering — V11)
