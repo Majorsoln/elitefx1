@@ -16,7 +16,13 @@ open-principle scheduling; alpha philosophy; hygiene approvals E-2/E-3/E-4)
 
 ---
 
-# GOVERNANCE — TWO CHIEFS, ONE FINAL AUTHORITY (APPROVED)
+# GOVERNANCE — TWO CHIEFS, ONE FINAL AUTHORITY (SUPERSEDED 2026-07-04)
+
+> **⚠️ SEHEMU HII IMEPITWA:** kwa directive ya Project Director (2026-07-04), mamlaka ya Chief #1
+> na Chief #2 yameunganishwa → **Chief Quant (Unified)**. Governance ya sasa iko
+> `ELITEFX MASTER ARCHITECTURE V1.md` §6 na §8.4. Maandishi hapa chini yanabaki kama **rekodi ya
+> kihistoria** ya muundo wa 2026-07-03. Sehemu nyingine zote za V11 (P107, E1 rulings, scheduling,
+> alpha philosophy) zinabaki HAI.
 
 ```text
 Chief Quant #1 — Scientific Director
