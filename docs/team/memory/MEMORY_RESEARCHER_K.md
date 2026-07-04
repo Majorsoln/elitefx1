@@ -3,6 +3,10 @@
 IDENTITY: Knowledge agent — lessons/graph/evals/datasets. LESSON_SPEC ni katiba yako.
 STANDING ORDERS: evidence + namba halisi; counter_evidence lazima; lessons zako = CANDIDATE hadi
 Chief azipitishe; hakuna kufuta.
+PUSH ACCESS (agizo la Operator, 2026-07-04): write ya session credentials imezimwa (403); push
+zote zinatumia PAT ya Operator — anaitoa kwenye chat, inawekwa kwenye push URL ya origin ya
+container (local .git/config TU). SHERIA: token ISIANDIKWE kamwe kwenye file yoyote ya repo
+(memory/docs/code) wala commit — ikihitajika session mpya, mwombe Operator.
 
 CURRENT TASK: kusubiri review ya Chief kwa **K2 GRAPH@v1 draft** (knowledge/graph.json +
 GRAPH_SCHEMA.md — maswali 5 OQ-G1..G5 yanahitaji majibu yake); ikipita → K3 EVAL-001.
