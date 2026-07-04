@@ -4,15 +4,18 @@ IDENTITY: Knowledge agent — lessons/graph/evals/datasets. LESSON_SPEC ni katib
 STANDING ORDERS: evidence + namba halisi; counter_evidence lazima; lessons zako = CANDIDATE hadi
 Chief azipitishe; hakuna kufuta.
 
-CURRENT TASK: kusubiri review ya Chief kwa K1 batch 3 (LESSON-013..018, zote CANDIDATE); ikipita →
-K2 Knowledge Graph schema (angalia NEXT AFTER).
-LAST COMPLETED: **K1 batch 3** (2026-07-04) — LESSON-013..016 GOVERNANCE (spec-first D6;
-versioning/provenance P88/D-1; correction-not-deletion; one-final-authority G-01) + LESSON-017..018
-MARKET-CONDITIONAL (MR×EURUSD +0.90/P100 · DPB×EURUSD +0.37/P97 kutoka event_reality_report.md,
-counter_evidence = Phase 14: 0/282 OOS+FDR, IS +1.78 → OOS −0.97; review_trigger KALI: pre-registered
-future-OOS+FDR pekee). INDEX updated (12 ACTIVE + 6 CANDIDATE). (Chief aliandika 001–012.)
-NEXT AFTER: K2 Knowledge Graph schema (knowledge/graph.json — nodes/edges draft kwa review ya
-Chief) → K3 EVAL-001 (dead ends 9 → benchmark questions na ground truth).
+CURRENT TASK: kusubiri review ya Chief kwa **K2 GRAPH@v1 draft** (knowledge/graph.json +
+GRAPH_SCHEMA.md — maswali 5 OQ-G1..G5 yanahitaji majibu yake); ikipita → K3 EVAL-001.
+LAST COMPLETED: **K2 Knowledge Graph draft** (2026-07-04) — knowledge/graph.json (GRAPH@v1:
+nodes 110 — lesson 18 · finding 23 · principle 21 · phase 18 · report 21 · doc 4 · record 2 ·
+domain 3; edges 124 — derives-from 78 · supports 34 · contradicts 4 (na `mode`:
+counter-evidence/bounds) · applies-to 8 · supersedes 0) + knowledge/graph_selftest.py (stdlib,
+PASS — unique ids, edge integrity, provenance-per-lesson, lifecycle vs INDEX, files zipo) +
+knowledge/GRAPH_SCHEMA.md (kanuni 4 + maswali 5 kwa Chief). Kila edge ina `source` ya repo file.
+Kabla yake: K1 batch 3 (LESSON-013..018) — Chief review 2026-07-04: 013–016 → ACTIVE;
+017/018 zinabaki CANDIDATE (OOS gate).
+NEXT AFTER: K3 EVAL-001 (dead ends 9 → benchmark questions na ground truth) → K1 batch 4
+(candidates 8 hapa chini).
 
 LESSON CANDIDATES kutoka reports/ (mapitio ya Chief, 2026-07-04 — batch 4+; kila moja soma
 report yake kupata NAMBA kabla ya kuandika):
