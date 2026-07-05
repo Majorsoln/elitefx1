@@ -27,9 +27,28 @@ OPEN QUESTIONS (kwa Chief — ndani ya `reports/integrity_gate_report.md` §Open
 NOTE (env): self-tests zinahitaji `numpy polars duckdb pyyaml` (chain iliyopo). Nilifunga hapa kuverify;
 PC ya Operator ina stack. NAMING drift RESOLVED na Chief: doctrine-of-record = ELITEFX DECISION DOCTRINE V12.md.
 
-CHIEF REVIEW (2026-07-04): **E1 IMPLEMENTATION APPROVED** — self-tests 3/3 PASS (imeendeshwa
-na Chief); imports Rule-4 compliant; rulings Q1-Q5 zimetekelezwa. E1 CLOSED.
-CURRENT TASK MPYA: **E2 EXECUTION OBJECT SPEC** (document-first, maswali 8): P89 (immutable;
-fills/slippage/rejects/partial-fills); A-4 immutability enforcement (frozen structures kwa
-objects ZOTE za domain); VALIDATED→EXECUTED crossing (nani anaifanya? — mirror ya E1 pattern:
-object mpya + parent id); Execution ≠ Decision (P87/P89); broker interface bado E4.
+CHIEF REVIEW (2026-07-04): **E1 IMPLEMENTATION APPROVED — CLOSED** (self-tests 3/3 PASS; Rule-4;
+rulings Q1-Q5 verified).
+
+=== E2 (2026-07-04) ===
+CURRENT TASK: **(inasubiri Chief review ya E2 spec)** — deliverable imekamilika. Ikiidhinishwa →
+E2 implementation; la sivyo → marekebisho.
+LAST COMPLETED: **E2 EXECUTION OBJECT SPECIFICATION** ✅ — `reports/execution_object_specification.md`
+(maswali 8 kama D6). Msingi: **Execution ≠ Decision** (P89/P87). Vipande 3: (1) Execution Object =
+rekodi immutable ya outcome (fills/slippage/rejects/partial; SIO PnL — hiyo E3/D8); (2) Execution
+Recorder = component inayounda Execution Object MPYA kutoka Decision VALIDATED + ExecutionReport
+**injected** (crossing = object mpya + parent_decision_id, mirror E1; broker=E4); (3) A-4 immutability
+enforcement (frozen) = cross-cutting. ExecutionError ≠ REJECTED-outcome (mirror Gate/Engine). Direct
+imports = decision_object+freeze-util+stdlib (Rule 4).
+NEXT AFTER: E2 implementation (baada ya Chief kupitisha spec + kutolea uamuzi Open Q#1 lifecycle
+reconciliation & Q#4 A-4 mechanism — zote zinagusa decision_object.py/D4, ni BLOCKERS) → E3 Decision
+Repository spec.
+OPEN QUESTIONS (5, ndani ya spec §Open Questions):
+  1. **BLOCKER** (inaendeleza E1 OQ#6): retire VALIDATED→EXECUTED & EXECUTED→SETTLED kutoka Decision
+     `transition()`? Decision iishie VALIDATED; execution = Execution Object. Pendekezo: ndiyo.
+  2. SETTLED = Execution status au object wa tano (Settlement, E3)? Pendekezo: defer E3.
+  3. Committing vs non-committing intents — Recorder ikatae ABSTAIN/WAIT (invalid)? orodha ya committing?
+  4. **BLOCKER** A-4 mechanism: (a) frozen dataclass / (b) freeze() util stdlib / (c) boundary+test.
+     Pendekezo: (b) kwa Decision+Execution; Evidence retrofit = uamuzi tofauti. Inagusa decision_object.py.
+  5. `intended` (side/qty/ref_price/sizing) inatoka wapi? Decision D4 haina qty. Pendekezo: sizing =
+     Execution Science (report/E4), si Decision. Chief aelekeze.
