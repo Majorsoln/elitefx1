@@ -1,7 +1,7 @@
 # LESSON INDEX — ELITEFX Knowledge Corpus Registry
 
 *Owner: Chief Quant (Unified) | Spec: `LESSON_SPEC.md` | Master Architecture V1 §3*
-*Last updated: 2026-07-04 (batch 3 — RESEARCHER-K) | Lessons: 16 ACTIVE + 2 CANDIDATE (017/018 - OOS gate) (METHOD 9 · MARKET-CONDITIONAL 5 · GOVERNANCE 4) | Backlog (K1): findings/phases zilizobaki ≈ 25–40*
+*Last updated: 2026-07-05 (batch 4 — RESEARCHER-K) | Lessons: 26 (16 ACTIVE + 10 CANDIDATE) — METHOD 13 · MARKET-CONDITIONAL 7 · GOVERNANCE 6 | Backlog (K1): findings/phases zilizobaki ≈ 18–30*
 
 | ID | Type | Claim (fupi) | Lifecycle | Provenance |
 |----|------|--------------|-----------|------------|
@@ -23,6 +23,14 @@
 | LESSON-016@v1 | GOVERNANCE | One final authority per domain; challengers contest, don't approve | ACTIVE | G-01/V11/2026-07-03·04 |
 | LESSON-017@v1 | MARKET-COND | MR positive net EV on EURUSD only (+0.90, P100) — in-sample candidate | CANDIDATE | F-030/F-031/Phase 12/V5.21/P30 |
 | LESSON-018@v1 | MARKET-COND | DPB positive net EV on EURUSD only (+0.37, P97) — in-sample candidate | CANDIDATE | F-030/F-031/Phase 12/V5.21/P30 |
+| LESSON-019@v1 | METHOD | State-age sharpens probability (LogLoss +2–5%) not accuracy (flat) — calibrator not predictor | CANDIDATE | Phase 1.6/1.8 |
+| LESSON-020@v1 | METHOD | Test the decision-relevant question before discarding (stability 0/9 vs information 18/18) | CANDIDATE | F-007/R-002/Phase 2-2.1/Truth9 |
+| LESSON-021@v1 | MARKET-COND | Context benefit is event-specific (+2.49 MR … −0.81; in-sample, died OOS) | CANDIDATE | F-008/Phase 4/P13 |
+| LESSON-022@v1 | MARKET-COND | Edge lives in interactions; same transition flips sign by age (in-sample) | CANDIDATE | F-012/Phase 5.7 |
+| LESSON-023@v1 | METHOD | In-sample fit leakage-inflated everywhere (+0.19..+0.33); OOS-survival is the measure | CANDIDATE | F-039/Phase 21/P44-45 |
+| LESSON-024@v1 | METHOD | Interpretability ≠ predictability; judge semantic layer by stability/recoverability not R² | CANDIDATE | F-040/Phase 22-23/P48-50 |
+| LESSON-025@v1 | GOVERNANCE | Define the interface contract object before building on it (Evidence = contract) | CANDIDATE | D0/P63-66/V3 |
+| LESSON-026@v1 | GOVERNANCE | Conflict must be an explicit, separately-tolerable input, not hidden in readiness | CANDIDATE | D5/G-7 V8/P74/P82 |
 
 ## K1 Backlog (vyanzo — order ya kazi)
 
@@ -31,7 +39,8 @@
 3. Findings F-001…F-042 (board) — zilizo generalizable
 4. ~~Governance lessons (spec-first, versioning, correction-not-deletion, one-final-authority)~~ — DONE batch 3 (LESSON-013..016 CANDIDATE)
 5. ~~MARKET-CONDITIONAL za kwanza (MR×EURUSD P100 · DPB×EURUSD P97 ya Phase 12 — na `review_trigger` kali)~~ — DONE batch 3 (LESSON-017..018 CANDIDATE)
-6. Batch 4 candidates 8 (mapitio ya Chief 2026-07-04) — orodha: `MEMORY_RESEARCHER_K.md`
+6. ~~Batch 4 candidates 8 (mapitio ya Chief 2026-07-04)~~ — DONE 2026-07-05 (LESSON-019..026 CANDIDATE)
+7. Batch 5+: Permanent Truths 12 zilizobaki + Findings F-001…F-042 generalizable + Decision D1-D4/E-series
 
 *Note (batch 3): lessons za RESEARCHER-K zinaingia kama CANDIDATE — zinasubiri review ya Chief
 (TEAM_PROTOCOL: hakuna approval kwa agents). LESSON-017/018 zina review_trigger KALI: pre-registered
@@ -41,7 +50,7 @@ future-OOS + FDR pekee ndiyo inaweza kuzipandisha.*
 
 | Artifact | Layer | File | Status |
 |----------|-------|------|--------|
-| GRAPH@v1 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | **APPROVED** (Chief 2026-07-04; OQ-G1..G5 zote) — nodes 110 · edges 124 |
-| EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-001.md`) | **ACTIVE** (Chief 2026-07-05) — maswali 13 (negative 9 + positive 4), rubric per-q; OQ-E1/E2/E4 |
+| GRAPH@v2 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1 APPROVED (Chief 2026-07-04); **v2** (2026-07-05) +EVAL-001 linkage — nodes 111 · edges 135 (inasubiri review ya v2) |
+| EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-001.md`) | **ACTIVE** (Chief 2026-07-05) — maswali 13 (negative 9 + positive 4), rubric per-q; imelinkwa graph@v2 |
 
 *L3 DATASETS (`knowledge/datasets/`) — bado (inasubiri corpus critical mass + E3 outcomes).*

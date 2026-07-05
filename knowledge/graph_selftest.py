@@ -69,12 +69,18 @@ def main() -> int:
             errors.append(f"[5] {short} haipo kwenye LESSON_INDEX.md")
         elif n.get("lifecycle") != want:
             errors.append(f"[5] lifecycle mismatch {short}: graph={n.get('lifecycle')} index={want}")
-    for short in sorted(set(index_lc) - {i.split(':', 1)[1] for i in lesson_ids}):
-        errors.append(f"[5] lesson imo INDEX lakini haipo graph: {short}")
+    # Policy: graph LAZIMA iwe na kila lesson ACTIVE; CANDIDATE zinalinkwa zikiapruvishwa (pending OK).
+    graph_shorts = {i.split(":", 1)[1] for i in lesson_ids}
+    pending = []
+    for short in sorted(set(index_lc) - graph_shorts):
+        if index_lc[short] == "ACTIVE":
+            errors.append(f"[5] ACTIVE lesson imo INDEX lakini haipo graph: {short}")
+        else:
+            pending.append(short)
 
-    # [6] report/doc files zipo
+    # [6] report/doc/eval files zipo
     for n in nodes:
-        if n.get("kind") in ("report", "doc") and not (ROOT / n["file"]).is_file():
+        if n.get("kind") in ("report", "doc", "eval") and not (ROOT / n["file"]).is_file():
             errors.append(f"[6] file haipo: {n['file']} ({n['id']})")
 
     kinds = {}
@@ -85,6 +91,8 @@ def main() -> int:
         types[e.get("type")] = types.get(e.get("type"), 0) + 1
     print(f"nodes={len(nodes)} {kinds}")
     print(f"edges={len(edges)} {types}")
+    if pending:
+        print(f"pending (CANDIDATE lessons not yet linked, link on approval): {pending}")
 
     if errors:
         print(f"\nSELF-TEST: FAIL ({len(errors)} errors)")

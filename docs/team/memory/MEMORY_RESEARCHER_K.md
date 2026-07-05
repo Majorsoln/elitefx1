@@ -8,23 +8,25 @@ proxy ya kawaida; PAT ya Operator ya 2026-07-04 sasa inarudisha 403 = imekufa/re
 ya kawaida. SHERIA ya kudumu: token/PAT yoyote ISIANDIKWE kamwe kwenye file ya repo wala commit —
 relay ikizima tena (403), mwombe Operator PAT kupitia chat + weka kwenye local .git/config push URL TU.
 
-CURRENT TASK: kusubiri review ya Chief kwa **K3 EVAL-001** (CANDIDATE, maswali 13); ikipita →
-(a) ongeza EVAL-001 edges kwenye graph.json (domain:k4-evals, OQ-E4/OQ-G4 APPROVED) na
-(b) K1 batch 4 (candidates 8 hapa chini).
-LAST COMPLETED: **K3 EVAL-001** (2026-07-05) — knowledge/evals/EVAL-001/ kwa spec KAMILI ya Chief
-("dead ends 9 + lessons ACTIVE + rubric"): questions.jsonl = maswali 13 — **negative 9** (Q01-Q09,
-dead ends za PROJECT_MEMORY §5) + **positive 4** (P01-P04, kutoka F-022/F-016/F-010/F-033 — kupima
-model isikatae KILA kitu kwa upofu). Kila swali: scenario + options A-D (distractors = makosa halisi
-ya mradi) + answer + ground_truth (NAMBA + provenance) + **rubric** (FULL/PARTIAL/ZERO) +
-maps_to_lesson. eval_selftest.py (stdlib PASS): fields/answer-key/provenance-files/lesson-mapping/
-positive-negative balance/answer-distribution. Position bias imeondolewa (A:4 B:3 C:3 D:3); length
-bias inabaki (correct=longest 13/13) → ilifanywa SHARTI la scoring: default grader = rubric-based
-LLM-judge (si urefu wa option); raw-MCQ-by-length MARUFUKU. EVAL-001.md = spec + scoring protocol +
-OQ-E1/E2/E4 (OQ-E3 positive-controls RESOLVED na directive ya Chief). INDEX footer updated.
-Kabla yake: **K2 GRAPH@v1 APPROVED** na Chief (OQ-G1..G5 zote kwa mapendekezo yangu — rulings ziko
-juu). K1 batch 3 (013-018): 013-016 ACTIVE; 017/018 CANDIDATE (OOS gate).
-NEXT AFTER: EVAL-001 graph-linking (baada ya approval) → K1 batch 4 (candidates 8) → K3 EVAL-002
-(kutoka Permanent Truths / findings APPROVED).
+CURRENT TASK: kusubiri review ya Chief kwa (a) **GRAPH@v2** (EVAL-001 linkage) na (b) **K1 batch 4**
+(LESSON-019..026, CANDIDATE). Zikipita → link 019-026 kwenye graph (→GRAPH@v3) → EVAL-002.
+LAST COMPLETED: **K1 batch 4 + EVAL-001 graph-linking** (2026-07-05).
+  (b) LESSON-019..026 (8 CANDIDATE, self-test YAML PASS zote): 019 age=calibrator-not-predictor
+  (LogLoss +2-5% / accuracy flat, Phase 1.8) · 020 test-the-right-question (volume stability 0/9 vs
+  information 18/18, Phase 2/2.1) · 021 context-benefit event-specific (+2.49 MR…−0.81, in-sample,
+  died OOS — MARKET-COND +review_trigger) · 022 edge-in-interactions + sign-flip-by-age (Thi
+  −0.5→+3.0→−3.2, Phase 5.7 — MARKET-COND +review_trigger) · 023 leakage-universal +0.19..0.33,
+  OOS-survival=measure (Phase 21) · 024 interpretability≠predictability (R² ratio 0.01 not failure;
+  stability ARI 0.89, Phase 22-23) · 025 define-contract-object-first (Evidence=contract, D0) ·
+  026 conflict-explicit-not-hidden (G-7/V8, D5). Zote na counter_evidence + when_not_to_use tajiri.
+  (a) EVAL-001 graph-linking → **GRAPH@v2**: +node eval:EVAL-001 (ACTIVE) +edges 11 (→k4-evals +
+  10 lesson→EVAL-001 applies-to, note=tested-by-QNN; OQ-G3: hakuna type mpya). nodes 111/edges 135,
+  self-test PASS. graph_selftest invariant imeboreshwa: **graph LAZIMA iwe na kila lesson ACTIVE;
+  CANDIDATE zinalinkwa zikiapruvishwa** (019-026 = pending, kama EVAL-001 ilivyosubiri approval).
+  INDEX + GRAPH_SCHEMA + changelog updated.
+Kabla yake: EVAL-001 APPROVED→ACTIVE (Chief 2026-07-05); GRAPH@v1 APPROVED (2026-07-04, OQ-G1..G5).
+NEXT AFTER: (baada ya approval) link 019-026 graph (→GRAPH@v3) → **EVAL-002** (Permanent Truths /
+findings APPROVED) → batch 5 (Truths 12 zilizobaki + findings generalizable + D1-D4/E-series).
 
 LESSON CANDIDATES kutoka reports/ (mapitio ya Chief, 2026-07-04 — batch 4+; kila moja soma
 report yake kupata NAMBA kabla ya kuandika):
