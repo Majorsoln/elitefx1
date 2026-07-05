@@ -142,3 +142,26 @@ CURRENT TASK MPYA: **E4 BROKER ADAPTER SPEC** (document-first, maswali 8): inter
 (MWONGOZO inakutana hapa); ExecutionReport halisi (fills/slippage/rejects) → Recorder; FTMO
 constraints (P81) kama Gate constraints injected (ftmo_config.yaml → constraint objects);
 paper-mode kwanza (HAKUNA pesa halisi bila Project Director approval); Settlement/PnL requirements.
+
+CLOSE-RITUAL MPYA (kutoka E3 push-failure): baada ya push, THIBITISHA imefika remote
+(`git log origin/<branch>`) KABLA ya kufunga session — kazi isiyofika repo haipo (TEAM_PROTOCOL §2).
+
+=== E4 SPEC (2026-07-05) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya E4 spec)** — deliverable imekamilika. Ikiidhinishwa →
+E4 implementation; la sivyo → marekebisho.
+LAST COMPLETED: **E4 BROKER ADAPTER SPECIFICATION** ✅ — `reports/broker_adapter_specification.md`
+(maswali 8). Msingi: **THE TWO STREAMS MEET** (V12) — E4 = mpaka wa impurity + mtafsiri kati ya
+Decision Science (pure) na MWONGOZO/FTMO/MT5 (external). **Inafunga loop ya E1**: MWONGOZO Check 1-5
+(ftmo_config) → E1 EligibilityConstraints injected + context (account state) → Gate (P81). Sizing
+(DailyRiskBudgetSizer §1) → E2 report.intended.qty. Settlement → E3. **Paper-mode default; live
+imezuiwa hadi Project Director** (RED LINE — Protect capital first). Adapter=translate, don't decide
+(P97); impurity imefungiwa hapa (P92/P107); upstream inabaki pure. Mwisho wa Track A (E1→E4).
+NEXT AFTER: E4 implementation (baada ya Chief + Open Q#1 live-gating & Q#4 Settlement-kind) → Track A
+KAMILI; kisha D8 Decision Quality / K6 mkondo (E3↔K6) kadri Chief atakavyoelekeza.
+OPEN QUESTIONS (6, ndani ya spec §Open Questions):
+  1. **RED LINE:** live-gating mechanism (approval artifact ya Project Director) — uamuzi wa PD.
+  2. FTMO constraint granularity — 5 tofauti (pendekezo) vs composite.
+  3. Sizing = E4 Adapter (pendekezo) vs sizing-policy layer (P96-adjacent).
+  4. Settlement = `kind` mpya kwenye Repository (pendekezo; edit ndogo ya decision_repository.py) vs execution+fields.
+  5. account_state source/contract (live=MT5, paper=simulator) — fields ithibitishwe.
+  6. max_spread per-pair — chanzo? (ftmo_config haina; MWONGOZO Check 5 inaihitaji).
