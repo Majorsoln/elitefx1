@@ -97,3 +97,24 @@ persistence nje ya Engine; append-only decision+execution history (P85); query i
 (kwa D8 quality + K6 lessons — schema ijadiliwe na mahitaji ya Track B mezani: kila rekodi
 iwe na refs kamili decision→snapshot→policy→gate→execution ili iwe training-data-ready);
 storage backend choice (file/duckdb?) = pendekeza; Settlement/PnL definition (E2 OQ#2).
+
+=== E3 SPEC (2026-07-05) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya E3 spec)** — deliverable imekamilika. Ikiidhinishwa →
+E3 implementation; la sivyo → marekebisho.
+LAST COMPLETED: **E3 DECISION REPOSITORY SPECIFICATION** ✅ — `reports/decision_repository_specification.md`
+(maswali 8). Msingi: **PERSISTENCE ≠ ENGINE** (P106) — Repository = store+query NJE ya Engine;
+**statefulness imefungiwa hapa** ili Engine/Gate/Recorder zibaki pure (P97/P103). Append-only (P85);
+records immutable (A-4); refs kamili → **training-data-ready** (`lineage(id)` = training example moja:
+snapshot→policy→decision→gate→execution→settlement). Backend **injected** (core stdlib-pure; JSONL
+default, DuckDB adapter ya baadaye). **Settlement Record** imefafanuliwa (object wa tano; broker/PnL=E4,
+quality=D8). E3 = mkutano Track A↔B (E3↔K6). Store, don't interpret.
+NEXT AFTER: E3 implementation (baada ya Chief kupitisha spec + Open Q#1 Settlement-object & Q#2 backend)
+→ **E4 Broker Adapter** (mkutano rasmi Decision Science ↔ MWONGOZO/FTMO — mwisho wa Track A).
+OPEN QUESTIONS (5, ndani ya spec §Open Questions):
+  1. Settlement = object tofauti au extension ya Execution? Pendekezo: tofauti (fill vs realized-close).
+  2. Storage backend default: JSONL (pendekezo — append-only, stdlib-pure, L3-aligned) vs DuckDB. Pendekezo:
+     JSONL core + DuckDB adapter ya hiari (nje ya core, iepushe P107).
+  3. Dangling-ref policy: strict reject vs lenient ingest + lineage() inaonyesha gaps? Pendekezo: lenient.
+  4. `versions` vector (P95: schema_version/doctrine_version) — ongeza sasa? Pendekezo: ndiyo (K6 itaihitaji).
+  5. Query surface kwa K6/D8 — kikao kifupi na RESEARCHER-K/Chief kabla ya implementation (agizo:
+     "schema ijadiliwe na mahitaji ya Track B mezani").
