@@ -21,7 +21,7 @@ when_to_use: every time a backtest, in-sample metric, or gross result 'looks pro
 when_not_to_use: not a mandate for permanent inaction — a genuinely OOS-proven, net-positive, FDR-
   controlled edge IS tradable; the directive gates the STANDARD of proof, it does not forbid trading
 provenance: {doctrine: (Permanent Truth 12), finding: F-032, phase: 14, principle: P26/P69}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** "profitable" kwenye backtest au GROSS si "tradable". Phase 14: candidates

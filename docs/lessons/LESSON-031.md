@@ -21,7 +21,7 @@ when_to_use: building any bridge to irreversible external action — default to 
 when_not_to_use: the refuse-stub is not a substitute for proof (an authorized-but-unproven edge is still
   unproven — LESSON-029) nor for correctness testing; it gates AUTHORITY over irreversible action, not validity
 provenance: {phase: E4, principle: P81, doctrine: (Master Architecture §8.2 — trading authority = Project Director; Permanent Truth 12)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** E4 ndipo streams mbili (Decision pure + MWONGOZO/FTMO/MT5) zinakutana —

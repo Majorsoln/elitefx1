@@ -22,7 +22,7 @@ when_not_to_use: do not read configuration-level EV as tradable (in-sample; 0/28
   rule engine on raw coordinate configurations (they fail cross-pair — LESSON-005); the principle is
   about the unit of measurement, not permission to trade a configuration
 provenance: {finding: F-020/F-021, phase: 6/6.5, doctrine: (Permanent Truth 6 — Configuration = atomic unit)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** event ileile (mean_reversion) ni +0.90 EURUSD lakini −0.212 kwa jumla —

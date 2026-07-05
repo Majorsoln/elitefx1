@@ -21,7 +21,7 @@ when_to_use: reviewing any module's compliance — check what it TRANSITIVELY pu
 when_not_to_use: transitive purity is not a substitute for correctness or interface design — a clean
   dependency graph atop a wrong contract is still wrong; do not let 'imports are pure' imply 'logic is right'
 provenance: {principle: P107, doctrine: (Permanent Truth 11), phase: Audit#5/E3, finding: OBS-1}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** module inaweza kuwa haina market logic yoyote kwenye mwili wake, lakini

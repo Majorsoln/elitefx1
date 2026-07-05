@@ -54,3 +54,10 @@ CHIEF RULINGS (standing reference — historia kamili: PROGRAM_BOARD + git log):
 - Approved hadi sasa: LESSON-001..026 (001-016+019-026 ACTIVE, 017/018 CANDIDATE OOS-gate);
   GRAPH@v1..v3; EVAL-001, EVAL-002 ACTIVE.
 - Batch 5 (LESSON-027..031) + GRAPH@v4 + EVAL-SUITE = session hii, zinasubiri review.
+
+CHIEF REVIEW (2026-07-05): **BATCH 5 APPROVED (027-031 → ACTIVE)** + **GRAPH@v4 APPROVED**
+(147/177, self-test PASS na Chief) + **EVAL-SUITE@v1 APPROVED → ACTIVE** (25 Qs, suite self-test
+PASS na Chief). OQ-S1/S2: defaults zako.
+CURRENT TASK MPYA: (a) GRAPH@v5 (link 027-031 + EVAL-SUITE); (b) fill maps_to_lesson za EVAL-002
+T06/T11/T12 (sasa 027/028/029 zipo); (c) **K1 BATCH 6** (F-005 alpha philosophy · F-023/F-024
+ranking/CCS · D1-D4 Evidence lessons · Failed Ideas zilizobaki). Corpus target: ~40.

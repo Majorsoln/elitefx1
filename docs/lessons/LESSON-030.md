@@ -24,7 +24,7 @@ when_to_use: designing any stage that transforms a domain object (validate/execu
 when_not_to_use: do not collapse the two — swallowing a system failure as a 'negative outcome' hides
   faults; and do not mutate an object 'for efficiency' (immutability + parent lineage is the audit trail)
 provenance: {phase: E1/E2/E4, principle: P83/P85/P87/P89, doctrine: (Execution Science)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** kuvuka domain yoyote (validate → execute → settle) kunazaa object MPYA
