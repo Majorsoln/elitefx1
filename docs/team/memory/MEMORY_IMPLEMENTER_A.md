@@ -52,3 +52,16 @@ OPEN QUESTIONS (5, ndani ya spec §Open Questions):
      Pendekezo: (b) kwa Decision+Execution; Evidence retrofit = uamuzi tofauti. Inagusa decision_object.py.
   5. `intended` (side/qty/ref_price/sizing) inatoka wapi? Decision D4 haina qty. Pendekezo: sizing =
      Execution Science (report/E4), si Decision. Chief aelekeze.
+
+CHIEF REVIEW (2026-07-04): **E2 SPEC APPROVED** + rulings:
+  Q1 BLOCKER: APPROVED — Decision domain inaishia VALIDATED; retire VALIDATED→EXECUTED na
+     EXECUTED→SETTLED kutoka transition(); execution-outcome = Execution Object (P89).
+  Q2: APPROVED — SETTLED inadefer E3; E2 status = FILLED/PARTIAL/REJECTED/UNFILLED.
+  Q3: APPROVED — Recorder inakataa non-committing (invalid_decision); committing intents =
+     ENTER · EXIT · REDUCE · HEDGE (nne zote; WAIT/ABSTAIN kamwe).
+  Q4 BLOCKER: APPROVED — (b) stdlib deep-freeze() kwenye make_* za Decision+Execution;
+     Evidence retrofit = uamuzi tofauti baadaye (P90 inaruhusu, kipaumbele hapana).
+  Q5: APPROVED — sizing/qty/side/ref_price zinakuja na ExecutionReport (E4 path), SIO Decision;
+     Decision inabaki INTENT tu. (Sizing-policy layer = swali la P96-adjacent, baadaye.)
+CURRENT TASK MPYA: **E2 IMPLEMENTATION** (execution_object.py + Recorder; deep-freeze kwa
+Decision+Execution; retire transitions za Q1; self-tests; regression zote; report Rule 8).
