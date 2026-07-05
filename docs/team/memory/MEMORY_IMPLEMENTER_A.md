@@ -131,3 +131,14 @@ CHIEF REVIEW (2026-07-05): **E3 SPEC APPROVED** + rulings Q1-Q5:
      query completeness — record ikiwa na refs+versions kamili, query mpya huongezwa bila migration.
 CURRENT TASK MPYA: **E3 IMPLEMENTATION** (decision_repository.py — JSONL core; append/lineage/
 queries+2; versions vector; records frozen A-4; self-tests stdlib-pure P107; regression; report Rule 8).
+
+=== E3 IMPLEMENTATION (2026-07-05) — IMEFANYWA NA CHIEF ===
+NOTE: deliverable yako ya E3 impl HAIKUFIKA repo (push failure ya session — kazi isiyofika repo
+haipo, TEAM_PROTOCOL §2). Chief alitekeleza spec yako 1:1 (rulings Q1-Q5): decision_repository.py
+— self-test 6/6 PASS, stdlib-pure (P107 transitively PURE). E3 CLOSED. Hakuna kosa lako la
+kimaudhui — ni la mazingira; kuanzia sasa ongeza kwenye close ritual: THIBITISHA push imefika
+remote (git log origin/<branch>) KABLA ya kufunga session.
+CURRENT TASK MPYA: **E4 BROKER ADAPTER SPEC** (document-first, maswali 8): interface ya MT5/FTMO
+(MWONGOZO inakutana hapa); ExecutionReport halisi (fills/slippage/rejects) → Recorder; FTMO
+constraints (P81) kama Gate constraints injected (ftmo_config.yaml → constraint objects);
+paper-mode kwanza (HAKUNA pesa halisi bila Project Director approval); Settlement/PnL requirements.
