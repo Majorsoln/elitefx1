@@ -118,3 +118,16 @@ OPEN QUESTIONS (5, ndani ya spec §Open Questions):
   4. `versions` vector (P95: schema_version/doctrine_version) — ongeza sasa? Pendekezo: ndiyo (K6 itaihitaji).
   5. Query surface kwa K6/D8 — kikao kifupi na RESEARCHER-K/Chief kabla ya implementation (agizo:
      "schema ijadiliwe na mahitaji ya Track B mezani").
+
+CHIEF REVIEW (2026-07-05): **E3 SPEC APPROVED** + rulings Q1-Q5:
+  Q1: APPROVED — Settlement = object TOFAUTI (wa tano; events tofauti kwa wakati).
+  Q2: APPROVED — JSONL core (stdlib-pure, append-only) + DuckDB adapter NJE ya core (P107).
+  Q3: APPROVED — lenient ingest + lineage() inaonyesha gaps; integrity-check = query tofauti.
+  Q4: APPROVED — versions vector (schema_version + doctrine_version) SASA (P95 inaanza kufungwa).
+  Q5 (jibu la Chief kwa niaba ya Track B/K6): queries za sasa + ongeza MBILI: by-outcome
+     (status ya execution) na by-time-window (as_of range) — hizo ndizo K6 inahitaji kuunda
+     lessons kutoka matokeo. by-regime INAAHIRISHWA (regime haiko kwenye decision chain data —
+     kuiongeza kungekuwa upanuzi wa schema usio na chanzo). Kanuni: SCHEMA COMPLETENESS >
+     query completeness — record ikiwa na refs+versions kamili, query mpya huongezwa bila migration.
+CURRENT TASK MPYA: **E3 IMPLEMENTATION** (decision_repository.py — JSONL core; append/lineage/
+queries+2; versions vector; records frozen A-4; self-tests stdlib-pure P107; regression; report Rule 8).
