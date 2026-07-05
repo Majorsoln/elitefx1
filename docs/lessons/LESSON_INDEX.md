@@ -50,8 +50,8 @@ future-OOS + FDR pekee ndiyo inaweza kuzipandisha.*
 
 | Artifact | Layer | File | Status |
 |----------|-------|------|--------|
-| GRAPH@v3 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1/v2 APPROVED (Chief 2026-07-04/05); **v3** (2026-07-05) +lessons 019-026 linkage — nodes 146 · edges 169 (inasubiri review ya v3) |
+| GRAPH@v3 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1/v2 APPROVED (Chief 2026-07-04/05); **v3** (2026-07-05) +lessons 019-026 linkage — nodes 146 · edges 169 — **v3 APPROVED** (Chief 2026-07-05) |
 | EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-001.md`) | **ACTIVE** (Chief 2026-07-05) — maswali 13 (negative 9 + positive 4), rubric per-q; imelinkwa graph |
-| EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-002.md`) | CANDIDATE (2026-07-05) — positive knowledge (Permanent Truths + findings APPROVED); mirror ya EVAL-001 |
+| EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-002.md`) | **ACTIVE** (Chief 2026-07-05) — positive knowledge (Permanent Truths + findings APPROVED); mirror ya EVAL-001 |
 
 *L3 DATASETS (`knowledge/datasets/`) — bado (inasubiri corpus critical mass + E3 outcomes).*

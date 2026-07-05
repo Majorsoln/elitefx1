@@ -79,3 +79,12 @@ PASS na Chief; invariant mpya ya lesson-ACTIVE-lazima-graph ni sahihi).
 CURRENT TASK MPYA: (a) link 019-026 kwenye graph → GRAPH@v3; (b) **EVAL-002** (Permanent Truths +
 findings APPROVED — positive knowledge, mirror ya EVAL-001 design na rubric protocol ile ile);
 baada yake batch 5.
+
+CHIEF REVIEW (2026-07-05): **GRAPH@v3 APPROVED** (nodes 146/edges 169; contradicts za 021/022
+kwenda counter-evidence ya Phase 14 = usahihi wa hali ya juu) + **EVAL-002 APPROVED →ACTIVE**
+(maswali 12; overreach-negatives 5 = design bora — zinapima mipaka ya truths, si truths tu;
+answer-dist balanced; rubric protocol ile ile). OQ-E5/E6: defaults zako.
+CURRENT TASK MPYA: (a) graph-link EVAL-002 (→GRAPH@v4); (b) **EVAL-SUITE** (unganisha 001+002:
+runner manifest + jumla ya maswali 25 + scoring protocol moja); (c) **K1 BATCH 5** (Truths
+T6/T11/T12 zisizo na lesson + findings generalizable + D1-D4/E-series lessons — pamoja na
+E-series governance lessons mpya: mirror-pattern ya crossings, refuse-stub gating).
