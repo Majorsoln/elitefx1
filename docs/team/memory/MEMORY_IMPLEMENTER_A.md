@@ -165,3 +165,20 @@ OPEN QUESTIONS (6, ndani ya spec §Open Questions):
   4. Settlement = `kind` mpya kwenye Repository (pendekezo; edit ndogo ya decision_repository.py) vs execution+fields.
   5. account_state source/contract (live=MT5, paper=simulator) — fields ithibitishwe.
   6. max_spread per-pair — chanzo? (ftmo_config haina; MWONGOZO Check 5 inaihitaji).
+
+CHIEF REVIEW (2026-07-05): **E4 SPEC APPROVED** + rulings Q1-Q6:
+  Q1: APPROVED kama default ya kiufundi — artifact-file + Project Director signature + mode=live
+     explicit; bila hiyo REFUSE. UAMUZI WA MWISHO ni wa Project Director (ameulizwa) — implementation
+     ianze na PAPER-MODE PEKEE; live path inabaki stub hadi PD athibitishe artifact format.
+  Q2: APPROVED — FTMO CHECKs 5 = constraints 5 TOFAUTI (kila moja auditable; AND/veto ya E1).
+  Q3: APPROVED — sizing inaishi Adapter kwa sasa (inahitaji account state + config); itahamia
+     sizing-policy layer P96 itakapofunguliwa (usiifunge design).
+  Q4: APPROVED — ongeza kind=settlement kwenye decision_repository.py (KINDS+REQUIRED: id, as_of,
+     parent_execution_id, pnl) — edit ndogo, self-test iongezwe.
+  Q5: APPROVED — account_state contract: daily_loss/total_dd/open_slots/correlation_exposure/
+     spread_by_pair; live=MT5, paper=simulator; validate structural kwenye Adapter boundary.
+  Q6: KAZI YA OPERATOR — max_spread per-pair iongezwe ftmo_config.yaml (Japhet; values zake).
+CURRENT TASK MPYA: **E4 IMPLEMENTATION — PAPER-MODE PEKEE** (broker_adapter.py: paper simulator +
+translator FTMO checks 5 → Gate constraints + sizing (MWONGOZO §1) → ExecutionReport → Recorder →
+Repository (+ kind=settlement); live path = refuse-stub; self-tests bila network; regression zote;
+report Rule 8). HAKUNA pesa halisi.
