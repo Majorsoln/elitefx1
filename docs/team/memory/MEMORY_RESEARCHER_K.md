@@ -51,3 +51,10 @@ CURRENT TASK MPYA: **K3 EVAL-001** — dead ends 9 + lessons ACTIVE → benchmar
 ground truth (knowledge/evals/EVAL-001/): kila swali = scenario halisi ya utafiti wetu (mf. setup
 ya Phase 8) + jibu sahihi + evidence ref + rubric ya kupima jibu la model; self-test stdlib;
 format inayoweza kuendeshwa na model yoyote. Baada yake: K1 batch 4 (candidates 8).
+
+CHIEF REVIEW (2026-07-05): **K3 EVAL-001 APPROVED** (CANDIDATE→ACTIVE) — maswali 13, self-test
+PASS (warning ya length-bias imefungwa ipasavyo kwa sharti la rubric-grading; raw-MCQ-by-length
+MARUFUKU inabaki). Positive controls 4 = design sahihi. OQ-E1/E2/E4: endelea na defaults zako;
+mabadiliko yoyote ya scoring protocol yanahitaji Chief.
+CURRENT TASK MPYA: (a) EVAL-001 graph-linking; (b) K1 BATCH 4 (candidates 8 — lessons 019-026);
+baada yake EVAL-002 (Permanent Truths/findings APPROVED).

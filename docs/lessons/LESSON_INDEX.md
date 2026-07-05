@@ -42,6 +42,6 @@ future-OOS + FDR pekee ndiyo inaweza kuzipandisha.*
 | Artifact | Layer | File | Status |
 |----------|-------|------|--------|
 | GRAPH@v1 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | **APPROVED** (Chief 2026-07-04; OQ-G1..G5 zote) — nodes 110 · edges 124 |
-| EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-001.md`) | CANDIDATE — maswali 13 (negative 9 + positive 4), rubric per-q; OQ-E1/E2/E4 |
+| EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-001.md`) | **ACTIVE** (Chief 2026-07-05) — maswali 13 (negative 9 + positive 4), rubric per-q; OQ-E1/E2/E4 |
 
 *L3 DATASETS (`knowledge/datasets/`) — bado (inasubiri corpus critical mass + E3 outcomes).*
