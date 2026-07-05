@@ -1,7 +1,7 @@
 # LESSON INDEX — ELITEFX Knowledge Corpus Registry
 
 *Owner: Chief Quant (Unified) | Spec: `LESSON_SPEC.md` | Master Architecture V1 §3*
-*Last updated: 2026-07-05 (batch 4 — RESEARCHER-K) | Lessons: 26 (24 ACTIVE + 2 CANDIDATE — 017/018 OOS gate) — METHOD 13 · MARKET-CONDITIONAL 7 · GOVERNANCE 6 | Backlog (K1): findings/phases zilizobaki ≈ 18–30*
+*Last updated: 2026-07-05 (batch 5 — RESEARCHER-K) | Lessons: 31 (24 ACTIVE + 7 CANDIDATE — 017/018 OOS gate + 027-031 batch 5) — METHOD 15 · MARKET-CONDITIONAL 7 · GOVERNANCE 9 | Backlog (K1): findings/phases zilizobaki ≈ 12–22*
 
 | ID | Type | Claim (fupi) | Lifecycle | Provenance |
 |----|------|--------------|-----------|------------|
@@ -31,6 +31,11 @@
 | LESSON-024@v1 | METHOD | Interpretability ≠ predictability; judge semantic layer by stability/recoverability not R² | ACTIVE | F-040/Phase 22-23/P48-50 |
 | LESSON-025@v1 | GOVERNANCE | Define the interface contract object before building on it (Evidence = contract) | ACTIVE | D0/P63-66/V3 |
 | LESSON-026@v1 | GOVERNANCE | Conflict must be an explicit, separately-tolerable input, not hidden in readiness | ACTIVE | D5/G-7 V8/P74/P82 |
+| LESSON-027@v1 | METHOD | Atomic unit of a tradable claim is the configuration (event × context), not the event | CANDIDATE | F-020/F-021/Phase 6/Truth6 |
+| LESSON-028@v1 | GOVERNANCE | Architectural purity = transitive dependency purity; the dependency graph is the architecture | CANDIDATE | P107/OBS-1/E3/Truth11 |
+| LESSON-029@v1 | METHOD | Profitable ≠ Tradable: prove OOS + net-of-cost before capital; protect first, scale after proof | CANDIDATE | Truth12/F-032/Phase14/P26-69 |
+| LESSON-030@v1 | GOVERNANCE | System failure ≠ valid negative outcome; every crossing mints a new immutable object (parent link) | CANDIDATE | E1/E2/E4/P83-89 |
+| LESSON-031@v1 | GOVERNANCE | Irreversible-effect capability ships as refuse-stub (paper default) until named authority enables live | CANDIDATE | E4/P81/§8.2/Truth12 |
 
 ## K1 Backlog (vyanzo — order ya kazi)
 
@@ -50,8 +55,9 @@ future-OOS + FDR pekee ndiyo inaweza kuzipandisha.*
 
 | Artifact | Layer | File | Status |
 |----------|-------|------|--------|
-| GRAPH@v3 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1/v2 APPROVED (Chief 2026-07-04/05); **v3** (2026-07-05) +lessons 019-026 linkage — nodes 146 · edges 169 — **v3 APPROVED** (Chief 2026-07-05) |
-| EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-001.md`) | **ACTIVE** (Chief 2026-07-05) — maswali 13 (negative 9 + positive 4), rubric per-q; imelinkwa graph |
-| EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` (`questions.jsonl` · `eval_selftest.py` · `EVAL-002.md`) | **ACTIVE** (Chief 2026-07-05) — positive knowledge (Permanent Truths + findings APPROVED); mirror ya EVAL-001 |
+| GRAPH@v4 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1-v3 APPROVED; **v4** (2026-07-05) +EVAL-002 linkage — nodes 147 · edges 177 (inasubiri review; 027-031 pending) |
+| EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` | **ACTIVE** (Chief 2026-07-05) — maswali 13 (neg 9 + pos 4); imelinkwa graph |
+| EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` | **ACTIVE** (Chief 2026-07-05) — Permanent Truths 12 (pos 7 + neg 5); imelinkwa graph@v4 |
+| EVAL-SUITE@v1 | L4 (evals) | `knowledge/evals/SUITE.json` (+ `suite_selftest.py` · `EVAL_SUITE.md`) | CANDIDATE (2026-07-05) — unganisha 001+002 (maswali 25, neg 14 + pos 11), protocol moja |
 
 *L3 DATASETS (`knowledge/datasets/`) — bado (inasubiri corpus critical mass + E3 outcomes).*

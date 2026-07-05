@@ -1,14 +1,15 @@
 {
   "meta": {
-    "id": "GRAPH@v3",
+    "id": "GRAPH@v4",
     "layer": "L2 (Master Architecture V1 §3.4)",
-    "status": "GRAPH@v1+v2 APPROVED (Chief 2026-07-04/05). GRAPH@v3 = increment: lessons 019-026 (batch 4, sasa ACTIVE) zimelinkwa — inasubiri review ya v3.",
+    "status": "GRAPH@v1..v3 APPROVED (Chief 2026-07-04/05). GRAPH@v4 = increment: eval:EVAL-002 (L4, ACTIVE) linkage — inasubiri review ya v4. Lessons 027-031 (batch 5, CANDIDATE) HAZIJALINKWA (pending approval).",
     "date": "2026-07-05",
     "builder": "RESEARCHER-K (Track B, K2/K3)",
     "changelog": [
       "@v1 (2026-07-04): nodes 110 / edges 124 — lessons 18 + provenance zao. APPROVED na Chief (OQ-G1..G5 zote kwa mapendekezo ya RESEARCHER-K).",
       "@v2 (2026-07-05): +node eval:EVAL-001 (L4, ACTIVE); +edge eval:EVAL-001->domain:k4-evals (applies-to); +edges 10 lesson->eval:EVAL-001 (applies-to, note=tested-by-QNN; edge type ni applies-to kwa OQ-G3 — hakuna type mpya). APPROVED na Chief 2026-07-05.",
-      "@v3 (2026-07-05): +lessons 019-026 (batch 4, ACTIVE) + provenance zao (findings F-007/R-002/F-012/F-040; phases 1.6-1.8/2-2.1/4/5.7/21/22-23/D0; principles P45/P46-P50/P63-P66/P74/P82/G-7; reports 10). derives-from + supports; 021/022 contradicts (contextual_alpha_confirmation, mode=counter-evidence: in-sample died 0/282 OOS). Invariant: kila lesson ACTIVE iko graph."
+      "@v3 (2026-07-05): +lessons 019-026 (batch 4, ACTIVE) + provenance zao (findings F-007/R-002/F-012/F-040; phases 1.6-1.8/2-2.1/4/5.7/21/22-23/D0; principles P45/P46-P50/P63-P66/P74/P82/G-7; reports 10). derives-from + supports; 021/022 contradicts (contextual_alpha_confirmation, mode=counter-evidence: in-sample died 0/282 OOS). Invariant: kila lesson ACTIVE iko graph. APPROVED na Chief 2026-07-05.",
+      "@v4 (2026-07-05): +node eval:EVAL-002 (L4, ACTIVE) +edges 8 (→domain:k4-evals + 7 lesson->eval:EVAL-002 applies-to, note=tested-by-TNN). Lessons 027-031 (batch 5, CANDIDATE) HAZIJALINKWA — zitalinkwa baada ya approval (kama 019-026 zilivyosubiri)."
     ],
     "scope": "lessons 26 za LESSON_INDEX.md (017/018 CANDIDATE zimo pia) + rekodi zote zinazotajwa kwenye provenance/evidence/counter_evidence zao. HAKUNA node/edge isiyo na rekodi ya repo (kila edge ina 'source').",
     "node_kinds": {
@@ -156,6 +157,7 @@
     {"id": "domain:k3-datasets", "kind": "domain", "label": "K3 training datasets (manifest + version) — ontology proposal (OQ-G4)"},
     {"id": "domain:k4-evals", "kind": "domain", "label": "K4 eval benchmarks (ground truth) — ontology proposal (OQ-G4)"},
     {"id": "eval:EVAL-001", "kind": "eval", "lifecycle": "ACTIVE", "file": "knowledge/evals/EVAL-001/questions.jsonl", "label": "Dead ends + lessons ACTIVE benchmark — maswali 13 (negative 9 + positive 4); Chief APPROVED 2026-07-05"},
+    {"id": "eval:EVAL-002", "kind": "eval", "lifecycle": "ACTIVE", "file": "knowledge/evals/EVAL-002/questions.jsonl", "label": "Positive knowledge (Permanent Truths 12) — maswali 12 (positive 7 + overreach-negative 5); Chief APPROVED 2026-07-05"},
 
     {"id": "lesson:LESSON-019@v1", "kind": "lesson", "type": "METHOD", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-019.md", "label": "State-age sharpens probability not accuracy — calibrator not predictor"},
     {"id": "lesson:LESSON-020@v1", "kind": "lesson", "type": "METHOD", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-020.md", "label": "Test the decision-relevant question before discarding an idea"},
@@ -392,6 +394,15 @@
     {"from": "lesson:LESSON-026@v1", "to": "principle:P74", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
     {"from": "lesson:LESSON-026@v1", "to": "principle:P82", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
     {"from": "lesson:LESSON-026@v1", "to": "principle:G-7", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
-    {"from": "report:decision_policy_report.md", "to": "lesson:LESSON-026@v1", "type": "supports", "note": "action from readiness+reliability+conflict; G-7: conflict explicit, per-policy tolerance, policies→@v2", "source": "docs/lessons/LESSON-026.md"}
+    {"from": "report:decision_policy_report.md", "to": "lesson:LESSON-026@v1", "type": "supports", "note": "action from readiness+reliability+conflict; G-7: conflict explicit, per-policy tolerance, policies→@v2", "source": "docs/lessons/LESSON-026.md"},
+
+    {"from": "eval:EVAL-002", "to": "domain:k4-evals", "type": "applies-to", "note": "EVAL-002 realizes k4-evals (positive knowledge: Permanent Truths 12)", "source": "knowledge/evals/EVAL-002/EVAL-002.md"},
+    {"from": "lesson:LESSON-003@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T01 (prediction/decision/explanation independent)", "source": "knowledge/evals/EVAL-002/questions.jsonl"},
+    {"from": "lesson:LESSON-010@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T02 (non-stationary; negatives persist) + T08 (early quality ≠ persistence)", "source": "knowledge/evals/EVAL-002/questions.jsonl"},
+    {"from": "lesson:LESSON-001@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T03 (remove-bad-first) + T10 (ranking/selection)", "source": "knowledge/evals/EVAL-002/questions.jsonl"},
+    {"from": "lesson:LESSON-005@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T04 (context = identity, still needs OOS)", "source": "knowledge/evals/EVAL-002/questions.jsonl"},
+    {"from": "lesson:LESSON-011@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T05 (context = payoff filter, not probability)", "source": "knowledge/evals/EVAL-002/questions.jsonl"},
+    {"from": "lesson:LESSON-012@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T07 (representation audit bounded)", "source": "knowledge/evals/EVAL-002/questions.jsonl"},
+    {"from": "lesson:LESSON-020@v1", "to": "eval:EVAL-002", "type": "applies-to", "note": "tested-by T09 (volume = information not stability)", "source": "knowledge/evals/EVAL-002/questions.jsonl"}
   ]
 }

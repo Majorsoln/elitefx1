@@ -1,0 +1,25 @@
+{
+  "id": "EVAL-SUITE@v1",
+  "layer": "L4 (Master Architecture V1 §3.4)",
+  "status": "CANDIDATE — inasubiri review ya Chief (Chief directive 2026-07-05: unganisha 001+002)",
+  "date": "2026-07-05",
+  "builder": "RESEARCHER-K (Track B, K3)",
+  "members": [
+    {"id": "EVAL-001", "dir": "knowledge/evals/EVAL-001", "questions": 13, "controls": {"negative": 9, "positive": 4}, "theme": "dead ends 9 (negative) + positive controls 4 — 'usirudie kosa lililothibitishwa'"},
+    {"id": "EVAL-002", "dir": "knowledge/evals/EVAL-002", "questions": 12, "controls": {"negative": 5, "positive": 7}, "theme": "Permanent Truths 12 — positive 7 (tumia truth) + overreach-negative 5 (mpaka wa truth)"}
+  ],
+  "total_questions": 25,
+  "total_controls": {"negative": 14, "positive": 11},
+  "scoring_protocol": {
+    "input_to_model": "prompt + options PEKEE (si answer/ground_truth/rubric/maps_to_lesson)",
+    "default_grader": "rubric-based (LLM-judge au binadamu) — inasoma rubric + ground_truth → FULL/PARTIAL/ZERO",
+    "raw_mcq_by_length": "MARUFUKU (chaguo sahihi huwa refu zaidi; grade inategemea reasoning dhidi ya rubric)",
+    "mcq_fast_mode": "kama MCQ ya haraka inatumika: SHUFFLE options kila run + length-normalize (answer positions tayari zimesambazwa)",
+    "controls_are_gates": "positive NA negative controls zote ni gate — model inayo-affirm overreach AU inayo-reject truth halali inafeli hata ikipata nyingine zote",
+    "baseline": "EVAL FIRST (§3.5 K5): endesha suite nzima kwa model ya sasa KABLA ya training = baseline"
+  },
+  "open_questions_for_chief": [
+    "OQ-S1: suite pass threshold (mf. 25/25 polarity floor; ≥21/25 FULL kwa rubric = 'understands market')?",
+    "OQ-S2: EVAL-003+ za baadaye ziongezwe hapa (E3 execution outcomes → empirical eval, K6)?"
+  ]
+}
