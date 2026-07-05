@@ -20,7 +20,7 @@ when_to_use: before rejecting any representation/feature/clock — ask which met
 when_not_to_use: do not invert into 'never reject anything' — the RIGHT question can still kill the
   idea; and information wins (GROSS) are not permission to trade (net cost, OOS unproven — LESSON-002/010)
 provenance: {phase: 2/2.1, finding: F-007/R-002, doctrine: (Permanent Truth 9 — Information Density > Calendar Uniformity)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** volume bars "zilishindwa" (stability 0/9) na "zikashinda" (information

@@ -21,7 +21,7 @@ when_to_use: any feature that improves LogLoss/Brier but NOT accuracy — recogn
 when_not_to_use: do not discard the variable because accuracy is flat (that is the wrong metric — it
   DOES improve probability quality); do not assume the calibration gain holds at every timeframe (D1 fails)
 provenance: {phase: 1.6/1.8, finding: (age-dependence of hazard)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** kuna aina mbili za "kuboresha utabiri": kubadilisha DARASA unalotabiri

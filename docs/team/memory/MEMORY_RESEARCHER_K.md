@@ -60,3 +60,11 @@ MARUFUKU inabaki). Positive controls 4 = design sahihi. OQ-E1/E2/E4: endelea na 
 mabadiliko yoyote ya scoring protocol yanahitaji Chief.
 CURRENT TASK MPYA: (a) EVAL-001 graph-linking; (b) K1 BATCH 4 (candidates 8 — lessons 019-026);
 baada yake EVAL-002 (Permanent Truths/findings APPROVED).
+
+CHIEF REVIEW (2026-07-05): **K1 BATCH 4 APPROVED — LESSON-019..026 zote CANDIDATE→ACTIVE**
+(zote na counter_evidence + bounds za uaminifu; hakuna inayodai edge hai isiyothibitishwa —
+tofauti na 017/018 zinazobaki OOS gate). **GRAPH@v2 APPROVED** (nodes 111/edges 135, self-test
+PASS na Chief; invariant mpya ya lesson-ACTIVE-lazima-graph ni sahihi).
+CURRENT TASK MPYA: (a) link 019-026 kwenye graph → GRAPH@v3; (b) **EVAL-002** (Permanent Truths +
+findings APPROVED — positive knowledge, mirror ya EVAL-001 design na rubric protocol ile ile);
+baada yake batch 5.

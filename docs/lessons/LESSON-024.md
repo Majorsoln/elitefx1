@@ -22,7 +22,7 @@ when_not_to_use: do not treat a stable, interpretable label as validated market 
   = profile-distinctiveness (a linguistic hypothesis), not proof the named mechanism is real; keep
   discovery unsupervised, semantics strictly post-hoc (LESSON-004)
 provenance: {finding: F-040, phase: 22-23, doctrine: V6.4-V6.6, principle: P46/P47/P48/P50}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** semantic layer ilipoteza R² (ratio 0.01) lakini ilikuwa stable (ARI 0.89)

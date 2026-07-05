@@ -21,7 +21,7 @@ when_to_use: any time an in-sample metric (silhouette/R²/EV/accuracy) is report
 when_not_to_use: a large leak gap is not proof the structure is fake — check whether it SURVIVES OOS
   (here it did, ~0.58); do not use leakage to dismiss a representation that still clears the OOS bar
 provenance: {finding: F-039, phase: 21, doctrine: V6.4, principle: P44/P45}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** in-sample silhouette 0.836 ilionekana imara; OOS halisi ilikuwa 0.577 —

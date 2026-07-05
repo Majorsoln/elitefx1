@@ -22,7 +22,7 @@ when_to_use: prioritizing WHICH events to study for context-conditioning — mea
 when_not_to_use: never as evidence of tradable edge — the ranking @Top10 is in-sample and the same
   objects died 0/282 OOS; do not read 'profitable @Top10' as anything more than in-sample context response
 provenance: {finding: F-008, phase: 4, doctrine: V5.3-V5.5, principle: P13}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** context si swichi ya jumla — inanufaisha events tofauti kwa viwango

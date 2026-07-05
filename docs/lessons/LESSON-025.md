@@ -23,7 +23,7 @@ when_not_to_use: a defined contract is not validated science — do not let a cl
   imply the underlying claim is true (confidence=1.00 was an n-artifact); the contract organizes
   ignorance, it does not remove it
 provenance: {phase: D0, principle: P63/P64/P65/P66, doctrine: Decision Doctrine V3}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** discovery kubwa ya D0 haikuwa kuhusu soko — ilikuwa kudefine CONTRACT

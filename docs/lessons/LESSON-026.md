@@ -24,7 +24,7 @@ when_not_to_use: do not hide conflict inside a blended readiness/confidence numb
   policy's ability to tune tolerance and erases the audit trail (the G-7 change existed precisely to
   pull conflict OUT of the readiness bundle)
 provenance: {phase: D5, principle: P74/P82/P88, doctrine: Decision Doctrine V8 (G-7)}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** conflict ikifichwa ndani ya readiness/confidence score moja, policy

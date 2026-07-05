@@ -23,7 +23,7 @@ when_to_use: never judge a variable by its marginal EV alone — inspect joint c
 when_not_to_use: high joint EV-spread is not tradable edge (in-sample; 0/282 OOS); do not build a
   cell-rule engine on these interactions (LESSON-005: coordinate-cell rules do not generalize cross-pair)
 provenance: {finding: F-012, phase: 5.7, doctrine: V5.6-V5.7}
-lifecycle: CANDIDATE
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** transition ileile (Thi) inatoa −0.5, +3.0, +1.7, −3.2 kadri umri
