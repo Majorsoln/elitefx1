@@ -1,10 +1,14 @@
 {
   "meta": {
-    "id": "GRAPH@v1",
+    "id": "GRAPH@v2",
     "layer": "L2 (Master Architecture V1 §3.4)",
-    "status": "DRAFT — kwa review ya Chief Quant (Unified); haijawa doctrine",
-    "date": "2026-07-04",
-    "builder": "RESEARCHER-K (Track B, K2)",
+    "status": "GRAPH@v1 APPROVED (Chief 2026-07-04, OQ-G1..G5). GRAPH@v2 = increment: EVAL-001 (L4) linkage baada ya EVAL-001 kupata ACTIVE (Chief 2026-07-05) — inasubiri review ya v2.",
+    "date": "2026-07-05",
+    "builder": "RESEARCHER-K (Track B, K2/K3)",
+    "changelog": [
+      "@v1 (2026-07-04): nodes 110 / edges 124 — lessons 18 + provenance zao. APPROVED na Chief (OQ-G1..G5 zote kwa mapendekezo ya RESEARCHER-K).",
+      "@v2 (2026-07-05): +node eval:EVAL-001 (L4, ACTIVE); +edge eval:EVAL-001->domain:k4-evals (applies-to); +edges 10 lesson->eval:EVAL-001 (applies-to, note=tested-by-QNN; edge type ni applies-to kwa OQ-G3 — hakuna type mpya). Lessons 019-026 (batch 4, CANDIDATE) HAZIJAINGIA graph bado — zitaingia baada ya Chief approval (sawa na jinsi EVAL-001 ilisubiri approval; P88/versioning)."
+    ],
     "scope": "lessons 18 za LESSON_INDEX.md + rekodi zote zinazotajwa kwenye provenance/evidence/counter_evidence zao. HAKUNA node/edge isiyo na rekodi ya repo (kila edge ina 'source').",
     "node_kinds": {
       "lesson": "docs/lessons/LESSON-###.md — canonical knowledge object (K0)",
@@ -14,7 +18,8 @@
       "report": "reports/*.md — L0 evidence (mgodi)",
       "doc": "docs za governance/memory zinazobeba evidence",
       "record": "entry mahususi ndani ya doc (audit drift item, board correction entry)",
-      "domain": "eneo la matumizi kwa edges za applies-to (ontology proposal — inahitaji Chief)"
+      "domain": "eneo la matumizi kwa edges za applies-to (ontology proposal — inahitaji Chief)",
+      "eval": "knowledge/evals/EVAL-###/ — L4 benchmark (K3); realizes domain:k4-evals"
     },
     "edge_types": {
       "derives-from": "lesson → rekodi ya provenance yake (finding/phase/principle/record)",
@@ -148,7 +153,8 @@
 
     {"id": "domain:contract-components", "kind": "domain", "label": "Components zenye contract surface (E1-E4, K-series tooling) — ontology proposal (OQ-G4)"},
     {"id": "domain:k3-datasets", "kind": "domain", "label": "K3 training datasets (manifest + version) — ontology proposal (OQ-G4)"},
-    {"id": "domain:k4-evals", "kind": "domain", "label": "K4 eval benchmarks (ground truth) — ontology proposal (OQ-G4)"}
+    {"id": "domain:k4-evals", "kind": "domain", "label": "K4 eval benchmarks (ground truth) — ontology proposal (OQ-G4)"},
+    {"id": "eval:EVAL-001", "kind": "eval", "lifecycle": "ACTIVE", "file": "knowledge/evals/EVAL-001/questions.jsonl", "label": "Dead ends + lessons ACTIVE benchmark — maswali 13 (negative 9 + positive 4); Chief APPROVED 2026-07-05"}
   ],
   "edges": [
     {"from": "lesson:LESSON-001@v1", "to": "finding:F-022", "type": "derives-from", "source": "docs/lessons/LESSON-001.md"},
@@ -291,6 +297,18 @@
     {"from": "report:event_reality_report.md", "to": "lesson:LESSON-018@v1", "type": "supports", "note": "DPB×EURUSD +0.37 (P97); aggregate −0.810 (perm p=0.007 lakini net hasi)", "source": "docs/lessons/LESSON-018.md"},
     {"from": "report:contextual_alpha_confirmation_report.md", "to": "lesson:LESSON-018@v1", "type": "contradicts", "mode": "counter-evidence", "note": "0/282 OOS+FDR; DPB·EURUSD contexts hazimo hata top-15 OOS", "source": "docs/lessons/LESSON-018.md"},
     {"from": "lesson:LESSON-009@v1", "to": "lesson:LESSON-018@v1", "type": "applies-to", "note": "review_trigger gate: pre-registered OOS+FDR pekee (P31/LESSON-009)", "source": "docs/lessons/LESSON-018.md"},
-    {"from": "lesson:LESSON-018@v1", "to": "domain:k4-evals", "type": "applies-to", "note": "eval ground truth: 'beats random null' ≠ 'positive net EV'", "source": "docs/lessons/LESSON-018.md"}
+    {"from": "lesson:LESSON-018@v1", "to": "domain:k4-evals", "type": "applies-to", "note": "eval ground truth: 'beats random null' ≠ 'positive net EV'", "source": "docs/lessons/LESSON-018.md"},
+
+    {"from": "eval:EVAL-001", "to": "domain:k4-evals", "type": "applies-to", "note": "EVAL-001 realizes the k4-evals domain (concrete L4 benchmark)", "source": "knowledge/evals/EVAL-001/EVAL-001.md"},
+    {"from": "lesson:LESSON-004@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q01 (human taxonomy = verification)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-005@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q02 (coordinate rules) + P02 (positive control)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-006@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q03 (algorithm-independence criterion)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-007@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q04 (rare states = execution risk)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-001@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q05 (CCS portfolio) + P01 (positive control, remove-bad-first)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-008@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q06 (causal primitive) + Q07 (ecology)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-009@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q08 (post-hoc survivor)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-002@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q09 ('Alpha Era' premature declaration)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-011@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by P03 (positive control: context = payoff, not win-prob)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+    {"from": "lesson:LESSON-012@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by P04 (positive control: representation audit vs 'no structure')", "source": "knowledge/evals/EVAL-001/questions.jsonl"}
   ]
 }
