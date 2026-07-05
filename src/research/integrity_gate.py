@@ -145,8 +145,8 @@ def self_test():
     ok = (v["lifecycle"] == "VALIDATED" and v["id"] != d["id"]
           and v["parent_decision_id"] == d["id"] and v["gate_id"] == GATE_ID
           and v["action"] == d["action"] and v["policy_id"] == d["policy_id"]
-          and v["evidence_refs"] == d["evidence_refs"]
-          and v["eligibility"]["verdict"] == "ELIGIBLE" and v["eligibility"]["failed"] == [])
+          and list(v["evidence_refs"]) == list(d["evidence_refs"])          # A-4: refs=tuple
+          and v["eligibility"]["verdict"] == "ELIGIBLE" and list(v["eligibility"]["failed"]) == [])
     ok_all &= ok
     print(f"[2] eligible→VALIDATED: new-id={v['id']!=d['id']} parent={v['parent_decision_id']==d['id']} carry-over={v['policy_id']==d['policy_id']} -> {'OK' if ok else 'FAIL'}")
 
@@ -155,7 +155,7 @@ def self_test():
                  _fake_constraint(cid="constraint:budget@v1", verdict="INELIGIBLE", reason="budget exceeded")])
     ok = (r["lifecycle"] == "REJECTED" and r["id"] != d["id"]
           and r["parent_decision_id"] == d["id"]
-          and r["eligibility"]["failed"] == ["constraint:budget@v1"]
+          and list(r["eligibility"]["failed"]) == ["constraint:budget@v1"]  # A-4: failed=tuple
           and len(r["eligibility"]["checks"]) == 2)                        # constraints ZOTE audited (Rule 6)
     ok_all &= ok
     print(f"[3] ineligible→REJECTED: lifecycle={r['lifecycle']} failed={r['eligibility']['failed']} all-audited={len(r['eligibility']['checks'])==2} -> {'OK' if ok else 'FAIL'}")

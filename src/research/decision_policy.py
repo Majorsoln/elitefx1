@@ -253,8 +253,8 @@ def self_test():
 
     # (3) decision references policy_id (P88) + snapshot_id (P84); reproducible
     d1 = apply_policy(POLICIES["conservative"], s); d2 = apply_policy(POLICIES["conservative"], s)
-    ok_ref = (d1["policy_id"] == "policy:conservative@v2" and d1["evidence_refs"] == ["snap:x"]
-              and d1["id"] == d2["id"])
+    ok_ref = (d1["policy_id"] == "policy:conservative@v2" and list(d1["evidence_refs"]) == ["snap:x"]
+              and d1["id"] == d2["id"])                        # A-4: refs=tuple
     print(f"policy_id + reproducible: policy={d1['policy_id']} id-stable={d1['id']==d2['id']} -> {'OK' if ok_ref else 'FAIL'}")
 
     # (4) version change → different policy_id → different decision id

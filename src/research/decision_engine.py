@@ -100,7 +100,7 @@ def self_test():
 
     # (2) decide → Decision Object yenye snapshot_id (P84) + policy_id (P88)
     d = decide(_fake_snapshot(), _fake_policy())
-    ok = d["evidence_refs"] == ["snap:t1"] and d["policy_id"] == "policy:test@v1" and d["lifecycle"] == "PROPOSED"
+    ok = list(d["evidence_refs"]) == ["snap:t1"] and d["policy_id"] == "policy:test@v1" and d["lifecycle"] == "PROPOSED"  # A-4: refs=tuple
     ok_all &= ok
     print(f"[2] refs: snapshot={d['evidence_refs']} policy={d['policy_id']} -> {'OK' if ok else 'FAIL'}")
 

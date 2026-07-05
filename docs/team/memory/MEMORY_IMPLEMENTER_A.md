@@ -65,3 +65,26 @@ CHIEF REVIEW (2026-07-04): **E2 SPEC APPROVED** + rulings:
      Decision inabaki INTENT tu. (Sizing-policy layer = swali la P96-adjacent, baadaye.)
 CURRENT TASK MPYA: **E2 IMPLEMENTATION** (execution_object.py + Recorder; deep-freeze kwa
 Decision+Execution; retire transitions za Q1; self-tests; regression zote; report Rule 8).
+
+=== E2 IMPLEMENTATION (2026-07-05) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya E2 IMPLEMENTATION)** — code + report vimekamilika; self-tests
+zote PASS. Ikiidhinishwa → E3 Decision Repository spec.
+LAST COMPLETED: **E2 EXECUTION OBJECT IMPLEMENTATION** ✅ (Chief rulings Q1-Q5 zote 1:1):
+  · `src/research/frozen.py` MPYA — `freeze()` deep-freeze A-4 (stdlib; dict→proxy, list→tuple) +
+    `is_frozen()`. Self-test PASS 5/5. Transitively PURE.
+  · `src/research/execution_object.py` MPYA — `record(decision, report)` = Execution Recorder;
+    `ExecutionError`≠outcome; STATUS=(FILLED/PARTIAL/REJECTED/UNFILLED); COMMITTING_INTENTS;
+    parent_decision_id → VALIDATED. **Transitively PURE** (frozen+stdlib; probe imethibitisha). PASS 7/7.
+  · `decision_object.py` — Q1: `transition()` VALIDATED→EXECUTED & EXECUTED→SETTLED **zimeretire**;
+    LIFECYCLE=[PROPOSED,VALIDATED]; Q4: freeze() kwenye make_*; self_test [8] A-4 + [3]/[6] updated. PASS 8/8.
+  · engine/policy/gate: list-equality zime-coerce (A-4 ripple: refs/failed = tuple). PASS zote.
+  · `reports/execution_object_report.md` (Rule 8).
+NEXT AFTER: **E3 Decision Repository spec** (P106) — persistence contract nje ya Engine (append-only
+history: Decision + Execution objects; mkutano na K6 schema — Master §2 E3↔K6).
+OPEN QUESTIONS (ndani ya `reports/execution_object_report.md`):
+  1. D6 enum migration SELECT→ENTER — ifanyike sasa? (nimeshughulikia kwa alias SELECT+ENTER; Rule 1).
+  2. Partial follow-up: remaining_qty>0 → decision mpya? nani? (nimeiweka downstream E3/caller).
+  3. recorder_id versioning (recorder:execution@v1) — Chief athibitishe pattern.
+  4. intended.side derivation (ENTER→BUY/SELL) — sizing-policy layer (P96-adjacent)? side=report kwa sasa.
+NOTE (P107): frozen + execution_object = **transitively PURE** (ushindi). decision_object bado inarithi
+baseline FAIL (numpy/market) — A-4 inagusa objects, si dependency graph; remediation bado PENDING Chief.

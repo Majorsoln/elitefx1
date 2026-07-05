@@ -18,7 +18,8 @@ default **ABSTAIN** (P26 capital preservation) — hakuna decision inayofanywa h
 
 Maswali (Chief, D4):
   Q1. Decision Object ina fields gani? (id, action, reason, reliability, risk, evidence_refs, timestamp)
-  Q2. Decision ina lifecycle gani? (PROPOSED→VALIDATED→EXECUTED→SETTLED; side EXPIRED/REJECTED/CANCELLED)
+  Q2. Decision ina lifecycle gani? (PROPOSED→VALIDATED [E2/Q1: Decision domain inaishia hapa; EXECUTED/
+      SETTLED → Execution Object, P89]; side EXPIRED/REJECTED/CANCELLED)
   Q3. Decision ina provenance yake? (snapshot → decision graph; P84)
   Q4. Decision ina integrity metrics gani? (structural; SIO OOS bado; P87)
   Q5. Decision ina audit trail gani? (P66)
@@ -42,15 +43,18 @@ from market_state_engine import cfg
 from evidence_snapshot import make_snapshot
 from evidence_operations import build_tagged_evidence
 from evidence_set import make_set
+from frozen import freeze                                     # A-4 immutability enforcement (E2 Q4)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Decision family (P60) — action enum
 ACTIONS = ["SELECT", "ABSTAIN", "REDUCE", "HEDGE", "DIVERSIFY", "WAIT", "EXIT", "SUSPEND"]
-# Decision lifecycle state machine (Q2; mirrors P82 for decisions)
-LIFECYCLE = ["PROPOSED", "VALIDATED", "EXECUTED", "SETTLED"]
-# side states: REJECTED (integrity fail) · EXPIRED (evidence expired) · CANCELLED (P86: stopped
-# before execution by news/broker/manual — DISTINCT from rejection)
+# Decision lifecycle state machine (Q2). E2/Q1 (Chief 2026-07-05): **Decision domain inaishia
+# VALIDATED** — EXECUTED/SETTLED zimehamia Execution domain (Execution Object, P89). Decision
+# haifiki EXECUTED tena; execution-outcome ni object tofauti.
+LIFECYCLE = ["PROPOSED", "VALIDATED"]
+# side states: REJECTED (integrity/eligibility fail) · EXPIRED (evidence expired) · CANCELLED
+# (P86: stopped before execution by news/broker/manual — DISTINCT from rejection)
 LIFECYCLE_SIDE = ["EXPIRED", "REJECTED", "CANCELLED"]
 
 
@@ -95,27 +99,27 @@ def make_decision(snapshot, action="ABSTAIN", reason=None, audit=None, policy_id
         "integrity": integrity,
         "audit": list(audit) if audit else [f"make_decision(action={action}, snapshot={sid}, policy={policy_id})"],
     }
-    return dec
+    return freeze(dec)                                         # A-4 (E2 Q4): immutable enforcement
 
 
 def transition(dec, to_state):
-    """Q2: lifecycle transition (immutable — rudisha object mpya + audit). P83.
+    """Q2: lifecycle transition (immutable — rudisha object MPYA + audit). P83.
     CANCELLED (P86) inaruhusiwa KABLA ya execution tu (PROPOSED/VALIDATED) — tofauti na REJECTED.
 
-    E1 (Chief ruling Q1, 2026-07-04): **PROPOSED→VALIDATED imeretire hapa** — VALIDATION ≠ ELIGIBILITY.
-    Crossing PROPOSED→VALIDATED ni ya **Integrity Gate** (E1) inayozalisha Decision Object MPYA (id
-    mpya + parent_decision_id) kupitia `make_gate_decision` — SIO same-id lifecycle bump. transition()
-    inabaki kwa lifecycle za baada-ya-eligibility (VALIDATED→EXECUTED→SETTLED) na side-states."""
-    valid = {"PROPOSED": {"REJECTED", "EXPIRED", "CANCELLED"},  # VALIDATED imeondolewa (Gate ndiyo canonical crossing — E1/Q1)
-             "VALIDATED": {"EXECUTED", "REJECTED", "EXPIRED", "CANCELLED"},
-             "EXECUTED": {"SETTLED"},                          # baada ya execution huwezi CANCEL
-             "SETTLED": set(), "REJECTED": set(), "EXPIRED": set(), "CANCELLED": set()}
+    E1 (Chief Q1, 2026-07-04): PROPOSED→VALIDATED imeretire — crossing hiyo ni ya **Integrity Gate**
+    (make_gate_decision, object MPYA). E2 (Chief Q1, 2026-07-05): **VALIDATED→EXECUTED na
+    EXECUTED→SETTLED zimeretire** — Decision domain inaishia VALIDATED; execution-outcome ni
+    **Execution Object** (P89, object tofauti). transition() sasa inabaki kwa **side-states pekee**
+    (REJECTED/EXPIRED/CANCELLED) kutoka PROPOSED/VALIDATED."""
+    valid = {"PROPOSED": {"REJECTED", "EXPIRED", "CANCELLED"},   # E1/Q1: VALIDATED = Gate
+             "VALIDATED": {"REJECTED", "EXPIRED", "CANCELLED"},  # E2/Q1: EXECUTED = Execution Object
+             "REJECTED": set(), "EXPIRED": set(), "CANCELLED": set()}
     if to_state not in valid.get(dec["lifecycle"], set()):
         raise ValueError(f"transition batili {dec['lifecycle']} → {to_state}")
-    new = {k: (list(v) if isinstance(v, list) else v) for k, v in dec.items()}
+    new = dict(dec)                                             # shallow copy (values frozen/immutable — A-4)
     new["lifecycle"] = to_state
     new["audit"] = list(dec["audit"]) + [f"transition({dec['lifecycle']}→{to_state})"]
-    return new
+    return freeze(new)                                          # A-4 (E2 Q4)
 
 
 def _gate_decision_id(parent_id, new_lifecycle, gate_id, as_of):
@@ -134,8 +138,7 @@ def make_gate_decision(parent, new_lifecycle, gate_id, eligibility=None, audit=N
     inayonyoosha nyuma (Q3, P85 traceability). `gate_id` (P88 pattern) inarekodiwa kama policy_id."""
     assert new_lifecycle in ("VALIDATED", "REJECTED"), "Gate hutoa VALIDATED|REJECTED tu"
     assert parent.get("lifecycle") == "PROPOSED", "Gate inagate decision za PROPOSED pekee"
-    new = {k: (list(v) if isinstance(v, list) else dict(v) if isinstance(v, dict) else v)
-           for k, v in parent.items()}
+    new = dict(parent)                                         # shallow copy (values frozen/immutable — A-4)
     new["id"] = _gate_decision_id(parent["id"], new_lifecycle, gate_id, parent["timestamp"])
     new["lifecycle"] = new_lifecycle
     new["parent_decision_id"] = parent["id"]                   # Q3 (P85): sio-yatima
@@ -145,7 +148,7 @@ def make_gate_decision(parent, new_lifecycle, gate_id, eligibility=None, audit=N
     base_audit = list(audit) if audit else list(parent["audit"])
     new["audit"] = base_audit + [
         f"gate({gate_id}): {parent['lifecycle']}→{new_lifecycle} (parent={parent['id']})"]
-    return new
+    return freeze(new)                                         # A-4 (E2 Q4)
 
 
 def decision_provenance(dec):
@@ -203,16 +206,14 @@ def _report(c, pairs, decisions):
     # Q2 — lifecycle
     L.append("\n## Q2 — Decision lifecycle (state machine)\n")
     L.append("```text")
-    L.append("PROPOSED → VALIDATED → EXECUTED → SETTLED")
+    L.append("PROPOSED ──(Integrity Gate, E1)──▶ VALIDATED   [Decision domain inaishia hapa — E2/Q1]")
     L.append("   ↘ REJECTED / EXPIRED / CANCELLED (side states; P86: CANCELLED ≠ REJECTED)")
+    L.append("execution-outcome ──▶ Execution Object (P89, E2; object tofauti — SIO Decision lifecycle)")
     L.append("```")
-    # PROPOSED→VALIDATED = Integrity Gate (E1, object MPYA); VALIDATED→EXECUTED→SETTLED = transition()
-    chain = make_gate_decision(d0, "VALIDATED", "gate:integrity@v1")   # E1/Q1: crossing = object mpya
-    steps = [d0["lifecycle"], chain["lifecycle"]]
-    for s in ("EXECUTED", "SETTLED"):
-        chain = transition(chain, s); steps.append(chain["lifecycle"])
-    L.append(f"- mfano transitions: {' → '.join(steps)} (PROPOSED→VALIDATED = Gate/object mpya E1; "
-             "salio = transition(); kila hatua immutable + audit; P83).")
+    # E1/Q1: PROPOSED→VALIDATED = Integrity Gate (object MPYA). E2/Q1: Decision inaishia VALIDATED.
+    v = make_gate_decision(d0, "VALIDATED", "gate:integrity@v1")
+    L.append(f"- mfano crossing: {d0['lifecycle']} → {v['lifecycle']} (Gate/object mpya E1); "
+             "execution = Execution Object (E2); side-states kupitia transition(); immutable + audit (P83/A-4).")
 
     # Q3 — provenance
     L.append("\n## Q3 — Decision provenance (→ Evidence Snapshot; P84)\n")
@@ -283,9 +284,9 @@ def self_test():
             "uncertainty": 0.3, "temporal_conflict": 0.0,
             "structural_conflict": {"cross-pair": 0.1}, "aggregate": {"support": 500}}
 
-    # (1) fields + references snapshot ID (P84)
+    # (1) fields + references snapshot ID (P84). NB: A-4 freeze → evidence_refs ni tuple (coerce list)
     d = make_decision(snap, action="ABSTAIN")
-    ok_fields = (d["evidence_refs"] == [snap["id"]] and d["action"] == "ABSTAIN"
+    ok_fields = (list(d["evidence_refs"]) == [snap["id"]] and d["action"] == "ABSTAIN"
                  and "id" in d and d["lifecycle"] == "PROPOSED")
     print(f"fields + snapshot-ref (P84): refs={d['evidence_refs']} action={d['action']} -> {'OK' if ok_fields else 'FAIL'}")
 
@@ -296,14 +297,19 @@ def self_test():
                 and dv["lifecycle"] == "VALIDATED")
     print(f"immutable identity + no-mutate: id-stable={d['id']==d2['id']} input={d['lifecycle']} new={dv['lifecycle']} -> {'OK' if ok_immut else 'FAIL'}")
 
-    # (3) lifecycle transitions valid; invalid rejected (PROPOSED→VALIDATED = Gate, si transition)
-    chain = transition(transition(dv, "EXECUTED"), "SETTLED")               # VALIDATED→EXECUTED→SETTLED
-    ok_life = chain["lifecycle"] == "SETTLED"
+    # (3) E2/Q1: Decision domain inaishia VALIDATED — VALIDATED→EXECUTED & EXECUTED→SETTLED zimeretire
     try:
-        transition(d, "EXECUTED"); ok_bad = False   # PROPOSED→EXECUTED batili
+        transition(dv, "EXECUTED"); ok_no_exec = False                     # VALIDATED→EXECUTED retired (E2/Q1)
+    except ValueError:
+        ok_no_exec = True
+    try:
+        transition(d, "EXECUTED"); ok_bad = False                          # PROPOSED→EXECUTED batili
     except ValueError:
         ok_bad = True
-    print(f"lifecycle: PROPOSED→(gate)VALIDATED→…→{chain['lifecycle']}; invalid-blocked={ok_bad} -> {'OK' if ok_life and ok_bad else 'FAIL'}")
+    side = transition(dv, "CANCELLED")                                      # VALIDATED→CANCELLED (side) halali
+    ok_life = ok_no_exec and side["lifecycle"] == "CANCELLED"
+    print(f"lifecycle (E2/Q1): VALIDATED→EXECUTED-retired={ok_no_exec} PROPOSED→EXECUTED-blocked={ok_bad} "
+          f"VALIDATED→CANCELLED={side['lifecycle']} -> {'OK' if ok_life and ok_bad else 'FAIL'}")
 
     # (4) audit grows + references snapshot
     ok_audit = len(dv["audit"]) > len(d["audit"]) and snap["id"] in d["audit"][0]
@@ -314,24 +320,16 @@ def self_test():
     ok_q = q["evidence_readiness_state"] == "READY" and q["is_abstention"] and "support_behind" in q
     print(f"integrity (structural): state={q['evidence_readiness_state']} abstain={q['is_abstention']} -> {'OK' if ok_q else 'FAIL'}")
 
-    # (6) P86: CANCELLED ≠ REJECTED — inafikika KABLA ya execution tu (PROPOSED/VALIDATED);
-    # baada ya EXECUTED huwezi CANCEL; CANCELLED ni terminal (VALIDATED sasa hutoka kwa Gate — E1)
+    # (6) P86: CANCELLED ≠ REJECTED — side-state kutoka PROPOSED/VALIDATED; CANCELLED ni terminal
     c1 = transition(make_decision(snap), "CANCELLED")                       # PROPOSED → CANCELLED
     v_ = make_gate_decision(make_decision(snap), "VALIDATED", "gate:integrity@v1")
     c2 = transition(v_, "CANCELLED")                                        # VALIDATED → CANCELLED
     try:
-        transition(transition(v_, "EXECUTED"), "CANCELLED")
-        ok_no_exec_cancel = False                                           # EXECUTED → CANCELLED batili
-    except ValueError:
-        ok_no_exec_cancel = True
-    try:
-        transition(c1, "VALIDATED"); ok_terminal = False                    # CANCELLED ni terminal
+        transition(c1, "REJECTED"); ok_terminal = False                    # CANCELLED ni terminal (side→side batili)
     except ValueError:
         ok_terminal = True
-    ok_cancel = (c1["lifecycle"] == "CANCELLED" and c2["lifecycle"] == "CANCELLED"
-                 and ok_no_exec_cancel and ok_terminal)
-    print(f"P86 CANCELLED: proposed→{c1['lifecycle']} validated→{c2['lifecycle']} "
-          f"executed-blocked={ok_no_exec_cancel} terminal={ok_terminal} -> {'OK' if ok_cancel else 'FAIL'}")
+    ok_cancel = c1["lifecycle"] == "CANCELLED" and c2["lifecycle"] == "CANCELLED" and ok_terminal
+    print(f"P86 CANCELLED: proposed→{c1['lifecycle']} validated→{c2['lifecycle']} terminal={ok_terminal} -> {'OK' if ok_cancel else 'FAIL'}")
 
     # (7) E1 (Chief Q1-Q3): PROPOSED→VALIDATED imeretire kwenye transition(); Gate = object MPYA
     try:
@@ -348,8 +346,21 @@ def self_test():
     print(f"E1 gate-crossing: transition-retired={ok_retired} new-id={gv['id']!=d['id']} "
           f"validated≠rejected={gv['id']!=gr['id']} parent-link={gv['parent_decision_id']==d['id']} -> {'OK' if ok_retired and ok_gate else 'FAIL'}")
 
+    # (8) A-4 (E2 Q4): objects ni frozen — mutation (top-level + nested) inaraise TypeError
+    frozen_ok = True
+    try:
+        d["lifecycle"] = "VALIDATED"; frozen_ok = False                    # top-level → TypeError
+    except TypeError:
+        pass
+    try:
+        d["integrity"]["is_abstention"] = False; frozen_ok = False         # nested → TypeError
+    except TypeError:
+        pass
+    ok_frozen = frozen_ok and isinstance(d["evidence_refs"], tuple) and dv["lifecycle"] == "VALIDATED"
+    print(f"A-4 frozen (E2/Q4): mutation-blocked={frozen_ok} refs-tuple={isinstance(d['evidence_refs'], tuple)} -> {'OK' if ok_frozen else 'FAIL'}")
+
     ok = (ok_fields and ok_immut and ok_life and ok_bad and ok_audit and ok_q and ok_cancel
-          and ok_retired and ok_gate)
+          and ok_retired and ok_gate and ok_frozen)
     print(f"\nSELF-TEST: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 
