@@ -17,8 +17,10 @@ import os
 import tempfile
 
 REPO_ID = "repository:decision@v1"
-KINDS = ("decision", "execution")
-REQUIRED = {"decision": ("id", "as_of", "lifecycle"), "execution": ("id", "as_of", "status")}
+KINDS = ("decision", "execution", "settlement")           # E4/Q4: settlement = kind mpya (object wa tano)
+REQUIRED = {"decision": ("id", "as_of", "lifecycle"),
+            "execution": ("id", "as_of", "status"),
+            "settlement": ("id", "as_of", "parent_execution_id", "pnl")}
 
 
 class RepositoryError(ValueError):
@@ -107,9 +109,10 @@ def integrity_check(path):
             dups.append(oid)
         ids.add(oid)
     for r in recs:
-        p = r["obj"].get("parent_decision_id")
-        if p and p not in ids:
-            dangling.append((_oid(r), p))
+        for ref in ("parent_decision_id", "parent_execution_id"):   # E4: settlement→execution pia
+            p = r["obj"].get(ref)
+            if p and p not in ids:
+                dangling.append((_oid(r), p))
     return {"records": len(recs), "duplicates": dups, "dangling": dangling,
             "ok": not dups and not dangling}
 
@@ -160,6 +163,17 @@ def self_test():
               and len(by_outcome(p, "FILLED")) == 1 and len(by_time_window(p, 11, 12)) == 2)
         ok_all &= ok
         print(f"[5] queries (snapshot/policy/outcome/window) -> {'OK' if ok else 'FAIL'}")
+        # [5b] E4/Q4: kind=settlement — append + store + parent_execution_id dangling detection
+        # (settlement iko kwenye log p ile ile ambayo ina exe:1; parent exe:1 ipo → si dangling)
+        append(p, "settlement", {"id": "settle:1", "as_of": 30, "parent_execution_id": "exe:1", "pnl": 42.5}, _v())
+        append(p, "settlement", {"id": "settle:2", "as_of": 31, "parent_execution_id": "exe:missing", "pnl": -5}, _v())
+        dangling = dict(integrity_check(p)["dangling"])
+        recs2 = load(p)
+        ok = (sum(1 for r in recs2 if r["kind"] == "settlement") == 2
+              and dangling.get("settle:2") == "exe:missing"             # dangling settlement detected (lenient)
+              and "settle:1" not in dangling)                           # parent exe:1 ipo → si dangling
+        ok_all &= ok
+        print(f"[5b] settlement kind + parent_execution_id integrity -> {'OK' if ok else 'FAIL'}")
         # [6] P107: module hii imports = stdlib pekee
         import pathlib
         src = pathlib.Path(__file__).read_text(encoding="utf-8")

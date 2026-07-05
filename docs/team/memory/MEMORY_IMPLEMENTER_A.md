@@ -182,3 +182,28 @@ CURRENT TASK MPYA: **E4 IMPLEMENTATION — PAPER-MODE PEKEE** (broker_adapter.py
 translator FTMO checks 5 → Gate constraints + sizing (MWONGOZO §1) → ExecutionReport → Recorder →
 Repository (+ kind=settlement); live path = refuse-stub; self-tests bila network; regression zote;
 report Rule 8). HAKUNA pesa halisi.
+
+=== E4 IMPLEMENTATION (2026-07-05) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya E4 IMPLEMENTATION)** — code + report vimekamilika; self-tests
++ integration PASS. Ikiidhinishwa → **Track A KAMILI (E1→E4)**.
+LAST COMPLETED: **E4 BROKER ADAPTER IMPLEMENTATION — PAPER-MODE** ✅ (Chief rulings Q1-Q6 1:1):
+  · `src/research/broker_adapter.py` MPYA — build_constraints (FTMO 5→E1, P81) · build_context ·
+    size (MWONGOZO §1) · PaperBroker · execute (→Recorder→Repo) · settle (→kind=settlement) ·
+    AdapterError; live=refuse-stub (RED LINE). **Transitively PURE**; self-test PASS 8/8.
+  · `decision_repository.py` — Q4: kind=settlement (REQUIRED id/as_of/parent_execution_id/pnl);
+    integrity_check +parent_execution_id; self-test [5b]. PASS 7/7.
+  · `integrity_gate.py` — **BUG-FIX (A-4 ripple, imenaswa na integration):** validate_decision
+    inakubali Mapping (frozen decision, si dict) + audit list/tuple; self-test [8] regression guard. PASS 8/8.
+  · **Integration E1↔E4 loop PASS:** make_decision→gate(FTMO constraints)→VALIDATED→execute→FILLED;
+    FTMO veto→REJECTED. Bugs 2 zilizonaswa na end-to-end (isolated self-tests zilizikosa).
+  · `reports/broker_adapter_report.md` (Rule 8). Regression: modules zote 8 PASS.
+NEXT AFTER: Track A KAMILI. Kinachofuata (Chief aelekeze): D8 Decision Quality / K6 stream (E3↔K6) /
+full-pipeline demo harness / P107 remediation (bado PENDING).
+OPEN QUESTIONS (ndani ya `reports/broker_adapter_report.md`):
+  1. timestamp↔as_of reconciliation (E2↔E3) — objects=timestamp vs Repository=as_of; kwa sasa Adapter
+     inanormaliza boundary. Pendekezo: Repository ikubali zote mbili (safi kuliko boundary-patch).
+  2. Live-gating artifact format (RED LINE) — Project Director aamue.
+  3. worst_case derivation (SL zote wazi) — nani anaihesabu (Adapter-live vs caller-paper).
+  4. Full-pipeline demo harness (snapshot→…→settlement)? Pendekezo: baada ya Chief kufunga E4.
+NOTE: numpy/polars/duckdb/pyyaml nilifunga kuverify integration (make_decision→gate chain inahitaji
+decision_object→numpy). broker_adapter yenyewe = transitively PURE (paper self-test bila numpy).

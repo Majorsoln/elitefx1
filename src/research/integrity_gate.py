@@ -29,6 +29,7 @@ Self-test: python src/research/integrity_gate.py --self-test
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping     # A-4: Decision Objects halisi ni frozen (MappingProxyType), si dict
 
 from decision_object import make_gate_decision, ACTIONS
 
@@ -51,15 +52,15 @@ class GateError(ValueError):
 def validate_decision(decision):
     """Q8 (structural PEKEE): decision NI Decision Object halali NA iko PROPOSED. Gate HAIrevalidate
     snapshot (Engine ilifanya D6/Q8) wala haisomi values kwa eligibility (hiyo ni constraints)."""
-    if not isinstance(decision, dict):
+    if not isinstance(decision, Mapping):                                  # dict AU frozen (A-4)
         raise GateError("invalid_decision: si mapping")
     missing = [f for f in DECISION_REQUIRED if f not in decision]          # D1/D3/D5
     if missing:
         raise GateError(f"invalid_decision: inakosa fields {missing}")
     if decision["action"] not in ACTIONS:                                  # D2 (P60)
         raise GateError(f"invalid_decision: action {decision['action']!r} nje ya enum")
-    if not isinstance(decision["audit"], list):                            # D5
-        raise GateError("invalid_decision: audit si list")
+    if not isinstance(decision["audit"], (list, tuple)):                    # D5 (A-4: frozen → tuple)
+        raise GateError("invalid_decision: audit si list/tuple")
     if decision["lifecycle"] != "PROPOSED":                                # D4 — Gate inagate PROPOSED pekee
         raise GateError(f"invalid_lifecycle: {decision['lifecycle']} (PROPOSED pekee)")
     return decision
@@ -195,7 +196,7 @@ def self_test():
     gate_src = full.split("self-tests (Rule 7)")[0]                        # scan gate portion only
     imports = [ln.strip() for ln in gate_src.splitlines()
                if ln.strip().startswith(("import ", "from ")) and "integrity_gate" not in ln]
-    allowed = ("from __future__", "import argparse", "from decision_object")
+    allowed = ("from __future__", "import argparse", "from collections", "from decision_object")
     bad_imports = [i for i in imports if not i.startswith(allowed)]
     # market-domain leak words (hazipo kwenye prose ya Gate — zingeonyesha code ya market imepenya)
     forbidden_words = ["market_" + "state", "event_" + "library", "representa" + "tion",
@@ -217,6 +218,14 @@ def self_test():
           and r_commit["lifecycle"] == "REJECTED")                        # committing intent → constraint veto
     ok_all &= ok
     print(f"[7] injection: empty→{v_empty['lifecycle']} abstain-short-circuit→{v_sc['lifecycle']} commit→{r_commit['lifecycle']} -> {'OK' if ok else 'FAIL'}")
+
+    # (8) A-4 regression: Decision Object halisi ni FROZEN (MappingProxyType) — Gate lazima iikubali
+    from frozen import freeze
+    fd = freeze(_fake_decision())
+    vf = gate(fd, [_fake_constraint(verdict="ELIGIBLE")])
+    ok = not isinstance(fd, dict) and vf["lifecycle"] == "VALIDATED"       # frozen si dict; Gate inaikubali
+    ok_all &= ok
+    print(f"[8] A-4 frozen decision accepted (Mapping): frozen-not-dict={not isinstance(fd, dict)} gate→{vf['lifecycle']} -> {'OK' if ok else 'FAIL'}")
 
     print(f"\nSELF-TEST: {'PASS' if ok_all else 'FAIL'}")
     return 0 if ok_all else 1
