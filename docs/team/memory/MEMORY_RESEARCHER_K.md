@@ -3,23 +3,28 @@
 IDENTITY: Knowledge agent — lessons/graph/evals/datasets. LESSON_SPEC ni katiba yako.
 STANDING ORDERS: evidence + namba halisi; counter_evidence lazima; lessons zako = CANDIDATE hadi
 Chief azipitishe; hakuna kufuta.
-PUSH ACCESS (agizo la Operator, 2026-07-04): write ya session credentials imezimwa (403); push
-zote zinatumia PAT ya Operator — anaitoa kwenye chat, inawekwa kwenye push URL ya origin ya
-container (local .git/config TU). SHERIA: token ISIANDIKWE kamwe kwenye file yoyote ya repo
-(memory/docs/code) wala commit — ikihitajika session mpya, mwombe Operator.
+PUSH ACCESS: 2026-07-05 — **relay ya session imerudi kufanya kazi** (`git push origin` inatumia
+proxy ya kawaida; PAT ya Operator ya 2026-07-04 sasa inarudisha 403 = imekufa/revoked). Tumia relay
+ya kawaida. SHERIA ya kudumu: token/PAT yoyote ISIANDIKWE kamwe kwenye file ya repo wala commit —
+relay ikizima tena (403), mwombe Operator PAT kupitia chat + weka kwenye local .git/config push URL TU.
 
-CURRENT TASK: kusubiri review ya Chief kwa **K2 GRAPH@v1 draft** (knowledge/graph.json +
-GRAPH_SCHEMA.md — maswali 5 OQ-G1..G5 yanahitaji majibu yake); ikipita → K3 EVAL-001.
-LAST COMPLETED: **K2 Knowledge Graph draft** (2026-07-04) — knowledge/graph.json (GRAPH@v1:
-nodes 110 — lesson 18 · finding 23 · principle 21 · phase 18 · report 21 · doc 4 · record 2 ·
-domain 3; edges 124 — derives-from 78 · supports 34 · contradicts 4 (na `mode`:
-counter-evidence/bounds) · applies-to 8 · supersedes 0) + knowledge/graph_selftest.py (stdlib,
-PASS — unique ids, edge integrity, provenance-per-lesson, lifecycle vs INDEX, files zipo) +
-knowledge/GRAPH_SCHEMA.md (kanuni 4 + maswali 5 kwa Chief). Kila edge ina `source` ya repo file.
-Kabla yake: K1 batch 3 (LESSON-013..018) — Chief review 2026-07-04: 013–016 → ACTIVE;
-017/018 zinabaki CANDIDATE (OOS gate).
-NEXT AFTER: K3 EVAL-001 (dead ends 9 → benchmark questions na ground truth) → K1 batch 4
-(candidates 8 hapa chini).
+CURRENT TASK: kusubiri review ya Chief kwa **K3 EVAL-001** (CANDIDATE, maswali 13); ikipita →
+(a) ongeza EVAL-001 edges kwenye graph.json (domain:k4-evals, OQ-E4/OQ-G4 APPROVED) na
+(b) K1 batch 4 (candidates 8 hapa chini).
+LAST COMPLETED: **K3 EVAL-001** (2026-07-05) — knowledge/evals/EVAL-001/ kwa spec KAMILI ya Chief
+("dead ends 9 + lessons ACTIVE + rubric"): questions.jsonl = maswali 13 — **negative 9** (Q01-Q09,
+dead ends za PROJECT_MEMORY §5) + **positive 4** (P01-P04, kutoka F-022/F-016/F-010/F-033 — kupima
+model isikatae KILA kitu kwa upofu). Kila swali: scenario + options A-D (distractors = makosa halisi
+ya mradi) + answer + ground_truth (NAMBA + provenance) + **rubric** (FULL/PARTIAL/ZERO) +
+maps_to_lesson. eval_selftest.py (stdlib PASS): fields/answer-key/provenance-files/lesson-mapping/
+positive-negative balance/answer-distribution. Position bias imeondolewa (A:4 B:3 C:3 D:3); length
+bias inabaki (correct=longest 13/13) → ilifanywa SHARTI la scoring: default grader = rubric-based
+LLM-judge (si urefu wa option); raw-MCQ-by-length MARUFUKU. EVAL-001.md = spec + scoring protocol +
+OQ-E1/E2/E4 (OQ-E3 positive-controls RESOLVED na directive ya Chief). INDEX footer updated.
+Kabla yake: **K2 GRAPH@v1 APPROVED** na Chief (OQ-G1..G5 zote kwa mapendekezo yangu — rulings ziko
+juu). K1 batch 3 (013-018): 013-016 ACTIVE; 017/018 CANDIDATE (OOS gate).
+NEXT AFTER: EVAL-001 graph-linking (baada ya approval) → K1 batch 4 (candidates 8) → K3 EVAL-002
+(kutoka Permanent Truths / findings APPROVED).
 
 LESSON CANDIDATES kutoka reports/ (mapitio ya Chief, 2026-07-04 — batch 4+; kila moja soma
 report yake kupata NAMBA kabla ya kuandika):
