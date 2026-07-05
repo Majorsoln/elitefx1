@@ -1,15 +1,16 @@
 {
   "meta": {
-    "id": "GRAPH@v2",
+    "id": "GRAPH@v3",
     "layer": "L2 (Master Architecture V1 §3.4)",
-    "status": "GRAPH@v1 APPROVED (Chief 2026-07-04, OQ-G1..G5). GRAPH@v2 = increment: EVAL-001 (L4) linkage baada ya EVAL-001 kupata ACTIVE (Chief 2026-07-05) — inasubiri review ya v2.",
+    "status": "GRAPH@v1+v2 APPROVED (Chief 2026-07-04/05). GRAPH@v3 = increment: lessons 019-026 (batch 4, sasa ACTIVE) zimelinkwa — inasubiri review ya v3.",
     "date": "2026-07-05",
     "builder": "RESEARCHER-K (Track B, K2/K3)",
     "changelog": [
       "@v1 (2026-07-04): nodes 110 / edges 124 — lessons 18 + provenance zao. APPROVED na Chief (OQ-G1..G5 zote kwa mapendekezo ya RESEARCHER-K).",
-      "@v2 (2026-07-05): +node eval:EVAL-001 (L4, ACTIVE); +edge eval:EVAL-001->domain:k4-evals (applies-to); +edges 10 lesson->eval:EVAL-001 (applies-to, note=tested-by-QNN; edge type ni applies-to kwa OQ-G3 — hakuna type mpya). Lessons 019-026 (batch 4, CANDIDATE) HAZIJAINGIA graph bado — zitaingia baada ya Chief approval (sawa na jinsi EVAL-001 ilisubiri approval; P88/versioning)."
+      "@v2 (2026-07-05): +node eval:EVAL-001 (L4, ACTIVE); +edge eval:EVAL-001->domain:k4-evals (applies-to); +edges 10 lesson->eval:EVAL-001 (applies-to, note=tested-by-QNN; edge type ni applies-to kwa OQ-G3 — hakuna type mpya). APPROVED na Chief 2026-07-05.",
+      "@v3 (2026-07-05): +lessons 019-026 (batch 4, ACTIVE) + provenance zao (findings F-007/R-002/F-012/F-040; phases 1.6-1.8/2-2.1/4/5.7/21/22-23/D0; principles P45/P46-P50/P63-P66/P74/P82/G-7; reports 10). derives-from + supports; 021/022 contradicts (contextual_alpha_confirmation, mode=counter-evidence: in-sample died 0/282 OOS). Invariant: kila lesson ACTIVE iko graph."
     ],
-    "scope": "lessons 18 za LESSON_INDEX.md + rekodi zote zinazotajwa kwenye provenance/evidence/counter_evidence zao. HAKUNA node/edge isiyo na rekodi ya repo (kila edge ina 'source').",
+    "scope": "lessons 26 za LESSON_INDEX.md (017/018 CANDIDATE zimo pia) + rekodi zote zinazotajwa kwenye provenance/evidence/counter_evidence zao. HAKUNA node/edge isiyo na rekodi ya repo (kila edge ina 'source').",
     "node_kinds": {
       "lesson": "docs/lessons/LESSON-###.md — canonical knowledge object (K0)",
       "finding": "F-### / H-## kutoka docs/PROGRAM_BOARD.md (H-## = hypothesis record)",
@@ -154,7 +155,47 @@
     {"id": "domain:contract-components", "kind": "domain", "label": "Components zenye contract surface (E1-E4, K-series tooling) — ontology proposal (OQ-G4)"},
     {"id": "domain:k3-datasets", "kind": "domain", "label": "K3 training datasets (manifest + version) — ontology proposal (OQ-G4)"},
     {"id": "domain:k4-evals", "kind": "domain", "label": "K4 eval benchmarks (ground truth) — ontology proposal (OQ-G4)"},
-    {"id": "eval:EVAL-001", "kind": "eval", "lifecycle": "ACTIVE", "file": "knowledge/evals/EVAL-001/questions.jsonl", "label": "Dead ends + lessons ACTIVE benchmark — maswali 13 (negative 9 + positive 4); Chief APPROVED 2026-07-05"}
+    {"id": "eval:EVAL-001", "kind": "eval", "lifecycle": "ACTIVE", "file": "knowledge/evals/EVAL-001/questions.jsonl", "label": "Dead ends + lessons ACTIVE benchmark — maswali 13 (negative 9 + positive 4); Chief APPROVED 2026-07-05"},
+
+    {"id": "lesson:LESSON-019@v1", "kind": "lesson", "type": "METHOD", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-019.md", "label": "State-age sharpens probability not accuracy — calibrator not predictor"},
+    {"id": "lesson:LESSON-020@v1", "kind": "lesson", "type": "METHOD", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-020.md", "label": "Test the decision-relevant question before discarding an idea"},
+    {"id": "lesson:LESSON-021@v1", "kind": "lesson", "type": "MARKET-CONDITIONAL", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-021.md", "label": "Context benefit is event-specific (in-sample; died OOS)"},
+    {"id": "lesson:LESSON-022@v1", "kind": "lesson", "type": "MARKET-CONDITIONAL", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-022.md", "label": "Edge lives in interactions; same transition flips sign by age (in-sample)"},
+    {"id": "lesson:LESSON-023@v1", "kind": "lesson", "type": "METHOD", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-023.md", "label": "In-sample fit leakage-inflated everywhere; OOS-survival is the measure"},
+    {"id": "lesson:LESSON-024@v1", "kind": "lesson", "type": "METHOD", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-024.md", "label": "Interpretability ≠ predictability; judge semantics by stability/recoverability"},
+    {"id": "lesson:LESSON-025@v1", "kind": "lesson", "type": "GOVERNANCE", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-025.md", "label": "Define the interface contract object before building on it"},
+    {"id": "lesson:LESSON-026@v1", "kind": "lesson", "type": "GOVERNANCE", "lifecycle": "ACTIVE", "file": "docs/lessons/LESSON-026.md", "label": "Conflict must be an explicit, separately-tolerable input, not hidden in readiness"},
+
+    {"id": "finding:F-007", "kind": "finding", "source": "docs/PROGRAM_BOARD.md", "label": "Volume bars add information density, not stability (vs R-002)"},
+    {"id": "finding:R-002", "kind": "finding", "source": "docs/PROGRAM_BOARD.md", "label": "Volume bars did not stabilize state distributions (0/9)"},
+    {"id": "finding:F-012", "kind": "finding", "source": "docs/PROGRAM_BOARD.md", "label": "Edge in interaction; marginal ≠ importance; Driver ≠ Gatekeeper"},
+    {"id": "finding:F-040", "kind": "finding", "subkind": "open", "source": "docs/PROGRAM_BOARD.md", "label": "Shared market vocabulary may recur over event-specific geometry (OPEN)"},
+
+    {"id": "phase:1.6-1.8", "kind": "phase", "subkind": "range", "label": "State age / transition-model (age as predictor?)"},
+    {"id": "phase:2-2.1", "kind": "phase", "subkind": "range", "label": "Adaptive volume bars: stability vs information"},
+    {"id": "phase:4", "kind": "phase", "label": "Event × Context matrix"},
+    {"id": "phase:5.7", "kind": "phase", "label": "Component interaction (Tier 1)"},
+    {"id": "phase:21", "kind": "phase", "label": "Representation operationalization (Nyström OOS, leakage)"},
+    {"id": "phase:22-23", "kind": "phase", "subkind": "range", "label": "Semantic taxonomy + consistency"},
+    {"id": "phase:D0", "kind": "phase", "label": "Evidence Theory (contract definition)"},
+
+    {"id": "principle:P45", "kind": "principle", "source": "docs/PROGRAM_BOARD.md", "label": "Operational robustness ≠ statistical proof of stability"},
+    {"id": "principle:P46-P50", "kind": "principle", "subkind": "range", "source": "docs/PROGRAM_BOARD.md", "label": "Semantics: taxonomy incomplete until interpretable; interpretability ≠ prediction (complementary)"},
+    {"id": "principle:P63-P66", "kind": "principle", "subkind": "range", "source": "docs/PROGRAM_BOARD.md", "label": "Evidence = contract; production-agnostic; first-class object; every decision traces to evidence"},
+    {"id": "principle:P74", "kind": "principle", "source": "docs/PROGRAM_BOARD.md", "label": "Conflict distinguishes temporal contradiction from structural disagreement"},
+    {"id": "principle:P82", "kind": "principle", "source": "docs/PROGRAM_BOARD.md", "label": "Decision-readiness is an explicit state machine (READY→STALE→EXPIRED→INVALID)"},
+    {"id": "principle:G-7", "kind": "principle", "subkind": "governance", "source": "docs/PROGRAM_BOARD.md", "label": "Conflict = explicit policy input (per-policy tolerance); policies → @v2"},
+
+    {"id": "report:state_age_report.md", "kind": "report", "file": "reports/state_age_report.md"},
+    {"id": "report:state_transition_model_report.md", "kind": "report", "file": "reports/state_transition_model_report.md"},
+    {"id": "report:adaptive_volume_bar_report.md", "kind": "report", "file": "reports/adaptive_volume_bar_report.md"},
+    {"id": "report:volume_information_report.md", "kind": "report", "file": "reports/volume_information_report.md"},
+    {"id": "report:event_context_matrix_report.md", "kind": "report", "file": "reports/event_context_matrix_report.md"},
+    {"id": "report:component_interaction_report.md", "kind": "report", "file": "reports/component_interaction_report.md"},
+    {"id": "report:semantic_taxonomy_report.md", "kind": "report", "file": "reports/semantic_taxonomy_report.md"},
+    {"id": "report:semantic_consistency_report.md", "kind": "report", "file": "reports/semantic_consistency_report.md"},
+    {"id": "report:evidence_theory_report.md", "kind": "report", "file": "reports/evidence_theory_report.md"},
+    {"id": "report:decision_policy_report.md", "kind": "report", "file": "reports/decision_policy_report.md"}
   ],
   "edges": [
     {"from": "lesson:LESSON-001@v1", "to": "finding:F-022", "type": "derives-from", "source": "docs/lessons/LESSON-001.md"},
@@ -309,6 +350,48 @@
     {"from": "lesson:LESSON-009@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q08 (post-hoc survivor)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
     {"from": "lesson:LESSON-002@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by Q09 ('Alpha Era' premature declaration)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
     {"from": "lesson:LESSON-011@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by P03 (positive control: context = payoff, not win-prob)", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
-    {"from": "lesson:LESSON-012@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by P04 (positive control: representation audit vs 'no structure')", "source": "knowledge/evals/EVAL-001/questions.jsonl"}
+    {"from": "lesson:LESSON-012@v1", "to": "eval:EVAL-001", "type": "applies-to", "note": "tested-by P04 (positive control: representation audit vs 'no structure')", "source": "knowledge/evals/EVAL-001/questions.jsonl"},
+
+    {"from": "lesson:LESSON-019@v1", "to": "phase:1.6-1.8", "type": "derives-from", "source": "docs/lessons/LESSON-019.md"},
+    {"from": "report:state_transition_model_report.md", "to": "lesson:LESSON-019@v1", "type": "supports", "note": "LogLoss +2.0..+5.4% (EURUSD H1 0.322→0.309) but accuracy flat 90-93%", "source": "docs/lessons/LESSON-019.md"},
+    {"from": "report:state_age_report.md", "to": "lesson:LESSON-019@v1", "type": "supports", "note": "P(stay) rises with age (median Δ vol +14.1pp, act +40.0pp, spr +28.2pp)", "source": "docs/lessons/LESSON-019.md"},
+
+    {"from": "lesson:LESSON-020@v1", "to": "phase:2-2.1", "type": "derives-from", "source": "docs/lessons/LESSON-020.md"},
+    {"from": "lesson:LESSON-020@v1", "to": "finding:F-007", "type": "derives-from", "source": "docs/lessons/LESSON-020.md"},
+    {"from": "lesson:LESSON-020@v1", "to": "finding:R-002", "type": "derives-from", "source": "docs/lessons/LESSON-020.md"},
+    {"from": "report:adaptive_volume_bar_report.md", "to": "lesson:LESSON-020@v1", "type": "supports", "note": "volume bars did NOT stabilize (volatility 0/9, activity 0/9)", "source": "docs/lessons/LESSON-020.md"},
+    {"from": "report:volume_information_report.md", "to": "lesson:LESSON-020@v1", "type": "supports", "note": "information∨context 18/18; context-EV C→V −0.29→+0.50", "source": "docs/lessons/LESSON-020.md"},
+
+    {"from": "lesson:LESSON-021@v1", "to": "finding:F-008", "type": "derives-from", "source": "docs/lessons/LESSON-021.md"},
+    {"from": "lesson:LESSON-021@v1", "to": "phase:4", "type": "derives-from", "source": "docs/lessons/LESSON-021.md"},
+    {"from": "lesson:LESSON-021@v1", "to": "principle:P13", "type": "derives-from", "source": "docs/lessons/LESSON-021.md"},
+    {"from": "report:event_context_matrix_report.md", "to": "lesson:LESSON-021@v1", "type": "supports", "note": "context benefit +2.49 (MR) … −0.81 (pattern_completion); 5/9 profitable @Top10 in-sample", "source": "docs/lessons/LESSON-021.md"},
+    {"from": "report:contextual_alpha_confirmation_report.md", "to": "lesson:LESSON-021@v1", "type": "contradicts", "mode": "counter-evidence", "note": "same event×context objects died OOS: 282→0 BH-FDR (Phase 14); @Top10 profit is in-sample", "source": "docs/lessons/LESSON-021.md"},
+
+    {"from": "lesson:LESSON-022@v1", "to": "finding:F-012", "type": "derives-from", "source": "docs/lessons/LESSON-022.md"},
+    {"from": "lesson:LESSON-022@v1", "to": "phase:5.7", "type": "derives-from", "source": "docs/lessons/LESSON-022.md"},
+    {"from": "report:component_interaction_report.md", "to": "lesson:LESSON-022@v1", "type": "supports", "note": "joint EV-spread > marginal (transition×age 6.3 vs 0.8); Thi flips −0.5→+3.0→+1.7→−3.2 by age", "source": "docs/lessons/LESSON-022.md"},
+    {"from": "report:contextual_alpha_confirmation_report.md", "to": "lesson:LESSON-022@v1", "type": "contradicts", "mode": "counter-evidence", "note": "in-sample interaction discrimination; same space → 0/282 OOS (Phase 14)", "source": "docs/lessons/LESSON-022.md"},
+
+    {"from": "lesson:LESSON-023@v1", "to": "finding:F-039", "type": "derives-from", "source": "docs/lessons/LESSON-023.md"},
+    {"from": "lesson:LESSON-023@v1", "to": "phase:21", "type": "derives-from", "source": "docs/lessons/LESSON-023.md"},
+    {"from": "lesson:LESSON-023@v1", "to": "principle:P45", "type": "derives-from", "source": "docs/lessons/LESSON-023.md"},
+    {"from": "report:representation_operationalization_report.md", "to": "lesson:LESSON-023@v1", "type": "supports", "note": "leak gap +0.194..+0.328 (all 5 events); in-sample 0.836 vs OOS 0.577 (~31% lower)", "source": "docs/lessons/LESSON-023.md"},
+
+    {"from": "lesson:LESSON-024@v1", "to": "finding:F-040", "type": "derives-from", "source": "docs/lessons/LESSON-024.md"},
+    {"from": "lesson:LESSON-024@v1", "to": "phase:22-23", "type": "derives-from", "source": "docs/lessons/LESSON-024.md"},
+    {"from": "lesson:LESSON-024@v1", "to": "principle:P46-P50", "type": "derives-from", "source": "docs/lessons/LESSON-024.md"},
+    {"from": "report:semantic_taxonomy_report.md", "to": "lesson:LESSON-024@v1", "type": "supports", "note": "R²(label)/R²(id)=0.01 (3 vs 15 groups); interpretable 10/15", "source": "docs/lessons/LESSON-024.md"},
+    {"from": "report:semantic_consistency_report.md", "to": "lesson:LESSON-024@v1", "type": "supports", "note": "labels stable ARI mean 0.890; data-driven recoverable ARI 0.620; P48 R²-drop ≠ failure", "source": "docs/lessons/LESSON-024.md"},
+
+    {"from": "lesson:LESSON-025@v1", "to": "phase:D0", "type": "derives-from", "source": "docs/lessons/LESSON-025.md"},
+    {"from": "lesson:LESSON-025@v1", "to": "principle:P63-P66", "type": "derives-from", "source": "docs/lessons/LESSON-025.md"},
+    {"from": "report:evidence_theory_report.md", "to": "lesson:LESSON-025@v1", "type": "supports", "note": "Evidence Object = contract (lifecycle/conflict/aggregation); confidence saturates 1.00 = n-artifact", "source": "docs/lessons/LESSON-025.md"},
+
+    {"from": "lesson:LESSON-026@v1", "to": "phase:D5", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
+    {"from": "lesson:LESSON-026@v1", "to": "principle:P74", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
+    {"from": "lesson:LESSON-026@v1", "to": "principle:P82", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
+    {"from": "lesson:LESSON-026@v1", "to": "principle:G-7", "type": "derives-from", "source": "docs/lessons/LESSON-026.md"},
+    {"from": "report:decision_policy_report.md", "to": "lesson:LESSON-026@v1", "type": "supports", "note": "action from readiness+reliability+conflict; G-7: conflict explicit, per-policy tolerance, policies→@v2", "source": "docs/lessons/LESSON-026.md"}
   ]
 }

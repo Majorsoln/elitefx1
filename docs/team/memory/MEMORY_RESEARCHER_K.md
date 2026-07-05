@@ -8,9 +8,20 @@ proxy ya kawaida; PAT ya Operator ya 2026-07-04 sasa inarudisha 403 = imekufa/re
 ya kawaida. SHERIA ya kudumu: token/PAT yoyote ISIANDIKWE kamwe kwenye file ya repo wala commit —
 relay ikizima tena (403), mwombe Operator PAT kupitia chat + weka kwenye local .git/config push URL TU.
 
-CURRENT TASK: kusubiri review ya Chief kwa (a) **GRAPH@v2** (EVAL-001 linkage) na (b) **K1 batch 4**
-(LESSON-019..026, CANDIDATE). Zikipita → link 019-026 kwenye graph (→GRAPH@v3) → EVAL-002.
-LAST COMPLETED: **K1 batch 4 + EVAL-001 graph-linking** (2026-07-05).
+CURRENT TASK: kusubiri review ya Chief kwa (a) **GRAPH@v3** (lessons 019-026 linkage) na
+(b) **EVAL-002** (CANDIDATE, maswali 12). Zikipita → batch 5 (Truths 12→lessons; T6/T11/T12 hazina
+lesson) + EVAL-SUITE (unganisha EVAL-001+002) + graph-link EVAL-002.
+LAST COMPLETED (2026-07-05, session 3): **GRAPH@v3 + EVAL-002**.
+  (a) GRAPH@v3: lessons 019-026 (sasa ACTIVE) zimelinkwa — +8 lesson nodes + provenance (findings 4
+  [F-007/R-002/F-012/F-040] · phases 7 · principles 6 [P45/P46-P50/P63-P66/P74/P82/G-7] · reports 10);
+  021/022 contradicts (contextual_alpha_confirmation, counter-evidence: in-sample died 0/282 OOS).
+  nodes 146 / edges 169, self-test PASS. Invariant (Chief-confirmed): kila lesson ACTIVE iko graph.
+  (b) EVAL-002 (knowledge/evals/EVAL-002/): positive knowledge kutoka Permanent Truths 12 (§2) —
+  maswali 12 (negative 5 = overreach-mpaka za truths T01/02/04/07/12; positive 7 = tumia truth).
+  Kila swali: scenario + options A-D + answer + ground_truth(NAMBA+provenance) + rubric + maps_to_lesson
+  (T06/T11/T12 = null, hazina lesson bado). eval_selftest.py PASS (answer_dist A:3 B:3 C:3 D:3 —
+  bias imekwisha; length→rubric-grader). Mirror ya EVAL-001 scoring. OQ-E5/E6.
+Kabla yake (session 2): K1 batch 4 (019-026) + EVAL-001 graph-linking → GRAPH@v2 (zote APPROVED Chief).
   (b) LESSON-019..026 (8 CANDIDATE, self-test YAML PASS zote): 019 age=calibrator-not-predictor
   (LogLoss +2-5% / accuracy flat, Phase 1.8) · 020 test-the-right-question (volume stability 0/9 vs
   information 18/18, Phase 2/2.1) · 021 context-benefit event-specific (+2.49 MR…−0.81, in-sample,
