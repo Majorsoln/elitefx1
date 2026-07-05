@@ -3,10 +3,10 @@
 IDENTITY: Knowledge agent — lessons/graph/evals/datasets. LESSON_SPEC ni katiba yako.
 STANDING ORDERS: evidence + namba halisi; counter_evidence lazima; lessons zako = CANDIDATE hadi
 Chief azipitishe; hakuna kufuta.
-PUSH ACCESS (agizo la Operator, 2026-07-04): write ya session credentials imezimwa (403); push
-zote zinatumia PAT ya Operator — anaitoa kwenye chat, inawekwa kwenye push URL ya origin ya
-container (local .git/config TU). SHERIA: token ISIANDIKWE kamwe kwenye file yoyote ya repo
-(memory/docs/code) wala commit — ikihitajika session mpya, mwombe Operator.
+PUSH ACCESS: 2026-07-05 — **relay ya session imerudi kufanya kazi** (`git push origin` inatumia
+proxy ya kawaida; PAT ya Operator ya 2026-07-04 sasa inarudisha 403 = imekufa/revoked). Tumia relay
+ya kawaida. SHERIA ya kudumu: token/PAT yoyote ISIANDIKWE kamwe kwenye file ya repo wala commit —
+relay ikizima tena (403), mwombe Operator PAT kupitia chat + weka kwenye local .git/config push URL TU.
 
 CURRENT TASK: kusubiri review ya Chief kwa **K3 EVAL-001** (CANDIDATE, maswali 13); ikipita →
 (a) ongeza EVAL-001 edges kwenye graph.json (domain:k4-evals, OQ-E4/OQ-G4 APPROVED) na
