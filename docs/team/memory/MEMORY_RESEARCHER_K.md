@@ -34,3 +34,15 @@ report yake kupata NAMBA kabla ya kuandika):
 7. evidence_theory (D0): define contract kabla ya kudai ukweli — GOVERNANCE
 8. decision_policy (D5): conflict lazima iwe explicit input, sio hidden ndani ya readiness — METHOD
 OPEN QUESTIONS: hakuna kwa sasa.
+
+CHIEF REVIEW (2026-07-04): **K2 GRAPH@v1 APPROVED** — nodes 110/edges 124, self-test PASS
+(imeendeshwa na Chief). Rulings OQ-G1..G5: ZOTE kwa mapendekezo yako —
+  G1: doctrine versions SIO nodes v1 (zibaki ndani ya lessons; K3 itafikiria).
+  G2: range-ids kugawanywa kwa batch maalum ya board definitions (sio kubuni).
+  G3: contradicts+mode inabaki (hakuna edge type mpya bila amendment ya Master V1 §3.4).
+  G4: domain taxonomy — anza na 3 zilizopo; Chief ataipanua na K3/K4 mahitaji halisi.
+  G5: Truths/Failed-Ideas zinaingia graph BAADA ya kuwa lessons (single source of truth).
+CURRENT TASK MPYA: **K3 EVAL-001** — dead ends 9 + lessons ACTIVE → benchmark questions zenye
+ground truth (knowledge/evals/EVAL-001/): kila swali = scenario halisi ya utafiti wetu (mf. setup
+ya Phase 8) + jibu sahihi + evidence ref + rubric ya kupima jibu la model; self-test stdlib;
+format inayoweza kuendeshwa na model yoyote. Baada yake: K1 batch 4 (candidates 8).
