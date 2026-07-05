@@ -61,3 +61,10 @@ PASS na Chief). OQ-S1/S2: defaults zako.
 CURRENT TASK MPYA: (a) GRAPH@v5 (link 027-031 + EVAL-SUITE); (b) fill maps_to_lesson za EVAL-002
 T06/T11/T12 (sasa 027/028/029 zipo); (c) **K1 BATCH 6** (F-005 alpha philosophy · F-023/F-024
 ranking/CCS · D1-D4 Evidence lessons · Failed Ideas zilizobaki). Corpus target: ~40.
+
+NOTE (Chief, 2026-07-05): kazi yako ya GRAPH@v5/batch-6 HAIKUFIKA repo (push failure — thibitisha
+push kwenye close ritual!). Chief amerestore invariant mwenyewe: **GRAPH@v5** (158/185, self-test
+PASS) — lessons 027-031 + provenance nodes 6 zimelinkwa. Kazi zako zilizobaki: (a) fill
+maps_to_lesson za EVAL-002 T06/T11/T12 (027/028/029 sasa ACTIVE+graphed); (b) K1 BATCH 6
+(F-005 alpha-philosophy · F-023/F-024 ranking/CCS · D1-D4 Evidence lessons · Failed Ideas
+zilizobaki); (c) ukiwa na GRAPH updates, base yako ni v5 ya sasa (pull kwanza!).

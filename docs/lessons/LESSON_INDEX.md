@@ -55,7 +55,7 @@ future-OOS + FDR pekee ndiyo inaweza kuzipandisha.*
 
 | Artifact | Layer | File | Status |
 |----------|-------|------|--------|
-| GRAPH@v4 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1-v3 APPROVED; **v4** (2026-07-05) +EVAL-002 linkage — nodes 147 · edges 177 (inasubiri review; 027-031 pending) |
+| GRAPH@v4 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1-v4 APPROVED; **v5** (2026-07-05, Chief) +lessons 027-031 — nodes 158 · edges 185 |
 | EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` | **ACTIVE** (Chief 2026-07-05) — maswali 13 (neg 9 + pos 4); imelinkwa graph |
 | EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` | **ACTIVE** (Chief 2026-07-05) — Permanent Truths 12 (pos 7 + neg 5); imelinkwa graph@v4 |
 | EVAL-SUITE@v1 | L4 (evals) | `knowledge/evals/SUITE.json` (+ `suite_selftest.py` · `EVAL_SUITE.md`) | **ACTIVE** (Chief 2026-07-05) — unganisha 001+002 (maswali 25, neg 14 + pos 11), protocol moja |
