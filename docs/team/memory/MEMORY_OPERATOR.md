@@ -16,3 +16,8 @@ RUNBOOK LOG (kila run: tarehe · amri · matokeo — jaza baada ya kila run):
 
 ## LOG
 - 2026-07-04: Team system imeundwa; hakuna run iliyofanyika bado.
+
+## RUNBOOK HAI (2026-07-05): Paper Validation
+Chief amejenga `src/research/e2e_paper_demo.py` (smoke test ya mnyororo mzima; CI PASS) + runbook
+`docs/RUNBOOK_paper_validation.md`. KAZI YAKO: fuata runbook hatua 1-5 kwenye PC yako, bandika
+output kwa Chief. Hii ndiyo mtihani wa kwanza wa mashine nzima kwenye stack halisi.
