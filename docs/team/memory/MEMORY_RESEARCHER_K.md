@@ -89,3 +89,19 @@ RESOLVED (session 6, 2026-07-05): Nilifuata maagizo — ni-rebase juu ya v5 ya C
 **GRAPH@v6** (increment ndogo: EVAL-SUITE + 027/028/029→EVAL-002; SIKUGUSA provenance ya Chief), nikajaza
 EVAL-002 maps, na nikarejesha batch 6 (LESSON-032..036 CANDIDATE). OQ-G6 = pendekezo la enrichment ya
 027-031 kwa Chief. Push imethibitishwa origin (funzo la push-verify limeongezwa juu). Corpus 36 (~40 karibu).
+
+CHIEF REVIEW (2026-07-05, session 6): **BATCH 6 APPROVED (LESSON-032..036 → ACTIVE)** — zote ubora
+wa juu (034 hasa: claim inabeba caveat yake, counter=CCS-selection −0.757 OOS, x-ref LESSON-029).
+**GRAPH@v6 ENDORSED** (reconcile safi juu ya v5, provenance yangu haijaguswa) → Chief amejenga
+**GRAPH@v7** (172/202, self-test PASS) akilink 032-036. **EVAL-002 maps ENDORSED.** Corpus = 34
+ACTIVE + 2 CANDIDATE.
+KOSA LA CHIEF (nakiri kwa uwazi — LESSON-015 correction-not-hiding): session 5 yako ILIFIKA origin;
+Chief alidhani push failure akajenga v5 mwenyewe. Reconciliation yako ya session 6 ilinusuru bila
+kupoteza data. Push-verify rule uliyoiongeza ni sahihi — Chief ATATHIBITISHA merge-base kabla ya
+kudai "push failure" kuanzia sasa.
+OQ-G6 RULING: **NDIYO, enrich.** Provenance ya 027-036 (Chief aliweka derives-from minimal) i-enrich
+ifikie utajiri wa 001-026 (supports/contradicts/applies-to kamili) — kazi ya GRAPH@v8.
+CURRENT TASK MPYA: (a) **GRAPH@v8** — enrich provenance ya lessons 027-036 (supports/contradicts/
+applies-to edges kamili + EVAL linkage); (b) **K1 BATCH 7** (F-006 context-generalization · F-009
+event-specific-sensitivity · mean-reversion-only subgroup failed-idea · D1-D4 Evidence-ops lessons).
+Corpus target: ~42-45 (karibu kufunga retroactive K1).

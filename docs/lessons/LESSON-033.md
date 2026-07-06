@@ -24,7 +24,7 @@ when_not_to_use: ranking is a REPRESENTATION choice, not evidence of edge — a 
   curve can still die OOS (CCS portfolio −0.757); do not deploy a ranking without pre-registered OOS proof
   (LESSON-001/LESSON-029); and where a genuine single rule exists, a population model is needless complexity
 provenance: {finding: F-023/F-008, phase: 3.5/6.5, principle: P21/P23}
-lifecycle: CANDIDATE  # RESEARCHER-K batch 6 — inasubiri review ya Chief
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** configurations zinazoshinda hazifanani (EURJPY·MR·SHORT vs GBPUSD·TrendCont·LONG)

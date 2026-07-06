@@ -24,7 +24,7 @@ when_not_to_use: this is not a ban on stating hypotheses or roadmaps (those are 
   it targets declarations that assert an achievement; and retracting a premature label is a correction, not
   a deletion (LESSON-015 — the V6.3 wording stays in the record with its V6.4 retraction)
 provenance: {doctrine: (V6.3 → V6.4 retraction), finding: F-039, principle: P45}
-lifecycle: CANDIDATE  # RESEARCHER-K batch 6 — inasubiri review ya Chief
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** V6.3 iliandika "Alpha Discovery Era inafunguka" — V6.4 ikaifuta: ugunduzi HALISI ni

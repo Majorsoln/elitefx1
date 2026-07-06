@@ -25,7 +25,7 @@ when_not_to_use: do not invoke 'freeze' to block a genuine downstream need (that
   and do not read 'frozen' as 'the implementation can never change' — P90 separates the stable contract
   from the mutable internals; the freeze governs the interface, not the engine room
 provenance: {principle: P90/P62, doctrine: (V6 Evidence Layer FROZEN / V8 / V11 alpha philosophy), finding: F-005}
-lifecycle: CANDIDATE  # RESEARCHER-K batch 6 — inasubiri review ya Chief
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** "freeze" haimaanishi code haitabadilika — P90 inatenga *contract* (imesimama) na *implementation*

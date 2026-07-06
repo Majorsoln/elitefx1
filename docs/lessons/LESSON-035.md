@@ -25,7 +25,7 @@ when_not_to_use: do not fold aggregation into the object (that locks you to one 
   provenance); and immutability is not correctness — a clean, frozen object with a wrong claim is still
   wrong (pair with LESSON-025 — define the contract first, and validate the claim separately)
 provenance: {principle: P67/P68/P83/P84, phase: D0/D1/D3, doctrine: (V3 / V6 — Evidence Layer FROZEN)}
-lifecycle: CANDIDATE  # RESEARCHER-K batch 6 — inasubiri review ya Chief
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** Evidence Object ni *contract isiyobadilika* (Claim + Quality + Operational State).

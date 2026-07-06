@@ -1,6 +1,6 @@
 {
  "meta": {
-  "id": "GRAPH@v6",
+  "id": "GRAPH@v7",
   "layer": "L2 (Master Architecture V1 \u00a73.4)",
   "status": "GRAPH@v1..v4 APPROVED (Chief 2026-07-04/05); GRAPH@v5 (Chief) = invariant restore ya lessons 027-031. GRAPH@v6 = increment ya RESEARCHER-K juu ya v5 ya Chief: +eval:EVAL-SUITE (L4, ACTIVE) linkage + 027/028/029\u2192EVAL-002 applies-to (T06/T11/T12). Inasubiri review. NOTE: provenance ya 027-031 ni invariant-restore (ndogo) \u2014 RESEARCHER-K amependekeza enrichment (supports/contradicts edges) kwa Chief, HAIJAGUSWA hapa.",
   "date": "2026-07-05",
@@ -11,7 +11,8 @@
    "@v3 (2026-07-05): +lessons 019-026 (batch 4, ACTIVE) + provenance zao (findings F-007/R-002/F-012/F-040; phases 1.6-1.8/2-2.1/4/5.7/21/22-23/D0; principles P45/P46-P50/P63-P66/P74/P82/G-7; reports 10). derives-from + supports; 021/022 contradicts (contextual_alpha_confirmation, mode=counter-evidence: in-sample died 0/282 OOS). Invariant: kila lesson ACTIVE iko graph. APPROVED na Chief 2026-07-05.",
    "@v4 (2026-07-05): +node eval:EVAL-002 (L4, ACTIVE) +edges 8 (\u2192domain:k4-evals + 7 lesson->eval:EVAL-002 applies-to, note=tested-by-TNN). Lessons 027-031 (batch 5, CANDIDATE) HAZIJALINKWA \u2014 zitalinkwa baada ya approval (kama 019-026 zilivyosubiri).",
    "v5 (2026-07-05, Chief): +lessons 027-031 + provenance nodes 6 (invariant restore baada ya batch-5 promotion)",
-   "v6 (2026-07-05, RESEARCHER-K juu ya v5 ya Chief): +node eval:EVAL-SUITE (\u2192domain:k4-evals; EVAL-001/EVAL-002 = member, OQ-G6) + 3 edges lesson\u2192eval:EVAL-002 (027/028/029 = T06/T11/T12, note=tested-by; inaoanisha na maps_to_lesson zilizojazwa). +6 edges, +1 node. 027-031 provenance ya Chief HAIJAGUSWA (enrichment = pendekezo kwa Chief)."
+   "v6 (2026-07-05, RESEARCHER-K juu ya v5 ya Chief): +node eval:EVAL-SUITE (\u2192domain:k4-evals; EVAL-001/EVAL-002 = member, OQ-G6) + 3 edges lesson\u2192eval:EVAL-002 (027/028/029 = T06/T11/T12, note=tested-by; inaoanisha na maps_to_lesson zilizojazwa). +6 edges, +1 node. 027-031 provenance ya Chief HAIJAGUSWA (enrichment = pendekezo kwa Chief).",
+   "v7 (2026-07-05, Chief): batch 6 APPROVED - +lessons 032-036 + provenance nodes 11 (minimal; RESEARCHER-K a-enrich 027-036 kwa OQ-G6)"
   ],
   "scope": "lessons 26 za LESSON_INDEX.md (017/018 CANDIDATE zimo pia) + rekodi zote zinazotajwa kwenye provenance/evidence/counter_evidence zao. HAKUNA node/edge isiyo na rekodi ya repo (kila edge ina 'source').",
   "node_kinds": {
@@ -1016,6 +1017,94 @@
    "lifecycle": "ACTIVE",
    "file": "knowledge/evals/SUITE.json",
    "label": "Unified suite EVAL-001+EVAL-002 (25 Qs: neg 14 + pos 11), one rubric-grader protocol; Chief APPROVED 2026-07-05"
+  },
+  {
+   "id": "finding:F-005",
+   "kind": "finding",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Context improves event quality (EV-selection)"
+  },
+  {
+   "id": "finding:F-023",
+   "kind": "finding",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Ranking is the native language of the Opportunity Engine (population not rule)"
+  },
+  {
+   "id": "finding:F-024",
+   "kind": "finding",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Confidence as valuable as EV (CCS; overlap 10/25)"
+  },
+  {
+   "id": "finding:F-025",
+   "kind": "finding",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Edge has Magnitude AND Availability"
+  },
+  {
+   "id": "principle:P62",
+   "kind": "principle",
+   "source": "ELITEFX DOCTRINE V6.9.md",
+   "label": "Stop expanding representations that dont change decisions"
+  },
+  {
+   "id": "principle:P90",
+   "kind": "principle",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Frozen = interface stability, not implementation immutability"
+  },
+  {
+   "id": "principle:P67",
+   "kind": "principle",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Evidence = 3 layers (Claim/Quality/Operational)"
+  },
+  {
+   "id": "principle:P68",
+   "kind": "principle",
+   "source": "docs/PROGRAM_BOARD.md",
+   "label": "Evidence immutable; aggregation is external operation"
+  },
+  {
+   "id": "lesson:LESSON-032@v1",
+   "kind": "lesson",
+   "type": "GOVERNANCE",
+   "lifecycle": "ACTIVE",
+   "file": "docs/lessons/LESSON-032.md",
+   "label": "A frozen layer reopens only on a proven downstream need; freeze binds the interface, not the implementation"
+  },
+  {
+   "id": "lesson:LESSON-033@v1",
+   "kind": "lesson",
+   "type": "METHOD",
+   "lifecycle": "ACTIVE",
+   "file": "docs/lessons/LESSON-033.md",
+   "label": "Heterogeneous winners -> model a population and rank it; classification discards ordering signal"
+  },
+  {
+   "id": "lesson:LESSON-034@v1",
+   "kind": "lesson",
+   "type": "METHOD",
+   "lifecycle": "ACTIVE",
+   "file": "docs/lessons/LESSON-034.md",
+   "label": "Confidence is a ranking dimension co-equal with EV; but CCS-selection is not tradable (-0.757 OOS)"
+  },
+  {
+   "id": "lesson:LESSON-035@v1",
+   "kind": "lesson",
+   "type": "GOVERNANCE",
+   "lifecycle": "ACTIVE",
+   "file": "docs/lessons/LESSON-035.md",
+   "label": "Evidence is an immutable contract; aggregation is an external, swappable operation"
+  },
+  {
+   "id": "lesson:LESSON-036@v1",
+   "kind": "lesson",
+   "type": "GOVERNANCE",
+   "lifecycle": "ACTIVE",
+   "file": "docs/lessons/LESSON-036.md",
+   "label": "Name an era by what is proven, not what is hoped; premature declarations are retracted"
   }
  ],
  "edges": [
@@ -2254,6 +2343,72 @@
    "type": "applies-to",
    "note": "member of suite \u2014 12 Qs (pos 7 + neg 5); edge type applies-to per OQ-G3/OQ-G6",
    "source": "knowledge/evals/SUITE.json"
+  },
+  {
+   "from": "lesson:LESSON-032@v1",
+   "to": "principle:P90",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-032.md"
+  },
+  {
+   "from": "lesson:LESSON-032@v1",
+   "to": "principle:P62",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-032.md"
+  },
+  {
+   "from": "lesson:LESSON-032@v1",
+   "to": "finding:F-005",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-032.md"
+  },
+  {
+   "from": "lesson:LESSON-033@v1",
+   "to": "finding:F-023",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-033.md"
+  },
+  {
+   "from": "lesson:LESSON-033@v1",
+   "to": "finding:F-008",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-033.md"
+  },
+  {
+   "from": "lesson:LESSON-034@v1",
+   "to": "finding:F-024",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-034.md"
+  },
+  {
+   "from": "lesson:LESSON-034@v1",
+   "to": "finding:F-025",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-034.md"
+  },
+  {
+   "from": "lesson:LESSON-035@v1",
+   "to": "principle:P67",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-035.md"
+  },
+  {
+   "from": "lesson:LESSON-035@v1",
+   "to": "principle:P68",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-035.md"
+  },
+  {
+   "from": "lesson:LESSON-036@v1",
+   "to": "finding:F-039",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-036.md"
+  },
+  {
+   "from": "lesson:LESSON-036@v1",
+   "to": "principle:P45",
+   "type": "derives-from",
+   "source": "docs/lessons/LESSON-036.md"
   }
  ]
 }

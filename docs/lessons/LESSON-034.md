@@ -23,7 +23,7 @@ when_not_to_use: do not treat a confidence-selected set as tradable — CCS-sele
   confidence improves the ORDERING, it is not itself proof of edge (LESSON-029); and CCS without a capacity
   dimension over-credits rare configurations (F-025)
 provenance: {finding: F-024/F-025, phase: 7-8, principle: P24/P25}
-lifecycle: CANDIDATE  # RESEARCHER-K batch 6 — inasubiri review ya Chief
+lifecycle: ACTIVE  # Chief review 2026-07-05
 ```
 
 **Maelezo kwa mwanafunzi:** kupanga kwa EV pekee kunadanganya — Top-25 kwa EV na kwa CCS zinaingiliana 10/25
