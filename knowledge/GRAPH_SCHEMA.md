@@ -1,7 +1,7 @@
 # KNOWLEDGE GRAPH (K2) — Schema Note kwa Review ya Chief
 
-*Builder: RESEARCHER-K | v1 2026-07-04 (APPROVED Chief 2026-07-04) · v2 2026-07-05 (inasubiri review)*
-*Layer: L2 (`ELITEFX MASTER ARCHITECTURE V1.md` §3.4) | File: `knowledge/graph.json` (GRAPH@v2)*
+*Builder: RESEARCHER-K | v1-v4 APPROVED (Chief) · v5 = Chief invariant-restore · v6 2026-07-05 (RESEARCHER-K, inasubiri review)*
+*Layer: L2 (`ELITEFX MASTER ARCHITECTURE V1.md` §3.4) | File: `knowledge/graph.json` (GRAPH@v6)*
 
 ## Kanuni za ujenzi (zilizofuatwa)
 
@@ -17,21 +17,26 @@
    moja — mf. Phase 14 0/282 dhidi ya LESSON-017/018) au `bounds` (inaweka mipaka bila kubatilisha —
    mf. F-016 dhidi ya LESSON-005). Tofauti hii inafuata LESSON_SPEC corpus rule 3.
 
-## Hali ya sasa (GRAPH@v3, 2026-07-05)
+## Hali ya sasa (GRAPH@v6, 2026-07-05)
 
 ```text
-nodes = 146  (lesson 26 · finding 27 · principle 27 · phase 25 · report 31 · doc 4 · record 2 · domain 3 · eval 1)
-edges = 169  (derives-from 99 · supports 45 · contradicts 6 · applies-to 19 · supersedes 0)
-v2 delta:   +eval:EVAL-001 (L4, ACTIVE) + edges 11 (EVAL-001→k4-evals; 10 lesson→EVAL-001 applies-to)
-v3 delta:   +lessons 019-026 (ACTIVE) + provenance zao (findings 4 · phases 7 · principles 6 · reports 10);
-            021/022 contradicts (contextual_alpha_confirmation, mode=counter-evidence: in-sample died 0/282 OOS)
+nodes = 159  (lesson 31 · finding 29 · principle 31 · phase 25 · report 31 · doc 4 · record 2 · domain 3 · eval 3)
+edges = 191  (derives-from 107 · supports 45 · contradicts 6 · applies-to 33 · supersedes 0)
+v2 delta:   +eval:EVAL-001 (ACTIVE) + edges 11 (EVAL-001→k4-evals; 10 lesson→EVAL-001 applies-to)
+v3 delta:   +lessons 019-026 (ACTIVE) + provenance zao; 021/022 contradicts (mode=counter-evidence, 0/282 OOS)
+v4 delta:   +eval:EVAL-002 (ACTIVE) + edges 8 (→k4-evals + 7 lesson→EVAL-002 applies-to)
+v5 delta:   (Chief) +lessons 027-031 (ACTIVE, batch-5 promotion) + provenance nodes 6 — invariant restore
+v6 delta:   (RESEARCHER-K juu ya v5) +eval:EVAL-SUITE (→k4-evals; EVAL-001/002 member — OQ-G6) +
+            3 edges lesson→EVAL-002 (027/028/029 = T06/T11/T12). 027-031 provenance ya Chief HAIJAGUSWA
+            (enrichment supports/contradicts = pendekezo kwa Chief — OQ-G6)
 self-test:  python3 knowledge/graph_selftest.py  (stdlib pekee, haihitaji data — R-1 mitigation)
             inakagua: unique ids · edge integrity · kila lesson ina provenance edge ·
             lifecycle inalingana na LESSON_INDEX · report/doc/eval files zipo repo
 ```
 
 **Invariant (imethibitishwa na Chief 2026-07-05):** graph LAZIMA iwe na kila lesson **ACTIVE**;
-CANDIDATE (017/018) zimo pia lakini si lazima — zitabaki hadi OOS gate yao. Lessons zote 26 sasa zimo.
+CANDIDATE (017/018 OOS-gate + 032-036 batch 6) zinasubiri approval — zinalinkwa zikiapruvishwa.
+Lessons zote 31 ACTIVE zimo; 032-036 = pending (self-test inaziorodhesha).
 
 ## Rulings za Chief (OQ-G1..G5 — APPROVED 2026-07-04, zote kwa mapendekezo yangu)
 

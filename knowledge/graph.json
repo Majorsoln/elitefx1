@@ -1,8 +1,8 @@
 {
  "meta": {
-  "id": "GRAPH@v5",
+  "id": "GRAPH@v6",
   "layer": "L2 (Master Architecture V1 \u00a73.4)",
-  "status": "GRAPH@v1..v3 APPROVED (Chief 2026-07-04/05). GRAPH@v4 = increment: eval:EVAL-002 (L4, ACTIVE) linkage \u2014 inasubiri review ya v4. Lessons 027-031 (batch 5, CANDIDATE) HAZIJALINKWA (pending approval).",
+  "status": "GRAPH@v1..v4 APPROVED (Chief 2026-07-04/05); GRAPH@v5 (Chief) = invariant restore ya lessons 027-031. GRAPH@v6 = increment ya RESEARCHER-K juu ya v5 ya Chief: +eval:EVAL-SUITE (L4, ACTIVE) linkage + 027/028/029\u2192EVAL-002 applies-to (T06/T11/T12). Inasubiri review. NOTE: provenance ya 027-031 ni invariant-restore (ndogo) \u2014 RESEARCHER-K amependekeza enrichment (supports/contradicts edges) kwa Chief, HAIJAGUSWA hapa.",
   "date": "2026-07-05",
   "builder": "RESEARCHER-K (Track B, K2/K3)",
   "changelog": [
@@ -10,7 +10,8 @@
    "@v2 (2026-07-05): +node eval:EVAL-001 (L4, ACTIVE); +edge eval:EVAL-001->domain:k4-evals (applies-to); +edges 10 lesson->eval:EVAL-001 (applies-to, note=tested-by-QNN; edge type ni applies-to kwa OQ-G3 \u2014 hakuna type mpya). APPROVED na Chief 2026-07-05.",
    "@v3 (2026-07-05): +lessons 019-026 (batch 4, ACTIVE) + provenance zao (findings F-007/R-002/F-012/F-040; phases 1.6-1.8/2-2.1/4/5.7/21/22-23/D0; principles P45/P46-P50/P63-P66/P74/P82/G-7; reports 10). derives-from + supports; 021/022 contradicts (contextual_alpha_confirmation, mode=counter-evidence: in-sample died 0/282 OOS). Invariant: kila lesson ACTIVE iko graph. APPROVED na Chief 2026-07-05.",
    "@v4 (2026-07-05): +node eval:EVAL-002 (L4, ACTIVE) +edges 8 (\u2192domain:k4-evals + 7 lesson->eval:EVAL-002 applies-to, note=tested-by-TNN). Lessons 027-031 (batch 5, CANDIDATE) HAZIJALINKWA \u2014 zitalinkwa baada ya approval (kama 019-026 zilivyosubiri).",
-   "v5 (2026-07-05, Chief): +lessons 027-031 + provenance nodes 6 (invariant restore baada ya batch-5 promotion)"
+   "v5 (2026-07-05, Chief): +lessons 027-031 + provenance nodes 6 (invariant restore baada ya batch-5 promotion)",
+   "v6 (2026-07-05, RESEARCHER-K juu ya v5 ya Chief): +node eval:EVAL-SUITE (\u2192domain:k4-evals; EVAL-001/EVAL-002 = member, OQ-G6) + 3 edges lesson\u2192eval:EVAL-002 (027/028/029 = T06/T11/T12, note=tested-by; inaoanisha na maps_to_lesson zilizojazwa). +6 edges, +1 node. 027-031 provenance ya Chief HAIJAGUSWA (enrichment = pendekezo kwa Chief)."
   ],
   "scope": "lessons 26 za LESSON_INDEX.md (017/018 CANDIDATE zimo pia) + rekodi zote zinazotajwa kwenye provenance/evidence/counter_evidence zao. HAKUNA node/edge isiyo na rekodi ya repo (kila edge ina 'source').",
   "node_kinds": {
@@ -36,7 +37,8 @@
    "OQ-G2: principle/phase RANGE ids (P53-P57, P90-P102, phase 9-11, 14-21) \u2014 zigawanywe kuwa nodes za mtu mmoja? Inahitaji kuchimba definitions za board (kazi ya batch ijayo, si ya kubuni).",
    "OQ-G3: 'contradicts' yenye mode='bounds' \u2014 je, ni edge type sahihi au tuongeze type 'bounds' rasmi? LESSON_SPEC \u00a7corpus rule 3 inatofautisha context-dependence na mgongano halisi.",
    "OQ-G4: ontology ya 'domain' nodes za applies-to (contract-components, k3-datasets, k4-evals) \u2014 proposal tu; Chief aamue taxonomy rasmi.",
-   "OQ-G5: Permanent Truths 12 + Failed Ideas 9 (PROJECT_MEMORY \u00a72/\u00a75) ziingie kama nodes sasa au baada ya kuwa lessons (K1 backlog items 1-2)?"
+   "OQ-G5: Permanent Truths 12 + Failed Ideas 9 (PROJECT_MEMORY \u00a72/\u00a75) ziingie kama nodes sasa au baada ya kuwa lessons (K1 backlog items 1-2)?",
+   "OQ-G6: eval-membership (EVAL-001/EVAL-002 \u2192 EVAL-SUITE) \u2014 nimetumia 'applies-to' note='member' kwa OQ-G3 (hakuna edge type mpya bila amendment). Pendekezo: applies-to inatosha (suite = domain-realizer kama evals). Pia: je, ni-enrich provenance ya 027-031 (ongeza supports/contradicts edges kama 001-026) au iachwe minimal?"
   ]
  },
  "nodes": [
@@ -1007,6 +1009,13 @@
    "lifecycle": "ACTIVE",
    "file": "docs/lessons/LESSON-031.md",
    "label": "Irreversible-effect capability ships as refuse-stub (paper default) until named authority enables live"
+  },
+  {
+   "id": "eval:EVAL-SUITE",
+   "kind": "eval",
+   "lifecycle": "ACTIVE",
+   "file": "knowledge/evals/SUITE.json",
+   "label": "Unified suite EVAL-001+EVAL-002 (25 Qs: neg 14 + pos 11), one rubric-grader protocol; Chief APPROVED 2026-07-05"
   }
  ],
  "edges": [
@@ -2203,6 +2212,48 @@
    "to": "principle:P81",
    "type": "derives-from",
    "source": "docs/lessons/LESSON-031.md"
+  },
+  {
+   "from": "lesson:LESSON-027@v1",
+   "to": "eval:EVAL-002",
+   "type": "applies-to",
+   "note": "tested-by T06 (Event\u00d7Configuration = atomic unit)",
+   "source": "knowledge/evals/EVAL-002/questions.jsonl"
+  },
+  {
+   "from": "lesson:LESSON-028@v1",
+   "to": "eval:EVAL-002",
+   "type": "applies-to",
+   "note": "tested-by T11 (transitive dependency purity / P107)",
+   "source": "knowledge/evals/EVAL-002/questions.jsonl"
+  },
+  {
+   "from": "lesson:LESSON-029@v1",
+   "to": "eval:EVAL-002",
+   "type": "applies-to",
+   "note": "tested-by T12 (Profitable \u2260 Tradable; protect capital first)",
+   "source": "knowledge/evals/EVAL-002/questions.jsonl"
+  },
+  {
+   "from": "eval:EVAL-SUITE",
+   "to": "domain:k4-evals",
+   "type": "applies-to",
+   "note": "EVAL-SUITE realizes k4-evals: aggregates EVAL-001+EVAL-002 into one rubric-grader protocol (25 Qs)",
+   "source": "knowledge/evals/EVAL_SUITE.md"
+  },
+  {
+   "from": "eval:EVAL-001",
+   "to": "eval:EVAL-SUITE",
+   "type": "applies-to",
+   "note": "member of suite \u2014 13 Qs (neg 9 + pos 4); edge type applies-to per OQ-G3/OQ-G6",
+   "source": "knowledge/evals/SUITE.json"
+  },
+  {
+   "from": "eval:EVAL-002",
+   "to": "eval:EVAL-SUITE",
+   "type": "applies-to",
+   "note": "member of suite \u2014 12 Qs (pos 7 + neg 5); edge type applies-to per OQ-G3/OQ-G6",
+   "source": "knowledge/evals/SUITE.json"
   }
  ]
 }

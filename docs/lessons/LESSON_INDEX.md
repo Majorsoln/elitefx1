@@ -1,7 +1,7 @@
 # LESSON INDEX — ELITEFX Knowledge Corpus Registry
 
 *Owner: Chief Quant (Unified) | Spec: `LESSON_SPEC.md` | Master Architecture V1 §3*
-*Last updated: 2026-07-05 (batch 5 — RESEARCHER-K) | Lessons: 31 (29 ACTIVE + 2 CANDIDATE — 017/018 OOS gate) — METHOD 15 · MARKET-CONDITIONAL 7 · GOVERNANCE 9 | Backlog (K1): findings/phases zilizobaki ≈ 12–22*
+*Last updated: 2026-07-05 (batch 6 — RESEARCHER-K) | Lessons: 36 (29 ACTIVE + 7 CANDIDATE — 017/018 OOS gate + 032-036 batch 6) — METHOD 17 · MARKET-CONDITIONAL 7 · GOVERNANCE 12 | Backlog (K1): findings/phases zilizobaki ≈ 7–17*
 
 | ID | Type | Claim (fupi) | Lifecycle | Provenance |
 |----|------|--------------|-----------|------------|
@@ -36,6 +36,11 @@
 | LESSON-029@v1 | METHOD | Profitable ≠ Tradable: prove OOS + net-of-cost before capital; protect first, scale after proof | ACTIVE | Truth12/F-032/Phase14/P26-69 |
 | LESSON-030@v1 | GOVERNANCE | System failure ≠ valid negative outcome; every crossing mints a new immutable object (parent link) | ACTIVE | E1/E2/E4/P83-89 |
 | LESSON-031@v1 | GOVERNANCE | Irreversible-effect capability ships as refuse-stub (paper default) until named authority enables live | ACTIVE | E4/P81/§8.2/Truth12 |
+| LESSON-032@v1 | GOVERNANCE | A frozen layer reopens only on a proven downstream need; freeze binds the interface, not the implementation | CANDIDATE | P90/P62/V6·V8·V11/F-005 |
+| LESSON-033@v1 | METHOD | Heterogeneous winners → model a population and rank it; classification discards ordering signal | CANDIDATE | F-023/F-008/Phase 6.5/P23 |
+| LESSON-034@v1 | METHOD | Confidence is a ranking dimension co-equal with EV; but CCS-selection is not tradable (−0.757 OOS) | CANDIDATE | F-024/F-025/Phase 7-8/P24-25 |
+| LESSON-035@v1 | GOVERNANCE | Evidence is an immutable contract; aggregation is an external, swappable operation | CANDIDATE | P67/P68/P83-84/D0-D3 |
+| LESSON-036@v1 | GOVERNANCE | Name an era by what is proven, not what is hoped; premature declarations are retracted | CANDIDATE | V6.3→V6.4/F-039/P45 |
 
 ## K1 Backlog (vyanzo — order ya kazi)
 
@@ -45,7 +50,9 @@
 4. ~~Governance lessons (spec-first, versioning, correction-not-deletion, one-final-authority)~~ — DONE batch 3 (LESSON-013..016 CANDIDATE)
 5. ~~MARKET-CONDITIONAL za kwanza (MR×EURUSD P100 · DPB×EURUSD P97 ya Phase 12 — na `review_trigger` kali)~~ — DONE batch 3 (LESSON-017..018 CANDIDATE)
 6. ~~Batch 4 candidates 8 (mapitio ya Chief 2026-07-04)~~ — DONE 2026-07-05 (LESSON-019..026 CANDIDATE)
-7. Batch 5+: Permanent Truths 12 zilizobaki + Findings F-001…F-042 generalizable + Decision D1-D4/E-series
+7. ~~Batch 5 (LESSON-027..031): Truths 6/11/12 + Execution E1-E4 governance~~ — DONE 2026-07-05 (ACTIVE)
+8. ~~Batch 6 (LESSON-032..036): freeze/alpha philosophy (F-005) · ranking/CCS (F-023/F-024/F-025) · Evidence immutability (D0-D3) · era-naming governance~~ — DONE 2026-07-05 (CANDIDATE)
+9. Batch 7+: F-001..F-042 generalizable zilizobaki (mf. F-006 context generalization · F-009 event-specific sensitivity) + Failed Ideas zisizo lessons bado (mean-reversion-only subgroup) + E3 execution-outcome lessons (baada ya K6)
 
 *Note (batch 3): lessons za RESEARCHER-K zinaingia kama CANDIDATE — zinasubiri review ya Chief
 (TEAM_PROTOCOL: hakuna approval kwa agents). LESSON-017/018 zina review_trigger KALI: pre-registered
@@ -55,9 +62,9 @@ future-OOS + FDR pekee ndiyo inaweza kuzipandisha.*
 
 | Artifact | Layer | File | Status |
 |----------|-------|------|--------|
-| GRAPH@v4 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1-v4 APPROVED; **v5** (2026-07-05, Chief) +lessons 027-031 — nodes 158 · edges 185 |
+| GRAPH@v6 | L2 (graph) | `knowledge/graph.json` (+ `graph_selftest.py` · `GRAPH_SCHEMA.md`) | v1-v4 APPROVED; **v5** (Chief) +lessons 027-031; **v6** (RESEARCHER-K juu ya v5) +EVAL-SUITE linkage + 027/028/029→EVAL-002 — nodes 159 · edges 191, self-test PASS (inasubiri review; 032-036 pending) |
 | EVAL-001 | L4 (evals) | `knowledge/evals/EVAL-001/` | **ACTIVE** (Chief 2026-07-05) — maswali 13 (neg 9 + pos 4); imelinkwa graph |
-| EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` | **ACTIVE** (Chief 2026-07-05) — Permanent Truths 12 (pos 7 + neg 5); imelinkwa graph@v4 |
+| EVAL-002 | L4 (evals) | `knowledge/evals/EVAL-002/` | **ACTIVE** (Chief 2026-07-05) — Permanent Truths 12 (pos 7 + neg 5); imelinkwa graph@v6; maps_to_lesson za T06/T11/T12 zimejazwa (027/028/029) |
 | EVAL-SUITE@v1 | L4 (evals) | `knowledge/evals/SUITE.json` (+ `suite_selftest.py` · `EVAL_SUITE.md`) | **ACTIVE** (Chief 2026-07-05) — unganisha 001+002 (maswali 25, neg 14 + pos 11), protocol moja |
 
 *L3 DATASETS (`knowledge/datasets/`) — bado (inasubiri corpus critical mass + E3 outcomes).*
