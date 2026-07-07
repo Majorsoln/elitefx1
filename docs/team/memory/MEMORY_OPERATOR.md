@@ -28,3 +28,10 @@ output kwa Chief. Hii ndiyo mtihani wa kwanza wa mashine nzima kwenye stack hali
   ilikwama Windows → Chief ametoa `run_selftests.py` (cross-platform, 10/10 PASS CI).
   KAZI YAKO IJAYO: `cd src/research && python run_selftests.py` → bandika output (thibitisho la
   self-test sweep kwenye stack yako). Kisha: Audit #6 + real-data runbook.
+
+## RUNBOOK HAI (2026-07-07): Real-Data Validation
+`docs/RUNBOOK_real_data_validation.md` + `src/research/real_data_paper_run.py` (harness — inajenga
+snapshots kutoka ticks halisi via build_tagged_evidence → decision → gate → repository). KAZI YAKO:
+(1) hakikisha states zipo (market_state_engine.py kama inahitajika); (2) endesha
+`python real_data_paper_run.py --policy conservative` (+ capital_preservation + aggressive);
+(3) bandika output. Tegemeo: ABSTAIN nyingi = SAHIHI (protect capital). SIO edge claim.
