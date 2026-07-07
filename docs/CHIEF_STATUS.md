@@ -1,8 +1,8 @@
 # CHIEF_STATUS.md — ELITEFX Live Status
 
 > **Owner: Chief Quant #2** (Doctrine Custodian — G-01). Hii ndiyo "tuko wapi sasa" ya mradi —
-> ina-update kila Chief #1 anapotoa uamuzi (phase/chapter/principle/approval).
-> Last updated: 2026-07-03.
+> ina-update kila uamuzi wa Chief/Project Director.
+> Last updated: 2026-07-07.
 
 ---
 
@@ -10,10 +10,9 @@
 
 ```text
 MASTER ARCHITECTURE V1 — TRACKS MBILI SAMBAMBA (updated 2026-07-07 baada ya Audit #6)
-TRACK A (Engineering):    E1-E4 ZOTE CLOSED (paper). Mnyororo mzima validated kwenye PC ya
-                          Operator (2026-07-06, sweep 10/10). Audit #6 PASS.
-                          KAZI HAI: P107 remediation (ruling: lazy-import + transitive test) —
-                          IMPLEMENTER-A. Kisha: real-data runbook.
+TRACK A (Engineering):    E1-E4 ZOTE CLOSED (paper). Validated PC ya Operator (sweep 11/11).
+                          Audit #6 PASS. **P107 RESOLVED** (core transitively PURE; purity_check).
+                          KAZI HAI: real-data runbook (snapshots kutoka ticks halisi).
 TRACK B (Knowledge & AI): K0-K3 ✅ — corpus 36 (34 ACTIVE) · GRAPH@v7 (172/202) · EVAL-SUITE 25 Qs.
                           KAZI HAI: batch 7 + GRAPH@v8 (kufunga K1 retroactive).
 Governance:               Chief Quant (Unified) — directive ya Project Director. Board Approval
@@ -32,14 +31,14 @@ Governance:               Chief Quant (Unified) — directive ya Project Directo
 ## Roadmap (STRICT ordering — V11)
 
 ```text
-E1  Integrity Gate      (P105) — inasubiri Chief Directive; spec-first (Implementer)
-E2  Execution Object    (P89)  — + immutability enforcement (A-4 inafungwa hapa)
-E3  Decision Repository (P106)
-E4  Broker Adapter      — mkutano rasmi wa Decision Science na MWONGOZO/FTMO
-------------------------------------------------------------------
-Baadaye (Decision Science): P96 Policy Selection (phase ya baadaye)
-NOT YET ELIGIBLE:           D8 Decision Quality/Outcome · D9 Portfolio/Live
-BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
+E1-E4  ✅ CLOSED (paper) — Integrity Gate · Execution Object · Repository · Broker Adapter
+       validated PC ya Operator (11/11) · Audit #6 PASS · P107 RESOLVED
+INAYOFUATA (Track A):  real-data validation (snapshots kutoka ticks) → paper-trading run →
+                       (uamuzi wa Project Director: live artifact + max_spread) → live paper → Production
+INAYOFUATA (Track B):  K1 batch 7 + GRAPH@v8 (funga retroactive) → K4 Datasets → K5 (EVAL→RAG→SFT)
+Baadaye (Decision Sci): P96 Policy Selection · P70 confidence model (RED LINE) · P78 redundancy
+NOT YET ELIGIBLE:      D8 Decision Quality/Outcome · D9 Portfolio/Live
+GATED:                 Trading-ML (evals + OOS + Project Director) · live money (artifact ya PD)
 ```
 
 ## Validation Log
@@ -69,11 +68,11 @@ BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
 | Item | Nani | Status |
 |------|------|--------|
 | AI Strategy discussion | — | **CLOSED (2026-07-04)** — Master Architecture V1; amendments 4 zimeingizwa; Tracks A+B sambamba |
-| K1 retroactive backlog (lessons ≈40–60 kutoka rekodi) | Chief Quant (Unified) | ACTIVE — kazi hai ya Track B |
-| E1 Chief Directive (kufungua phase) | Chief #1 | PENDING |
-| P107 remediation (options a/b/c — Audit #5) | Chief #1 (uamuzi) → Implementer | PENDING |
+| K1 retroactive backlog (batch 7 → ~42-45) + GRAPH@v8 | RESEARCHER-K | ACTIVE |
+| P107 remediation | IMPLEMENTER-A | **CLOSED 2026-07-07** (purity_check; 11/11) |
 | F-005 full-metric re-run | Japhet (data run ijayo) | DEBT (V11) |
-| Transitive compliance test (P104+P107) | Implementer (baada ya uamuzi wa Chief #1) | PENDING |
+| Real-data runbook (snapshots kutoka ticks za Operator) | Chief → Operator | NEXT |
+| Maamuzi ya Project Director: live-artifact format + max_spread per-pair | Project Director | PENDING (kabla ya live) |
 
 ## Governance
 
