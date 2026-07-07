@@ -343,3 +343,123 @@ Decision chain, kisha chain inafuatwa. Hii ni **baseline** — kila audit ijayo 
 (iliyorekodiwa doctrine — V11; remediation ni uamuzi wa Chief #1, utekelezaji wa Implementer).
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
+
+---
+
+## AUDIT #6 — 2026-07-07 (Track A E1–E4 kamili; audit ya kwanza baada ya Master Architecture V1)
+
+Scope: mnyororo mzima wa Execution Science uliojengwa tangu Audit #5 — **E1 Integrity Gate ·
+E2 Execution Object (+`frozen.py` A-4) · E3 Decision Repository · E4 Broker Adapter (paper) ·
+`e2e_paper_demo.py`** — dhidi ya **Decision Doctrine V12** (rulings za E1–E4 + P107) na
+**Master Architecture V1** (§4 Track A; §7 constitution). Kipimo cha pili cha **P107 transitive
+dependency graph** (baseline = Audit #5). Ushahidi wote umeendeshwa upya kwenye environment hii leo
+(self-test sweep + probe mbili za dependency).
+
+Nini kimekaguliwa: compliance ya code na rulings/principles · dependency graph · governance records.
+Nini HAKIJAKAGULIWA (nje ya role): ubora wa sizing formula, thresholds za FTMO (judgement ya
+Operator — V12), maamuzi ya design yaliyo wazi (hayo ni ya Chief/Project Director).
+
+### 4-Point Compliance Review (kila module ya E-series + Engine)
+
+| # | Check | Kipimo (leo) | Verdict |
+|---|-------|--------------|---------|
+| 1 | **Engine size** (P103) | `decision_engine.py` core ~74 lines (baseline ~72; delta = self-test list-coercion ya A-4 ripple TU — hakuna responsibility mpya). Cores mpya (benchmark za leo): gate ~103 · execution_object ~150 · repository ~119 · adapter ~227 (kabla ya self-tests) | **PASS** |
+| 2 | **Forbidden imports** | Direct imports za kila module core: engine=`decision_object`+stdlib · gate=`decision_object`+stdlib · execution_object=`frozen`+stdlib · repository=stdlib PEKEE · adapter=`frozen`+`execution_object`+`decision_repository`+stdlib. Self-tests za import-purity ([4]/[6]/[7]/[8]) zimeendeshwa upya leo: PASS zote; hakuna `ftmo`/network/market import popote | **PASS** |
+| 3 | **Stateless** | `module-mutables=[]` kwenye engine/gate/execution_object; repository haina state (file path injected); adapter haina module state (`PaperBroker` instance state ni simulator INJECTED, si state ya adapter). Determinism (id-stable) imethibitishwa kwenye self-tests | **PASS** |
+| 4 | **Policy leakage** | Engine: hakuna logic. Gate: hakuna eligibility logic — constraints INJECTED (Rule 3); AND/veto tu. Recorder: hakuna decision/broker logic; slippage = fact, si tathmini. Adapter: FTMO constraint factory + sizing zinaishi hapa **kwa rulings za Chief Q2/Q3 (E4)** — exception iliyorekodiwa doctrine, si leakage | **PASS** |
+
+Self-test sweep kamili (`run_selftests.py`, modules 9 + e2e demo): **10/10 PASS** kwenye environment
+hii leo (baada ya kufunga numpy/polars/duckdb/pyyaml — tazama P107 hapa chini).
+
+### P107 Transitive Dependency Graph (kipimo #2; Market-domain kwa **bold**)
+
+| Module | Direct imports (core) | Transitive status |
+|--------|----------------------|-------------------|
+| `decision_engine` | decision_object | ❌ IMPURE — → decision_object → **market stack** |
+| `integrity_gate` *(E1 — MPYA)* | decision_object | ❌ IMPURE — **imejiunga na chain chafu ileile** (inherits, si leak mpya) |
+| `decision_object` | **market_state_engine** · evidence chain · frozen (+numpy) | ❌ chanzo cha leak (demo-instantiation — P92 allowance) |
+| `frozen` *(A-4 — MPYA)* | stdlib pekee | ✅ **PURE** |
+| `execution_object` *(E2 — MPYA)* | frozen + stdlib | ✅ **PURE** |
+| `decision_repository` *(E3 — MPYA)* | stdlib pekee | ✅ **PURE** |
+| `broker_adapter` *(E4 — MPYA)* | frozen + execution_object + decision_repository | ✅ **PURE** (impurity boundary bila Market/network import) |
+| `e2e_paper_demo` *(harness)* | engine + gate + adapter + repository | ❌ IMPURE by design (harness inashikilia pipeline) |
+
+**Probe ya vitendo (leo, environment bila Market stack):** sweep = **4/10 PASS** — `frozen`,
+`execution_object`, `decision_repository`, `broker_adapter` zina-load na kupita PEKEE;
+engine/gate/object/policy/snapshot/demo zinashindwa ku-**load** (`market_state_engine → duckdb/yaml`,
+evidence chain → polars/numpy). Kwa stack kamili: 10/10 PASS.
+
+Findings:
+1. **P107 FAIL ya Audit #5 inabaki bila mabadiliko** kwa Engine chain — remediation (options a/b/c)
+   bado inasubiri uamuzi wa Chief. **E1 Gate imeongezeka kwenye chain chafu** kupitia
+   `decision_object` (direct purity ✅; transitive ❌) — inarithi baseline FAIL, SIO leak mpya;
+   remediation moja itaponya Engine + Gate kwa pamoja.
+2. **Nusu mpya ya Execution Science ni PURE kwa makusudi** (E2/E3/E4 + frozen): Implementer alikataa
+   `decision_object` import kwenye E2–E4 (fake-decision fixtures kwenye self-tests) — hii ndiyo
+   mara ya kwanza P107 inaonekana ikitengeneza architecture badala ya kuipima tu.
+3. Gap ya P104 inabaki: compliance tests ni direct-only; regression ya transitive purity bado
+   haitakamatwa na self-test yoyote (probe ya leo ilikuwa ya mkono). Option (c) ya Audit #5 iko wazi.
+
+### Compliance Matrix
+
+| Principle | Status | Ushahidi |
+|-----------|--------|----------|
+| P81 (FTMO = execution constraint; SI Policy/Engine) | **PASS** | Gate haina ftmo import (self-test [6]); FTMO inaingia kama constraints 5 INJECTED kutoka adapter (rulings Q2/E4) |
+| P83/P85 (Gate/Recorder = object MPYA immutable; parent link; append-only) | **PASS** | `make_gate_decision` (id mpya, `parent_decision_id`); `record()` → `exec:` object; repository append-only; self-tests [2]/[3] |
+| P87/P89 (Execution ≠ Decision; outcome ≠ error) | **PASS** | `execution_object.py` tofauti; `transition()` VALIDATED→EXECUTED/SETTLED zimeretire; REJECTED/UNFILLED = outcome, si error |
+| P88 (versioned ids) | **PASS** | `gate:integrity@v1` · `recorder:execution@v1` · `repository:decision@v1` · `adapter:broker@v1` · constraints `@v1` |
+| P91 (Chief Directive kila E-phase; spec-first) | **PASS** | E1–E4 zote: spec → Chief rulings → implementation → Chief review CLOSED (rekodi: MEMORY_IMPLEMENTER_A + commits) — lakini tazama Drift Watch (board lag) |
+| P92 (dependency direction) | **PASS** | Hakuna Market import kwenye E-module yoyote; direction Evidence→Decision→Execution imeheshimiwa |
+| P94/P97 (contract pekee; orchestration only) | **PASS** | Engine: `policy.decide`; Gate: `constraint.check` — surface mbili tu (`id`+`check`), mirror ya P94 |
+| P95 (reproducibility vector — inaanza kufungwa) | **PASS** | `versions{schema_version,doctrine_version}` LAZIMA kwenye kila repository append (ruling E3/Q4) |
+| P103 (bounded complexity) | **PASS** | 4-point #1; hakuna helper/cache/logic growth ndani ya Engine |
+| P104 (automated compliance tests) | ⚠️ **Direct-only** | Gap ya Audit #5 inabaki — transitive check haipo (option c PENDING) |
+| P105 (Integrity Gate) | **PASS — imefungwa** | E1 CLOSED 2026-07-04; validation ≠ eligibility imetekelezwa 1:1 na rulings |
+| P106 (Repository nje ya Engine) | **PASS — imefungwa** | E3 CLOSED; statefulness imefungiwa repository; Engine/Gate/Recorder pure |
+| **P107 (transitive purity)** | ❌ **FAIL inayojulikana (bila mabadiliko)** | Engine+Gate chain → market stack; E2/E3/E4 PURE; remediation PENDING Chief |
+| RED LINE (reliability ≠ probability hadi P70) | **PASS** | Engine/Gate/Recorder/Adapter — hakuna anayesoma `reliability` kwa maamuzi (inapita kama rekodi tu); constraints zinasoma account state, si reliability |
+| V12 Forbidden (live deployment; ML; E-phase bila Directive) | **PASS** | `mode=live` = refuse-stub (AdapterError — self-test [7] + run ya leo); hakuna ML; kila phase ilianza kwa Chief |
+| Master V1 §7 (immutability/provenance/rekodi) | **PASS** (na Watch moja) | A-4 imefungwa kwa `freeze()` (E2/Q4); provenance chain decision→snapshot→gate→execution→settlement inafanya kazi (e2e lineage: gaps=[]) |
+
+### Architectural Drift Watch
+
+| Item | Risk |
+|------|------|
+| **Transitive Market leak (P107)** — Engine + **Gate (mpya kwenye chain)** hazi-load bila market stack | **Kubwa inayojulikana** — haijabadilika tangu Audit #5; production isolation ya nusu-pure imefungwa hadi remediation (a/b/c — uamuzi wa Chief) |
+| **Compliance tests direct-only (P104)** | Regression ya transitive purity haitakamatwa — probe ya leo ilikuwa ya mkono; option (c) inasubiri |
+| **Governance record lag** — Approval Log ya `PROGRAM_BOARD.md` inaishia 2026-07-04: approvals za E1–E4 (specs + implementations + CLOSED) zipo kwenye MEMORY_IMPLEMENTER_A/commits/CHIEF_STATUS validation log LAKINI hazimo board; roadmap ya board bado inaonyesha E1–E4 `[ ]` na CHIEF_STATUS "Current Phase" bado inasema "E1 spec inafuata" | **Watch — kwa Chief (custodian duty)**: Master V1 §7.7 "kila uamuzi board"; rekodi zipo, ziko mahali pasipo rasmi |
+| **Engine↔Gate asymmetry ya A-4** — `decision_engine.validate_snapshot` inadai `isinstance(dict)` halisi; Gate imesharekebishwa kukubali `Mapping` (frozen). Evidence Layer ikiretrofitiwa `freeze()` baadaye, Engine itakataa snapshot frozen | **Ndogo** — leo snapshots ni dicts (retrofit = uamuzi tofauti wa Chief); ni mstari wa kukumbuka kwenye retrofit review |
+| **SELECT→ENTER (INTENT) migration bado OPEN** — E2 inatumia alias (`COMMITTING_INTENTS` ina zote mbili); e2e demo inatumia `SELECT` | **Watch** — uamuzi wa Chief; alias inafanya kazi lakini vocabulary mbili zinaishi sambamba |
+| `broker_adapter` inatumia `repo._plain` (helper ya ndani ya module nyingine) | **Ndogo** — hygiene; ikihamishwa/kubadilishwa jina, adapter inavunjika kimya |
+| Live-gating artifact format + `max_spread` per-pair (ftmo_config) | **Si drift** — maamuzi ya Project Director/Operator yanayosubiriwa (rulings Q1/Q6 E4) |
+
+### Architectural Maturity
+
+| Layer | Maturity |
+|-------|----------|
+| Market Science | **Stable** (FROZEN → reopenable-by-knowledge-need, Master V1 §8.2) |
+| Evidence Layer | **Frozen** (interface — P90; haijaguswa na E-series ✅) |
+| Decision Objects | **Stable** (+A-4 frozen enforcement; `transition()` = side-states pekee) |
+| Decision Policy | **Stable** (@v2; illustrative — si validated economically) |
+| Decision Engine | **Stable** (core ~74 lines; haijabadilika kimaudhui tangu D6 CLOSED) |
+| Integrity Gate (E1) | **Stable** (CLOSED 2026-07-04; paper-validated end-to-end) |
+| Execution Object (E2) | **Stable** (CLOSED; transitively PURE) |
+| Decision Repository (E3) | **Stable** (CLOSED; stdlib-pure; E3↔K6 queries zipo) |
+| Broker Adapter (E4) | **Stable — PAPER PEKEE** (live = refuse-stub hadi Project Director artifact) |
+| Policy Selection (P96) | **Not Started** (Decision Science phase ya baadaye — scheduling ya V12) |
+| D8 Quality / D9 Portfolio/Live | **Not Started** (NOT YET ELIGIBLE) |
+| Track B (K0–K2 corpus/graph/evals) | **Active — sambamba** (nje ya scope ya audit hii; Master V1 §2) |
+
+### Verdict
+
+**Architecture Review: PASS — Compliant with current doctrine (V12 + Master Architecture V1).**
+
+Hakuna drift mpya isiyotawaliwa. Ujenzi wa E1–E4 umeheshimu rulings za Chief 1:1 (spot-checks zote);
+mnyororo mzima umethibitishwa 10/10 kwenye environment hii NA kwenye PC ya Operator (2026-07-06).
+P107 inabaki FAIL inayojulikana kwa Engine+Gate chain — lakini kwa mara ya kwanza principle hiyo
+imezaa matunda: **nusu mpya ya mfumo (E2/E3/E4) imejengwa PURE kwa makusudi.** Vinavyosubiri uamuzi:
+P107 remediation (Chief) · transitive compliance test (P104) · governance record lag (board/status)
+· live artifact + max_spread (Project Director/Operator). Approval ya chochote hapa ni ya Chief —
+hii ni compliance review tu.
+
+*Profitable ≠ Tradable Edge. Protect capital first.*
