@@ -258,3 +258,9 @@ OPEN QUESTIONS (ndani ya `reports/p107_remediation_report.md`):
   3. Audit #7 = re-measure; Auditor aweza kuendesha purity_check badala ya manual graph-walk.
 PENDING (kipaumbele chini): ASCII-safe self-test output (cp1252 portability) — purity_check tayari
 ASCII; modules nyingine bado zina →/≠/✓ (sweep inashughulikia kwa PYTHONUTF8).
+
+CHIEF REVIEW (2026-07-07): **P107 REMEDIATION APPROVED — CLOSED.** Sweep 11/11 PASS (imeendeshwa na
+Chief, incl. purity_check). decision_object core = stdlib+frozen PEKEE (numpy→math; market/demo deps
+lazy kwenye run()). purity_check.py (option c): modules 7 za core PURE + decision_policy ctrl-guard OK.
+**Track A core runtime = transitively PURE.** P104 gap imefungwa (purity_check = automated transitive
+compliance, inaendeshwa kila sweep). CURRENT TASK: STANDBY (real-data runbook au batch nyingine).

@@ -58,7 +58,7 @@ BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
 | # | Risk | Status |
 |---|------|--------|
 | R-1 | Data ~26GB kwenye PC moja (Japhet) — kila report inaitegemea | **HIGH/HIGH** — mitigation: self-tests bila data |
-| P107 | Transitive Market leak (Engine chain → market_state_engine → polars) | Baseline **FAIL** (Audit #5) — remediation inasubiri uamuzi wa Chief #1 |
+| P107 | Transitive Market leak | **RESOLVED 2026-07-07** — decision_object core = stdlib+frozen; Track A runtime transitively PURE; `purity_check.py` automates (P104 gap closed); sweep 11/11 |
 | A-1 | Reliability saturation Φ(EV/SE) (P70) | OPEN **kwa makusudi** — RED LINE reliability ≠ probability inabaki |
 | A-3 | Redundancy (P78) — correlated evidence → reliability optimistic | Imepangwa BAADA ya Execution Science |
 | A-2 | Snapshot age-shift semantics vs production event-time | WATCH (E-series) |
