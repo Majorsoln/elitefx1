@@ -215,3 +215,11 @@ COMPLETE: D0-D6 + E1-E4 (paper).** Hongera — mnyororo mzima kutoka Evidence ha
 CURRENT TASK MPYA: **STANDBY** hadi: (a) paper-validation run ya Operator (Chief ataandika
 runbook); (b) Audit #6 findings; (c) maamuzi ya Project Director (live artifact + max_spread).
 Kazi zinazowezekana baadaye: P107 remediation itakapoamuliwa; sizing-policy layer (P96).
+
+=== PORTABILITY FIX (Chief, 2026-07-06) ===
+Windows cp1252 console inaanguka kwa herufi za Unicode (→ ≠ ✓) kwenye self-test prints zilizopo
+(frozen/decision_object/integrity_gate/execution_object/broker_adapter). Chief amefunga kwa:
+run_selftests.py (env PYTHONUTF8=1 + encoding=utf-8) + e2e_paper_demo.py (stdout.reconfigure utf-8).
+CLEANUP TASK (kipaumbele cha chini, ukirudi): fanya self-test output za modules zote **ASCII-safe**
+(-> badala ya →, != badala ya ≠, [OK] badala ya ✓) ili direct-run iwe imara hata kwenye console ya
+cp1252 bila kutegemea reconfigure. Ni portability, si logic.

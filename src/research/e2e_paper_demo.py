@@ -19,7 +19,14 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
 import tempfile
+
+# Windows console (cp1252) inaanguka kwa herufi za Unicode (→ ✓); lazimisha stdout UTF-8 (Py3.7+).
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 from decision_engine import decide
 from integrity_gate import gate
