@@ -37,13 +37,14 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
-import numpy as np
+import math
 
-from market_state_engine import cfg
-from evidence_snapshot import make_snapshot
-from evidence_operations import build_tagged_evidence
-from evidence_set import make_set
 from frozen import freeze                                     # A-4 immutability enforcement (E2 Q4)
+
+# P107 (Chief ruling a, 2026-07-07): market/demo imports (numpy, market_state_engine, evidence_*)
+# ni **LAZY** — ndani ya run()/main() PEKEE (demo path). Core (make_decision / transition /
+# make_gate_decision / freeze) = frozen + stdlib TU → decision_object transitively PURE →
+# Engine + Gate PURE. Reuse (demo): evidence_snapshot·evidence_operations·evidence_set·market_state_engine.
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -86,7 +87,7 @@ def make_decision(snapshot, action="ABSTAIN", reason=None, audit=None, policy_id
         "action": action,
         "reason": reason or f"snapshot={rstate}; default capital-preservation (P26)",
         "reliability": round(snapshot["reliability"], 4),      # inherits snapshot (P70 OPEN)
-        "risk": round(snapshot["uncertainty"], 4) if np.isfinite(snapshot["uncertainty"]) else None,
+        "risk": round(snapshot["uncertainty"], 4) if math.isfinite(snapshot["uncertainty"]) else None,
         # --- references (Q3; P84 + P88) ---
         "evidence_refs": [sid],                                # references SNAPSHOT ID, sio objects
         "policy_id": policy_id,                                # P88: policy iliyounda decision hii
@@ -157,6 +158,10 @@ def decision_provenance(dec):
 
 
 def run(pairs, rng):
+    from market_state_engine import cfg                       # P107: lazy (demo path pekee)
+    from evidence_snapshot import make_snapshot
+    from evidence_operations import build_tagged_evidence
+    from evidence_set import make_set
     c = cfg()
     print("Building snapshots then Decision Objects (action=ABSTAIN default)...", flush=True)
     tagged, no_px = build_tagged_evidence(pairs)
@@ -371,6 +376,8 @@ def main():
     a = ap.parse_args()
     if a.self_test:
         return self_test()
+    import numpy as np                                        # P107: lazy (demo path pekee)
+    from market_state_engine import cfg
     c = cfg()
     return run(c["pairs"], np.random.default_rng(4))
 

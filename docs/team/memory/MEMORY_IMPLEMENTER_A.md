@@ -238,3 +238,23 @@ UAMUZI WA CHIEF: **option (a) + (c)**.
       market). Iongeze kwenye run_selftests.py au module mpya `purity_check.py`.
 NB: hii ni core D4 — kuwa surgical; make_decision/make_gate_decision LOGIC isiguswe. Report Rule 8.
 Baada ya hapo Chief ata-request Audit #7 (re-measure P107 graph). Ukimaliza THIBITISHA push (origin).
+
+=== P107 REMEDIATION (2026-07-07) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review + Audit #7)** — P107 leak imefungwa; sweep 11/11 PASS.
+LAST COMPLETED: **P107 REMEDIATION (a+c)** ✅ (surgical; LOGIC haijaguswa):
+  · (a) `decision_object.py`: module-level market/demo imports (numpy, market_state_engine,
+    evidence_snapshot/operations/set) → **LAZY** (ndani ya run()/main()). Core `np.isfinite` →
+    `math.isfinite` (stdlib). Module-level sasa = stdlib + frozen PEKEE. → **Engine + Gate + core
+    zote 7 transitively PURE** (probe imethibitisha: zina-load bila market stack).
+  · (c) `src/research/purity_check.py` MPYA — compliance test (subprocess guard inazuia numpy/polars/
+    market; core 7 = PURE; negative control decision_policy = imenaswa). Imeongezwa run_selftests.py.
+  · `reports/p107_remediation_report.md` (Rule 8).
+  · **FULL SWEEP 11/11 PASS** (10→11 na purity_check; e2e_paper_demo bado PASS — hakuna kilichovunjika).
+NEXT AFTER: Chief review + **Audit #7** (re-measure P107 graph — purity_check inatoa kipimo cha
+kiotomatiki). P107 baseline FAIL (Audit #5) IMEFUNGWA.
+OPEN QUESTIONS (ndani ya `reports/p107_remediation_report.md`):
+  1. Policies (decision_policy) ziwe pure pia, au zibaki demo-impure (leaf, injected)? Sasa=neg control.
+  2. purity_check iwe BLOCKING kwenye CI gate rasmi (Rule 2)? Sasa ni sehemu ya sweep.
+  3. Audit #7 = re-measure; Auditor aweza kuendesha purity_check badala ya manual graph-walk.
+PENDING (kipaumbele chini): ASCII-safe self-test output (cp1252 portability) — purity_check tayari
+ASCII; modules nyingine bado zina →/≠/✓ (sweep inashughulikia kwa PYTHONUTF8).
