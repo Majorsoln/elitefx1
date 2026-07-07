@@ -35,3 +35,9 @@ snapshots kutoka ticks halisi via build_tagged_evidence → decision → gate �
 (1) hakikisha states zipo (market_state_engine.py kama inahitajika); (2) endesha
 `python real_data_paper_run.py --policy conservative` (+ capital_preservation + aggressive);
 (3) bandika output. Tegemeo: ABSTAIN nyingi = SAHIHI (protect capital). SIO edge claim.
+
+## LOG — 2026-07-07 (REAL-DATA VALIDATION: PASS)
+Snapshots 5 halisi × policies 3. capital_preservation=5 ABSTAIN; conservative=4 SELECT+1 ABSTAIN;
+aggressive=4 SELECT+1 HEDGE. Gate: SELECT zote VALIDATED; integrity ok. Mashine + data halisi = OK.
+UAMINIFU: SELECT ≠ trade nzuri (policies illustrative; edge = OOS, haijafanywa). Kazi ijayo:
+paper-trading run ya mfululizo (time-ordered) au K4 datasets (E3 outcomes = training data).

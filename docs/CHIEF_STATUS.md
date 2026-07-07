@@ -52,6 +52,20 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   Modules zote 9 + e2e_paper_demo zimethibitishwa kwenye stack halisi ya Operator. **TRACK A
   imethibitishwa end-to-end kwenye mkono halisi — SI CI tu.** Hatua inayofuata: AUDIT #6.
 
+- **2026-07-07 — REAL-DATA VALIDATION: PASS kwenye PC ya Operator.** Snapshots 5 halisi
+  (breakout/deep_pullback/mean_reversion/pullback/trend_continuation) kutoka states za ticks
+  (9 pairs × H1-D1, 2016-2024). Policy-injection kwa data halisi ilionyesha tabia TOFAUTI:
+  capital_preservation → 5 ABSTAIN · conservative → 4 SELECT + 1 ABSTAIN · aggressive → 4 SELECT
+  + 1 HEDGE (deep_pullback = INVALID readiness). Gate: SELECT zote VALIDATED (akaunti safi);
+  repository integrity ok (provenance → snapshot halisi). **Mashine inasoma evidence halisi na
+  policies zinabadilika kwa usahihi.**
+  ⚠️ **UAMINIFU (Chief):** SELECT hapa = "evidence READY + thresholds za policy zimefikiwa" —
+  SIO "trade yenye faida". Policies ni ILLUSTRATIVE (R-2; D5 CLOSED = architecture, SIO edge;
+  RED LINE reliability ≠ probability). SELECT 4 SI trades 4 nzuri. Edge = OOS proof (haijafanywa).
+  **OBSERVATION:** conservative ime-SELECT 4/5 READY → threshold zaweza kuwa permissive (echo ya
+  R-2 saturation + Phase-3 ~99%-permissive); capital_preservation ndiyo guard halisi. Policy
+  validation = kazi ya baadaye (D8/OOS), SIO sasa.
+
 ## Top Risks (live)
 
 | # | Risk | Status |
