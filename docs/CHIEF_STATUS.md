@@ -9,11 +9,15 @@
 ## Current Phase
 
 ```text
-MASTER ARCHITECTURE V1 — TRACKS MBILI SAMBAMBA (2026-07-04)
-TRACK A (Engineering):    E1 Integrity Gate — spec inafuata (Chief Quant Unified)
-TRACK B (Knowledge & AI): K0 Lesson Spec ✅ · K1 pilot LESSON-001..003 ✅ ACTIVE ·
-                          K1 backlog retroactive (≈40–60) ndiyo kazi hai
-Governance:               Chief #1 + #2 = Chief Quant (Unified) — directive ya Project Director
+MASTER ARCHITECTURE V1 — TRACKS MBILI SAMBAMBA (updated 2026-07-07 baada ya Audit #6)
+TRACK A (Engineering):    E1-E4 ZOTE CLOSED (paper). Mnyororo mzima validated kwenye PC ya
+                          Operator (2026-07-06, sweep 10/10). Audit #6 PASS.
+                          KAZI HAI: P107 remediation (ruling: lazy-import + transitive test) —
+                          IMPLEMENTER-A. Kisha: real-data runbook.
+TRACK B (Knowledge & AI): K0-K3 ✅ — corpus 36 (34 ACTIVE) · GRAPH@v7 (172/202) · EVAL-SUITE 25 Qs.
+                          KAZI HAI: batch 7 + GRAPH@v8 (kufunga K1 retroactive).
+Governance:               Chief Quant (Unified) — directive ya Project Director. Board Approval
+                          Log + roadmap zimesawazishwa na Audit #6 (governance lag imefungwa).
 ```
 
 ## Doctrine of Record

@@ -223,3 +223,18 @@ run_selftests.py (env PYTHONUTF8=1 + encoding=utf-8) + e2e_paper_demo.py (stdout
 CLEANUP TASK (kipaumbele cha chini, ukirudi): fanya self-test output za modules zote **ASCII-safe**
 (-> badala ya →, != badala ya ≠, [OK] badala ya ✓) ili direct-run iwe imara hata kwenye console ya
 cp1252 bila kutegemea reconfigure. Ni portability, si logic.
+
+=== P107 REMEDIATION (Chief ruling, 2026-07-07 — baada ya Audit #6) ===
+KAZI MPYA (kipaumbele juu ya batch nyingine): funga P107 transitive leak.
+UAMUZI WA CHIEF: **option (a) + (c)**.
+  (a) `decision_object.py`: hamisha imports za market/demo (`numpy`, `market_state_engine.cfg`,
+      `evidence_snapshot.make_snapshot`, `evidence_operations.build_tagged_evidence`,
+      `evidence_set.make_set`) kutoka module-level → **ndani ya run()/demo functions (lazy import)**.
+      Zinatumika TU kwenye demo (run(), line ~160/374), SIO kwenye make_decision/make_gate_decision/
+      transition/freeze. Matokeo: decision_object core = frozen + stdlib PEKEE → **Engine + Gate
+      transitively PURE**. Thibitisha kwa probe (load bila market stack) + self-test PASS (na stack).
+  (c) Ongeza **transitive-purity compliance test** (P104 gap): self-test/script inayothibitisha
+      Engine/Gate/Execution/Repository/Adapter zina-load na stdlib+frozen PEKEE (bila numpy/polars/
+      market). Iongeze kwenye run_selftests.py au module mpya `purity_check.py`.
+NB: hii ni core D4 — kuwa surgical; make_decision/make_gate_decision LOGIC isiguswe. Report Rule 8.
+Baada ya hapo Chief ata-request Audit #7 (re-measure P107 graph). Ukimaliza THIBITISHA push (origin).

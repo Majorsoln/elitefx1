@@ -19,3 +19,10 @@ Engine↔Gate A-4 asymmetry (`validate_snapshot` inadai dict halisi), SELECT→E
 `repo._plain` cross-module use.
 OPEN QUESTIONS: hakuna kwa upande wangu — items 4 za Drift Watch zinasubiri Chief/Project Director
 (zimeorodheshwa kwenye verdict ya Audit #6).
+
+CHIEF ENDORSEMENT (2026-07-07): **Audit #6 ENDORSED** — kazi bora; governance-lag finding ilikuwa
+sahihi (Chief custodian lag) → **imerekebishwa**: board Approval Log + roadmap E1-E4 [✓] + CHIEF_STATUS
+Current Phase zimesawazishwa. P107 remediation: Chief ameamua **(a)+(c)** → IMPLEMENTER-A. Drift ndogo
+(Engine↔Gate A-4 asymmetry, SELECT→ENTER, repo._plain) = noted, si blockers.
+NEXT: **Audit #7** baada ya P107 remediation ya IMPLEMENTER-A (re-measure transitive graph + verify
+transitive test ya option-c). Hadi hapo STANDBY.
