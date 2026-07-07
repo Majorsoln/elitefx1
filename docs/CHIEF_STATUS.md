@@ -38,6 +38,14 @@ NOT YET ELIGIBLE:           D8 Decision Quality/Outcome · D9 Portfolio/Live
 BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
 ```
 
+## Validation Log
+
+- **2026-07-06 — PAPER SMOKE TEST: PASS kwenye PC ya Operator (Windows).** Mnyororo mzima
+  (Snapshot→Engine→Gate→Broker→Execution→Repository→Settlement) umetembea end-to-end kwenye
+  stack halisi: [A] FILLED+settled · [B] FTMO REJECTED (mtaji umelindwa) · [C] ABSTAIN;
+  repository lineage/integrity ok. **Mara ya kwanza mfumo mzima unakimbia nje ya CI.** Self-test
+  sweep 10/10 (via `run_selftests.py`, cross-platform). Inayofuata: Audit #6 → real-data runbook.
+
 ## Top Risks (live)
 
 | # | Risk | Status |

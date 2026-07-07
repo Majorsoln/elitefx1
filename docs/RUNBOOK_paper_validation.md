@@ -28,16 +28,18 @@ pip install -r requirements.txt
 
 ## HATUA 3 — Self-test sweep (thibitisha kila module kwenye stack yako)
 
+**Cross-platform (Windows/Linux/Mac) — amri MOJA:**
+
 ```bash
 cd src/research
-for m in frozen decision_object evidence_snapshot decision_policy decision_engine \
-         integrity_gate execution_object decision_repository broker_adapter; do
-  echo "== $m"; python $m.py --self-test | tail -1
-done
+python run_selftests.py
 ```
 
-**Unatarajia:** kila mstari `SELF-TEST: PASS`. Ikitokea FAIL popote — **simama, bandika output kwa
-Chief** (usiendelee HATUA 4).
+**Unatarajia:** `SELF-TEST SWEEP: 10/10 PASS` (inajumuisha na e2e_paper_demo). Ikitokea FAIL
+popote — **simama, bandika output kwa Chief.**
+
+> *(NB: usitumie `for ... do ... done` wala `tail` kwenye Windows CMD — ni syntax ya bash/Linux.
+> `run_selftests.py` inafanya kazi kila mahali.)*
 
 ## HATUA 4 — End-to-end paper smoke test (mnyororo mzima)
 
