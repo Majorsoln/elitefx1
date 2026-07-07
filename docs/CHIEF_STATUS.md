@@ -45,6 +45,9 @@ BLOCKED:                    ML (inahudumia decision iliyothibitishwa tu)
   stack halisi: [A] FILLED+settled · [B] FTMO REJECTED (mtaji umelindwa) · [C] ABSTAIN;
   repository lineage/integrity ok. **Mara ya kwanza mfumo mzima unakimbia nje ya CI.** Self-test
   sweep 10/10 (via `run_selftests.py`, cross-platform). Inayofuata: Audit #6 → real-data runbook.
+- **2026-07-06 — SELF-TEST SWEEP: 10/10 PASS kwenye PC ya Operator (Windows, cp1252 fix).**
+  Modules zote 9 + e2e_paper_demo zimethibitishwa kwenye stack halisi ya Operator. **TRACK A
+  imethibitishwa end-to-end kwenye mkono halisi — SI CI tu.** Hatua inayofuata: AUDIT #6.
 
 ## Top Risks (live)
 
