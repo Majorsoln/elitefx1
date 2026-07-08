@@ -66,6 +66,13 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   R-2 saturation + Phase-3 ~99%-permissive); capital_preservation ndiyo guard halisi. Policy
   validation = kazi ya baadaye (D8/OOS), SIO sasa.
 
+- **2026-07-07 — DETERMINISM confirmed:** real-data run × 2 = output byte-identical (pure/
+  deterministic end-to-end kwa data halisi). **CHIEF JUDGMENT (doctrine-consistent):** HATUTAFANYI
+  naive paper-trading PnL run juu ya 2016-2024 kwa policies illustrative — PnL in-sample bila OOS/FDR
+  = mtego wa LESSON-001/002/029 (Chapter 1: 0/282 survived FDR). Namba nzuri ingeshawishi edge isiyopo.
+  Njia zenye nidhamu: K4 Datasets (rekodi halisi → training data) au OOS-validation rasmi (pre-reg+FDR),
+  SIO naive backtest. Edge = OOS proof + Project Director approval kabla ya pesa.
+
 ## Top Risks (live)
 
 | # | Risk | Status |
