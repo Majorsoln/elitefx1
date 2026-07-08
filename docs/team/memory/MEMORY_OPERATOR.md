@@ -41,3 +41,11 @@ Snapshots 5 halisi × policies 3. capital_preservation=5 ABSTAIN; conservative=4
 aggressive=4 SELECT+1 HEDGE. Gate: SELECT zote VALIDATED; integrity ok. Mashine + data halisi = OK.
 UAMINIFU: SELECT ≠ trade nzuri (policies illustrative; edge = OOS, haijafanywa). Kazi ijayo:
 paper-trading run ya mfululizo (time-ordered) au K4 datasets (E3 outcomes = training data).
+
+## RUNBOOK HAI (2026-07-07): FORWARD Paper-Trading — TAYARI KUTUMIA
+`paper_trader.py` (Chief direct; self-test 4/4 + sweep 12/12). Kila signal yako ya MWONGOZO:
+  python paper_trader.py --signal PAIR SIDE ENTRY SL TP     (mashine: decide+gate+size+fill+log)
+  python paper_trader.py --close paper:N --price P          (settlement + bajeti ya siku)
+  python paper_trader.py --status                           (hali ya akaunti ya paper)
+Log: data/paper/paper_log.jsonl (COMMIT kila siku = pre-registration ya umma). Tathmini rasmi ya
+Chief baada ya siku 20+/trades 30+. HAKUNA pesa halisi.
