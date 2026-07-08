@@ -264,3 +264,22 @@ Chief, incl. purity_check). decision_object core = stdlib+frozen PEKEE (numpy→
 lazy kwenye run()). purity_check.py (option c): modules 7 za core PURE + decision_policy ctrl-guard OK.
 **Track A core runtime = transitively PURE.** P104 gap imefungwa (purity_check = automated transitive
 compliance, inaendeshwa kila sweep). CURRENT TASK: STANDBY (real-data runbook au batch nyingine).
+
+=== PAPER-TRADER (Chief spec-light, 2026-07-07 — directive ya Project Director) ===
+CURRENT TASK: **paper_trader.py** — FORWARD paper-trading CLI (mkutano wa MWONGOZO na mashine).
+Protocol: docs/RUNBOOK_forward_paper_trading.md. Mahitaji:
+  1. `--signal PAIR SIDE ENTRY SL TP [--policy conservative]`: jenga decision (signal ya Operator =
+     manual intent; snapshot nyepesi ya signal — readiness READY, provenance="operator-signal") →
+     gate (FTMO constraints 5 kutoka config/ftmo_config.yaml + account state HALISI ya paper) →
+     size (MWONGOZO §1: sl_pips kutoka ENTRY/SL; pip_value kwa pair) → paper-fill @ ENTRY →
+     rekodi decision+execution kwenye data/paper/paper_log.jsonl (persistent, append-only, versions).
+  2. `--close ORDER_ID --price P`: settlement (PnL halisi ya paper kwa qty×pips) + update account
+     state (daily_loss/budget/slots — MWONGOZO HATUA 1: bajeti inashuka kwa loss_factor, inakua
+     kwa win_factor) + rekodi kind=settlement.
+  3. `--status`: account state ya sasa (bajeti iliyobaki, slots wazi, daily loss, positions wazi).
+  4. Account state persistence: data/paper/account_state.json (reset ya siku = --new-day au auto
+     kwa date change). correlation_exposure kutoka positions wazi (correlation_groups za config).
+  5. Reuse core zilizopo (gate/execute/settle/repo) — USIJENGE mpya; hii ni CLI wrapper + state.
+  6. Self-tests bila network; Windows-safe output (ASCII/UTF8 reconfigure); report Rule 8.
+NB: pip_value kwa pair — tumia mapping rahisi ya MWONGOZO (quote USD=$10/lot... kwa qty units
+tumia scale ya adapter iliyopo); weka wazi kwenye Known Limitations kama approximation.
