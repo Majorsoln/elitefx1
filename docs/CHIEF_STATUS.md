@@ -13,6 +13,10 @@ MASTER ARCHITECTURE V1 — TRACKS MBILI SAMBAMBA (updated 2026-07-07 baada ya Au
 TRACK A (Engineering):    E1-E4 ZOTE CLOSED (paper). Validated PC ya Operator (sweep 11/11).
                           Audit #6 PASS. **P107 RESOLVED** (core transitively PURE; purity_check).
                           KAZI HAI: real-data runbook (snapshots kutoka ticks halisi).
+**ALPHA ENGINEERING (S-series) — OPENED 2026-07-08 (directive ya Project Director; Master V1
+s8.2 knowledge-need):** S1 Strategy Factory (events x pairs x params, backtest+costs, TRAIN) ->
+S2 Validation (walk-forward 2023-24 + FDR) -> S3 Holdout proof (2025+, mara moja) -> S4 Deploy
+(policies + K4 training data). QUICK WIN kwanza: OOS-confirm LESSON-017/018 (candidates za Phase 12).
 TRACK B (Knowledge & AI): K0-K3 ✅ — corpus 36 (34 ACTIVE) · GRAPH@v7 (172/202) · EVAL-SUITE 25 Qs.
                           KAZI HAI: batch 7 + GRAPH@v8 (kufunga K1 retroactive).
 Governance:               Chief Quant (Unified) — directive ya Project Director. Board Approval

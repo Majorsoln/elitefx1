@@ -283,3 +283,25 @@ Protocol: docs/RUNBOOK_forward_paper_trading.md. Mahitaji:
   6. Self-tests bila network; Windows-safe output (ASCII/UTF8 reconfigure); report Rule 8.
 NB: pip_value kwa pair — tumia mapping rahisi ya MWONGOZO (quote USD=$10/lot... kwa qty units
 tumia scale ya adapter iliyopo); weka wazi kwenye Known Limitations kama approximation.
+
+=== ALPHA ENGINEERING S1: STRATEGY FACTORY (Chief, 2026-07-08 — directive ya Project Director) ===
+KIPAUMBELE CHA JUU KULIKO ZOTE. Jenga `src/research/strategy_lab.py`:
+  1. GRID: events 9 za Event Library.md (Davey — rules kamili zimo) × pairs 9 × TF (H1/H4) ×
+     SL/TP params (mf. SL=ATR×{1,1.5,2}, TP=R×{1,1.5,2,3}) × filters za hiari (vol/activity state
+     kutoka states zilizopo) → candidates (~elfu kadhaa).
+  2. BACKTEST ENGINE (vectorized, polars): entries kwa rules za Davey verbatim ("next bar" honest);
+     COSTS = spread halisi ya pair (median kutoka states) + slippage ndogo; NO LOOKAHEAD (kila
+     signal inatumia bars zilizofungwa tu).
+  3. SPLITS TAKATIFU: TRAIN 2016-2022 (search) · VALIDATION 2023-2024 (walk-forward) ·
+     HOLDOUT 2025+ HAIGUSWI (S3 pekee, mara moja — enforce kwa code: refuse kusoma > 2024-12-31
+     bila flag --holdout-final iliyo na Chief token).
+  4. METRICS kwa kila candidate: trades N, EV net/trade, win%, PF, maxDD, trades/siku (availability),
+     walk-forward consistency. RANK kwa population view (LESSON-033/034 — si top-EV pekee).
+  5. FDR: BH correction juu ya validation results; ripoti survivors WAZI na wangapi wangetokea
+     kwa bahati (null baseline).
+  6. OUTPUT: reports/strategy_lab_report.md (survivors + metrics + registration list ya S3) +
+     data/strategies/candidates.jsonl. Self-test na data synthetic ndogo (bila data halisi).
+  RED LINES: hakuna kuchagua kwa holdout; hakuna metric bila costs; survivors = CANDIDATES hadi S3.
+PIA (kazi ndogo ya kwanza, kabla ya S1): OOS-CONFIRM runbook ya LESSON-017/018 (MR×EURUSD,
+DPB×EURUSD) — pre-registered test juu ya 2023-2024 validation window (SIO holdout) na FDR ya 2;
+hii inaweza kutupa strategy halisi ya kwanza NDANI YA WIKI.
