@@ -33,8 +33,9 @@ Governance:               Chief Quant (Unified) — directive ya Project Directo
 ```text
 E1-E4  ✅ CLOSED (paper) — Integrity Gate · Execution Object · Repository · Broker Adapter
        validated PC ya Operator (11/11) · Audit #6 PASS · P107 RESOLVED
-INAYOFUATA (Track A):  real-data validation (snapshots kutoka ticks) → paper-trading run →
-                       (uamuzi wa Project Director: live artifact + max_spread) → live paper → Production
+INAYOFUATA (Track A):  real-data validation ✅ → K4 datasets (rekodi halisi → training) au
+                       OOS-validation rasmi (pre-reg+FDR) — SIO naive PnL backtest (Chief judgment)
+                       → (baadaye, kwa proof + PD approval) paper-trading live → Production
 INAYOFUATA (Track B):  K1 batch 7 + GRAPH@v8 (funga retroactive) → K4 Datasets → K5 (EVAL→RAG→SFT)
 Baadaye (Decision Sci): P96 Policy Selection · P70 confidence model (RED LINE) · P78 redundancy
 NOT YET ELIGIBLE:      D8 Decision Quality/Outcome · D9 Portfolio/Live
@@ -92,7 +93,8 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
 | K1 retroactive backlog (batch 7 → ~42-45) + GRAPH@v8 | RESEARCHER-K | ACTIVE |
 | P107 remediation | IMPLEMENTER-A | **CLOSED 2026-07-07** (purity_check; 11/11) |
 | F-005 full-metric re-run | Japhet (data run ijayo) | DEBT (V11) |
-| Real-data runbook (snapshots kutoka ticks za Operator) | Chief → Operator | NEXT |
+| Real-data validation | Operator | **DONE 2026-07-07 (PASS)** |
+| K4 Datasets (rekodi halisi → training data) au batch 7 | Chief/RESEARCHER-K | NEXT (chaguo la PD) |
 | Maamuzi ya Project Director: live-artifact format + max_spread per-pair | Project Director | PENDING (kabla ya live) |
 
 ## Governance
