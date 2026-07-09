@@ -80,3 +80,15 @@ strategy_lab.py iko tayari (IMPLEMENTER-A + Chief fixes 2; sweep 15/15). KAZI YA
 Ripoti: "tayari S1". Chief atakagua candidates + kufunga registration, KISHA ndiyo
 --split validation (S2 + FDR — hukumu). USIENDESHE validation kabla ya review ya Chief
 (nidhamu ya pre-registration; kuepuka forking paths).
+
+## LOG — 2026-07-09 (S1 TRAIN: DONE; REGISTRATION FROZEN) + RUNBOOK HAI: S2 VALIDATION
+S1: cells 2,004 → candidates 2,004 (EV>0: 805). nr7_break×(LONDON,NY) = 216/216 chanya. Chief
+amefunga registration (grid+code frozen). KAZI YAKO SASA (S2 — hukumu, amri moja):
+  git pull
+  cd src\research
+  python strategy_lab.py --split validation
+  cd ..\..
+  git add reports\strategy_lab_report.md data\strategies\candidates.jsonl
+  git commit -m "S2 validation + FDR" && git push origin main
+Ripoti: "tayari S2". Ripoti itakuwa na sehemu ya FDR (survivors + wangapi kwa bahati) —
+strategy za kwanza RASMI zinaweza kuzaliwa hapa (au kufa kwa heshima; zote mbili ni sayansi).

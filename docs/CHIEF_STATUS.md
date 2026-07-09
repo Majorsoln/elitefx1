@@ -107,6 +107,21 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   Uamuzi wa Chief: S1 grid TIER-1 = nr7_break (+session/vol filters), second_chance, shock_follow,
   session_orb, inside_break, rsi2_pullback; wengine TIER-2/kwa ukamilifu.
 
+- **2026-07-09 — S1 STRATEGY FACTORY RUN: DONE (TRAIN) + S2 REGISTRATION FROZEN (Chief).**
+  Grid cells 2,004 (pre-registered kwa code) juu ya TRAIN 2016-2022: candidates 2,004 (min N=50),
+  EV>0 = 805 (40%). Muundo: **nr7_break inatawala** (cells chanya 530; na filter (LONDON,NY) =
+  **216/216 chanya**, no-LATE 203/216, bila filter 111/216 — gradient ya mechanism inashikamana);
+  top: nr7×GBPUSD (LONDON,NY)×HIGH EV +7..+13 net (PF 1.4-1.9, N 168-532), nr7×USDCAD/AUDUSD/
+  EURUSD; shock_follow×EURJPY ASIA (+8.5..+9.5, N=50); second_chance×EURJPY LATE (+6.3..+7.5).
+  **UAMINIFU:** top rows = max order-statistics za cells 2,004 in-sample — shrinkage kubwa OOS
+  inatarajiwa; hukumu = S2. **REGISTRATION FROZEN (uamuzi wa Chief):** S2 = grid ILEILE, code
+  ILEILE (hakuna mabadiliko yoyote kati ya sasa na S2 run; mabadiliko yoyote = re-registration),
+  juu ya VALIDATION 2023-2024, BH-FDR q=0.10 juu ya cells zote. Prediction ya wazi (falsifiable):
+  kama familia ya nr7_break itasalia na muundo uleule (GBPUSD/USDCAD/AUDUSD, LONDON+NY) baada ya
+  FDR → mechanism ni halisi; isiposalia → LESSON mpya ya kupinga. S2 run = Operator (amri moja).
+  NB ya S2 scope: validation ni window moja 2023-24 + FDR (OOS-confirmation); rolling walk-forward
+  kamili = uboreshaji wa baadaye (S2.1) kama itahitajika.
+
 ## Top Risks (live)
 
 | # | Risk | Status |
