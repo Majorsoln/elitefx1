@@ -91,6 +91,22 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   Njia zenye nidhamu: K4 Datasets (rekodi halisi → training data) au OOS-validation rasmi (pre-reg+FDR),
   SIO naive backtest. Edge = OOS proof + Project Director approval kabla ya pesa.
 
+- **2026-07-09 — S0 EVENT QUALITY RUN: DONE kwenye PC ya Operator (TRAIN 2016-2022, H1, pairs 9,
+  episodes ~500k).** Matokeo makuu (IN-SAMPLE TRAIN — sio edge claims; S2 FDR ndiyo hukumu):
+  (1) **nr7_break (familia F3, MPYA) = nyota ya S0**: aggregate −0.108 (bora kuliko zote; PF 0.99),
+  chanya kwenye pairs 5 (GBPUSD +0.91 n=2246 · AUDUSD +0.57 n=2569 · EURGBP +0.35 · USDJPY +0.25 ·
+  EURUSD +0.14), **session-structure kali: LONDON +2.23 / NY +2.64 / ASIA +0.59 / LATE −1.26**, na
+  **HIGH vol +0.71 (n=7692)**. Mantiki inashikamana: compression inalipuka pale participation
+  inapoingia — mechanism-consistent, sio data-mining artifact ya wazi. (2) Pockets nyingine chanya:
+  second_chance×EURJPY +1.57 · shock_follow×EURJPY +1.17 / ×USDJPY +0.38 (ASIA +0.99) ·
+  session_orb×USDJPY +0.52 · inside_break×USDJPY +0.47. (3) **Stop-breakout entries za bei ghali**:
+  jump_off −4.49 na breakout_stop −2.85 aggregate — breakout inalipa spread+slippage+adverse
+  selection kwa SL/TP 1.5/1.5; watajaribiwa S1 kwa TP 2-3R kabla ya kuuawa. (4) V1 zote negative
+  (kama Phase 12) — D1-fix imepunguza trades/siku bila kuharibu ulinganifu. TAHADHARI ya Chief:
+  cells 144+ zimeangaliwa — rows chanya za juu zinaweza kuwa bahati; kazi ya S2 (FDR) kuamua.
+  Uamuzi wa Chief: S1 grid TIER-1 = nr7_break (+session/vol filters), second_chance, shock_follow,
+  session_orb, inside_break, rsi2_pullback; wengine TIER-2/kwa ukamilifu.
+
 ## Top Risks (live)
 
 | # | Risk | Status |

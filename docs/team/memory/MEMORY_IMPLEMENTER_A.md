@@ -327,3 +327,21 @@ Chief ameongeza: entries 5 MPYA (rsi2_pullback, bb_fade, engulf_extreme, inside_
 (by_vol; jedwali la 4 la ripoti) + session (jedwali la 3). KWA S1 GRID YAKO: dimension ya
 context filter = {none, vol_state, session, vol_state x session} — hii ndiyo safu ya uchambuzi
 inayolishwa modeli baadaye (K4: P(outcome | context, event, params)). Sweep 14/14 PASS.
+
+=== S1 GRID RULING (Chief, 2026-07-09 — baada ya S0 event_quality run ya Operator) ===
+Evidence: reports/event_quality_report.md (TRAIN 2016-2022, H1, ~500k episodes). RULING ya grid:
+  TIER-1 (kipaumbele cha compute + pre-registration ya S2):
+    * nr7_break — pairs ZOTE; filters: session {ALL, no-LATE, LONDON+NY} × vol {ALL, HIGH};
+      TP sweep muhimu (compression inaweza kulipa zaidi kwa 2-3R).
+    * second_chance — EURJPY/USDCHF/EURUSD; filters {ALL, LATE, LOW}.
+    * shock_follow — EURJPY/USDJPY; filters {ALL, ASIA, NORMAL}.
+    * session_orb — USDJPY (+EURUSD/GBPUSD kwa kulinganisha); vol {ALL, HIGH}.
+    * inside_break — USDJPY; session {ALL, LONDON} × vol {ALL, HIGH}.
+    * rsi2_pullback — EURUSD/USDJPY (karibu-flat, TP/SL sweep inaweza kuifungua).
+  TIER-2 (endesha kwa ukamilifu, compute ikiruhusu): mr_zscore, lowvol_reversal, trend_resume,
+    big_range_mo, pullback_v2, pattern_3lows, bb_fade, engulf_extreme.
+  STOP-BREAKOUTS (jump_off, breakout_stop): usiwaue bado — TRAIN inaonyesha −4.5/−2.8 kwa
+    SL/TP 1.5/1.5; jaribu TP {2,3}R + session filters; wakibaki negative kila param → ripoti
+    na tutawa-archive kwa evidence.
+  KUMBUKA: hizi ni TRAIN in-sample; S1 inatoa candidates → S2 walk-forward 2023-24 + BH-FDR
+  (cells zote zilizojaribiwa zinahesabika kwenye correction!) → S3 holdout mara moja.
