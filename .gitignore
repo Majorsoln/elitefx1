@@ -12,6 +12,13 @@ data/**
 !data/interim/
 !data/processed/
 !data/**/.gitkeep
+# EXCEPTIONS (rekodi ndogo za mfumo — SI data ghafi):
+#   data/paper/      = paper-trading log + account state (pre-registration ya umma)
+#   data/strategies/ = candidates.jsonl za strategy_lab (S1/S2 record)
+!data/paper/
+!data/paper/**
+!data/strategies/
+!data/strategies/**
 
 # === Virtual environments (KAMWE haziwekwi git) ===
 .venv/
