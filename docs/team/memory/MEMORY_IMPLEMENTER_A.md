@@ -396,3 +396,11 @@ bars · no-LATE (entry-hour 17-23 = skip) · position 1 kwa wakati. Kazi mbili:
   2. **policy rasmi**: "policy:strat001-nr7-usdchf@v1" kwenye decision_policy.py — deterministic,
      inaingia decision_engine → gate (FTMO 5) → paper broker (mnyororo uleule wa E1-E4).
      Provenance: strategy_lab S1-S3 (commits ccfbb24/e1a0d27/86a5977). Self-tests; Rule 8 report.
+
+=== S4 UPDATE (Chief, 2026-07-09): tool + policy sasa ni za strategies MBILI ===
+S3b imezaa STRAT-002 (nr7_break × USDJPY · SL1.0/TP1.0 · no-LATE · PROVEN-OOS). Badilisha
+spec ya S4: strat001_signal.py → **strat_signal.py** yenye REGISTRY ya strategies PROVEN
+(STRAT-001 USDCHF SL2/TP1; STRAT-002 USDJPY SL1/TP1; zote nr7+no-LATE) — CLI: --pair au
+--all, inasoma bars, inatoa pending orders kwa format ya paper_trader. Policy: moja kwa kila
+strategy ("policy:strat001@v1", "policy:strat002@v1") au registry-policy moja — chagua rahisi,
+eleza. Bado: REUSE nr7_break + wilder_atr; self-tests; Rule 8 report.

@@ -204,6 +204,25 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   kutoka holdout hii. Chanzo cha holdout rows: candidates.jsonl ya commit 86a5977 (tayari
   ina p za kila cell — hakuna run mpya inayohitajika).
 
+- **2026-07-09 — S3b VERDICT: 3/5 PASS (BH-FDR q=0.10, m=5; expected false ~0.3).**
+  Holdout (cells 5 zilizosajiliwa PEKEE zilifunguliwa):
+    SIB-1 USDCHF 1.5/1.0 no-LATE: N=310, EV +1.41, win 67.7%, p=0.049 → **PASS**
+    SIB-2 USDJPY 1.0/1.0 no-LATE: N=327, EV +2.65, win 57.8%, p=0.029 → **PASS**
+    SIB-3 USDCHF 2.0/1.0 (LONDON,NY): N=82, EV +3.60, win 75.6%, p=0.036 → **PASS**
+    SIB-4 EURUSD 2.0/1.5 no-LATE: EV −0.84 → **FAIL** (pair-level mirage — EURUSD imekufa holdout)
+    SIB-5 GBPUSD 2.0/1.0 no-LATE HIGH: EV +2.84 LAKINI p=0.17 (N=103) → FAIL (underpowered tena;
+          anabaki candidate wa forward-OOS ya baadaye — HAJAthibitishwa)
+  **MAJINA RASMI + PORTFOLIO RULING (Chief):**
+    · **STRAT-002 = nr7_break × USDJPY · SL1.0/TP1.0 · no-LATE (PROVEN-OOS)** — slot MPYA ya
+      pair huru; pamoja na STRAT-001 → ~1.6 trades/siku jumla.
+    · SIB-1 na SIB-3 (USDCHF) = **uthibitisho wa PLATEAU ya params ya STRAT-001** (robustness
+      kwa maana ya Davey) — trades zao zina-overlap sana na STRAT-001 (NR7 bar ileile), kwa hiyo
+      SIO slots huru za deployment; zinarekodiwa PROVEN-OOS kama correlation-group "USDCHF-nr7";
+      deployment ya USDCHF inabaki STRAT-001 pekee (FTMO correlation constraint inaunga mkono).
+  Mechanism confirmation: nr7+TP1.0+no-LATE sasa imethibitika kwenye pairs MBILI huru (USDCHF,
+  USDJPY) na param-plateau (SL 1.5-2.0) — hii si cell ya bahati, ni FAMILIA halisi.
+  Holdout: SEALED tena kabisa — batch hii ilikuwa one-time (ruling 4331e57).
+
 ## Top Risks (live)
 
 | # | Risk | Status |

@@ -148,3 +148,11 @@ Holdout: N=303, EV +1.92 net, win 73.9%, PF 1.31, p=0.021 (criterion imepita). K
 Re-run ya validation baada ya state rebuild = byte-identical na e1a0d27 (diff TUPU; screenshot).
 S3 rekodi imefungwa BILA masharti. STRAT-001 anasimama imara. Kazi zilizobaki: IMPLEMENTER-A
 session (S4: strat001_signal.py + policy), RESEARCHER-K session (lessons 3), paper-trading kila siku.
+
+## LOG — 2026-07-09 (S3b: 3/5 PASS — STRAT-002 AMEZALIWA)
+**STRAT-002 = nr7_break × USDJPY · H1 · SL 1.0×ATR / TP 1.0×ATR · no-LATE** (holdout: N=327,
+EV +2.65, win 57.8%, p=0.029). USDCHF plateau (SIB-1/3) inathibitisha STRAT-001; EURUSD FAIL;
+GBPUSD underpowered (forward candidate). PORTFOLIO YA PAPER SASA: STRAT-001 (USDCHF) +
+STRAT-002 (USDJPY) = ~1.6 trades/siku. KAZI: paper-trade ZOTE MBILI kila siku (NR7 + no-LATE;
+USDJPY: SL=TP=1×ATR14). IMPLEMENTER-A session: S4 tool sasa i-cover strategies zote mbili
+(memory yake ime-update).
