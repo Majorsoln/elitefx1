@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import lzma
+import socket
 import struct
 import sys
 import time
@@ -165,11 +166,48 @@ def download_month(symbol: str, year: int, month: int, out_root: Path,
     return "OK", len(rows)
 
 
-def preflight(symbol: str, timeout: int) -> None:
-    """Jaribio moja la haraka la mtandao kabla ya kazi 300+: Jumatatu ya zamani
-    inayojulikana. Ikishindikana mara 2, inua hitilafu — usisage kazi zote bure."""
-    url = hour_url(symbol, datetime(2020, 1, 6, 10, tzinfo=timezone.utc))
-    fetch(url, timeout=timeout, retries=1)
+_GAI = socket.getaddrinfo
+
+
+def _ipv4_only(on: bool) -> None:
+    """Lazimisha IPv4 (IPv6 mbovu kwenye Windows/ISP = 'read operation timed out')."""
+    if on:
+        socket.getaddrinfo = (lambda host, port, family=0, type=0, proto=0, flags=0:
+                              _GAI(host, port, socket.AF_INET, type, proto, flags))
+    else:
+        socket.getaddrinfo = _GAI
+
+
+def _scheme(https: bool) -> None:
+    """Badilisha http(s) ya BASE_URL. Data ni ya umma — http ni fallback halali
+    pale ISP/firewall inapobana https ya host hii."""
+    global BASE_URL
+    BASE_URL = ("https" if https else "http") + "://datafeed.dukascopy.com/datafeed"
+
+
+# (jina, https?, ipv4-only?) — zinajaribiwa kwa mpangilio huu; ya kwanza
+# inayofanya kazi inabaki kwa run nzima.
+MODES = [("https", True, False), ("https+IPv4", True, True),
+         ("http+IPv4", False, True), ("http", False, False)]
+
+
+def preflight(symbol: str, timeout: int, fetch_fn=fetch) -> str:
+    """Jaribio la haraka kabla ya kazi 300+: Jumatatu ya zamani inayojulikana,
+    kwa kila mode (https/http x IPv6/IPv4). Rudisha jina la mode iliyofanya kazi
+    (inabaki hai); zote zikishindikana — inua hitilafu, usisage kazi zote bure."""
+    dt = datetime(2020, 1, 6, 10, tzinfo=timezone.utc)
+    errors = []
+    for name, https, v4 in MODES:
+        _scheme(https)
+        _ipv4_only(v4)
+        try:
+            fetch_fn(hour_url(symbol, dt), timeout=timeout, retries=1)
+            return name
+        except Exception as e:
+            errors.append(f"  {name}: {e}")
+    _scheme(True)
+    _ipv4_only(False)
+    raise RuntimeError("modes zote 4 zimeshindikana:\n" + "\n".join(errors))
 
 
 def run(pairs, start, end, out_root: Path, workers: int, force: bool,
@@ -179,11 +217,16 @@ def run(pairs, start, end, out_root: Path, workers: int, force: bool,
     print(f"Dukascopy direct: pairs={','.join(pairs)} | miezi {start}..{end} "
           f"({len(months)}) | kazi {total} | -> {out_root}")
     try:
-        preflight(pairs[0], timeout)
+        mode = preflight(pairs[0], timeout)
+        if mode != "https":
+            print(f"TAARIFA: https ya kawaida imeshindikana — natumia mode '{mode}' "
+                  f"kwa run nzima.")
     except Exception as e:
-        print(f"\nPREFLIGHT IMESHINDIKANA — mtandao haufiki datafeed.dukascopy.com:\n  {e}\n"
-              f"Angalia internet/firewall/VPN yako kisha ujaribu tena "
-              f"(au ongeza --timeout, mf. --timeout 60).")
+        print(f"\nPREFLIGHT IMESHINDIKANA — mtandao haufiki datafeed.dukascopy.com:\n{e}\n"
+              f"Hatua: (1) fungua {BASE_URL}/XAUUSD/2020/00/06/10h_ticks.bi5 kwenye "
+              f"browser — ikishindikana pia, ISP/firewall imefunga host hii; "
+              f"(2) jaribu VPN au hotspot ya simu; (3) --timeout 90; "
+              f"(4) tumia provider mbadala: scripts/download_histdata.py")
         return 2
     fetcher = lambda u: fetch(u, timeout=timeout, retries=retries)
     done = failed = streak = 0
@@ -257,7 +300,7 @@ def self_test() -> int:
           ticks[0][3] == 2.25 and ticks[0][4] == 1.5)
     check("parse_bi5: bytes tupu = hakuna ticks", parse_bi5(b"", h0, 1_000) == [])
 
-    # 4) fetch: retries zikiisha -> RuntimeError yenye URL (bila mtandao halisi)
+    # 4b) fetch: retries zikiisha -> RuntimeError yenye URL (bila mtandao halisi)
     real_urlopen = urllib.request.urlopen
     urllib.request.urlopen = lambda *a, **k: (_ for _ in ()).throw(OSError("mock down"))
     try:
@@ -269,11 +312,47 @@ def self_test() -> int:
     finally:
         urllib.request.urlopen = real_urlopen
 
-    # 5) month_range inclusive + kuvuka mwaka
+    # 5) modes za preflight: fallback https -> https+IPv4 -> http+IPv4 -> http
+    try:
+        _ipv4_only(True)
+        infos = socket.getaddrinfo("localhost", 80)
+        check("_ipv4_only: matokeo yote AF_INET",
+              bool(infos) and all(i[0] == socket.AF_INET for i in infos))
+    finally:
+        _ipv4_only(False)
+    _scheme(False)
+    check("_scheme: http kwenye URL", hour_url("XAUUSD", h0).startswith("http://"))
+    _scheme(True)
+
+    fails = {"n": 0}
+
+    def flaky_fetch(url, timeout=0, retries=0):
+        fails["n"] += 1
+        if fails["n"] < 3:                     # https na https+IPv4 zinafeli
+            raise OSError("timed out")
+        return b""
+
+    mode = preflight("XAUUSD", 5, fetch_fn=flaky_fetch)
+    check("preflight: fallback -> http+IPv4", mode == "http+IPv4"
+          and BASE_URL.startswith("http://"))
+    _scheme(True)
+    _ipv4_only(False)
+
+    def dead_fetch(url, timeout=0, retries=0):
+        raise OSError("down")
+
+    try:
+        preflight("XAUUSD", 5, fetch_fn=dead_fetch)
+        check("preflight: zote zikifeli -> hitilafu + rollback", False)
+    except RuntimeError:
+        check("preflight: zote zikifeli -> hitilafu + rollback",
+              BASE_URL.startswith("https://") and socket.getaddrinfo is _GAI)
+
+    # 6) month_range inclusive + kuvuka mwaka
     check("month_range 2016-11..2017-02",
           month_range("2016-11", "2017-02") == [(2016, 11), (2016, 12), (2017, 1), (2017, 2)])
 
-    # 6) end-to-end ya mwezi mmoja na fetcher bandia (hakuna mtandao) + resume
+    # 7) end-to-end ya mwezi mmoja na fetcher bandia (hakuna mtandao) + resume
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         fake = lzma.compress(REC.pack(0, 108500, 108450, 1.0, 1.0))
