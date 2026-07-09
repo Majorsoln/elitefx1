@@ -1,0 +1,355 @@
+"""
+strategy_lab.py — S1 STRATEGY FACTORY (Alpha Engineering; Chief directive + GRID RULING 2026-07-09).
+
+MCHAKATO: GRID (events V2 x pairs x SL/TP x context-filter) -> backtest kwa `episodes()` ya
+event_quality_report (fill rules ZILIZOKAGULIWA — SIBADILISHI) -> metrics kwa costs -> candidates.
+S1 = TRAIN search (in-sample) -> candidates.jsonl. S2 = walk-forward VALIDATION + BH-FDR (machinery
+imo hapa: bh_fdr/pvalue_gt0). S3 = HOLDOUT mara moja (imezuiwa kwa code hadi Chief token).
+
+MKATABA (spec ya Chief + rulings):
+  1. GRID: EVENTS_V2 (TIER-1 pre-registered filters + TIER-2 default) x pairs x SL/TP{1,1.5,2}x{1,1.5,2,3}
+     x context-filter {ALL, session, vol} — filters PRE-REGISTERED per event (FDR inahesabu ZOTE).
+  2. BACKTEST: `episodes()` (next-bar honest, tie->SL, costs kila trade). SIBADILISHI fill rules (Chief).
+  3. SACRED SPLITS (RED LINE, enforced kwa code): TRAIN <2023 (search) | VALIDATION 2023-2024 |
+     HOLDOUT >=2025 (refuse kusoma bila --holdout-final + token sahihi).
+  4. METRICS: N, EV net/trade (pips, costs ndani), win%, PF, maxDD, trades/day. RANK = population view
+     (LESSON-033/034 — si top-EV pekee: N + availability + consistency).
+  5. FDR: BH correction (bh_fdr) juu ya p-values za VALIDATION; null baseline (wangapi kwa bahati).
+  6. OUTPUT: reports/strategy_lab_report.md + data/strategies/candidates.jsonl. Survivors = CANDIDATES
+     hadi S3. RED LINES: hakuna kuchagua kwa holdout; hakuna metric bila costs.
+
+Research harness (numpy OK — SIO Engine core; purity inahusu core). Reuse: event_library_v2 (EVENTS_V2),
+event_quality_report (episodes, _metrics, SESSIONS, _sess).
+Endesha (PC ya data): python strategy_lab.py --split train        (S1 candidates)
+                      python strategy_lab.py --split validation   (S2 walk-forward + FDR)
+Self-test (bila data): python strategy_lab.py --self-test
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import numpy as np
+
+from event_library_v2 import EVENTS_V2, _synthetic
+from event_quality_report import episodes, _metrics, SESSIONS
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+MIN_N = 30                                    # sample ya chini kuwa candidate
+SL_GRID = (1.0, 1.5, 2.0)
+TP_GRID = (1.0, 1.5, 2.0, 3.0)
+VOLS = ("LOW", "NORMAL", "HIGH")
+
+# sacred splits (RED LINE)
+TRAIN_END = datetime(2023, 1, 1)
+VALID_END = datetime(2025, 1, 1)
+HOLDOUT_TOKEN = "CHIEF-HOLDOUT-S3"            # lazima ilingane ili kusoma >=2025 (Chief pekee)
+
+# GRID RULING (Chief 2026-07-09) — TIER-1 pre-registered: pairs + session/vol filters per event.
+# session_filter: None=ALL | "no-LATE" | jina la session | list ya sessions.  vol_filter: None=ALL | jina.
+TIER1 = {
+    "nr7_break":     dict(pairs="ALL", sessions=(None, "no-LATE", ("LONDON", "NY")), vols=(None, "HIGH")),
+    "second_chance": dict(pairs=("EURJPY", "USDCHF", "EURUSD"), sessions=(None, "LATE"), vols=(None, "LOW")),
+    "shock_follow":  dict(pairs=("EURJPY", "USDJPY"), sessions=(None, "ASIA"), vols=(None, "NORMAL")),
+    "session_orb":   dict(pairs=("USDJPY", "EURUSD", "GBPUSD"), sessions=(None,), vols=(None, "HIGH")),
+    "inside_break":  dict(pairs=("USDJPY",), sessions=(None, "LONDON"), vols=(None, "HIGH")),
+    "rsi2_pullback": dict(pairs=("EURUSD", "USDJPY"), sessions=(None,), vols=(None,)),
+}
+# TIER-2 (default context — ALL sessions/vols) endesha kwa ukamilifu compute ikiruhusu.
+TIER2 = ("mr_zscore", "lowvol_reversal", "trend_resume", "big_range_mo",
+         "pullback_v2", "pattern_3lows", "bb_fade", "engulf_extreme")
+# stop-breakouts: usiwaue — jaribu TP {2,3}R (ruling). Negative kila param -> archive kwa evidence.
+STOP_BREAKOUTS = {"jump_off": dict(pairs="ALL", sessions=(None,), vols=(None,)),
+                  "breakout_stop": dict(pairs="ALL", sessions=(None,), vols=(None,))}
+
+
+def grid(pairs):
+    """Zalisha candidate specs zote (cartesian) kutoka GRID RULING. Kila spec = dict inayoelezea cell.
+    FDR itahesabu ZOTE zilizozalishwa hapa (pre-registration ya honest multiple-testing)."""
+    cells = []
+    def add(bank, sltp):
+        for ev, evp in bank.items():
+            syms = pairs if evp["pairs"] == "ALL" else [p for p in evp["pairs"] if p in pairs]
+            for sym in syms:
+                for sl in SL_GRID:
+                    for tp in sltp:
+                        for sf in evp["sessions"]:
+                            for vf in evp["vols"]:
+                                cells.append(dict(event=ev, pair=sym, sl_atr=sl, tp_atr=tp,
+                                                  session_filter=sf, vol_filter=vf))
+    add(TIER1, TP_GRID)
+    add({k: dict(pairs="ALL", sessions=(None,), vols=(None,)) for k in TIER2}, TP_GRID)
+    add(STOP_BREAKOUTS, (2.0, 3.0))          # ruling: stop-breakouts jaribu TP {2,3}R
+    return cells
+
+
+def _match(tr, sf, vf):
+    """Je trade inakidhi context filter? tr = (entry, exit, dir, pnl, session, vol_state)."""
+    sess, vs = tr[4], tr[5]
+    if sf is not None:
+        if sf == "no-LATE":
+            if sess == "LATE":
+                return False
+        elif isinstance(sf, (list, tuple)):
+            if sess not in sf:
+                return False
+        elif sess != sf:
+            return False
+    if vf is not None and vs != vf:
+        return False
+    return True
+
+
+def _maxdd(pnls):
+    """Max drawdown ya equity curve ya cumulative pnl (pips)."""
+    eq = np.cumsum(pnls)
+    peak = np.maximum.accumulate(eq)
+    return float((peak - eq).max()) if len(eq) else 0.0
+
+
+def evaluate(cell, data, days):
+    """Backtest cell moja: event fn(params default) -> episodes -> context filter -> metrics+costs.
+    Rudisha dict ya candidate (au None kama N<MIN_N)."""
+    spec = EVENTS_V2[cell["event"]]
+    out = spec["fn"](data["o"], data["h"], data["l"], data["c"], data.get("tc"), data.get("hour"))
+    trs = episodes(out, spec["entry"], data["o"], data["h"], data["l"], data["c"],
+                   data["atr"], data["spr"], data["hour"], data.get("vol"),
+                   sl_atr=cell["sl_atr"], tp_atr=cell["tp_atr"])
+    pn = [t[3] for t in trs if _match(t, cell["session_filter"], cell["vol_filter"])]
+    m = _metrics(pn)
+    if m["n"] < MIN_N:
+        return None
+    return dict(**cell, n=m["n"], ev=round(m["ev"], 4), win=round(m["win"], 4),
+                pf=round(m["pf"], 3) if math.isfinite(m["pf"]) else None,
+                maxdd=round(_maxdd(pn), 2), trades_per_day=round(m["n"] / max(days, 1), 3),
+                pnls=pn)                       # pnls zinahifadhiwa kwa FDR (S2); zinaondolewa kwenye jsonl
+
+
+# ---------- FDR machinery (S2) ----------
+def pvalue_gt0(pnls):
+    """One-sided p-value: H0 mean<=0 vs H1 mean>0 (normal approx, stdlib erfc)."""
+    p = np.asarray(pnls, float); n = len(p)
+    if n < 2:
+        return 1.0
+    sd = p.std(ddof=1)
+    if sd == 0:
+        return 0.0 if p.mean() > 0 else 1.0
+    t = p.mean() / (sd / math.sqrt(n))
+    return 0.5 * math.erfc(t / math.sqrt(2.0))
+
+
+def bh_fdr(pvals, q=0.10):
+    """Benjamini-Hochberg: rudisha (survivors_mask, k, expected_false). Cells ZOTE zinahesabika (m)."""
+    pv = np.asarray(pvals, float); m = len(pv)
+    if m == 0:
+        return np.zeros(0, bool), 0, 0.0
+    order = np.argsort(pv)
+    k = 0
+    for rank, idx in enumerate(order, 1):
+        if pv[idx] <= q * rank / m:
+            k = rank
+    if k == 0:
+        return np.zeros(m, bool), 0, 0.0
+    cutoff = pv[order[k - 1]]
+    survivors = pv <= cutoff
+    return survivors, int(k), round(q * k, 2)
+
+
+# ---------- data loading (SACRED SPLITS — enforced) ----------
+def load_window(sym, tf, split, holdout_token=None):
+    """Soma state parquet kwa split. RED LINE: holdout inarefuse bila token sahihi (KABLA ya kusoma)."""
+    if split == "holdout" and holdout_token != HOLDOUT_TOKEN:
+        raise PermissionError("RED LINE: HOLDOUT (>=2025) imezuiwa — inahitaji --holdout-final + Chief token")
+    import polars as pl
+    from market_state_engine import pip
+    from latent_structure import state_path
+    p = state_path(sym, tf)
+    if not p.exists():
+        return None
+    df = pl.read_parquet(p).sort("ts")
+    if split == "train":
+        df = df.filter(pl.col("ts") < TRAIN_END)
+    elif split == "validation":
+        df = df.filter((pl.col("ts") >= TRAIN_END) & (pl.col("ts") < VALID_END))
+    elif split == "holdout":
+        df = df.filter(pl.col("ts") >= VALID_END)
+    else:
+        raise ValueError(f"split batili: {split}")
+    if df.height < 500:
+        return None
+    pp = pip(sym)
+    return dict(o=df["o"].to_numpy() / pp, h=df["h"].to_numpy() / pp, l=df["l"].to_numpy() / pp,
+                c=df["c"].to_numpy() / pp, atr=df["atr"].to_numpy() / pp,
+                spr=np.nan_to_num(df["spr"].to_numpy(), nan=0.0), tc=df["tc"].to_numpy().astype(float),
+                hour=df["ts"].dt.hour().to_numpy(), vol=np.asarray(df["volatility_state"].to_list()),
+                days=df["ts"].dt.date().n_unique())
+
+
+def search(pairs, tf, split, holdout_token=None):
+    """Endesha grid nzima juu ya split. Rudisha (candidates, n_cells_tested, days_total)."""
+    cells = grid(pairs)
+    cache = {sym: load_window(sym, tf, split, holdout_token) for sym in pairs}   # load mara moja kwa pair
+    cands = []; tested = 0
+    days_tot = sum(d["days"] for d in cache.values() if d)
+    for cell in cells:
+        data = cache.get(cell["pair"])
+        if data is None:
+            continue
+        tested += 1
+        cand = evaluate(cell, data, data["days"])
+        if cand is not None:
+            cands.append(cand)
+    return cands, tested, days_tot
+
+
+# ---------- output ----------
+def _population_rank(cands):
+    """Population view (LESSON-033/034): rank kwa EV chanya NA availability (trades/day) NA N — si EV pekee."""
+    return sorted(cands, key=lambda x: (x["ev"] > 0, x["ev"] * math.log1p(x["n"])), reverse=True)
+
+
+def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, out_root=REPO_ROOT):
+    out_root = Path(out_root)
+    strat_dir = out_root / "data" / "strategies"
+    strat_dir.mkdir(parents=True, exist_ok=True)
+    jl = strat_dir / "candidates.jsonl"
+    with open(jl, "w", encoding="utf-8") as f:
+        for c in _population_rank(cands):
+            rec = {k: v for k, v in c.items() if k != "pnls"}
+            rec["split"] = split
+            f.write(json.dumps(rec, sort_keys=True) + "\n")
+
+    fdr_line = ""
+    if apply_fdr and cands:
+        pvals = [pvalue_gt0(c["pnls"]) for c in cands]
+        surv, k, exp_false = bh_fdr(pvals, q)
+        fdr_line = (f"- **BH-FDR (q={q})**: {int(surv.sum())}/{len(cands)} survivors; "
+                    f"~{exp_false} zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)={tested}.")
+
+    L = [f"# Strategy Lab — S1 candidates ({split.upper()})\n",
+         f"*{datetime.now():%Y-%m-%d %H:%M} | TF={tf} | split={split} | cells tested={tested} | "
+         f"candidates (N>={MIN_N})={len(cands)} | costs ndani (episodes) | RANK=population view*\n",
+         "> **UAMINIFU:** hizi ni CANDIDATES, SIO strategies. TRAIN=in-sample; uthibitisho = S2 "
+         "(walk-forward VALIDATION + BH-FDR) na S3 (HOLDOUT, mara moja). RED LINES: hakuna kuchagua "
+         "kwa holdout; hakuna metric bila costs. LESSON-001/002/029/033/034. Profitable != Tradable Edge.\n"]
+    if fdr_line:
+        L.append("\n## FDR (S2)\n" + fdr_line + "\n")
+    L.append("\n## Top candidates (population rank)\n")
+    L.append("| event | pair | SL | TP | session | vol | N | EV net | win% | PF | maxDD | tr/day |")
+    L.append("|-------|------|----|----|---------|-----|---|--------|------|----|-------|--------|")
+    for c in _population_rank(cands)[:40]:
+        L.append(f"| {c['event']} | {c['pair']} | {c['sl_atr']} | {c['tp_atr']} | {c['session_filter']} | "
+                 f"{c['vol_filter']} | {c['n']:,} | {c['ev']:+.3f} | {c['win']*100:.1f} | "
+                 f"{c['pf'] if c['pf'] is not None else 'inf'} | {c['maxdd']:.1f} | {c['trades_per_day']:.2f} |")
+    L.append("\n*S1 = candidates -> S2 walk-forward+FDR -> S3 holdout. Chief directive + GRID RULING.*")
+    rpt = out_root / "reports" / "strategy_lab_report.md"
+    rpt.parent.mkdir(parents=True, exist_ok=True)
+    rpt.write_text("\n".join(L), encoding="utf-8")
+    return jl, rpt
+
+
+# ---------- self-test (bila data halisi) ----------
+def self_test():
+    ok = True
+
+    # (1) grid inazalisha cells; ZOTE zina fields sahihi; pairs zisizo kwenye orodha hazitokei
+    pairs = ["EURUSD", "USDJPY", "EURJPY", "GBPUSD", "USDCHF"]
+    cells = grid(pairs)
+    keys_ok = all({"event", "pair", "sl_atr", "tp_atr", "session_filter", "vol_filter"} <= set(c) for c in cells)
+    pairs_ok = all(c["pair"] in pairs for c in cells)
+    tier1_present = {c["event"] for c in cells} >= set(TIER1) | set(TIER2)
+    # inside_break = USDJPY pekee (pre-registration inaheshimiwa)
+    ib_pairs = {c["pair"] for c in cells if c["event"] == "inside_break"}
+    reg_ok = ib_pairs == {"USDJPY"}
+    print(f"  [1] grid: cells={len(cells)} keys={keys_ok} pairs-scoped={pairs_ok} tier-coverage={tier1_present} pre-reg={reg_ok}")
+    ok = ok and keys_ok and pairs_ok and tier1_present and reg_ok and len(cells) > 100
+
+    # (2) evaluate juu ya synthetic: candidate ina metrics + costs (EV inaweza hasi — sawa)
+    o, h, l, c, tc, hour = _synthetic(n=6000, seed=3)
+    atr = np.maximum(h - l, 0.1)
+    spr = np.full(len(c), 1.0)
+    vol = np.array(["NORMAL"] * len(c))
+    data = dict(o=o, h=h, l=l, c=c, atr=atr, spr=spr, tc=tc, hour=hour, vol=vol, days=250)
+    cand = evaluate(dict(event="mr_zscore", pair="EURUSD", sl_atr=1.5, tp_atr=1.5,
+                         session_filter=None, vol_filter=None), data, 250)
+    ev_ok = cand is not None and cand["n"] >= MIN_N and "ev" in cand and "maxdd" in cand
+    print(f"  [2] evaluate: n={cand['n'] if cand else 0} ev={cand['ev'] if cand else None} maxdd={cand['maxdd'] if cand else None}")
+    ok = ok and ev_ok
+
+    # (2b) context filter inapunguza trades (vol_filter=HIGH < ALL kwenye data ya NORMAL -> 0/None)
+    cand_hi = evaluate(dict(event="mr_zscore", pair="EURUSD", sl_atr=1.5, tp_atr=1.5,
+                            session_filter=None, vol_filter="HIGH"), data, 250)
+    filt_ok = cand_hi is None            # data yote NORMAL -> HIGH filter -> N=0 -> None
+    print(f"  [2b] context filter (HIGH kwenye NORMAL data -> None): {filt_ok}")
+    ok = ok and filt_ok
+
+    # (3) BH-FDR math: pvals zenye survivors zinazojulikana
+    pv = [0.001, 0.008, 0.02, 0.6, 0.9]
+    surv, k, ef = bh_fdr(pv, q=0.10)
+    # BH: sorted 0.001,0.008,0.02,0.6,0.9; thresholds 0.02,0.04,0.06,0.08,0.10 -> 0.02<=0.06 (rank3) pass
+    bh_ok = k == 3 and surv.tolist() == [True, True, True, False, False]
+    print(f"  [3] BH-FDR: k={k} survivors={surv.tolist()} expected_false={ef} -> {bh_ok}")
+    ok = ok and bh_ok
+
+    # (3b) pvalue_gt0: chanya thabiti -> p ndogo; noise -> p ~ kubwa
+    p_pos = pvalue_gt0([2.0, 2.5, 1.8, 2.2, 2.1, 1.9] * 5)
+    p_noise = pvalue_gt0(list(np.random.default_rng(0).normal(0, 2, 200)))
+    pv_ok = p_pos < 0.01 and p_noise > 0.05
+    print(f"  [3b] pvalue: strong+={p_pos:.4f} noise={p_noise:.3f} -> {pv_ok}")
+    ok = ok and pv_ok
+
+    # (4) SACRED SPLITS RED LINE: holdout bila token -> PermissionError (KABLA ya kusoma data)
+    try:
+        load_window("EURUSD", "H1", "holdout", holdout_token=None)
+        red_ok = False
+    except PermissionError:
+        red_ok = True
+    try:
+        load_window("EURUSD", "H1", "holdout", holdout_token="wrong")
+        red_ok = red_ok and False
+    except PermissionError:
+        red_ok = red_ok and True
+    print(f"  [4] RED LINE holdout guard (no/ wrong token -> refuse): {red_ok}")
+    ok = ok and red_ok
+
+    # (5) write_outputs (temp dir — SI kwenye repo halisi): candidates.jsonl haina pnls, ina split
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        jl, rpt = write_outputs([cand], tested=len(cells), split="train", tf="H1", days_tot=250, out_root=tmp)
+        rec = json.loads(open(jl, encoding="utf-8").readline())
+        rpt_exists = rpt.exists()
+        out_ok = "pnls" not in rec and rec["split"] == "train" and rpt_exists
+        print(f"  [5] outputs: jsonl no-pnls={('pnls' not in rec)} split={rec.get('split')} report={rpt_exists}")
+    ok = ok and out_ok
+
+    print("SELF-TEST:", "PASS" if ok else "FAIL")
+    return 0 if ok else 1
+
+
+def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--split", default="train", choices=["train", "validation", "holdout"])
+    ap.add_argument("--tf", default="H1")
+    ap.add_argument("--holdout-final", dest="token", default=None, help="Chief token kwa holdout (S3)")
+    ap.add_argument("--self-test", action="store_true")
+    a = ap.parse_args()
+    if a.self_test:
+        return self_test()
+    from market_state_engine import cfg
+    pairs = cfg()["pairs"]
+    cands, tested, days = search(pairs, a.tf, a.split, a.token)
+    apply_fdr = a.split in ("validation", "holdout")     # FDR = out-of-sample pekee (S2/S3)
+    jl, rpt = write_outputs(cands, tested, a.split, a.tf, days, apply_fdr=apply_fdr)
+    print(f"candidates={len(cands)} (cells tested={tested}) split={a.split}")
+    print(f"  {jl.relative_to(REPO_ROOT)}\n  {rpt.relative_to(REPO_ROOT)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

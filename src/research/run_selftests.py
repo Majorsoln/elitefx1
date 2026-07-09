@@ -13,7 +13,7 @@ import sys
 MODULES = ["frozen", "decision_object", "evidence_snapshot", "decision_policy", "decision_engine",
            "integrity_gate", "execution_object", "decision_repository", "broker_adapter",
            "purity_check", "paper_trader", "event_library_v2", "event_quality_report",
-           "e2e_paper_demo"]     # purity_check = P107 transitive compliance (Chief ruling c)
+           "strategy_lab", "e2e_paper_demo"]     # purity_check = P107 compliance; strategy_lab = S1 factory
 
 # Windows CMD hutumia cp1252 kwa child stdout → herufi za Unicode (→ ≠ ✓) zinaanguka kwenye pipe.
 # PYTHONUTF8=1 inalazimisha child zote ziwe UTF-8; encoding="utf-8" inasoma UTF-8 upande huu.

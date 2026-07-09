@@ -345,3 +345,29 @@ Evidence: reports/event_quality_report.md (TRAIN 2016-2022, H1, ~500k episodes).
     na tutawa-archive kwa evidence.
   KUMBUKA: hizi ni TRAIN in-sample; S1 inatoa candidates → S2 walk-forward 2023-24 + BH-FDR
   (cells zote zilizojaribiwa zinahesabika kwenye correction!) → S3 holdout mara moja.
+
+=== S1 STRATEGY LAB (2026-07-09) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya S1)** — strategy_lab.py + report; sweep 15/15 PASS.
+LAST COMPLETED: **S1 STRATEGY FACTORY** ✅ (`src/research/strategy_lab.py`; directive + GRID RULING):
+  · GRID(pairs): TIER-1 pre-registered (nr7_break/second_chance/shock_follow/session_orb/inside_break/
+    rsi2_pullback + pairs/session/vol filters halisi za RULING) + TIER-2 (8) + STOP-BREAKOUTS (TP{2,3}R);
+    SL{1,1.5,2}xTP{1,1.5,2,3}. (~1284 cells kwa synthetic pairs 5.)
+  · BACKTEST: `evaluate()` inatumia `episodes()` ya event_quality_report — SIBADILISHI fill rules
+    (next-bar honest, tie->SL, costs kila trade). Context filter (session/vol) kwa slicing trades.
+  · SACRED SPLITS enforced: `load_window(split, token)` — HOLDOUT>=2025 inarefuse (PermissionError)
+    bila HOLDOUT_TOKEN sahihi KABLA ya kusoma (RED LINE). TRAIN<2023 / VALID 2023-24.
+  · METRICS: N/EV-net/win/PF/maxDD/trades-per-day; RANK=population view (LESSON-033/034).
+  · FDR (S2): pvalue_gt0 (erfc normal-approx) + bh_fdr (BH; m=cells zote; null baseline). apply_fdr
+    kwa validation/holdout pekee (out-of-sample).
+  · OUTPUT: data/strategies/candidates.jsonl (bila raw pnls) + reports/strategy_lab_report.md.
+  · Self-test 7 checks PASS (synthetic, temp dir — hakuna artifacts repo). SWEEP 15/15 PASS.
+  · Rule 8: reports/strategy_lab_implementation.md.
+NEXT AFTER: Operator aendeshe TRAIN (candidates) -> S2 (`--split validation`: walk-forward+BH-FDR) ->
+S3 (`--split holdout --holdout-final <token>`, mara moja). Chief review ya S1 + Open Questions.
+OPEN QUESTIONS (ndani ya reports/strategy_lab_implementation.md):
+  1. Param-sweep depth (event-internal params au SL/TP+context tu per RULING)? Pendekezo: RULING tu S1.
+  2. p-value method (normal-approx sasa vs bootstrap S2)? Pendekezo: bootstrap S2.
+  3. Candidate promotion threshold (zote N>=30 -> S2, au pre-filter)? Pendekezo: zote (pre-registration).
+  4. Walk-forward windows halisi (rolling) kwa S2 — Chief aelekeze muundo.
+NOTE: strategy_lab = research harness (numpy OK, SIO Engine core — purity inahusu core). numpy/polars
+nilifunga kuverify; PC ya Operator ina stack. e2e/core sweep haijavunjika.
