@@ -12,6 +12,8 @@
 | D2: uaminifu wa KJ ulipotea (Jump Off #3 haipo; #4 close-confirm badala ya stop; #5 percentile ilipotea; #8 volume filter iliondolewa) | `jump_off`, `breakout_stop` (stop-entry halisi, intrabar), `second_chance` (percentile), `lowvol_reversal` (volume filter kwa `tc`) |
 | D3: hakuna time-of-day (FX session structure) | `session_orb` (London opening-range breakout) + jedwali la EV kwa session |
 | D4: pockets zilizothibitishwa (MR×EURUSD P100, DPB×EURUSD P97) hazikuwa na toleo kali | `mr_zscore` (ATR-stretch) + `trend_resume` (pullback + resumption bar) |
+| D5: KJ 9 si ulimwengu wote wa entries (directive ya PD 2026-07-09) | Mbinu 5 MPYA za familia tofauti: `rsi2_pullback` (Connors MR-ndani-ya-trend), `bb_fade` (band re-entry), `engulf_extreme` (price-action kwenye extreme), `inside_break` + `nr7_break` (compression→expansion) — **jumla entries 16, familia 7** |
+| Entries hazikuwa zinapimwa NDANI ya uchambuzi wa soko | Jedwali la 4: kila entry × **volatility state** (market_state_engine — deseasonalized, no-lookahead) + jedwali la 3 (sessions). Entry = trigger; context = uchambuzi |
 | Outcome ya Phase 12 = forward 6 bars bila trade structure | Harness: SL/TP za ATR (1.5/1.5), timeout 24 bars, tie→SL (worst case), costs = spread halisi + slippage |
 
 ## Hatua (PC yako ya data)

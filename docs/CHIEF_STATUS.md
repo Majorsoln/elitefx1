@@ -20,11 +20,15 @@ S2 Validation (walk-forward 2023-24 + FDR) -> S3 Holdout proof (2025+, mara moja
 **S0 (Chief direct, 2026-07-08): EVENT LIBRARY V2** — ukaguzi wa Chief ulipata defects 4 kwenye
 entries za V1 (D1 conditions-sio-events [334/1000 bars, spread kila bar -> Phase 12 EV negative];
 D2 uaminifu wa KJ umepotea [stop-entries #3/#4, percentile #5, volume filter #8]; D3 hakuna
-session structure; D4 pockets P100/P97 bila toleo kali). Zimejengwa: event_library_v2.py
-(entries 11: edge-trigger+rearm, stop-entries intrabar, session ORB, mr_zscore, trend_resume)
-+ event_quality_report.py (harness ya haki V1-vs-V2: episode non-overlap, SL/TP za ATR, tie->SL,
-costs kila trade, TRAIN<2023 enforced). Sweep 14/14 PASS. Operator: RUNBOOK_event_quality.md.
-S1 grid sasa inatumia EVENTS_V2 (memory ya IMPLEMENTER-A ime-update).
+session structure; D4 pockets P100/P97 bila toleo kali; D5 [PD 2026-07-09] KJ-9 si ulimwengu
+wote). Zimejengwa: event_library_v2.py (**entries 16, familia 7**: edge-trigger+rearm,
+stop-entries intrabar, session ORB, mr_zscore, trend_resume, + mpya 5: rsi2_pullback/bb_fade/
+engulf_extreme/inside_break/nr7_break) + event_quality_report.py (harness ya haki V1-vs-V2:
+episode non-overlap, SL/TP za ATR, tie->SL, costs kila trade, TRAIN<2023 enforced; entries
+zinapimwa NDANI ya uchambuzi wa soko: x volatility_state + x session). Sweep 14/14 PASS.
+Operator: RUNBOOK_event_quality.md. S1 grid = EVENTS_V2 + context dimension (memory ya
+IMPLEMENTER-A ime-update). Kanuni: ENTRY = trigger; UCHAMBUZI = context (states/session/age);
+AI inajifunza ramani context->event->outcome (K4), sio triggers peke yake.
 TRACK B (Knowledge & AI): K0-K3 ✅ — corpus 36 (34 ACTIVE) · GRAPH@v7 (172/202) · EVAL-SUITE 25 Qs.
                           KAZI HAI: batch 7 + GRAPH@v8 (kufunga K1 retroactive).
 Governance:               Chief Quant (Unified) — directive ya Project Director. Board Approval

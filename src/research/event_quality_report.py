@@ -50,11 +50,12 @@ def _sess(hr):
     return "LATE"
 
 
-def episodes(out, entry, o, h, l, c, atr, spr, hour,
+def episodes(out, entry, o, h, l, c, atr, spr, hour, vol=None,
              sl_atr=SL_ATR, tp_atr=TP_ATR, max_hold=MAX_HOLD):
     """Simulisha episodes za event moja. Inarudisha list ya
-    (entry_bar, exit_bar, dir, pnl_pips_net, session). NO-LOOKAHEAD: signal ya
-    bar i -> entry bar i+1; SL/TP zinachunguzwa kuanzia bar ya entry."""
+    (entry_bar, exit_bar, dir, pnl_pips_net, session, vol_state). NO-LOOKAHEAD:
+    signal ya bar i -> entry bar i+1; SL/TP zinachunguzwa kuanzia bar ya entry.
+    vol = volatility_state ya kila bar (uchambuzi wa soko — market_state_engine)."""
     n = len(c); trades = []; pos_end = -1
     sig = out.get("sig")
     LL = out.get("long_level"); SS = out.get("short_level")
@@ -96,7 +97,8 @@ def episodes(out, entry, o, h, l, c, atr, spr, hour,
         if exit_px is None:
             exit_px = c[j_end]; j = j_end
         pnl = d * (exit_px - e) - cost
-        trades.append((i + 1, j, d, float(pnl), _sess(int(hour[i + 1]))))
+        vs = str(vol[i + 1]) if vol is not None else "-"
+        trades.append((i + 1, j, d, float(pnl), _sess(int(hour[i + 1])), vs))
         pos_end = j
     return trades
 
@@ -145,6 +147,7 @@ def load_pair(sym, tf):
         spr=np.nan_to_num(df["spr"].to_numpy(), nan=0.0),
         tc=df["tc"].to_numpy().astype(float),
         hour=df["ts"].dt.hour().to_numpy(),
+        vol=np.asarray(df["volatility_state"].to_list()),
         days=df["ts"].dt.date().n_unique(),
     )
 
@@ -155,6 +158,7 @@ def run(pairs, tf):
     agg = {}          # name -> list pnl
     by_pair = {}      # (name, sym) -> list pnl
     by_sess = {}      # (name, sess) -> list pnl
+    by_vol = {}       # (name, vol_state) -> list pnl  (uchambuzi wa soko)
     days_tot = 0; pairs_done = []
     for sym in pairs:
         d = load_pair(sym, tf)
@@ -165,11 +169,12 @@ def run(pairs, tf):
         for name, fn, entry, fam in all_events():
             out = fn(d["o"], d["h"], d["l"], d["c"], d["tc"], d["hour"])
             trs = episodes(out, entry, d["o"], d["h"], d["l"], d["c"],
-                           d["atr"], d["spr"], d["hour"])
-            for (_, _, _, pnl, sess) in trs:
+                           d["atr"], d["spr"], d["hour"], d["vol"])
+            for (_, _, _, pnl, sess, vs) in trs:
                 agg.setdefault(name, []).append(pnl)
                 by_pair.setdefault((name, sym), []).append(pnl)
                 by_sess.setdefault((name, sess), []).append(pnl)
+                by_vol.setdefault((name, vs), []).append(pnl)
         print(f"  {sym}: done ({d['days']} siku za TRAIN)", flush=True)
     if not pairs_done:
         print("HITILAFU: hakuna state parquet. Endesha market_state_engine.py kwanza.", file=sys.stderr)
@@ -221,6 +226,24 @@ def run(pairs, tf):
             m = _metrics(by_sess.get((name, snm), []))
             cells.append(f"{m['ev']:+.2f} (n={m['n']})" if m["n"] >= MIN_N else "—")
         L.append(f"| {name} | " + " | ".join(cells) + " |")
+
+    # 4) V2 per volatility state (uchambuzi wa soko: entry ndani ya context)
+    L.append("\n## 4) V2 kwa VOLATILITY STATE (uchambuzi wa soko — market_state_engine, "
+             "deseasonalized, no-lookahead)\n")
+    VOLS = ("LOW", "NORMAL", "HIGH")
+    L.append("| event | " + " | ".join(VOLS) + " |")
+    L.append("|-------|" + "|".join(["-----"] * len(VOLS)) + "|")
+    for name, _, _, fam in all_events():
+        if fam != "V2":
+            continue
+        cells = []
+        for vs in VOLS:
+            m = _metrics(by_vol.get((name, vs), []))
+            cells.append(f"{m['ev']:+.2f} (n={m['n']})" if m["n"] >= MIN_N else "—")
+        L.append(f"| {name} | " + " | ".join(cells) + " |")
+    L.append("\n-> Cell chanya thabiti = event x state filter ya grid ya S1 (mf. 'mr_zscore "
+             "NORMAL tu'). Phase 12 Q4 ilionyesha state-dependence; hapa inapimwa kwa "
+             "trade structure halisi.")
 
     L.append("\n## VERDICT (descriptive tu)\n")
     L.append("- Linganisha jozi v1 vs v2 (mf. v1:pullback vs v2:pullback_v2): D1-fix inaonekana kwenye "

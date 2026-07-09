@@ -19,6 +19,12 @@ KWA NINI V2 (ukaguzi wa Chief juu ya event_library.py + evidence za Phase 3/12):
       deep_pullback x EURUSD (P97). V2 inaongeza matoleo makali zaidi ya familia
       hizo mbili: mr_zscore (ATR-stretch, sio N-bar-low tu) na trend_resume
       (pullback + resumption bar — KJ #2 modification rasmi).
+  D5. (directive ya PD 2026-07-09) KJ 9 si ulimwengu wote wa entries. Mbinu 5 MPYA
+      za familia tofauti: rsi2_pullback (MR-ndani-ya-trend, Connors), bb_fade
+      (band reversion + re-entry confirmation), engulf_extreme (price-action
+      reversal kwenye extreme), inside_break + nr7_break (compression->expansion,
+      Crabel). Jumla: entries 16 katika familia 7 (trend-pullback, breakout,
+      compression, session, shock, mean-reversion, price-action).
 
 MKATABA (API):
   Bei zote (o,h,l,c) ziko katika PIPS (kama event_reality: price/pip). hour = saa
@@ -69,6 +75,23 @@ def _roll(x, n, fn, incl=True):
         if len(x) > n:
             out[n:] = fn(sliding_window_view(x[:-1], n), axis=1)
     return out
+
+
+def wilder_rsi(c, n=2):
+    """RSI ya Wilder (no-lookahead). n=2 = Connors-style mean reversion."""
+    c = np.asarray(c, float)
+    d = np.diff(c, prepend=c[0])
+    up = np.where(d > 0, d, 0.0); dn = np.where(d < 0, -d, 0.0)
+    au = np.empty_like(up); ad = np.empty_like(dn)
+    au[0] = up[0]; ad[0] = dn[0]; a = 1.0 / n
+    for i in range(1, len(c)):
+        au[i] = a * up[i] + (1 - a) * au[i - 1]
+        ad[i] = a * dn[i] + (1 - a) * ad[i - 1]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        rsi = 100.0 - 100.0 / (1.0 + au / ad)
+    rsi[ad == 0] = 100.0
+    rsi[(au == 0) & (ad == 0)] = 50.0
+    return rsi
 
 
 def wilder_atr(h, l, c, n=14):
@@ -195,7 +218,73 @@ def shock_follow(o, h, l, c, tc=None, hour=None, len_=20, k=3.0, rearm=10):
     return {"sig": _edge(lc, sc, rearm)}
 
 
+def rsi2_pullback(o, h, l, c, tc=None, hour=None, ma_len=100, rsi_len=2, lo=10.0, rearm=5):
+    """MBINU MPYA (familia: mean-reversion-ndani-ya-trend, Connors RSI-2):
+    trend up (c>SMA) + oversold kali ya muda mfupi (RSI(2)<lo) -> long. Tofauti na
+    mr_zscore: inatumia velocity ya returns, sio umbali wa bei."""
+    sma = _sma(c, ma_len); r = wilder_rsi(c, rsi_len)
+    with np.errstate(invalid="ignore"):
+        lc = (c > sma) & (r < lo)
+        sc = (c < sma) & (r > 100.0 - lo)
+    return {"sig": _edge(lc, sc, rearm)}
+
+
+def bb_fade(o, h, l, c, tc=None, hour=None, n=20, k=2.0, rearm=5):
+    """MBINU MPYA (familia: band reversion + CONFIRMATION): close ilifunga NJE ya
+    Bollinger band (n,k) bar iliyopita, na sasa imerudi NDANI -> fade. Re-entry
+    ndiyo confirmation (haishiki kisu kinachoanguka)."""
+    ma = _sma(c, n); sd = _roll(c, n, np.std)
+    lower = ma - k * sd; upper = ma + k * sd
+    c1 = _shift(c, 1); lo1 = _shift(lower, 1); up1 = _shift(upper, 1)
+    with np.errstate(invalid="ignore"):
+        lc = (c1 < lo1) & (c > lower)
+        sc = (c1 > up1) & (c < upper)
+    return {"sig": _edge(lc, sc, rearm)}
+
+
+def engulf_extreme(o, h, l, c, tc=None, hour=None, ext=10, rearm=5):
+    """MBINU MPYA (familia: price-action reversal kwenye extreme): bullish engulfing
+    (body ya sasa inameza body ya bar iliyopita) IKITOKEA kwenye low ya ext-bars
+    -> long (mirror short kwenye high). Pattern + location, sio pattern peke yake."""
+    o1 = _shift(o, 1); c1 = _shift(c, 1)
+    lmin = _roll(l, ext, np.min); hmax = _roll(h, ext, np.max)
+    with np.errstate(invalid="ignore"):
+        bull = (c1 < o1) & (c > o) & (o <= c1) & (c >= o1)
+        bear = (c1 > o1) & (c < o) & (o >= c1) & (c <= o1)
+        lc = bull & (l <= lmin)
+        sc = bear & (h >= hmax)
+    return {"sig": _edge(lc, sc, rearm)}
+
+
 # ---------- STOP events (intrabar-honest entries — D2) ----------
+
+def inside_break(o, h, l, c, tc=None, hour=None, tick=TICK):
+    """MBINU MPYA (familia: compression -> expansion): inside bar (range ndani ya
+    bar-mama) -> stop orders kwenye high/low za bar-mama (OCO). Volatility
+    contraction hutangulia expansion."""
+    n = len(c)
+    h1 = _shift(h, 1); l1 = _shift(l, 1)
+    LL = np.full(n, np.nan); SS = np.full(n, np.nan)
+    with np.errstate(invalid="ignore"):
+        inside = (h < h1) & (l > l1)
+    LL[inside] = h1[inside] + tick
+    SS[inside] = l1[inside] - tick
+    return {"long_level": LL, "short_level": SS}
+
+
+def nr7_break(o, h, l, c, tc=None, hour=None, n=7, tick=TICK):
+    """MBINU MPYA (familia: compression -> expansion, Crabel NR7): range ya bar hii
+    ndiyo NYEMBAMBA zaidi ya bars n -> stop orders juu/chini ya bar hii (OCO)."""
+    m = len(c)
+    rng_ = h - l
+    rmin = _roll(rng_, n, np.min)
+    LL = np.full(m, np.nan); SS = np.full(m, np.nan)
+    with np.errstate(invalid="ignore"):
+        nr = rng_ <= rmin
+    LL[nr] = h[nr] + tick
+    SS[nr] = l[nr] - tick
+    return {"long_level": LL, "short_level": SS}
+
 
 def jump_off(o, h, l, c, tc=None, hour=None, pbasebar=10, trendbar=20, atrmult=2.0, atr_len=15):
     """KJ #3 (Jump Off) — HAIKUWEPO V1 (D2). pbase = (HH+LL)/2 ya pbasebar;
@@ -259,6 +348,12 @@ EVENTS_V2 = {
     "pattern_3lows":   dict(fn=pattern_3lows,   entry="market", needs=(),        v1="pattern_completion"),
     "mr_zscore":       dict(fn=mr_zscore,       entry="market", needs=(),        v1="mean_reversion"),
     "shock_follow":    dict(fn=shock_follow,    entry="market", needs=(),        v1="news_shock"),
+    # --- mbinu MPYA kabisa (hazitokani na KJ 9 — familia za ziada, directive ya PD 2026-07-09) ---
+    "rsi2_pullback":   dict(fn=rsi2_pullback,   entry="market", needs=(),        v1=None),
+    "bb_fade":         dict(fn=bb_fade,         entry="market", needs=(),        v1=None),
+    "engulf_extreme":  dict(fn=engulf_extreme,  entry="market", needs=(),        v1=None),
+    "inside_break":    dict(fn=inside_break,    entry="stop",   needs=(),        v1=None),
+    "nr7_break":       dict(fn=nr7_break,       entry="stop",   needs=(),        v1=None),
 }
 
 

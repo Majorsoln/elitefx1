@@ -43,10 +43,12 @@ UAMINIFU: SELECT ≠ trade nzuri (policies illustrative; edge = OOS, haijafanywa
 paper-trading run ya mfululizo (time-ordered) au K4 datasets (E3 outcomes = training data).
 
 ## RUNBOOK HAI (2026-07-08): EVENT QUALITY — entries V1 vs V2 (TRAIN 2016-2022) — KIPAUMBELE
-Chief amejenga mwenyewe `event_library_v2.py` (entries 11 zilizoboreshwa: edge-trigger+rearm,
-stop-entries halisi za intrabar, session ORB ya London, volume filter kwa `tc`, ATR-stretch MR)
+Chief amejenga mwenyewe `event_library_v2.py` (**entries 16, familia 7**: edge-trigger+rearm,
+stop-entries halisi za intrabar, session ORB ya London, volume filter kwa `tc`, ATR-stretch MR,
++ mbinu mpya 5: rsi2_pullback/bb_fade/engulf_extreme/inside_break/nr7_break)
 + `event_quality_report.py` (harness ya haki: episode non-overlap, SL/TP za ATR, costs halisi
-kila trade; inaKATA ts>=2023 YENYEWE — sacred splits). Sweep 14/14 PASS CI. KAZI YAKO: fuata
+kila trade; jedwali la entries × VOLATILITY STATE + sessions = entry ndani ya uchambuzi wa soko;
+inaKATA ts>=2023 YENYEWE — sacred splits). Sweep 14/14 PASS CI. KAZI YAKO: fuata
 `docs/RUNBOOK_event_quality.md`: git pull → `python run_selftests.py` (14/14) →
 `python event_quality_report.py` → commit `reports/event_quality_report.md` → ripoti
 **"tayari event quality"**. Ripoti hii inalisha grid ya S1 (IMPLEMENTER-A).

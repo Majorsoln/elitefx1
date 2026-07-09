@@ -319,3 +319,11 @@ TRAIN<2023 enforced). Sweep 14/14 PASS. MABADILIKO KWA S1 SPEC YAKO:
      USIBADILISHE fill rules (next-bar open / stop touch / tie->SL worst case).
   c. Ripoti ya `event_quality_report.md` (Operator ataiendesha) = pruning ya kwanza ya grid:
      event x pair x session zenye EV net chanya TRAIN zinapata kipaumbele; ZOTE bado zinapimwa S2.
+
+=== UPDATE 2 ya S1 (Chief direct, 2026-07-09 — maswali ya PD): ENTRIES 16 + CONTEXT LAYER ===
+PD aliuliza (1) kwa nini 9->11 na akaagiza mbinu zaidi; (2) uchambuzi wa soko kabla ya entry.
+Chief ameongeza: entries 5 MPYA (rsi2_pullback, bb_fade, engulf_extreme, inside_break, nr7_break)
+-> EVENTS_V2 sasa = 16 katika familia 7. Harness sasa inapima kila entry x VOLATILITY STATE
+(by_vol; jedwali la 4 la ripoti) + session (jedwali la 3). KWA S1 GRID YAKO: dimension ya
+context filter = {none, vol_state, session, vol_state x session} — hii ndiyo safu ya uchambuzi
+inayolishwa modeli baadaye (K4: P(outcome | context, event, params)). Sweep 14/14 PASS.
