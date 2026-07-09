@@ -404,3 +404,18 @@ spec ya S4: strat001_signal.py → **strat_signal.py** yenye REGISTRY ya strateg
 --all, inasoma bars, inatoa pending orders kwa format ya paper_trader. Policy: moja kwa kila
 strategy ("policy:strat001@v1", "policy:strat002@v1") au registry-policy moja — chagua rahisi,
 eleza. Bado: REUSE nr7_break + wilder_atr; self-tests; Rule 8 report.
+
+=== CYCLE-2 TASK (Chief, 2026-07-09): S1-C2 GRID + STRENGTH FRAMEWORK ===
+Events mpya 4 tayari zimejengwa na Chief (squeeze_break, nr4_inside, gap_fade, london_drift —
+registry EVENTS_V2 sasa 20; USIzibadilishe). KAZI ZAKO (baada ya S4 tool):
+  1. strategy_lab: ongeza GRID_C2 tofauti na ya cycle-1 (usiguse TIER1/TIER2 za C1):
+     events {squeeze_break, nr4_inside, gap_fade, london_drift} × pairs 9 × SL/TP grid ileile
+     × filters {None, no-LATE} + **--tf H4 kwa {nr7_break, squeeze_break, nr4_inside,
+     shock_follow}** (H-C2-1/2: COST remedy). Flag --cycle 2. m ya FDR = cells zote za C2.
+  2. CURRENCY STRENGTH framework (H-C2-5, spec-light): module inayosoma pairs zote 9 kwa
+     pamoja → USD strength index (trailing returns za USD dhidi ya wenzake) → event
+     "usd_drift": long/short pair kulingana na strength ya pande zake. NO LOOKAHEAD; costs
+     kama kawaida. Jenga strength_lab.py ndogo, reuse episodes().
+  3. EXIT SCIENCE (H-C2-6): episodes() ipate exit variants za hiari: trailing stop (k×ATR),
+     breakeven baada ya +1R, time-exit. Defaults = tabia ya sasa BYTE-IDENTICAL (self-test
+     ithibitishe!). Kisha grid ndogo ya exits juu ya STRAT-001/002 (exploration; forward confirm).
