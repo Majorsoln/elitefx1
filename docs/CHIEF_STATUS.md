@@ -280,3 +280,12 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
 ```
 
 *Profitable ≠ Tradable Edge. Protect capital first.*
+
+> **UFAFANUZI RASMI (2026-07-09, swali la PD):** Events 4 za CYCLE-2 = **HYPOTHESES
+> AMBAZO HAZIJAPIMWA** (self-test ya code tu — SIO utafiti). Zinasubiri pipeline ileile:
+> S1-C2 (TRAIN, PC ya Operator) → S2-C2 (VALID+FDR) → S3-C2 (OOS mpya). HAKUNA pair mpya
+> iliyoongezwa — ilikuwa ombi la kuangalia chanzo tu; pair mpya huingia TU baada ya data
+> + pipeline kamili. Vyanzo vya hypotheses: (a) lessons/data zetu (compression/shock/COST
+> remedy — autopsy), (b) maarifa ya Chief (gap/drift/strength) — VYOTE hupita mlango
+> uleule; data ya nyuma ya Operator ndiyo hakimu pekee; hakuna kinacholisha AI (K4)
+> bila OOS proof (EP-3). Kifo cha hypothesis pia ni LESSON.
