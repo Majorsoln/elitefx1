@@ -371,3 +371,16 @@ OPEN QUESTIONS (ndani ya reports/strategy_lab_implementation.md):
   4. Walk-forward windows halisi (rolling) kwa S2 — Chief aelekeze muundo.
 NOTE: strategy_lab = research harness (numpy OK, SIO Engine core — purity inahusu core). numpy/polars
 nilifunga kuverify; PC ya Operator ina stack. e2e/core sweep haijavunjika.
+
+=== CHIEF REVIEW ya S1 strategy_lab (2026-07-09): APPROVED + FIXES 2 za Chief ===
+VERDICT: APPROVED. Ubora mzuri: reuse sahihi ya episodes() (fill rules hazikuguswa), holdout
+guard inakataa KABLA ya kusoma (PermissionError, self-tested), grid ruling/pre-registration
+imeheshimiwa, BH-FDR math sahihi, outputs safi (no pnls). FIXES za Chief (committed juu yake):
+  F1. Vol-filter decidability (EP-5): vol state ya bar ya ENTRY (i+1) haijulikani hadi bar
+      ifunge -> episodes() sasa inarekodi vol[i] (bar ya SIGNAL); session inabaki hour[i+1]
+      (ratiba = ex-ante).
+  F2. Context filter ilikuwa POST-HOC (baada ya episodes) -> position-gating isingeendana na
+      strategy halisi ya filtered. Sasa: _mask_context() inaweka filter KWENYE SIGNALS kabla
+      ya episodes(); _match imeondolewa; self-test [2c] mpya inathibitisha. Sweep 15/15.
+LESSON kwa kazi zijazo: filter yoyote ya strategy lazima (a) iamuliwe kwa taarifa zilizopo
+wakati wa signal, (b) iingie KWENYE simulation, sio kwenye uchujaji wa matokeo.

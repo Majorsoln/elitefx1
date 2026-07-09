@@ -87,21 +87,31 @@ def grid(pairs):
     return cells
 
 
-def _match(tr, sf, vf):
-    """Je trade inakidhi context filter? tr = (entry, exit, dir, pnl, session, vol_state)."""
-    sess, vs = tr[4], tr[5]
+def _mask_context(out, entry, hour, vol, sf, vf):
+    """CHIEF FIX (review 2026-07-09): context filter inawekwa KWENYE SIGNALS — kabla ya
+    episodes() — ili position-gating (non-overlap) iendane na strategy halisi ya filtered
+    (post-hoc filter iliruhusu trade ya nje-ya-filter kuzuia signal ya ndani-ya-filter).
+    Decidability (EP-5): session = saa ya bar ya ENTRY i+1 (ratiba, inajulikana ex-ante);
+    vol = STATE ya bar ya SIGNAL i (state ya i+1 haijulikani hadi bar ifunge)."""
+    n = len(hour)
+    allow = np.ones(n, bool)
     if sf is not None:
+        from event_quality_report import _sess
+        sess_entry = np.array([_sess(int(hour[i + 1])) if i + 1 < n else "LATE" for i in range(n)])
         if sf == "no-LATE":
-            if sess == "LATE":
-                return False
+            allow &= sess_entry != "LATE"
         elif isinstance(sf, (list, tuple)):
-            if sess not in sf:
-                return False
-        elif sess != sf:
-            return False
-    if vf is not None and vs != vf:
-        return False
-    return True
+            allow &= np.isin(sess_entry, list(sf))
+        else:
+            allow &= sess_entry == sf
+    if vf is not None and vol is not None:
+        allow &= np.asarray(vol) == vf
+    if entry == "market":
+        sig = out["sig"].copy(); sig[~allow] = 0
+        return {"sig": sig}
+    LL = out["long_level"].copy(); SS = out["short_level"].copy()
+    LL[~allow] = np.nan; SS[~allow] = np.nan
+    return {"long_level": LL, "short_level": SS}
 
 
 def _maxdd(pnls):
@@ -112,14 +122,16 @@ def _maxdd(pnls):
 
 
 def evaluate(cell, data, days):
-    """Backtest cell moja: event fn(params default) -> episodes -> context filter -> metrics+costs.
-    Rudisha dict ya candidate (au None kama N<MIN_N)."""
+    """Backtest cell moja: event fn(params default) -> context mask KWENYE signals ->
+    episodes -> metrics+costs. Rudisha dict ya candidate (au None kama N<MIN_N)."""
     spec = EVENTS_V2[cell["event"]]
     out = spec["fn"](data["o"], data["h"], data["l"], data["c"], data.get("tc"), data.get("hour"))
+    out = _mask_context(out, spec["entry"], data["hour"], data.get("vol"),
+                        cell["session_filter"], cell["vol_filter"])
     trs = episodes(out, spec["entry"], data["o"], data["h"], data["l"], data["c"],
                    data["atr"], data["spr"], data["hour"], data.get("vol"),
                    sl_atr=cell["sl_atr"], tp_atr=cell["tp_atr"])
-    pn = [t[3] for t in trs if _match(t, cell["session_filter"], cell["vol_filter"])]
+    pn = [t[3] for t in trs]
     m = _metrics(pn)
     if m["n"] < MIN_N:
         return None
@@ -286,6 +298,21 @@ def self_test():
     filt_ok = cand_hi is None            # data yote NORMAL -> HIGH filter -> N=0 -> None
     print(f"  [2b] context filter (HIGH kwenye NORMAL data -> None): {filt_ok}")
     ok = ok and filt_ok
+
+    # (2c) CHIEF FIX: mask iko kwenye SIGNALS na inaheshimu decidability — session ya bar ya
+    # ENTRY (i+1) na vol ya bar ya SIGNAL (i)
+    n4 = 48
+    hr4 = np.arange(n4) % 24
+    sig_all = {"sig": np.ones(n4, dtype=int)}
+    masked = _mask_context(sig_all, "market", hr4, None, "LONDON", None)["sig"]
+    idx_on = np.flatnonzero(masked != 0)
+    sess_ok = all(7 <= hr4[i + 1] <= 11 for i in idx_on if i + 1 < n4)
+    vol4 = np.array(["HIGH" if i % 2 == 0 else "LOW" for i in range(n4)])
+    masked_v = _mask_context(sig_all, "market", hr4, vol4, None, "HIGH")["sig"]
+    vol_ok = all(vol4[i] == "HIGH" for i in np.flatnonzero(masked_v != 0))
+    mask_ok = sess_ok and vol_ok and masked.sum() > 0 and masked_v.sum() > 0
+    print(f"  [2c] signal-mask: session@entry-bar={sess_ok} vol@signal-bar={vol_ok} -> {mask_ok}")
+    ok = ok and mask_ok
 
     # (3) BH-FDR math: pvals zenye survivors zinazojulikana
     pv = [0.001, 0.008, 0.02, 0.6, 0.9]

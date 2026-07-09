@@ -69,3 +69,14 @@ Chief review: nr7_break = nyota (chanya pairs 5; LONDON/NY/HIGH-vol kali); pocke
 imeandikwa kwenye MEMORY_IMPLEMENTER_A. KAZI YAKO IJAYO: fungua session ya IMPLEMENTER-A
 (prompt: docs/team/PROMPTS.md) — memory yake ina QUICK-WIN (OOS-confirm 017/018) + S1 spec +
 grid ruling. Paper-trading ya kila siku inaendelea.
+
+## RUNBOOK HAI (2026-07-09): S1 STRATEGY LAB — TRAIN run
+strategy_lab.py iko tayari (IMPLEMENTER-A + Chief fixes 2; sweep 15/15). KAZI YAKO:
+  git pull
+  cd src\research
+  python run_selftests.py                REM tegemeo: 15/15 PASS
+  python strategy_lab.py --split train   REM S1: grid cells ~2000 juu ya TRAIN (dakika kadhaa)
+  REM commit: reports/strategy_lab_report.md + data/strategies/candidates.jsonl
+Ripoti: "tayari S1". Chief atakagua candidates + kufunga registration, KISHA ndiyo
+--split validation (S2 + FDR — hukumu). USIENDESHE validation kabla ya review ya Chief
+(nidhamu ya pre-registration; kuepuka forking paths).

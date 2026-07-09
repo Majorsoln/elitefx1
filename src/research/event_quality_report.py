@@ -97,7 +97,10 @@ def episodes(out, entry, o, h, l, c, atr, spr, hour, vol=None,
         if exit_px is None:
             exit_px = c[j_end]; j = j_end
         pnl = d * (exit_px - e) - cost
-        vs = str(vol[i + 1]) if vol is not None else "-"
+        # vol state ya bar ya SIGNAL (i) — inajulikana wakati wa uamuzi (EP-5 decidability);
+        # state ya bar ya entry (i+1) haijulikani hadi bar hiyo ifunge. Session = saa ya entry
+        # (ratiba inajulikana ex-ante, si data ya bei).
+        vs = str(vol[i]) if vol is not None else "-"
         trades.append((i + 1, j, d, float(pnl), _sess(int(hour[i + 1])), vs))
         pos_end = j
     return trades
