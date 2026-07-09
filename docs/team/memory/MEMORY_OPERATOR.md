@@ -135,3 +135,11 @@ HATUA (mpangilio MKALI):
   4. Commit ripoti + jsonl → push → ripoti "tayari S3".
 KUMBUKA: hukumu = STRAT-001 PEKEE (EV>0 na p<0.05). Cells nyingine zote za holdout = SEALED
 (hazizai candidates; hazitumiki kwa selection). Paper-trading ya STRAT-001 inaendelea sambamba.
+
+## LOG — 2026-07-09 (S3: ✅ PASS — STRAT-001 NI STRATEGY RASMI YA KWANZA)
+Holdout: N=303, EV +1.92 net, win 73.9%, PF 1.31, p=0.021 (criterion imepita). KAZI ZAKO:
+  1. THIBITISHA kwa neno moja: integrity gate (hatua 2 — validation re-run) ilionyesha diff
+     TUPU kabla ya holdout? (rekodi ya kisayansi inahitaji neno lako.)
+  2. Fungua session ya IMPLEMENTER-A — S4 task (strat001_signal.py + policy) imo memory yake.
+  3. Endelea paper-trading STRAT-001 kila siku (baada ya tool ya 2 itakuwa rahisi zaidi).
+  4. Session ya RESEARCHER-K — sasa lessons 3 (L-a, L-b, L-c) zimo memory yake.

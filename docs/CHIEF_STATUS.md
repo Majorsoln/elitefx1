@@ -171,6 +171,24 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   inatarajiwa — computations zote ni trailing/no-lookahead). Ikitofautiana → SIMAMA, ripoti
   (data-source inconsistency); S3 HAIFANYIKI hadi ieleweke.
 
+- **2026-07-09 — S3 HOLDOUT (one-shot): HUKUMU = ✅ PASS — STRAT-001 NI STRATEGY RASMI YA KWANZA
+  YA ELITEFX (PROVEN-OOS).** Holdout 2025-01→2026-04 (data mpya kabisa, haijawahi kuwepo mfumoni):
+  **N=303 · EV +1.92 pips net · win 73.9% · PF 1.31 · 0.87 tr/siku · maxDD 221 pips ·
+  p=0.0209 < 0.05 ✓ na EV>0 ✓** (criterion pre-registered, single test). Uthabiti vipindi VITATU:
+  TRAIN +0.36 (N=1,607, win 71.1%) · VALID +3.07 (N=425, 79.3%) · HOLDOUT +1.92 (N=303, 73.9%) —
+  mwelekeo uleule, availability ileile (~0.85 tr/siku), hakuna sura ya overfit-decay.
+  NB: BH-FDR ya grid nzima kwenye holdout = 0/1,886 — HAINA maana kwa criterion yetu (hiyo ni
+  multiple-testing juu ya cells SEALED; hypothesis yetu ilikuwa MOJA, pre-registered — hii ndiyo
+  nguvu halisi ya registration). Cells nyingine zote za holdout zinabaki SEALED milele.
+  TAHADHARI hai: (a) edge ni MODEST (+1.9/trade net) na win-margin juu ya breakeven ~6 points —
+  win% decay ndiyo hatari #1; monitoring ya forward ni lazima; (b) integrity gate (validation
+  re-run byte-identical) — ushahidi usio wa moja kwa moja unaunga mkono (market_state_report
+  ilibadilika mistari 2 tu; computations trailing); uthibitisho wa neno la Operator umeombwa.
+  **S4 IMEFUNGULIWA:** (1) IMPLEMENTER-A: STRAT-001 → decision policy rasmi + signal tool ya
+  paper-trading; (2) K4: episodes za strategy_lab = training data ya kwanza yenye edge halisi;
+  (3) forward paper-trading ya STRAT-001 (tathmini dhidi ya tegemeo la holdout);
+  (4) LIVE bado GATED: maamuzi ya PD (live-artifact + max_spread) yanabaki PENDING.
+
 ## Top Risks (live)
 
 | # | Risk | Status |

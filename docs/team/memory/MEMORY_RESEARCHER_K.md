@@ -116,3 +116,10 @@ Evidence: reports/strategy_lab_report.md (S1 TRAIN commit ccfbb24; S2b VALIDATIO
   L-b (METHOD): "FDR huchagua consistency+N, si flashy EV" — survivor pekee (p=9e-06) alikuwa
       EV +3.07 N=425 win 79%, WAKATI cells za EV +11..+13 (N=30-182) hazikupita. Implication:
       power ya takwimu inatoka kwa sampuli kubwa thabiti; top-EV ndogo-N = mtego (LESSON-033/034).
+
+=== NYONGEZA (Chief, 2026-07-09 baada ya S3 PASS): LESSON ya tatu ===
+  L-c (METHOD): "Pre-registration ya hypothesis MOJA hushinda grid-FDR kwenye sample fupi" —
+      holdout (miezi 16): grid-wide BH-FDR = 0/1,886 survivors, LAKINI STRAT-001 (pre-registered
+      S2, single test) alipita p=0.0209. Bila registration tungetangaza "hakuna kitu"; kwa
+      registration, strategy rasmi ya kwanza imezaliwa. Implication: nidhamu ya kutaja hypothesis
+      KABLA ndiyo inayookoa power ya takwimu. Evidence: commits 3d51727 (pre-reg) + 86a5977 (S3).

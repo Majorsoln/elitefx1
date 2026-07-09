@@ -384,3 +384,15 @@ imeheshimiwa, BH-FDR math sahihi, outputs safi (no pnls). FIXES za Chief (commit
       ya episodes(); _match imeondolewa; self-test [2c] mpya inathibitisha. Sweep 15/15.
 LESSON kwa kazi zijazo: filter yoyote ya strategy lazima (a) iamuliwe kwa taarifa zilizopo
 wakati wa signal, (b) iingie KWENYE simulation, sio kwenye uchujaji wa matokeo.
+
+=== S4 TASK (Chief, 2026-07-09 — baada ya S3 PASS): STRAT-001 -> POLICY + SIGNAL TOOL ===
+STRAT-001 (PROVEN-OOS): nr7_break × USDCHF H1 · SL 2.0×ATR(14) / TP 1.0×ATR(14) · timeout 24
+bars · no-LATE (entry-hour 17-23 = skip) · position 1 kwa wakati. Kazi mbili:
+  1. **strat001_signal.py** (ndogo, kwanza): CLI inayosoma bars za hivi karibuni za USDCHF H1
+     (CSV/parquet path ya Operator) → detect NR7 kwenye bar iliyofunga (REUSE event_library_v2.
+     nr7_break + wilder_atr — USIANDIKE math mpya) → print pending orders (buy-stop high+0.1 /
+     sell-stop low−0.1, SL/TP computed) katika format ya paper_trader --signal. Self-test na
+     bars synthetic. Hii inamwezesha Operator paper-trade STRAT-001 bila hesabu za mkono.
+  2. **policy rasmi**: "policy:strat001-nr7-usdchf@v1" kwenye decision_policy.py — deterministic,
+     inaingia decision_engine → gate (FTMO 5) → paper broker (mnyororo uleule wa E1-E4).
+     Provenance: strategy_lab S1-S3 (commits ccfbb24/e1a0d27/86a5977). Self-tests; Rule 8 report.
