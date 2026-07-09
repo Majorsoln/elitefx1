@@ -181,9 +181,10 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   multiple-testing juu ya cells SEALED; hypothesis yetu ilikuwa MOJA, pre-registered — hii ndiyo
   nguvu halisi ya registration). Cells nyingine zote za holdout zinabaki SEALED milele.
   TAHADHARI hai: (a) edge ni MODEST (+1.9/trade net) na win-margin juu ya breakeven ~6 points —
-  win% decay ndiyo hatari #1; monitoring ya forward ni lazima; (b) integrity gate (validation
-  re-run byte-identical) — ushahidi usio wa moja kwa moja unaunga mkono (market_state_report
-  ilibadilika mistari 2 tu; computations trailing); uthibitisho wa neno la Operator umeombwa.
+  win% decay ndiyo hatari #1; monitoring ya forward ni lazima; (b) **INTEGRITY GATE: PASS
+  CONFIRMED 2026-07-09 20:26** — Operator ali-re-run --split validation baada ya state rebuild;
+  `git diff e1a0d27 -- data/strategies/candidates.jsonl` = TUPU (byte-identical, screenshot
+  kwenye chat). Data mpya haikugusa historia. Rekodi ya S3 imefungwa BILA masharti.
   **S4 IMEFUNGULIWA:** (1) IMPLEMENTER-A: STRAT-001 → decision policy rasmi + signal tool ya
   paper-trading; (2) K4: episodes za strategy_lab = training data ya kwanza yenye edge halisi;
   (3) forward paper-trading ya STRAT-001 (tathmini dhidi ya tegemeo la holdout);
