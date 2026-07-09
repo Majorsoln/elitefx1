@@ -207,7 +207,7 @@ def search(pairs, tf, split, holdout_token=None):
     cache = {sym: load_window(sym, tf, split, holdout_token) for sym in pairs}   # load mara moja kwa pair
     cands = []; tested = 0
     days_tot = sum(d["days"] for d in cache.values() if d)
-    for cell in cells:
+    for k, cell in enumerate(cells, 1):
         data = cache.get(cell["pair"])
         if data is None:
             continue
@@ -215,6 +215,8 @@ def search(pairs, tf, split, holdout_token=None):
         cand = evaluate(cell, data, data["days"])
         if cand is not None:
             cands.append(cand)
+        if k % 200 == 0:
+            print(f"  ...cells {k}/{len(cells)} (candidates hadi sasa: {len(cands)})", flush=True)
     return cands, tested, days_tot
 
 
