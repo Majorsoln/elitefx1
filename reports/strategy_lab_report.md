@@ -1,12 +1,18 @@
 # Strategy Lab — S1 candidates (VALIDATION)
 
-*2026-07-09 13:00 | TF=H1 | split=validation | cells tested=2004 | candidates (N>=30)=1939 | costs ndani (episodes) | RANK=population view*
+*2026-07-09 13:09 | TF=H1 | split=validation | cells tested=2004 | candidates (N>=30)=1939 | costs ndani (episodes) | RANK=population view*
 
 > **UAMINIFU:** hizi ni CANDIDATES, SIO strategies. TRAIN=in-sample; uthibitisho = S2 (walk-forward VALIDATION + BH-FDR) na S3 (HOLDOUT, mara moja). RED LINES: hakuna kuchagua kwa holdout; hakuna metric bila costs. LESSON-001/002/029/033/034. Profitable != Tradable Edge.
 
 
 ## FDR (S2)
 - **BH-FDR (q=0.1)**: 1/1939 survivors; ~0.1 zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)=2004.
+
+### SURVIVORS — waliosalia BH-FDR (hawa PEKEE ndio registration ya S3)
+
+| event | pair | SL | TP | session | vol | N | EV net | win% | PF | p |
+|-------|------|----|----|---------|-----|---|--------|------|----|---|
+| nr7_break | USDCHF | 2.0 | 1.0 | no-LATE | None | 425 | +3.068 | 79.3 | 1.605 | 9.00e-06 |
 
 
 ## Top candidates (population rank)
