@@ -1,6 +1,6 @@
 # Market State Engine v1 — pairs ZOTE × TF ZOTE (PHASE 1, CQ-003)
 
-*2026-06-26 23:24 | TF: H1, H2, H4, D1 | DESEASONALIZED (saa-ya-siku, trailing 60) | vol/activity terciles 0.33/0.67 (~mwaka 1/TF) | spread RANK top 15% (trailing 750) | no-lookahead*
+*2026-07-07 20:24 | TF: H1, H2, H4, D1 | DESEASONALIZED (saa-ya-siku, trailing 60) | vol/activity terciles 0.33/0.67 (~mwaka 1/TF) | spread RANK top 15% (trailing 750) | no-lookahead*
 
 > ⚠️ **STATE LAYER v1 (building blocks) — SIO regime engine ya mwisho.** States ni vipengele; regime za kweli (Compression/Expansion/Transition/Shock) + transitions zinajengwa baadaye. Labels RELATIVE kwa mwaka uliopita (no-lookahead).
 
@@ -29,7 +29,7 @@
 | USDCAD | H4 | 15,665 | 32/33/35 | 33/33/34 | 17% | 10/2/6 |
 | USDCAD | D1 | 2,620 | 33/32/35 | 32/34/34 | 14% | 6/3/9 |
 | USDCHF | H1 | 61,203 | 32/33/35 | 34/33/33 | 18% | 12/3/6 |
-| USDCHF | H2 | 30,782 | 32/33/35 | 33/33/33 | 19% | 10/2/5 |
+| USDCHF | H2 | 30,782 | 32/33/35 | 34/33/33 | 19% | 10/2/5 |
 | USDCHF | H4 | 15,668 | 32/33/35 | 34/33/34 | 17% | 11/2/5 |
 | USDCHF | D1 | 2,620 | 30/32/38 | 33/33/34 | 16% | 7/2/5 |
 | AUDUSD | H1 | 61,212 | 33/33/34 | 33/33/34 | 18% | 11/3/6 |
@@ -71,9 +71,9 @@
 | USDCAD | H2 | 21.3 | 1.19 | 6,131 |
 | USDCAD | H4 | 30.3 | 1.19 | 11,999 |
 | USDCAD | D1 | 82.8 | 1.18 | 79,833 |
-| USDCHF | H1 | 11.5 | 1.00 | 2,257 |
-| USDCHF | H2 | 16.5 | 1.00 | 4,567 |
-| USDCHF | H4 | 23.5 | 1.00 | 8,988 |
+| USDCHF | H1 | 11.5 | 1.00 | 2,258 |
+| USDCHF | H2 | 16.5 | 1.00 | 4,568 |
+| USDCHF | H4 | 23.5 | 1.00 | 8,990 |
 | USDCHF | D1 | 62.2 | 1.05 | 58,812 |
 | AUDUSD | H1 | 11.9 | 1.00 | 2,590 |
 | AUDUSD | H2 | 17.1 | 1.00 | 5,245 |
