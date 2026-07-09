@@ -1,53 +1,57 @@
-# Strategy Lab — S1 candidates (TRAIN)
+# Strategy Lab — S1 candidates (VALIDATION)
 
-*2026-07-09 12:44 | TF=H1 | split=train | cells tested=2004 | candidates (N>=30)=2004 | costs ndani (episodes) | RANK=population view*
+*2026-07-09 13:00 | TF=H1 | split=validation | cells tested=2004 | candidates (N>=30)=1939 | costs ndani (episodes) | RANK=population view*
 
 > **UAMINIFU:** hizi ni CANDIDATES, SIO strategies. TRAIN=in-sample; uthibitisho = S2 (walk-forward VALIDATION + BH-FDR) na S3 (HOLDOUT, mara moja). RED LINES: hakuna kuchagua kwa holdout; hakuna metric bila costs. LESSON-001/002/029/033/034. Profitable != Tradable Edge.
+
+
+## FDR (S2)
+- **BH-FDR (q=0.1)**: 1/1939 survivors; ~0.1 zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)=2004.
 
 
 ## Top candidates (population rank)
 
 | event | pair | SL | TP | session | vol | N | EV net | win% | PF | maxDD | tr/day |
 |-------|------|----|----|---------|-----|---|--------|------|----|-------|--------|
-| nr7_break | GBPUSD | 2.0 | 3.0 | ('LONDON', 'NY') | HIGH | 168 | +12.761 | 57.1 | 1.595 | 650.3 | 0.09 |
-| nr7_break | GBPUSD | 2.0 | 1.5 | ('LONDON', 'NY') | HIGH | 178 | +12.602 | 68.5 | 1.77 | 186.1 | 0.10 |
-| nr7_break | GBPUSD | 1.0 | 1.5 | ('LONDON', 'NY') | HIGH | 182 | +11.201 | 54.4 | 1.856 | 192.5 | 0.10 |
-| nr7_break | GBPUSD | 1.5 | 1.5 | ('LONDON', 'NY') | HIGH | 181 | +10.719 | 62.4 | 1.669 | 284.3 | 0.10 |
-| nr7_break | GBPUSD | 2.0 | 2.0 | ('LONDON', 'NY') | HIGH | 174 | +10.188 | 62.6 | 1.51 | 416.7 | 0.10 |
-| nr7_break | GBPUSD | 1.5 | 3.0 | ('LONDON', 'NY') | HIGH | 171 | +9.187 | 48.5 | 1.437 | 545.8 | 0.09 |
-| nr7_break | GBPUSD | 2.0 | 1.5 | ('LONDON', 'NY') | None | 519 | +7.539 | 67.2 | 1.506 | 478.5 | 0.28 |
-| nr7_break | GBPUSD | 1.0 | 3.0 | ('LONDON', 'NY') | HIGH | 173 | +8.961 | 37.6 | 1.504 | 492.8 | 0.10 |
-| nr7_break | USDCAD | 2.0 | 3.0 | ('LONDON', 'NY') | HIGH | 106 | +9.732 | 56.6 | 1.558 | 356.6 | 0.06 |
-| nr7_break | GBPUSD | 1.5 | 2.0 | ('LONDON', 'NY') | HIGH | 177 | +8.676 | 55.9 | 1.46 | 316.3 | 0.10 |
-| nr7_break | USDCAD | 1.5 | 3.0 | ('LONDON', 'NY') | HIGH | 107 | +9.270 | 50.5 | 1.574 | 296.6 | 0.06 |
-| nr7_break | GBPUSD | 2.0 | 2.0 | ('LONDON', 'NY') | None | 512 | +6.877 | 60.0 | 1.386 | 670.9 | 0.28 |
-| nr7_break | GBPUSD | 1.0 | 2.0 | ('LONDON', 'NY') | HIGH | 178 | +8.221 | 44.9 | 1.513 | 251.1 | 0.10 |
-| nr7_break | GBPUSD | 1.0 | 1.5 | ('LONDON', 'NY') | None | 532 | +6.649 | 53.2 | 1.579 | 375.1 | 0.29 |
-| nr7_break | USDCAD | 2.0 | 2.0 | ('LONDON', 'NY') | None | 296 | +7.199 | 63.2 | 1.55 | 391.3 | 0.16 |
-| nr7_break | GBPUSD | 2.0 | 3.0 | ('LONDON', 'NY') | None | 493 | +6.550 | 49.7 | 1.314 | 1047.4 | 0.27 |
-| nr7_break | GBPUSD | 2.0 | 3.0 | no-LATE | HIGH | 452 | +6.536 | 51.1 | 1.279 | 992.5 | 0.25 |
-| nr7_break | GBPUSD | 1.5 | 1.5 | ('LONDON', 'NY') | None | 525 | +6.323 | 61.0 | 1.447 | 457.1 | 0.29 |
-| nr7_break | USDCAD | 1.5 | 2.0 | ('LONDON', 'NY') | None | 297 | +6.568 | 57.2 | 1.55 | 348.9 | 0.16 |
-| shock_follow | EURJPY | 1.5 | 2.0 | ASIA | NORMAL | 50 | +9.497 | 60.0 | 1.83 | 113.8 | 0.03 |
-| nr7_break | USDCAD | 1.5 | 1.5 | ('LONDON', 'NY') | None | 303 | +6.475 | 66.0 | 1.661 | 212.5 | 0.17 |
-| nr7_break | GBPUSD | 1.0 | 1.0 | ('LONDON', 'NY') | HIGH | 188 | +7.011 | 62.8 | 1.646 | 99.4 | 0.10 |
-| nr7_break | AUDUSD | 2.0 | 2.0 | ('LONDON', 'NY') | HIGH | 301 | +6.370 | 61.1 | 1.569 | 218.6 | 0.17 |
-| nr7_break | GBPUSD | 1.0 | 3.0 | ('LONDON', 'NY') | None | 508 | +5.823 | 35.0 | 1.374 | 676.9 | 0.28 |
-| nr7_break | USDCAD | 2.0 | 3.0 | ('LONDON', 'NY') | None | 285 | +6.363 | 50.9 | 1.399 | 504.5 | 0.16 |
-| nr7_break | EURUSD | 1.0 | 3.0 | ('LONDON', 'NY') | None | 439 | +5.908 | 38.0 | 1.591 | 273.0 | 0.24 |
-| second_chance | EURJPY | 1.5 | 3.0 | LATE | None | 294 | +6.285 | 46.3 | 1.376 | 327.9 | 0.16 |
-| second_chance | EURJPY | 2.0 | 3.0 | LATE | None | 294 | +6.270 | 50.3 | 1.34 | 408.2 | 0.16 |
-| nr7_break | GBPUSD | 1.5 | 2.0 | ('LONDON', 'NY') | None | 518 | +5.679 | 53.3 | 1.343 | 613.8 | 0.28 |
-| nr7_break | GBPUSD | 2.0 | 1.0 | ('LONDON', 'NY') | HIGH | 186 | +6.762 | 74.7 | 1.483 | 186.1 | 0.10 |
-| nr7_break | GBPUSD | 1.5 | 3.0 | ('LONDON', 'NY') | None | 501 | +5.637 | 43.7 | 1.293 | 1108.4 | 0.28 |
-| nr7_break | GBPUSD | 1.0 | 2.0 | ('LONDON', 'NY') | None | 524 | +5.562 | 44.3 | 1.408 | 537.0 | 0.29 |
-| nr7_break | AUDUSD | 1.5 | 2.0 | ('LONDON', 'NY') | HIGH | 303 | +5.997 | 56.8 | 1.578 | 150.3 | 0.17 |
-| nr7_break | USDCAD | 2.0 | 1.5 | ('LONDON', 'NY') | None | 302 | +5.957 | 69.5 | 1.533 | 315.8 | 0.17 |
-| shock_follow | EURJPY | 1.5 | 1.5 | ASIA | NORMAL | 50 | +8.526 | 66.0 | 1.9 | 113.8 | 0.03 |
-| second_chance | EURJPY | 2.0 | 3.0 | LATE | LOW | 82 | +7.515 | 57.3 | 1.53 | 170.6 | 0.04 |
-| nr7_break | EURUSD | 1.5 | 3.0 | ('LONDON', 'NY') | None | 430 | +5.460 | 45.6 | 1.429 | 340.8 | 0.24 |
-| nr7_break | EURUSD | 2.0 | 3.0 | ('LONDON', 'NY') | None | 416 | +5.469 | 51.0 | 1.392 | 388.4 | 0.23 |
-| nr7_break | USDCAD | 1.5 | 3.0 | ('LONDON', 'NY') | None | 289 | +5.810 | 45.0 | 1.402 | 698.2 | 0.16 |
-| second_chance | EURJPY | 1.5 | 1.5 | LATE | LOW | 82 | +7.350 | 68.3 | 1.936 | 85.5 | 0.04 |
+| nr7_break | USDJPY | 2.0 | 3.0 | None | HIGH | 182 | +11.250 | 52.2 | 1.404 | 503.3 | 0.35 |
+| nr7_break | USDJPY | 2.0 | 2.0 | None | HIGH | 204 | +8.757 | 54.9 | 1.331 | 561.0 | 0.39 |
+| nr7_break | GBPUSD | 2.0 | 2.0 | ('LONDON', 'NY') | HIGH | 30 | +12.537 | 66.7 | 2.176 | 92.4 | 0.06 |
+| nr7_break | USDJPY | 1.5 | 3.0 | None | HIGH | 197 | +7.842 | 44.2 | 1.286 | 502.7 | 0.38 |
+| nr7_break | USDJPY | 1.0 | 2.0 | None | HIGH | 229 | +7.398 | 42.8 | 1.367 | 307.5 | 0.44 |
+| shock_follow | USDJPY | 2.0 | 3.0 | ASIA | None | 49 | +9.908 | 53.1 | 1.408 | 203.9 | 0.09 |
+| nr7_break | GBPUSD | 2.0 | 1.5 | ('LONDON', 'NY') | HIGH | 30 | +10.678 | 73.3 | 2.137 | 92.4 | 0.06 |
+| nr7_break | USDJPY | 1.0 | 1.0 | None | HIGH | 261 | +6.232 | 59.8 | 1.449 | 166.8 | 0.50 |
+| nr7_break | USDJPY | 1.0 | 3.0 | None | HIGH | 211 | +6.317 | 34.6 | 1.279 | 405.3 | 0.40 |
+| nr7_break | USDJPY | 1.0 | 3.0 | ('LONDON', 'NY') | None | 271 | +5.949 | 36.9 | 1.36 | 484.2 | 0.52 |
+| nr7_break | USDJPY | 2.0 | 1.0 | None | HIGH | 247 | +6.046 | 70.9 | 1.336 | 346.5 | 0.47 |
+| nr7_break | USDJPY | 1.0 | 2.0 | ('LONDON', 'NY') | None | 280 | +5.798 | 43.6 | 1.388 | 592.5 | 0.54 |
+| nr7_break | EURJPY | 2.0 | 3.0 | ('LONDON', 'NY') | HIGH | 92 | +7.153 | 47.8 | 1.209 | 586.4 | 0.18 |
+| nr7_break | USDJPY | 1.0 | 1.5 | None | HIGH | 244 | +5.887 | 47.9 | 1.324 | 340.8 | 0.47 |
+| engulf_extreme | EURJPY | 2.0 | 3.0 | None | None | 143 | +6.452 | 47.5 | 1.265 | 315.4 | 0.27 |
+| nr7_break | GBPUSD | 2.0 | 1.0 | ('LONDON', 'NY') | HIGH | 32 | +8.962 | 81.2 | 2.294 | 85.2 | 0.06 |
+| nr7_break | USDJPY | 2.0 | 1.5 | None | HIGH | 222 | +5.727 | 60.4 | 1.236 | 538.7 | 0.42 |
+| nr7_break | USDJPY | 2.0 | 1.5 | no-LATE | None | 386 | +5.068 | 62.9 | 1.294 | 809.6 | 0.74 |
+| nr7_break | GBPUSD | 1.5 | 2.0 | ('LONDON', 'NY') | HIGH | 30 | +8.696 | 60.0 | 1.737 | 86.4 | 0.06 |
+| nr7_break | USDJPY | 1.5 | 1.0 | None | HIGH | 254 | +5.360 | 66.5 | 1.315 | 287.9 | 0.49 |
+| nr7_break | EURJPY | 2.0 | 1.5 | ('LONDON', 'NY') | HIGH | 104 | +6.252 | 61.5 | 1.239 | 431.0 | 0.20 |
+| engulf_extreme | EURJPY | 1.5 | 3.0 | None | None | 147 | +5.788 | 40.1 | 1.272 | 288.3 | 0.28 |
+| nr7_break | USDJPY | 2.0 | 2.0 | no-LATE | None | 366 | +4.791 | 54.1 | 1.233 | 1009.5 | 0.70 |
+| nr7_break | USDJPY | 2.0 | 1.0 | no-LATE | None | 429 | +4.557 | 74.6 | 1.359 | 235.9 | 0.82 |
+| nr7_break | USDJPY | 2.0 | 2.0 | ('LONDON', 'NY') | None | 264 | +4.889 | 55.3 | 1.227 | 771.4 | 0.51 |
+| nr7_break | GBPUSD | 1.5 | 1.5 | ('LONDON', 'NY') | HIGH | 30 | +7.943 | 66.7 | 1.785 | 82.5 | 0.06 |
+| shock_follow | USDJPY | 1.0 | 3.0 | ASIA | None | 49 | +6.940 | 38.8 | 1.401 | 166.8 | 0.09 |
+| nr7_break | USDJPY | 1.0 | 1.0 | ('LONDON', 'NY') | None | 294 | +4.762 | 61.6 | 1.462 | 272.8 | 0.56 |
+| nr7_break | USDJPY | 1.5 | 2.0 | None | HIGH | 217 | +5.029 | 47.9 | 1.194 | 546.8 | 0.42 |
+| nr7_break | GBPUSD | 2.0 | 2.0 | no-LATE | HIGH | 130 | +5.491 | 59.2 | 1.412 | 171.6 | 0.25 |
+| nr7_break | USDJPY | 1.0 | 1.0 | no-LATE | HIGH | 133 | +5.460 | 59.4 | 1.37 | 279.7 | 0.26 |
+| nr7_break | USDJPY | 1.0 | 1.0 | ('LONDON', 'NY') | HIGH | 96 | +5.819 | 60.4 | 1.395 | 242.2 | 0.18 |
+| nr7_break | USDJPY | 1.0 | 1.5 | ('LONDON', 'NY') | None | 284 | +4.703 | 49.6 | 1.352 | 690.0 | 0.54 |
+| nr7_break | USDJPY | 2.0 | 3.0 | no-LATE | None | 341 | +4.498 | 46.9 | 1.194 | 957.1 | 0.65 |
+| nr7_break | USDJPY | 2.0 | 1.5 | ('LONDON', 'NY') | None | 274 | +4.642 | 63.1 | 1.253 | 839.5 | 0.53 |
+| nr7_break | USDJPY | 1.5 | 2.0 | ('LONDON', 'NY') | None | 273 | +4.563 | 50.2 | 1.238 | 788.7 | 0.52 |
+| nr7_break | USDJPY | 1.0 | 2.0 | ('LONDON', 'NY') | HIGH | 89 | +5.578 | 41.6 | 1.261 | 507.4 | 0.17 |
+| nr7_break | USDJPY | 1.0 | 1.0 | no-LATE | None | 444 | +4.051 | 60.6 | 1.408 | 340.4 | 0.85 |
+| shock_follow | USDJPY | 1.5 | 3.0 | ASIA | None | 49 | +6.289 | 46.9 | 1.273 | 197.2 | 0.09 |
+| nr7_break | GBPUSD | 2.0 | 1.5 | no-LATE | HIGH | 131 | +4.981 | 66.4 | 1.43 | 129.9 | 0.25 |
 
 *S1 = candidates -> S2 walk-forward+FDR -> S3 holdout. Chief directive + GRID RULING.*
