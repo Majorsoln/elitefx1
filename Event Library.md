@@ -1,5 +1,9 @@
 # 9 Event (plain text)
 
+> **NOTE (2026-07-09):** Hii ni SOURCE ya kihistoria (KJ Davey). Doctrine hai ya entries
+> sasa ni **`ELITEFX ENTRY DOCTRINE V1.md`** (familia 7, entries 16, kanuni EP-1..EP-7);
+> code ya rekodi = `src/research/event_library_v2.py` (EVENTS_V2).
+
 Source: Kevin J. Davey — "9 Terrific Trading Entries, 7 Sensible Exits"
 Notation: `close[n]` = close n bars ago. Orders execute "next bar". All directions are mirrored long/short.
 

@@ -42,6 +42,7 @@ Governance:               Chief Quant (Unified) — directive ya Project Directo
 | **Supreme** | `ELITEFX MASTER ARCHITECTURE V1.md` | ACTIVE (Tracks A+B; governance §6; mabadiliko §8) |
 | Market | `ELITEFX DOCTRINE V6.9.md` | FROZEN → reopenable-by-knowledge-need (V1 §8.2) |
 | Decision | `ELITEFX DECISION DOCTRINE V12.md` | ACTIVE |
+| **Entry** | `ELITEFX ENTRY DOCTRINE V1.md` | **ACTIVE (NEW 2026-07-09)** — familia 7 · entries 16 (EVENTS_V2) · context layer · EP-1..EP-7 · njia S0→S4 |
 | Governance | `docs/PROGRAM_BOARD.md` (G-01 + roles + workflow) | ACTIVE |
 
 ## Roadmap (STRICT ordering — V11)
