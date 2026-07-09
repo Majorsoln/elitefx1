@@ -154,6 +154,23 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   Track B: LESSON mbili mpya kwa RESEARCHER-K — (a) mechanism ya familia hudumu OOS, ranking ya
   pair huzunguka; (b) FDR huchagua N+consistency, si flashy EV.
 
+- **2026-07-09 — S3 PRE-REGISTRATION (imefungwa KABLA ya kuona holdout; Chief token imetolewa).**
+  (1) **HOLDOUT WINDOW = 2025-01-01 → 2026-04 (data zote za >=2025 zilizopo).** Miezi 05-06/2026
+  haipo kwa Operator — itakuwa forward-monitoring baadaye, SIO sehemu ya S3. Kwa ~0.8 tr/siku
+  tunatarajia N≈300+ kwa STRAT-001 — inatosha kwa single test.
+  (2) **CRITERION (STRAT-001 PEKEE):** EV>0 NA p<0.05 (one-sided, single test). PASS → strategy
+  RASMI ya kwanza (inaenda S4). FAIL → STRAT-001 anakufa kwa heshima + LESSON; HAKUNA "kujaribu
+  mwingine kwenye holdout".
+  (3) **SEAL YA HOLDOUT:** run ya S3 itaendesha grid nzima (code frozen — hatubadilishi chochote),
+  LAKINI matokeo ya cells NYINGINE ZOTE za holdout ni SEALED: hayawezi kuzalisha candidate yoyote
+  mpya, hayawezi kutumika kwa selection, hayarejelewi kwenye ripoti za mbele. Strategy yoyote
+  mpya ya baadaye inaanza S1/S2 upya kwa data mpya. (Hii inazuia post-hoc selection juu ya
+  holdout — RED LINE ya Master V1 + LESSON-002.)
+  (4) **INTEGRITY GATE kabla ya S3 (lazima):** baada ya kuongeza ticks mpya na ku-rebuild states,
+  Operator ata-RE-RUN --split validation na kulinganisha na iliyokwisha-commit (byte-identical
+  inatarajiwa — computations zote ni trailing/no-lookahead). Ikitofautiana → SIMAMA, ripoti
+  (data-source inconsistency); S3 HAIFANYIKI hadi ieleweke.
+
 ## Top Risks (live)
 
 | # | Risk | Status |

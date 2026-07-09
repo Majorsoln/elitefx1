@@ -117,3 +117,21 @@ KAZI ZAKO (mpangilio):
      low−0.1 pip); ikigusa: SL=2×ATR14, TP=1×ATR14, timeout 24 bars → paper_trader --signal
      kama kawaida. Hii ni forward OOS ya ziada — haipotezi holdout.
   3. RESEARCHER-K session (Track B): lessons mbili mpya za S2 zimo kwenye memory yake.
+
+## RUNBOOK HAI (2026-07-09): S3 HOLDOUT — ONE-SHOT (token imetolewa)
+Holdout window IMEFUNGWA: 2025-01 → 2026-04 (05-06/2026 hazipo — zitakuwa forward-monitoring).
+HATUA (mpangilio MKALI):
+  1. Ingiza ticks mpya (2025-01→2026-04) kwenye store ileile ya raw → endesha
+     market_state_engine (states sasa zitafika 2026-04).
+  2. INTEGRITY GATE (lazima kabla ya S3):
+       cd src\research
+       python strategy_lab.py --split validation
+       cd ..\..  &&  git diff --stat data/strategies/candidates.jsonl
+     Tegemeo: HAKUNA tofauti (byte-identical na iliyokwisha-commit). Ikitofautiana → SIMAMA,
+     bandika diff kwa Chief. USIENDELEE hatua 3.
+  3. S3 ONE-SHOT (mara MOJA pekee):
+       cd src\research
+       python strategy_lab.py --split holdout --holdout-final CHIEF-HOLDOUT-S3
+  4. Commit ripoti + jsonl → push → ripoti "tayari S3".
+KUMBUKA: hukumu = STRAT-001 PEKEE (EV>0 na p<0.05). Cells nyingine zote za holdout = SEALED
+(hazizai candidates; hazitumiki kwa selection). Paper-trading ya STRAT-001 inaendelea sambamba.
