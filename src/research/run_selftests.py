@@ -36,7 +36,7 @@ def main():
         print(f"  {'PASS' if ok else 'FAIL'}  {m}")
         if not ok:
             print("    --- output ya mwisho ---")
-            print("    " + "\n    ".join(txt.strip().splitlines()[-8:]))
+            print("    " + "\n    ".join(txt.strip().splitlines()[-20:]))
 
     passed = sum(1 for _, ok in results if ok)
     print(f"\n{'=' * 50}")
