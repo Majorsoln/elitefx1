@@ -103,3 +103,35 @@ jsonl). Run ni deterministic — namba zilezile, jina linaonekana. KAZI YAKO (da
   cd ..\..
   git add -A && git commit -m "S2 re-run: survivor named" && git push origin main
 Ripoti: "tayari S2b". Kisha Chief anafunga registration ya S3 (holdout — mara MOJA tu).
+
+## LOG — 2026-07-09 (S2b: SURVIVOR = STRAT-001) + KAZI ZAKO MPYA
+**STRAT-001: nr7_break × USDCHF · H1 · SL 2.0×ATR / TP 1.0×ATR · no-LATE (usiingie saa 17-23
+server) · vol yoyote.** VALID: EV +3.07/trade net, win 79.3%, N=425, ~0.8 tr/siku, p=9e-06
+(1/1,939 FDR). TRAIN pia chanya (N=1,607, win 71%). STATUS: CANDIDATE-VALIDATED.
+KAZI ZAKO (mpangilio):
+  1. **DATA ya S3 (blocker):** pakua ticks 2025-01 → 2026-06 kutoka chanzo chako kilekile
+     (angalau USDCHF; bora pairs zote 9) → endesha market_state_engine kuzalisha states.
+     Ripoti "data 2025-26 tayari" — Chief atakupa token ya S3 (one-shot).
+  2. **Paper-trading ya STRAT-001 (sasa, sambamba):** kila bar ya H1 ya USDCHF yenye range
+     nyembamba zaidi ya bars 7 (NR7), na saa si 17-23: weka stop pande zote (high+0.1 pip /
+     low−0.1 pip); ikigusa: SL=2×ATR14, TP=1×ATR14, timeout 24 bars → paper_trader --signal
+     kama kawaida. Hii ni forward OOS ya ziada — haipotezi holdout.
+  3. RESEARCHER-K session (Track B): lessons mbili mpya za S2 zimo kwenye memory yake.
+
+## RUNBOOK HAI (2026-07-09): S3 HOLDOUT — ONE-SHOT (token imetolewa)
+Holdout window IMEFUNGWA: 2025-01 → 2026-04 (05-06/2026 hazipo — zitakuwa forward-monitoring).
+HATUA (mpangilio MKALI):
+  1. Ingiza ticks mpya (2025-01→2026-04) kwenye store ileile ya raw → endesha
+     market_state_engine (states sasa zitafika 2026-04).
+  2. INTEGRITY GATE (lazima kabla ya S3):
+       cd src\research
+       python strategy_lab.py --split validation
+       cd ..\..  &&  git diff --stat data/strategies/candidates.jsonl
+     Tegemeo: HAKUNA tofauti (byte-identical na iliyokwisha-commit). Ikitofautiana → SIMAMA,
+     bandika diff kwa Chief. USIENDELEE hatua 3.
+  3. S3 ONE-SHOT (mara MOJA pekee):
+       cd src\research
+       python strategy_lab.py --split holdout --holdout-final CHIEF-HOLDOUT-S3
+  4. Commit ripoti + jsonl → push → ripoti "tayari S3".
+KUMBUKA: hukumu = STRAT-001 PEKEE (EV>0 na p<0.05). Cells nyingine zote za holdout = SEALED
+(hazizai candidates; hazitumiki kwa selection). Paper-trading ya STRAT-001 inaendelea sambamba.

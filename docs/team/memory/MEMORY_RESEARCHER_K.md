@@ -105,3 +105,14 @@ CURRENT TASK MPYA: (a) **GRAPH@v8** — enrich provenance ya lessons 027-036 (su
 applies-to edges kamili + EVAL linkage); (b) **K1 BATCH 7** (F-006 context-generalization · F-009
 event-specific-sensitivity · mean-reversion-only subgroup failed-idea · D1-D4 Evidence-ops lessons).
 Corpus target: ~42-45 (karibu kufunga retroactive K1).
+
+=== KAZI MPYA (Chief, 2026-07-09): LESSONS 2 kutoka S2/Alpha Engineering ===
+Evidence: reports/strategy_lab_report.md (S1 TRAIN commit ccfbb24; S2b VALIDATION commit e1a0d27)
++ CHIEF_STATUS validation log 2026-07-09. Andika kwa LESSON_SPEC kamili (counter_evidence lazima):
+  L-a (MARKET-CONDITIONAL): "Mechanism ya familia hudumu OOS; ranking ya pair huzunguka" —
+      nr7_break: TRAIN kiongozi GBPUSD(LONDON,NY) 216/216 chanya; VALIDATION kiongozi USDJPY(HIGH);
+      survivor halisi USDCHF. Familia ilibaki juu pande zote; pairs zilizunguka. Implication:
+      thibitisha/deploy FAMILIA + re-rank pairs mara kwa mara, usioe pair moja (inaungana LESSON-001).
+  L-b (METHOD): "FDR huchagua consistency+N, si flashy EV" — survivor pekee (p=9e-06) alikuwa
+      EV +3.07 N=425 win 79%, WAKATI cells za EV +11..+13 (N=30-182) hazikupita. Implication:
+      power ya takwimu inatoka kwa sampuli kubwa thabiti; top-EV ndogo-N = mtego (LESSON-033/034).
