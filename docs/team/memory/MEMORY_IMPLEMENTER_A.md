@@ -305,3 +305,17 @@ KIPAUMBELE CHA JUU KULIKO ZOTE. Jenga `src/research/strategy_lab.py`:
 PIA (kazi ndogo ya kwanza, kabla ya S1): OOS-CONFIRM runbook ya LESSON-017/018 (MR×EURUSD,
 DPB×EURUSD) — pre-registered test juu ya 2023-2024 validation window (SIO holdout) na FDR ya 2;
 hii inaweza kutupa strategy halisi ya kwanza NDANI YA WIKI.
+
+=== UPDATE ya S1 (Chief direct, 2026-07-08): EVENT LIBRARY V2 NDIYO MSINGI WA GRID ===
+Chief amejenga mwenyewe `src/research/event_library_v2.py` (entries 11: edge-trigger+rearm,
+stop-entries za intrabar [jump_off/breakout_stop/session_orb], volume filter [lowvol_reversal],
+ATR-stretch MR [mr_zscore], resumption pullback [trend_resume]) + `event_quality_report.py`
+(harness: episode non-overlap, next-bar honest, SL/TP za ATR, tie->SL, costs kila trade,
+TRAIN<2023 enforced). Sweep 14/14 PASS. MABADILIKO KWA S1 SPEC YAKO:
+  a. GRID ya strategy_lab.py itumie **EVENTS_V2 registry** (sio Event Library.md pekee) —
+     mkataba: market events -> {"sig"}; stop events -> {"long_level","short_level"}; params
+     za kila fn = dimensions za grid (short_len/long_len/k/rearm/q/range_hours n.k.).
+  b. TUMIA `episodes()` ya event_quality_report.py kama reference semantics ya fills/exits —
+     USIBADILISHE fill rules (next-bar open / stop touch / tie->SL worst case).
+  c. Ripoti ya `event_quality_report.md` (Operator ataiendesha) = pruning ya kwanza ya grid:
+     event x pair x session zenye EV net chanya TRAIN zinapata kipaumbele; ZOTE bado zinapimwa S2.

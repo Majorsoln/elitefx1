@@ -42,6 +42,15 @@ aggressive=4 SELECT+1 HEDGE. Gate: SELECT zote VALIDATED; integrity ok. Mashine 
 UAMINIFU: SELECT ≠ trade nzuri (policies illustrative; edge = OOS, haijafanywa). Kazi ijayo:
 paper-trading run ya mfululizo (time-ordered) au K4 datasets (E3 outcomes = training data).
 
+## RUNBOOK HAI (2026-07-08): EVENT QUALITY — entries V1 vs V2 (TRAIN 2016-2022) — KIPAUMBELE
+Chief amejenga mwenyewe `event_library_v2.py` (entries 11 zilizoboreshwa: edge-trigger+rearm,
+stop-entries halisi za intrabar, session ORB ya London, volume filter kwa `tc`, ATR-stretch MR)
++ `event_quality_report.py` (harness ya haki: episode non-overlap, SL/TP za ATR, costs halisi
+kila trade; inaKATA ts>=2023 YENYEWE — sacred splits). Sweep 14/14 PASS CI. KAZI YAKO: fuata
+`docs/RUNBOOK_event_quality.md`: git pull → `python run_selftests.py` (14/14) →
+`python event_quality_report.py` → commit `reports/event_quality_report.md` → ripoti
+**"tayari event quality"**. Ripoti hii inalisha grid ya S1 (IMPLEMENTER-A).
+
 ## RUNBOOK HAI (2026-07-07): FORWARD Paper-Trading — TAYARI KUTUMIA
 `paper_trader.py` (Chief direct; self-test 4/4 + sweep 12/12). Kila signal yako ya MWONGOZO:
   python paper_trader.py --signal PAIR SIDE ENTRY SL TP     (mashine: decide+gate+size+fill+log)
