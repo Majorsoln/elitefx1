@@ -443,3 +443,11 @@ OPEN QUESTIONS (ndani ya reports/strat_signal_report.md):
   3. policy-per-strategy (nilichagua) vs registry-policy moja? Chief athibitishe.
   4. strat_signal live (MT5) = E4-adjacent, imezuiwa hadi Project Director (RED LINE).
 NOTE: strat_signal = research/tool (numpy OK). numpy/polars nilifunga kuverify; core purity haijaguswa.
+
+=== CHIEF REVIEW ya S4 (2026-07-09): APPROVED bila fixes ===
+strat_signal.py: registry ya STRAT-001/002, reuse kamili (nr7_break+wilder_atr), no-LATE
+decidable (hour+1), OCO+SL/TP zinazolingana na harness semantics, pip scaling ya JPY, CSV/parquet
+loaders, self-test 6/6 (ikiwemo ratio 2.0 ya SL/TP na LATE skip). decision_policy: STRATEGY_POLICIES
+kama provenance-wrappers deterministic NJE ya POLICIES za demo — chaguo sahihi, self-test (7) nzuri.
+Sweep 17/17. Kazi safi — hakuna marekebisho. INAYOFUATA KWAKO: CYCLE-2 tasks (GRID_C2 +
+strength framework + exit science — tayari zimo memory yako).

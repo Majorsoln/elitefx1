@@ -162,3 +162,12 @@ Events mpya 4 (gap_fade, london_drift, squeeze_break, nr4_inside) + charter ya C
 KAZI MPYA: (a) angalia chanzo chako cha ticks kama kina XAUUSD / GBPJPY / EURCHF — ripoti
 "pairs mpya zinapatikana: ..."; (b) endelea kukusanya data mpya kila mwezi (2026-05+ = OOS ya
 baadaye ya compression/shock C2); (c) IMPLEMENTER-A: S4 tool kwanza, kisha C2 tasks (memory yake).
+
+## RUNBOOK HAI (2026-07-09): SIGNAL TOOL ya kila siku (S4 — APPROVED, sweep 17/17)
+Paper-trading yako sasa ni nusu-otomatiki. Kila siku (au kila bar ya H1 ikifunga):
+  cd src\research
+  python strat_signal.py --all --bars-dir <dir yenye USDCHF.parquet na USDJPY.parquet>
+  (au: python strat_signal.py --pair USDCHF --bars <path.parquet au .csv>)
+Tool inakuambia: kama kuna NR7 + no-LATE -> inakupa amri KAMILI za paper_trader --signal
+(entry/SL/TP zimehesabiwa). Weka OCO stops MT5 (demo); ikijaza moja, futa nyingine, endesha
+amri ya paper_trader iliyotolewa. Ikifika TP/SL: paper_trader --close. Commit data/paper/ kila siku.
