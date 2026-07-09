@@ -17,6 +17,9 @@ Endesha (kutoka root ya repo, kwenye PC yenye internet isiyozuiliwa):
   python scripts/download_dukascopy_direct.py --pairs EURUSD --start 2024-01 \\
          --end 2024-02 --workers 4
 RESUME: mwezi wenye parquet tayari unarukwa (tumia --force kushusha upya).
+Mtandao wa polepole / timeouts: --workers 2 --timeout 60. Script ina preflight
+(inasimama mapema mtandao usipofika Dukascopy) na inasimama baada ya miezi 3
+mfululizo kufeli — endesha tena tu, resume itaendelea pale ilipoishia.
 Self-test (offline, hakuna mtandao): python scripts/download_dukascopy_direct.py --self-test
 
 Muundo wa .bi5 (kwa kila saa, LZMA): rekodi za bytes 20 big-endian —
@@ -41,7 +44,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://datafeed.dukascopy.com/datafeed"
 REC = struct.Struct(">IIIff")          # ms, ask_pts, bid_pts, ask_vol, bid_vol
-RETRIES = 4                            # backoff 2s, 4s, 8s, 16s
+RETRIES = 5                            # backoff 2s, 4s, 8s, 15s, 15s (cap 15s)
+TIMEOUT = 30                           # sekunde kwa kila ombi (connect + read)
 UA = "Mozilla/5.0 (EliteFX data pipeline)"
 
 # point_factor: bei = points / factor. Rejea metadata ya Dukascopy.
@@ -68,23 +72,23 @@ def hour_url(symbol: str, dt: datetime) -> str:
             f"{dt.day:02d}/{dt.hour:02d}h_ticks.bi5")
 
 
-def fetch(url: str) -> bytes:
-    """Shusha URL moja; 404 = hakuna data (b''). Retry na exponential backoff."""
-    for attempt in range(RETRIES + 1):
+def fetch(url: str, timeout: int = TIMEOUT, retries: int = RETRIES) -> bytes:
+    """Shusha URL moja; 404 = hakuna data (b''). Retry na exponential backoff (cap 15s)."""
+    last: Exception | None = None
+    for attempt in range(retries + 1):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=60) as r:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read()
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 return b""
-            if attempt == RETRIES:
-                raise
-        except Exception:
-            if attempt == RETRIES:
-                raise
-        time.sleep(2 ** (attempt + 1))
-    return b""
+            last = e
+        except Exception as e:
+            last = e
+        if attempt < retries:
+            time.sleep(min(2 ** (attempt + 1), 15))
+    raise RuntimeError(f"{url}: imeshindikana baada ya majaribio {retries + 1} — {last}")
 
 
 def parse_bi5(raw: bytes, hour_start: datetime, factor: int) -> list[tuple]:
@@ -161,23 +165,47 @@ def download_month(symbol: str, year: int, month: int, out_root: Path,
     return "OK", len(rows)
 
 
-def run(pairs, start, end, out_root: Path, workers: int, force: bool) -> int:
+def preflight(symbol: str, timeout: int) -> None:
+    """Jaribio moja la haraka la mtandao kabla ya kazi 300+: Jumatatu ya zamani
+    inayojulikana. Ikishindikana mara 2, inua hitilafu — usisage kazi zote bure."""
+    url = hour_url(symbol, datetime(2020, 1, 6, 10, tzinfo=timezone.utc))
+    fetch(url, timeout=timeout, retries=1)
+
+
+def run(pairs, start, end, out_root: Path, workers: int, force: bool,
+        timeout: int = TIMEOUT, retries: int = RETRIES) -> int:
     months = month_range(start, end)
     total = len(pairs) * len(months)
     print(f"Dukascopy direct: pairs={','.join(pairs)} | miezi {start}..{end} "
           f"({len(months)}) | kazi {total} | -> {out_root}")
-    done = failed = 0
+    try:
+        preflight(pairs[0], timeout)
+    except Exception as e:
+        print(f"\nPREFLIGHT IMESHINDIKANA — mtandao haufiki datafeed.dukascopy.com:\n  {e}\n"
+              f"Angalia internet/firewall/VPN yako kisha ujaribu tena "
+              f"(au ongeza --timeout, mf. --timeout 60).")
+        return 2
+    fetcher = lambda u: fetch(u, timeout=timeout, retries=retries)
+    done = failed = streak = 0
     t0 = time.time()
     for symbol in pairs:
         for (y, m) in months:
             done += 1
             tag = f"[{done:>4d}/{total}] {symbol} {y:04d}-{m:02d}"
             try:
-                status, n = download_month(symbol, y, m, out_root, workers, force)
+                status, n = download_month(symbol, y, m, out_root, workers, force,
+                                           fetcher=fetcher)
             except Exception as e:
                 failed += 1
+                streak += 1
                 print(f"{tag}: HITILAFU — {e}", flush=True)
+                if streak >= 3:
+                    print(f"\nNIMESIMAMA: miezi {streak} mfululizo imeshindikana — "
+                          f"mtandao una tatizo. Endesha tena baadaye (resume itaruka "
+                          f"miezi iliyokamilika); jaribu --workers 2 --timeout 60.")
+                    return 1
                 continue
+            streak = 0
             if status == "SKIP":
                 print(f"{tag}: ipo tayari (ruka; --force kushusha upya)", flush=True)
             elif status == "FUTURE":
@@ -229,11 +257,23 @@ def self_test() -> int:
           ticks[0][3] == 2.25 and ticks[0][4] == 1.5)
     check("parse_bi5: bytes tupu = hakuna ticks", parse_bi5(b"", h0, 1_000) == [])
 
-    # 4) month_range inclusive + kuvuka mwaka
+    # 4) fetch: retries zikiisha -> RuntimeError yenye URL (bila mtandao halisi)
+    real_urlopen = urllib.request.urlopen
+    urllib.request.urlopen = lambda *a, **k: (_ for _ in ()).throw(OSError("mock down"))
+    try:
+        fetch("https://example.invalid/x.bi5", timeout=1, retries=0)
+        check("fetch: inainua hitilafu retries zikiisha", False)
+    except RuntimeError as e:
+        check("fetch: inainua hitilafu retries zikiisha",
+              "x.bi5" in str(e) and "mock down" in str(e))
+    finally:
+        urllib.request.urlopen = real_urlopen
+
+    # 5) month_range inclusive + kuvuka mwaka
     check("month_range 2016-11..2017-02",
           month_range("2016-11", "2017-02") == [(2016, 11), (2016, 12), (2017, 1), (2017, 2)])
 
-    # 5) end-to-end ya mwezi mmoja na fetcher bandia (hakuna mtandao) + resume
+    # 6) end-to-end ya mwezi mmoja na fetcher bandia (hakuna mtandao) + resume
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         fake = lzma.compress(REC.pack(0, 108500, 108450, 1.0, 1.0))
@@ -272,6 +312,10 @@ def main(argv=None) -> int:
     ap.add_argument("--out", default=None,
                     help="root ya output (default: paths.raw_ticks ya data_config.yaml)")
     ap.add_argument("--workers", type=int, default=8, help="threads za kushusha (default 8)")
+    ap.add_argument("--timeout", type=int, default=TIMEOUT,
+                    help=f"sekunde kwa kila ombi (default {TIMEOUT}; mtandao wa polepole: 60)")
+    ap.add_argument("--retries", type=int, default=RETRIES,
+                    help=f"majaribio ya ziada kwa kila URL (default {RETRIES})")
     ap.add_argument("--force", action="store_true", help="shusha upya hata kama parquet ipo")
     ap.add_argument("--self-test", action="store_true", help="test za offline, hakuna mtandao")
     a = ap.parse_args(argv)
@@ -289,7 +333,7 @@ def main(argv=None) -> int:
         except ModuleNotFoundError:
             out_root = REPO_ROOT / "data" / "raw" / "ticks"
     return run([p.upper() for p in a.pairs], a.start, a.end, out_root,
-               a.workers, a.force)
+               a.workers, a.force, timeout=a.timeout, retries=a.retries)
 
 
 if __name__ == "__main__":
