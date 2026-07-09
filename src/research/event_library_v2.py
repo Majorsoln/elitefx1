@@ -332,6 +332,75 @@ def session_orb(o, h, l, c, tc=None, hour=None, range_hours=(7, 8), trade_hours=
     return {"long_level": LL, "short_level": SS}
 
 
+# ---------- CYCLE-2 events (Chief direct, 2026-07-09 — directive ya PD: "out of the box,
+# trade za aina tofauti"). Mechanisms mpya, si variants za zilizopo ----------
+
+def squeeze_break(o, h, l, c, tc=None, hour=None, bb_len=20, k=2.0, q=0.15,
+                  look=100, brk=5, tick=TICK):
+    """CYCLE-2 (familia F3+): MULTI-BAR squeeze — Bollinger-width ya chini kihistoria
+    (quantile q ya widths za bars look zilizopita) -> stop orders kwenye HH/LL za bars brk.
+    Tofauti na nr7 (bar MOJA nyembamba): hii ni mgandamizo wa WIKI, mlipuko mkubwa zaidi."""
+    n = len(c)
+    ma = _sma(c, bb_len); sd = _roll(c, bb_len, np.std)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        width = (2 * k * sd) / np.where(ma > 0, ma, np.nan)
+    wq = _roll(width, look, lambda w, axis: np.nanquantile(w, q, axis=axis), incl=False)
+    hh = _roll(h, brk, np.max); ll = _roll(l, brk, np.min)
+    LL = np.full(n, np.nan); SS = np.full(n, np.nan)
+    with np.errstate(invalid="ignore"):
+        squeezed = width <= wq
+    LL[squeezed] = hh[squeezed] + tick
+    SS[squeezed] = ll[squeezed] - tick
+    return {"long_level": LL, "short_level": SS}
+
+
+def nr4_inside(o, h, l, c, tc=None, hour=None, n_rng=4, tick=TICK):
+    """CYCLE-2 (familia F3+, Crabel ID/NR4): inside bar AMBAYO PIA ni range nyembamba
+    zaidi ya bars 4 — mgandamizo maradufu -> stops kwenye high/low za bar-mama."""
+    m = len(c)
+    h1 = _shift(h, 1); l1 = _shift(l, 1)
+    rng_ = h - l
+    rmin = _roll(rng_, n_rng, np.min)
+    LL = np.full(m, np.nan); SS = np.full(m, np.nan)
+    with np.errstate(invalid="ignore"):
+        idnr = (h < h1) & (l > l1) & (rng_ <= rmin)
+    LL[idnr] = h1[idnr] + tick
+    SS[idnr] = l1[idnr] - tick
+    return {"long_level": LL, "short_level": SS}
+
+
+def gap_fade(o, h, l, c, tc=None, hour=None, k=0.5, atr_len=14, rearm=10):
+    """CYCLE-2 (familia MPYA F8: LIQUIDITY-GAP REVERSION — aina tofauti ya trade kabisa):
+    open ya bar ina-gap dhidi ya close iliyopita (> k*ATR — hasa Monday/rollover FX);
+    bar ya gap ikianza kurudi (close dhidi ya open ya gap) -> fuata KURUDI kuelekea
+    close ya zamani. Mechanism: gaps za FX hujazwa mara nyingi (liquidity vacuum)."""
+    c1 = _shift(c, 1)
+    atr = wilder_atr(h, l, c, atr_len)
+    atr1 = _shift(atr, 1)
+    with np.errstate(invalid="ignore"):
+        gap = o - c1
+        gap_up = gap > k * atr1
+        gap_dn = gap < -k * atr1
+        sc = gap_up & (c < o)      # gap juu + imeanza kurudi chini -> short (fade)
+        lc = gap_dn & (c > o)      # gap chini + imeanza kurudi juu -> long
+    return {"sig": _edge(lc, sc, rearm)}
+
+
+def london_drift(o, h, l, c, tc=None, hour=None, open_hr=8, mom=2, rearm=6):
+    """CYCLE-2 (familia MPYA F9: SESSION-DRIFT — seasonality ya saa): kwenye close ya
+    bar ya saa ya London open, mwelekeo wa bars mom za mwisho (Asia->London handoff)
+    huendelea kipindi cha London/NY. Trade ya aina ya 'drift ya ratiba', si breakout."""
+    n = len(c)
+    if hour is None:
+        return {"sig": np.zeros(n, dtype=int)}
+    cm = _shift(c, mom)
+    with np.errstate(invalid="ignore"):
+        at_open = np.asarray(hour) == open_hr
+        lc = at_open & (c > cm)
+        sc = at_open & (c < cm)
+    return {"sig": _edge(lc, sc, rearm)}
+
+
 # ---------- Registry rasmi V2 ----------
 # entry: "market" (sig -> open ya bar ijayo) | "stop" (levels -> touch ya bar ijayo)
 # needs: data za ziada zinazohitajika ("tc" = volume, "hour" = time-of-day)
@@ -354,6 +423,12 @@ EVENTS_V2 = {
     "engulf_extreme":  dict(fn=engulf_extreme,  entry="market", needs=(),        v1=None),
     "inside_break":    dict(fn=inside_break,    entry="stop",   needs=(),        v1=None),
     "nr7_break":       dict(fn=nr7_break,       entry="stop",   needs=(),        v1=None),
+    # --- CYCLE-2 (2026-07-09, directive ya PD: diversification — trade za AINA tofauti).
+    #     Grid ya cycle-2 ina registration YAKE (S1-C2); hazimo kwenye grid ya cycle-1. ---
+    "squeeze_break":   dict(fn=squeeze_break,   entry="stop",   needs=(),        v1=None),
+    "nr4_inside":      dict(fn=nr4_inside,      entry="stop",   needs=(),        v1=None),
+    "gap_fade":        dict(fn=gap_fade,        entry="market", needs=(),        v1=None),
+    "london_drift":    dict(fn=london_drift,    entry="market", needs=("hour",), v1=None),
 }
 
 
@@ -367,6 +442,9 @@ def _synthetic(n=3000, seed=0):
     rets = rng.normal(drift, vol)
     c = np.cumsum(rets) + 10000.0
     o = np.roll(c, 1); o[0] = c[0]
+    # gaps za mara kwa mara (mf. Monday/rollover FX) — o ina-gap dhidi ya close iliyopita
+    gap_idx = rng.choice(n - 1, size=max(4, n // 150), replace=False) + 1
+    o[gap_idx] += rng.choice((-1, 1), len(gap_idx)) * rng.uniform(2.0, 5.0, len(gap_idx))
     spread_bar = np.abs(rets) + np.abs(rng.normal(0, 0.4 * vol, n))
     h = np.maximum(o, c) + spread_bar
     l = np.minimum(o, c) - spread_bar

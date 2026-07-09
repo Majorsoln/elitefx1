@@ -223,6 +223,29 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   USDJPY) na param-plateau (SL 1.5-2.0) — hii si cell ya bahati, ni FAMILIA halisi.
   Holdout: SEALED tena kabisa — batch hii ilikuwa one-time (ruling 4331e57).
 
+- **2026-07-09 — ALPHA CYCLE-2 OPENED (directive ya PD: "out of the box — trade za aina tofauti,
+  uelewa mpana").** Lengo: AI ipate TAXONOMY pana ya aina za trade, kila aina na P(mafanikio|context)
+  yake — sio aina moja. **Events MPYA 4 zimejengwa (Chief direct; registry sasa = 20; sweep 16/16):**
+  `squeeze_break` (mgandamizo wa MULTI-BAR — BB-width quantile), `nr4_inside` (Crabel ID/NR4,
+  mgandamizo maradufu), `gap_fade` (FAMILIA MPYA F8: liquidity-gap reversion — aina tofauti kabisa
+  ya trade), `london_drift` (FAMILIA MPYA F9: session-drift/seasonality ya saa).
+  **HYPOTHESES ZA CYCLE-2 (familia-level, pre-registered):**
+    H-C2-1 Compression kwa KINA: squeeze/nr4/nr7 kwenye **H4** + pairs za spread nyembamba
+           (remedy ya COST-KILLED 324 ya autopsy — ATR×2, spread ileile).
+    H-C2-2 Shock refinement (mshipa hai #2: pooled +0.34): ASIA + JPY pairs + H4.
+    H-C2-3 Gap reversion (aina mpya — reversion ya liquidity, si breakout).
+    H-C2-4 Session drift (aina mpya — ratiba, si bei).
+    H-C2-5 Currency STRENGTH cross-pair (dimension mpya kabisa — framework ya multi-pair;
+           spec kwa IMPLEMENTER-A).
+    H-C2-6 EXIT SCIENCE kwa STRAT-001/002 (Davey "7 Sensible Exits": trailing ATR, breakeven,
+           time-exit) — kuboresha proven bila entry-risk mpya.
+  **OOS RULES za C2 (uadilifu):** S1-C2=TRAIN · S2-C2=VALID 2023-24 (halali kwa familia MPYA —
+  hazikuchaguliwa kwayo; m=cells zote za C2) · S3-C2: familia mpya kabisa (gap/drift/strength)
+  zaweza one-shot batch kwenye 2025→2026-04 (hazijaguswa nayo); compression/shock-adjacent →
+  **2026-05+/forward TU** (Chief aliona holdout top-40 ya grid-1 — knowledge leak inazuiliwa).
+  **PAIRS EXPANSION (ombi kwa PD):** angalia chanzo chako kama kina XAUUSD (gold), GBPJPY,
+  EURCHF — diversity ya soko kwa AI + compression kwenye gold ni familia classic.
+
 ## Top Risks (live)
 
 | # | Risk | Status |
