@@ -137,6 +137,23 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   kwenye report na jsonl (self-test 5b). Re-run ya validation (deterministic) inahitajika
   kumtaja survivor → registration ya S3.
 
+- **2026-07-09 — S2b: SURVIVOR AMETAJWA — REGISTRATION ya S3 (STRAT-001).**
+  **STRAT-001 = nr7_break × USDCHF · H1 · SL 2.0×ATR / TP 1.0×ATR · filter: no-LATE · vol: ALL.**
+  VALIDATION 2023-24: N=425, EV **+3.07 pips net**, win **79.3%**, PF 1.61, ~0.8 trades/siku,
+  p=9.0e-06 (pekee aliyeshinda BH-FDR q=0.10 kati ya 1,939; kwa bahati ~0.1).
+  **COHERENCE (TRAIN 2016-22): chanya PIA** — N=1,607, EV +0.36, win 71.1%, PF 1.05, 0.88 tr/siku.
+  Profile ya edge halisi: SIYO nyota ya in-sample (aliepuka mtego wa max-order-statistic),
+  bali thabiti pande zote mbili, N kubwa, mwelekeo uleule. Muundo: high-win/small-target
+  (TP 1×ATR, SL 2×ATR; breakeven ~68% dhidi ya observed 71-79%) — FRAGILITY kuu = win% decay;
+  monitoring ya lazima. STATUS: **CANDIDATE-VALIDATED** (bado SIO strategy rasmi — S3 inasubiri).
+  **S3 BLOCKER (data):** holdout = 2025+ lakini ticks za PC ya Operator zinaishia 2024 →
+  Operator apakue ticks 2025-01 → 2026-06 (chanzo kilekile, angalau USDCHF; bora pairs zote),
+  aendeshe market_state_engine, KISHA one-shot S3 kwa token ya Chief. Criterion ya S3
+  (pre-registered): STRAT-001 pekee, EV>0 NA p<0.05 (single test — hakuna multiple comparison).
+  SAMBAMBA (haipotezi holdout): STRAT-001 inaingia forward paper-trading (paper_trader).
+  Track B: LESSON mbili mpya kwa RESEARCHER-K — (a) mechanism ya familia hudumu OOS, ranking ya
+  pair huzunguka; (b) FDR huchagua N+consistency, si flashy EV.
+
 ## Top Risks (live)
 
 | # | Risk | Status |
