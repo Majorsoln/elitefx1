@@ -190,6 +190,20 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   (3) forward paper-trading ya STRAT-001 (tathmini dhidi ya tegemeo la holdout);
   (4) LIVE bado GATED: maamuzi ya PD (live-artifact + max_spread) yanabaki PENDING.
 
+- **2026-07-09 — S3b REGISTRATION (OPTION B approved na PD; imefungwa KABLA ya kufungua holdout).**
+  Uchaguzi: kimakanika kutoka B3a ya autopsy (TRAIN+VALID PEKEE — git e613f32 inathibitisha
+  holdout haikusomwa na selection): best-p kwa kila pair yenye TRAIN EV>0, +1 diversity ya
+  session-filter. **CELLS 5 PEKEE zinafunguliwa kwenye holdout; nyingine zote zinabaki SEALED:**
+    SIB-1: nr7_break × USDCHF · SL1.5/TP1.0 · no-LATE · vol ALL   (VALID p=0.0002)
+    SIB-2: nr7_break × USDJPY · SL1.0/TP1.0 · no-LATE · vol ALL   (VALID p=0.0007)
+    SIB-3: nr7_break × USDCHF · SL2.0/TP1.0 · (LONDON,NY) · ALL   (VALID p=0.0009)
+    SIB-4: nr7_break × EURUSD · SL2.0/TP1.5 · no-LATE · vol ALL   (VALID p=0.0026)
+    SIB-5: nr7_break × GBPUSD · SL2.0/TP1.0 · no-LATE · vol HIGH  (VALID p=0.0070)
+  CRITERION (pre-registered): BH-FDR q=0.10 juu ya p-values 5 za HOLDOUT (m=5) NA EV>0.
+  Survivors → STRAT-002.. (PROVEN-OOS). Utaratibu huu ni one-time; hakuna batch ya pili
+  kutoka holdout hii. Chanzo cha holdout rows: candidates.jsonl ya commit 86a5977 (tayari
+  ina p za kila cell — hakuna run mpya inayohitajika).
+
 ## Top Risks (live)
 
 | # | Risk | Status |
