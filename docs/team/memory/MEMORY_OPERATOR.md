@@ -92,3 +92,14 @@ amefunga registration (grid+code frozen). KAZI YAKO SASA (S2 — hukumu, amri mo
   git commit -m "S2 validation + FDR" && git push origin main
 Ripoti: "tayari S2". Ripoti itakuwa na sehemu ya FDR (survivors + wangapi kwa bahati) —
 strategy za kwanza RASMI zinaweza kuzaliwa hapa (au kufa kwa heshima; zote mbili ni sayansi).
+
+## LOG — 2026-07-09 (S2: DONE — SURVIVOR 1/1,939!) + RUNBOOK: S2 re-run (kumtaja survivor)
+FDR imepitisha strategy MOJA kati ya 1,939 (kwa bahati ~0.1 — huyu ana nguvu halisi). Defect ya
+reporting: hakutajwa kwa jina. Chief amerekebisha (survivors sasa wanaandikwa + p-values kwenye
+jsonl). Run ni deterministic — namba zilezile, jina linaonekana. KAZI YAKO (dakika ~5):
+  git pull
+  cd src\research
+  python strategy_lab.py --split validation
+  cd ..\..
+  git add -A && git commit -m "S2 re-run: survivor named" && git push origin main
+Ripoti: "tayari S2b". Kisha Chief anafunga registration ya S3 (holdout — mara MOJA tu).

@@ -122,6 +122,21 @@ GATED:                 Trading-ML (evals + OOS + Project Director) · live money
   NB ya S2 scope: validation ni window moja 2023-24 + FDR (OOS-confirmation); rolling walk-forward
   kamili = uboreshaji wa baadaye (S2.1) kama itahitajika.
 
+- **2026-07-09 — S2 VALIDATION + FDR: DONE (hukumu ya kwanza ya OOS katika historia ya mradi).**
+  Grid frozen (cells 2,004) juu ya VALIDATION 2023-24: candidates 1,939. **BH-FDR q=0.10 →
+  SURVIVOR 1/1,939** (kwa bahati wangetarajiwa ~0.1 — yaani survivor huyu ana uwezekano mkubwa
+  wa kuwa HALISI). Tathmini ya prediction ya Chief (iliyorekodiwa kabla): **familia ya nr7_break
+  IMESALIA kileo** — inatawala top ya validation vilevile — LAKINI uongozi wa pair ULIZUNGUKA:
+  TRAIN kiongozi = GBPUSD (LONDON,NY); VALIDATION kiongozi = USDJPY (HIGH vol, hasa bila session
+  filter; GBPUSD (LONDON,NY) HIGH ilibaki chanya +8..+13 lakini N=30 tu kwa miaka 2). shock_follow
+  ASIA pia ilizunguka EURJPY→USDJPY. **LESSON-material (Track B): mechanism ya familia hudumu OOS;
+  ranking ya pair huzunguka — thibitisha familia, sio pair.** engulf_extreme×EURJPY imejitokeza
+  fresh validation (haikuwa TRAIN top → mtuhumiwa wa bahati; FDR haikumpitisha).
+  **AMENDMENT ya reporting (statistics HAZIKUGUSWA):** ripoti ya S2 ilisema "1 survivor" bila
+  kumtaja (defect ya write_outputs); imerekebishwa — survivors sasa wanatajwa kwa jina + p-value
+  kwenye report na jsonl (self-test 5b). Re-run ya validation (deterministic) inahitajika
+  kumtaja survivor → registration ya S3.
+
 ## Top Risks (live)
 
 | # | Risk | Status |

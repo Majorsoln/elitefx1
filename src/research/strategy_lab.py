@@ -230,19 +230,27 @@ def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, o
     out_root = Path(out_root)
     strat_dir = out_root / "data" / "strategies"
     strat_dir.mkdir(parents=True, exist_ok=True)
+
+    # FDR KWANZA (kabla ya jsonl) ili p-value + survivor flag ziingie kwenye rekodi zote.
+    # (Amendment ya reporting 2026-07-09: ripoti ya awali ilisema '1 survivor' BILA kumtaja —
+    # statistics hazikuguswa; hii ni kufichua tu kilichokwishahesabiwa.)
+    fdr_line = ""; surv_rows = []
+    if apply_fdr and cands:
+        pvals = [pvalue_gt0(c["pnls"]) for c in cands]
+        surv, k, exp_false = bh_fdr(pvals, q)
+        for c, p, s in zip(cands, pvals, surv):
+            c["p"] = round(float(p), 6)
+            c["fdr_survivor"] = bool(s)
+        surv_rows = sorted((c for c in cands if c["fdr_survivor"]), key=lambda x: x["p"])
+        fdr_line = (f"- **BH-FDR (q={q})**: {int(surv.sum())}/{len(cands)} survivors; "
+                    f"~{exp_false} zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)={tested}.")
+
     jl = strat_dir / "candidates.jsonl"
     with open(jl, "w", encoding="utf-8") as f:
         for c in _population_rank(cands):
             rec = {k: v for k, v in c.items() if k != "pnls"}
             rec["split"] = split
             f.write(json.dumps(rec, sort_keys=True) + "\n")
-
-    fdr_line = ""
-    if apply_fdr and cands:
-        pvals = [pvalue_gt0(c["pnls"]) for c in cands]
-        surv, k, exp_false = bh_fdr(pvals, q)
-        fdr_line = (f"- **BH-FDR (q={q})**: {int(surv.sum())}/{len(cands)} survivors; "
-                    f"~{exp_false} zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)={tested}.")
 
     L = [f"# Strategy Lab — S1 candidates ({split.upper()})\n",
          f"*{datetime.now():%Y-%m-%d %H:%M} | TF={tf} | split={split} | cells tested={tested} | "
@@ -252,6 +260,15 @@ def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, o
          "kwa holdout; hakuna metric bila costs. LESSON-001/002/029/033/034. Profitable != Tradable Edge.\n"]
     if fdr_line:
         L.append("\n## FDR (S2)\n" + fdr_line + "\n")
+        if surv_rows:
+            L.append("### SURVIVORS — waliosalia BH-FDR (hawa PEKEE ndio registration ya S3)\n")
+            L.append("| event | pair | SL | TP | session | vol | N | EV net | win% | PF | p |")
+            L.append("|-------|------|----|----|---------|-----|---|--------|------|----|---|")
+            for c in surv_rows:
+                L.append(f"| {c['event']} | {c['pair']} | {c['sl_atr']} | {c['tp_atr']} | "
+                         f"{c['session_filter']} | {c['vol_filter']} | {c['n']:,} | {c['ev']:+.3f} | "
+                         f"{c['win']*100:.1f} | {c['pf'] if c['pf'] is not None else 'inf'} | {c['p']:.2e} |")
+            L.append("")
     L.append("\n## Top candidates (population rank)\n")
     L.append("| event | pair | SL | TP | session | vol | N | EV net | win% | PF | maxDD | tr/day |")
     L.append("|-------|------|----|----|---------|-----|---|--------|------|----|-------|--------|")
@@ -354,6 +371,23 @@ def self_test():
         out_ok = "pnls" not in rec and rec["split"] == "train" and rpt_exists
         print(f"  [5] outputs: jsonl no-pnls={('pnls' not in rec)} split={rec.get('split')} report={rpt_exists}")
     ok = ok and out_ok
+
+    # (5b) FDR reporting: survivor anatajwa kwa JINA (report + jsonl ina p/fdr_survivor)
+    base = dict(pair="EURUSD", sl_atr=1.5, tp_atr=1.5, session_filter=None, vol_filter=None,
+                n=60, win=0.6, pf=1.5, maxdd=10.0, trades_per_day=0.1)
+    strong = dict(base, event="nr7_break", ev=2.0, pnls=[2.0, 2.5, 1.8, 2.2, 2.1, 1.9] * 10)
+    noise = dict(base, event="bb_fade", ev=0.01,
+                 pnls=list(np.random.default_rng(1).normal(0, 2, 60)))
+    with tempfile.TemporaryDirectory() as tmp:
+        jl, rpt = write_outputs([strong, noise], tested=2, split="validation", tf="H1",
+                                days_tot=500, apply_fdr=True, out_root=tmp)
+        txt = rpt.read_text(encoding="utf-8")
+        recs = [json.loads(l) for l in open(jl, encoding="utf-8")]
+        named = "SURVIVORS" in txt and "nr7_break" in txt.split("SURVIVORS")[1].split("##")[0]
+        flags = {r["event"]: r.get("fdr_survivor") for r in recs}
+        flag_ok = flags.get("nr7_break") is True and flags.get("bb_fade") is False and all("p" in r for r in recs)
+        print(f"  [5b] FDR survivor reporting: named-in-report={named} jsonl-flags={flag_ok}")
+    ok = ok and named and flag_ok
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
