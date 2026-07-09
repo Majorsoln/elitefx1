@@ -50,12 +50,50 @@ def _sess(hr):
     return "LATE"
 
 
+def _exit_variant(cfg, d, e, a, sl_px, tp_px, h, l, c, i, j_end):
+    """Cycle-2 EXIT SCIENCE (H-C2-6): trailing (k×ATR) / breakeven (baada ya +rR) / time (bars).
+    Inarudisha (exit_px, exit_bar). Convention ya intrabar = sawa na default (SL/trailing KABLA ya
+    TP; tie -> stop). EXPLORATION — default (exit_cfg=None) HAITUMII hii (byte-identical inabaki)."""
+    mode = cfg["mode"]
+    if mode == "trailing":
+        k = cfg.get("k", 1.0); trail = sl_px; best = e
+        for j in range(i + 1, j_end + 1):
+            best = max(best, h[j]) if d == 1 else min(best, l[j])
+            cand = best - d * k * a
+            trail = max(trail, cand) if d == 1 else min(trail, cand)
+            if (l[j] <= trail) if d == 1 else (h[j] >= trail):
+                return trail, j
+            if (h[j] >= tp_px) if d == 1 else (l[j] <= tp_px):
+                return tp_px, j
+        return c[j_end], j_end
+    if mode == "breakeven":
+        r = cfg.get("r", 1.0); R = abs(e - sl_px); sl_cur = sl_px; moved = False
+        for j in range(i + 1, j_end + 1):
+            if not moved and ((h[j] >= e + r * R) if d == 1 else (l[j] <= e - r * R)):
+                sl_cur = e; moved = True                  # sogeza SL -> entry (breakeven)
+            if (l[j] <= sl_cur) if d == 1 else (h[j] >= sl_cur):
+                return sl_cur, j
+            if (h[j] >= tp_px) if d == 1 else (l[j] <= tp_px):
+                return tp_px, j
+        return c[j_end], j_end
+    if mode == "time":
+        end = min(i + cfg.get("bars", j_end - i), j_end)
+        for j in range(i + 1, end + 1):
+            if (l[j] <= sl_px) if d == 1 else (h[j] >= sl_px):
+                return sl_px, j
+            if (h[j] >= tp_px) if d == 1 else (l[j] <= tp_px):
+                return tp_px, j
+        return c[end], end
+    raise ValueError(f"exit mode batili: {mode}")
+
+
 def episodes(out, entry, o, h, l, c, atr, spr, hour, vol=None,
-             sl_atr=SL_ATR, tp_atr=TP_ATR, max_hold=MAX_HOLD):
+             sl_atr=SL_ATR, tp_atr=TP_ATR, max_hold=MAX_HOLD, exit_cfg=None):
     """Simulisha episodes za event moja. Inarudisha list ya
     (entry_bar, exit_bar, dir, pnl_pips_net, session, vol_state). NO-LOOKAHEAD:
     signal ya bar i -> entry bar i+1; SL/TP zinachunguzwa kuanzia bar ya entry.
-    vol = volatility_state ya kila bar (uchambuzi wa soko — market_state_engine)."""
+    vol = volatility_state ya kila bar (uchambuzi wa soko — market_state_engine).
+    exit_cfg (Cycle-2): None = default fixed-exit (BYTE-IDENTICAL); au {"mode": trailing/breakeven/time,...}."""
     n = len(c); trades = []; pos_end = -1
     sig = out.get("sig")
     LL = out.get("long_level"); SS = out.get("short_level")
@@ -86,16 +124,20 @@ def episodes(out, entry, o, h, l, c, atr, spr, hour, vol=None,
         sl_px = e - d * sl_atr * a
         tp_px = e + d * tp_atr * a
         j_end = min(i + 1 + max_hold, n - 1)
-        exit_px = None; j = j_end
-        for j in range(i + 1, j_end + 1):
-            hit_sl = (l[j] <= sl_px) if d == 1 else (h[j] >= sl_px)
-            hit_tp = (h[j] >= tp_px) if d == 1 else (l[j] <= tp_px)
-            if hit_sl:                       # tie -> SL kwanza (worst case)
-                exit_px = sl_px; break
-            if hit_tp:
-                exit_px = tp_px; break
-        if exit_px is None:
-            exit_px = c[j_end]; j = j_end
+        if exit_cfg is None:
+            # === DEFAULT fixed-exit (BYTE-IDENTICAL; Cycle-2 exit science HAIGUSI path hii) ===
+            exit_px = None; j = j_end
+            for j in range(i + 1, j_end + 1):
+                hit_sl = (l[j] <= sl_px) if d == 1 else (h[j] >= sl_px)
+                hit_tp = (h[j] >= tp_px) if d == 1 else (l[j] <= tp_px)
+                if hit_sl:                       # tie -> SL kwanza (worst case)
+                    exit_px = sl_px; break
+                if hit_tp:
+                    exit_px = tp_px; break
+            if exit_px is None:
+                exit_px = c[j_end]; j = j_end
+        else:
+            exit_px, j = _exit_variant(exit_cfg, d, e, a, sl_px, tp_px, h, l, c, i, j_end)
         pnl = d * (exit_px - e) - cost
         # vol state ya bar ya SIGNAL (i) — inajulikana wakati wa uamuzi (EP-5 decidability);
         # state ya bar ya entry (i+1) haijulikani hadi bar hiyo ifunge. Session = saa ya entry
@@ -324,6 +366,26 @@ def self_test():
     train_ok = cut.height == 1 and cut["ts"].max() < TRAIN_END
     print(f"  TRAIN filter: {train_ok}")
     ok = ok and train_ok
+
+    # (7) Cycle-2 EXIT SCIENCE: default BYTE-IDENTICAL (golden hashes zilizonaswa kabla ya mabadiliko);
+    # variants (trailing/breakeven/time) zinaendesha + zinatoa matokeo halali.
+    import hashlib
+    from event_library_v2 import mr_zscore, nr7_break
+    o5, h5, l5, c5, tc5, hr5 = _synthetic(n=5000, seed=1)
+    atr5 = np.maximum(h5 - l5, 0.1); spr5 = np.full(len(c5), 1.0); vol5 = np.array(["NORMAL"] * len(c5))
+    def _gh(trs):
+        return hashlib.sha1(repr(trs).encode()).hexdigest()[:16]
+    gm = _gh(episodes(mr_zscore(o5, h5, l5, c5), "market", o5, h5, l5, c5, atr5, spr5, hr5, vol5))
+    gs = _gh(episodes(nr7_break(o5, h5, l5, c5), "stop", o5, h5, l5, c5, atr5, spr5, hr5, vol5,
+                      sl_atr=2.0, tp_atr=1.0))
+    byte_id = gm == "28cc2218e7d1c43f" and gs == "872edc444171653e"
+    base = mr_zscore(o5, h5, l5, c5)
+    tr_tr = episodes(base, "market", o5, h5, l5, c5, atr5, spr5, hr5, vol5, exit_cfg={"mode": "trailing", "k": 1.0})
+    tr_be = episodes(base, "market", o5, h5, l5, c5, atr5, spr5, hr5, vol5, exit_cfg={"mode": "breakeven", "r": 1.0})
+    tr_ti = episodes(base, "market", o5, h5, l5, c5, atr5, spr5, hr5, vol5, exit_cfg={"mode": "time", "bars": 6})
+    variants_ok = len(tr_tr) > 0 and len(tr_be) > 0 and len(tr_ti) > 0
+    print(f"  exit-science: default BYTE-IDENTICAL={byte_id} (mr={gm} nr7={gs}); variants tr/be/time run={variants_ok}")
+    ok = ok and byte_id and variants_ok
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

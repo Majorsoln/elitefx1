@@ -451,3 +451,26 @@ loaders, self-test 6/6 (ikiwemo ratio 2.0 ya SL/TP na LATE skip). decision_polic
 kama provenance-wrappers deterministic NJE ya POLICIES za demo — chaguo sahihi, self-test (7) nzuri.
 Sweep 17/17. Kazi safi — hakuna marekebisho. INAYOFUATA KWAKO: CYCLE-2 tasks (GRID_C2 +
 strength framework + exit science — tayari zimo memory yako).
+
+=== CYCLE-2 (2026-07-09) — IMEKAMILIKA (tasks 3) ===
+CURRENT TASK: **(inasubiri Chief review ya Cycle-2)** — GRID_C2 + strength_lab + exit science; sweep 18/18.
+LAST COMPLETED: **CYCLE-2** ✅ (Chief directive; hypotheses HAZIJAPIMWA — S1-C2->S3-C2 ndiyo hukumu, EP-3):
+  1. GRID_C2 (strategy_lab): grid_c2(pairs,tf) — H1={squeeze_break,nr4_inside,gap_fade,london_drift};
+     H4={nr7_break,squeeze_break,nr4_inside,shock_follow} (cost-remedy H-C2-1/2); pairs 9 x SL/TP x
+     {None,no-LATE}. --cycle {1,2}; outputs _c2 (C1 haijaguswa). self-test [1c]. FDR m=cells za C2.
+  2. strength_lab.py MPYA (H-C2-5): usd_strength (trailing returns, NO-LOOKAHEAD truncation-invariant)
+     + usd_drift (base-USD long/quote-USD short USD ikisimama; edge+rearm; non-USD zero) + backtest
+     kwa episodes(). run() inalign pairs kwa ts. self-test 5 checks PASS.
+  3. EXIT SCIENCE (event_quality_report): episodes(exit_cfg=None) — default HAIGUSWI (byte-identical,
+     golden hashes mr=28cc2218 nr7=872edc44 self-tested [7]). _exit_variant: trailing/breakeven/time.
+     exit_sweep(cell,data) kwenye strategy_lab (fixed==default; [6]). BYTE-IDENTICAL = STRAT-001/002
+     reproducible bit-kwa-bit.
+  · SWEEP 18/18 PASS (harness iliyokaguliwa haijavunjika). Rule 8: reports/cycle2_implementation.md.
+NEXT AFTER: Chief review + Operator aendeshe S1-C2 (--cycle 2 --split train, H1 na H4) + strength_lab
++ exit exploration -> S2-C2 (validation+FDR) -> S3-C2 (holdout). OOS rules za uadilifu za Chief.
+OPEN QUESTIONS (ndani ya reports/cycle2_implementation.md):
+  1. usd_drift params (k,std_win) — S1-C2 grid au defaults? Pendekezo: grid.
+  2. Strength beyond USD (EUR/JPY indices)? Pendekezo: USD tu sasa (spec-light).
+  3. Exit-grid promotion juu ya STRAT PROVEN inahitaji forward-confirm (EP-3)? Pendekezo: NDIYO.
+  4. GRID_C2 event-internal params? Pendekezo: SL/TP+filter tu (kama C1).
+NOTE: byte-identical ni ushahidi wa msingi — episodes() default haijabadilika; strategies PROVEN salama.

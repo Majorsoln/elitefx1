@@ -38,6 +38,11 @@ import numpy as np
 from event_library_v2 import EVENTS_V2, _synthetic
 from event_quality_report import episodes, _metrics, SESSIONS
 
+# Cycle-2 EXIT SCIENCE (H-C2-6): variants za exploration juu ya strategy (STRAT-001/002). 'fixed' =
+# default byte-identical (exit_cfg=None). Forward-confirm kabla ya kubadilisha strategy iliyothibitishwa.
+EXIT_VARIANTS = ({"mode": "fixed"}, {"mode": "trailing", "k": 1.0}, {"mode": "trailing", "k": 2.0},
+                 {"mode": "breakeven", "r": 1.0}, {"mode": "time", "bars": 12})
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 MIN_N = 30                                    # sample ya chini kuwa candidate
 SL_GRID = (1.0, 1.5, 2.0)
@@ -84,6 +89,27 @@ def grid(pairs):
     add(TIER1, TP_GRID)
     add({k: dict(pairs="ALL", sessions=(None,), vols=(None,)) for k in TIER2}, TP_GRID)
     add(STOP_BREAKOUTS, (2.0, 3.0))          # ruling: stop-breakouts jaribu TP {2,3}R
+    return cells
+
+
+# ---------- CYCLE-2 GRID (Chief 2026-07-09; HAIGUSI TIER1/TIER2 za C1 hapo juu) ----------
+# H1: events 4 MPYA za C2 (squeeze/nr4/gap/drift). H4: cost-remedy set (H-C2-1/2: compression+shock).
+# filters {None, no-LATE}; vol {None}. m ya FDR = cells ZOTE za C2 (pre-registration tofauti na C1).
+C2_EVENTS_H1 = ("squeeze_break", "nr4_inside", "gap_fade", "london_drift")
+C2_EVENTS_H4 = ("nr7_break", "squeeze_break", "nr4_inside", "shock_follow")
+
+
+def grid_c2(pairs, tf):
+    """GRID ya Cycle-2. TF inaamua event set: H4 = cost-remedy (H-C2-1/2); H1 = events 4 mpya."""
+    events = C2_EVENTS_H4 if tf == "H4" else C2_EVENTS_H1
+    cells = []
+    for ev in events:
+        for sym in pairs:
+            for sl in SL_GRID:
+                for tp in TP_GRID:
+                    for sf in (None, "no-LATE"):
+                        cells.append(dict(event=ev, pair=sym, sl_atr=sl, tp_atr=tp,
+                                          session_filter=sf, vol_filter=None))
     return cells
 
 
@@ -139,6 +165,23 @@ def evaluate(cell, data, days):
                 pf=round(m["pf"], 3) if math.isfinite(m["pf"]) else None,
                 maxdd=round(_maxdd(pn), 2), trades_per_day=round(m["n"] / max(days, 1), 3),
                 pnls=pn)                       # pnls zinahifadhiwa kwa FDR (S2); zinaondolewa kwenye jsonl
+
+
+def exit_sweep(cell, data, variants=EXIT_VARIANTS):
+    """Cycle-2 EXIT SCIENCE: sweep exit variants juu ya cell moja (STRAT-001/002). Rudisha
+    list ya (variant, metrics). 'fixed' = default (exit_cfg=None, byte-identical). EXPLORATION."""
+    spec = EVENTS_V2[cell["event"]]
+    out = spec["fn"](data["o"], data["h"], data["l"], data["c"], data.get("tc"), data.get("hour"))
+    out = _mask_context(out, spec["entry"], data["hour"], data.get("vol"),
+                        cell["session_filter"], cell["vol_filter"])
+    rows = []
+    for v in variants:
+        ecfg = None if v["mode"] == "fixed" else v
+        trs = episodes(out, spec["entry"], data["o"], data["h"], data["l"], data["c"],
+                       data["atr"], data["spr"], data["hour"], data.get("vol"),
+                       sl_atr=cell["sl_atr"], tp_atr=cell["tp_atr"], exit_cfg=ecfg)
+        rows.append((v, _metrics([t[3] for t in trs])))
+    return rows
 
 
 # ---------- FDR machinery (S2) ----------
@@ -201,9 +244,10 @@ def load_window(sym, tf, split, holdout_token=None):
                 days=df["ts"].dt.date().n_unique())
 
 
-def search(pairs, tf, split, holdout_token=None):
-    """Endesha grid nzima juu ya split. Rudisha (candidates, n_cells_tested, days_total)."""
-    cells = grid(pairs)
+def search(pairs, tf, split, holdout_token=None, cycle=1):
+    """Endesha grid nzima juu ya split. cycle 1 = grid ya C1; cycle 2 = grid_c2 (tf-aware).
+    Rudisha (candidates, n_cells_tested, days_total)."""
+    cells = grid_c2(pairs, tf) if cycle == 2 else grid(pairs)
     cache = {sym: load_window(sym, tf, split, holdout_token) for sym in pairs}   # load mara moja kwa pair
     cands = []; tested = 0
     days_tot = sum(d["days"] for d in cache.values() if d)
@@ -226,10 +270,11 @@ def _population_rank(cands):
     return sorted(cands, key=lambda x: (x["ev"] > 0, x["ev"] * math.log1p(x["n"])), reverse=True)
 
 
-def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, out_root=REPO_ROOT):
+def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, out_root=REPO_ROOT, cycle=1):
     out_root = Path(out_root)
     strat_dir = out_root / "data" / "strategies"
     strat_dir.mkdir(parents=True, exist_ok=True)
+    suffix = "" if cycle == 1 else f"_c{cycle}"     # C2 haiandiki juu ya candidates za C1
 
     # FDR KWANZA (kabla ya jsonl) ili p-value + survivor flag ziingie kwenye rekodi zote.
     # (Amendment ya reporting 2026-07-09: ripoti ya awali ilisema '1 survivor' BILA kumtaja —
@@ -245,15 +290,15 @@ def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, o
         fdr_line = (f"- **BH-FDR (q={q})**: {int(surv.sum())}/{len(cands)} survivors; "
                     f"~{exp_false} zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)={tested}.")
 
-    jl = strat_dir / "candidates.jsonl"
+    jl = strat_dir / f"candidates{suffix}.jsonl"
     with open(jl, "w", encoding="utf-8") as f:
         for c in _population_rank(cands):
             rec = {k: v for k, v in c.items() if k != "pnls"}
             rec["split"] = split
             f.write(json.dumps(rec, sort_keys=True) + "\n")
 
-    L = [f"# Strategy Lab — S1 candidates ({split.upper()})\n",
-         f"*{datetime.now():%Y-%m-%d %H:%M} | TF={tf} | split={split} | cells tested={tested} | "
+    L = [f"# Strategy Lab — cycle-{cycle} candidates ({split.upper()})\n",
+         f"*{datetime.now():%Y-%m-%d %H:%M} | cycle={cycle} | TF={tf} | split={split} | cells tested={tested} | "
          f"candidates (N>={MIN_N})={len(cands)} | costs ndani (episodes) | RANK=population view*\n",
          "> **UAMINIFU:** hizi ni CANDIDATES, SIO strategies. TRAIN=in-sample; uthibitisho = S2 "
          "(walk-forward VALIDATION + BH-FDR) na S3 (HOLDOUT, mara moja). RED LINES: hakuna kuchagua "
@@ -277,7 +322,7 @@ def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, o
                  f"{c['vol_filter']} | {c['n']:,} | {c['ev']:+.3f} | {c['win']*100:.1f} | "
                  f"{c['pf'] if c['pf'] is not None else 'inf'} | {c['maxdd']:.1f} | {c['trades_per_day']:.2f} |")
     L.append("\n*S1 = candidates -> S2 walk-forward+FDR -> S3 holdout. Chief directive + GRID RULING.*")
-    rpt = out_root / "reports" / "strategy_lab_report.md"
+    rpt = out_root / "reports" / f"strategy_lab_report{suffix}.md"
     rpt.parent.mkdir(parents=True, exist_ok=True)
     rpt.write_text("\n".join(L), encoding="utf-8")
     return jl, rpt
@@ -298,6 +343,17 @@ def self_test():
     reg_ok = ib_pairs == {"USDJPY"}
     print(f"  [1] grid: cells={len(cells)} keys={keys_ok} pairs-scoped={pairs_ok} tier-coverage={tier1_present} pre-reg={reg_ok}")
     ok = ok and keys_ok and pairs_ok and tier1_present and reg_ok and len(cells) > 100
+
+    # (1c) CYCLE-2 grid: H1 = events 4 mpya; H4 = cost-remedy set; filters {None, no-LATE}; HAIGUSI C1
+    c2_h1 = grid_c2(pairs, "H1")
+    c2_h4 = grid_c2(pairs, "H4")
+    ev_h1 = {c["event"] for c in c2_h1}; ev_h4 = {c["event"] for c in c2_h4}
+    sf_h1 = {c["session_filter"] for c in c2_h1}
+    c2_ok = (ev_h1 == set(C2_EVENTS_H1) and ev_h4 == set(C2_EVENTS_H4)
+             and sf_h1 == {None, "no-LATE"} and all(c["vol_filter"] is None for c in c2_h1)
+             and ev_h1.isdisjoint(set(TIER1)) )   # C2 H1 events ni tofauti na TIER1 za C1
+    print(f"  [1c] grid_c2: H1={sorted(ev_h1)} H4-includes-nr7={'nr7_break' in ev_h4} filters={sorted(str(x) for x in sf_h1)} -> {c2_ok}")
+    ok = ok and c2_ok
 
     # (2) evaluate juu ya synthetic: candidate ina metrics + costs (EV inaweza hasi — sawa)
     o, h, l, c, tc, hour = _synthetic(n=6000, seed=3)
@@ -389,6 +445,17 @@ def self_test():
         print(f"  [5b] FDR survivor reporting: named-in-report={named} jsonl-flags={flag_ok}")
     ok = ok and named and flag_ok
 
+    # (6) EXIT SCIENCE sweep: 'fixed' variant == default evaluate() N (byte-identical path); variants run
+    cell_nr7 = dict(event="nr7_break", pair="EURUSD", sl_atr=2.0, tp_atr=1.0,
+                    session_filter=None, vol_filter=None)
+    rows = exit_sweep(cell_nr7, data)
+    fixed_m = next(m for v, m in rows if v["mode"] == "fixed")
+    cand_nr7 = evaluate(cell_nr7, data, 250)
+    fixed_matches = cand_nr7 is not None and fixed_m["n"] == cand_nr7["n"]
+    variants_run = all(m["n"] >= 0 for _, m in rows) and len(rows) == len(EXIT_VARIANTS)
+    print(f"  [6] exit_sweep: fixed==default(N={fixed_m['n']})={fixed_matches} variants={len(rows)} run={variants_run}")
+    ok = ok and fixed_matches and variants_run
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -399,6 +466,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="train", choices=["train", "validation", "holdout"])
     ap.add_argument("--tf", default="H1")
+    ap.add_argument("--cycle", type=int, default=1, choices=[1, 2], help="1=C1 grid (TIER1/2); 2=GRID_C2")
     ap.add_argument("--holdout-final", dest="token", default=None, help="Chief token kwa holdout (S3)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
@@ -406,10 +474,10 @@ def main():
         return self_test()
     from market_state_engine import cfg
     pairs = cfg()["pairs"]
-    cands, tested, days = search(pairs, a.tf, a.split, a.token)
+    cands, tested, days = search(pairs, a.tf, a.split, a.token, cycle=a.cycle)
     apply_fdr = a.split in ("validation", "holdout")     # FDR = out-of-sample pekee (S2/S3)
-    jl, rpt = write_outputs(cands, tested, a.split, a.tf, days, apply_fdr=apply_fdr)
-    print(f"candidates={len(cands)} (cells tested={tested}) split={a.split}")
+    jl, rpt = write_outputs(cands, tested, a.split, a.tf, days, apply_fdr=apply_fdr, cycle=a.cycle)
+    print(f"cycle={a.cycle} candidates={len(cands)} (cells tested={tested}) split={a.split}")
     print(f"  {jl.relative_to(REPO_ROOT)}\n  {rpt.relative_to(REPO_ROOT)}")
     return 0
 
