@@ -111,6 +111,22 @@ POLICIES = {
     "aggressive": _policy("aggressive", 2, _aggressive),
 }
 
+# ---------- STRATEGY POLICIES (S4): proven-OOS strategies zilizowekwa kwenye E1-E4 chain ----------
+# EDGE iko kwenye SIGNAL (strat_signal.py — nr7_break PRE-REGISTERED) + uthibitisho wa OOS (S3/S3b),
+# SIO kwenye policy logic. Policy = **provenance wrapper** deterministic (mirror OPERATOR_POLICY ya
+# paper_trader): inapoitwa (Operator/tool aliona signal) inarudisha SELECT, ikirekodi strategy_id.
+# Chief "chagua rahisi": registry tofauti (HAIingii POLICIES ili demo run() isichafuke); mnyororo
+# uleule wa E1-E4 (decision_engine→gate→broker). Provenance: strategy_lab S1-S3 (commits za board).
+def _strategy_select(desc):
+    return lambda snap: ("SELECT", desc)
+
+STRATEGY_POLICIES = {
+    "strat001-nr7-usdchf": _policy("strat001-nr7-usdchf", 1, _strategy_select(
+        "STRAT-001 nr7_break×USDCHF H1 SL2/TP1 no-LATE PROVEN-OOS (S3 holdout N=303 EV+1.92 p=0.021)")),
+    "strat002-nr7-usdjpy": _policy("strat002-nr7-usdjpy", 1, _strategy_select(
+        "STRAT-002 nr7_break×USDJPY H1 SL1/TP1 no-LATE PROVEN-OOS (S3b holdout N=327 EV+2.65 p=0.029)")),
+}
+
 
 def apply_policy(policy, snapshot):
     """Q5: CONTRACT ya Engine↔Policy. Engine inaita hii; policy inarudisha (action, reason); Engine
@@ -276,7 +292,16 @@ def self_test():
     ok_cf = a_cp2 == "ABSTAIN" and "conflict" in why_cp2 and a_cons2 == "SELECT"
     print(f"explicit conflict input (G-7): cap-pres={a_cp2} conservative={a_cons2} -> {'OK' if ok_cf else 'FAIL'}")
 
-    ok = ok_choose and ok_swap and ok_ref and ok_ver and ok_inv and ok_cf
+    # (7) S4 STRATEGY POLICIES: deterministic SELECT + policy_id sahihi; zinapita apply_policy (E1-E4)
+    sp = snap("READY", 0.5)                             # rel ndogo: strategy policy ha-i-tegemei snapshot
+    d1 = apply_policy(STRATEGY_POLICIES["strat001-nr7-usdchf"], sp)
+    d2 = apply_policy(STRATEGY_POLICIES["strat002-nr7-usdjpy"], sp)
+    ok_strat = (d1["action"] == "SELECT" and d1["policy_id"] == "policy:strat001-nr7-usdchf@v1"
+                and d2["policy_id"] == "policy:strat002-nr7-usdjpy@v1"
+                and "STRATEGY_POLICIES" not in POLICIES and "strat001-nr7-usdchf" not in POLICIES)
+    print(f"S4 strategy policies: strat001={d1['policy_id']} action={d1['action']} (SIO kwenye POLICIES demo) -> {'OK' if ok_strat else 'FAIL'}")
+
+    ok = ok_choose and ok_swap and ok_ref and ok_ver and ok_inv and ok_cf and ok_strat
     print(f"\nSELF-TEST: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 

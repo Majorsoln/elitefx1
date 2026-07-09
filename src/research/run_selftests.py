@@ -13,8 +13,8 @@ import sys
 MODULES = ["frozen", "decision_object", "evidence_snapshot", "decision_policy", "decision_engine",
            "integrity_gate", "execution_object", "decision_repository", "broker_adapter",
            "purity_check", "paper_trader", "event_library_v2", "event_quality_report",
-           "strategy_lab", "failure_autopsy",
-           "e2e_paper_demo"]     # purity_check = P107; strategy_lab = S1 factory; failure_autopsy = S-DIAG
+           "strategy_lab", "failure_autopsy", "strat_signal",
+           "e2e_paper_demo"]     # purity_check = P107; strategy_lab = S1; strat_signal = S4 signal tool
 
 # Windows CMD hutumia cp1252 kwa child stdout → herufi za Unicode (→ ≠ ✓) zinaanguka kwenye pipe.
 # PYTHONUTF8=1 inalazimisha child zote ziwe UTF-8; encoding="utf-8" inasoma UTF-8 upande huu.

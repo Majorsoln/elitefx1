@@ -419,3 +419,27 @@ registry EVENTS_V2 sasa 20; USIzibadilishe). KAZI ZAKO (baada ya S4 tool):
   3. EXIT SCIENCE (H-C2-6): episodes() ipate exit variants za hiari: trailing stop (k×ATR),
      breakeven baada ya +1R, time-exit. Defaults = tabia ya sasa BYTE-IDENTICAL (self-test
      ithibitishe!). Kisha grid ndogo ya exits juu ya STRAT-001/002 (exploration; forward confirm).
+
+=== S4 SIGNAL TOOL + POLICIES (2026-07-09) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya S4)** — strat_signal.py + strategy policies; sweep 17/17.
+LAST COMPLETED: **S4** ✅ (deploy strategies PROVEN-OOS STRAT-001/002):
+  · `src/research/strat_signal.py` MPYA — REGISTRY (STRAT-001 USDCHF SL2/TP1; STRAT-002 USDJPY
+    SL1/TP1; nr7+no-LATE). pending_orders() REUSE nr7_break+wilder_atr (bars PRICE->PIPS->levels
+    PRICE); no-LATE ex-ante (entry=bar hour+1); OCO buy-stop/sell-stop; SL/TP za ATR. load_bars
+    (parquet/CSV). CLI --pair/--all -> format ya paper_trader --signal. Self-test 6 checks PASS.
+  · `decision_policy.py` — STRATEGY_POLICIES (strat001-nr7-usdchf@v1, strat002-nr7-usdjpy@v1):
+    thin SELECT + provenance (mirror OPERATOR_POLICY); registry TOFAUTI (HAIingii POLICIES ->
+    demo run() safi). self-test [7] PASS. Edge=signal pre-registered+OOS proof, SIO policy logic.
+  · Integration S4->E1-E4: strat_signal order -> apply_policy(strat001) -> gate(FTMO) -> VALIDATED. PASS.
+  · SWEEP 17/17 PASS. Rule 8: reports/strat_signal_report.md.
+NEXT AFTER: **CYCLE-2** (baada ya S4 review) — (1) GRID_C2 kwenye strategy_lab (events 4 mpya
+{squeeze_break,nr4_inside,gap_fade,london_drift} x pairs 9 x SL/TP x {None,no-LATE} + --tf H4 kwa
+{nr7,squeeze,nr4,shock}; flag --cycle 2; m=cells za C2); (2) strength_lab.py (usd_drift, currency
+strength, reuse episodes()); (3) EXIT SCIENCE (episodes() exit variants: trailing/breakeven/time;
+defaults BYTE-IDENTICAL - self-test ithibitishe; kisha grid ndogo juu ya STRAT-001/002).
+OPEN QUESTIONS (ndani ya reports/strat_signal_report.md):
+  1. next-bar hour kwa no-LATE (gaps/weekend) — tool vs Operator? Pendekezo: onyo + Operator anaona ratiba.
+  2. OCO kwenye paper_trader (--oco) au mkono? Pendekezo: mkono sasa, --oco baadaye.
+  3. policy-per-strategy (nilichagua) vs registry-policy moja? Chief athibitishe.
+  4. strat_signal live (MT5) = E4-adjacent, imezuiwa hadi Project Director (RED LINE).
+NOTE: strat_signal = research/tool (numpy OK). numpy/polars nilifunga kuverify; core purity haijaguswa.
