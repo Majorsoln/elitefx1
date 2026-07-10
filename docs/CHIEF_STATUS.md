@@ -310,3 +310,11 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   mpya ilionekana kabla ya registration (07c59df) — uchaguzi unabaki mechanical kwa kanuni hii.
   Mchakato: Operator anaendesha TRAIN + VALIDATION za pairs 11 (deterministic; rows za zamani
   byte-identical) → Chief anataja cells kwa kanuni → freeze → one-shot holdout → hukumu.
+
+- **2026-07-09 — S3c REGISTRATION FROZEN (kanuni ya 97b2fdb imetumika kimakanika; determinism
+  2004/2004 rows za zamani identical).** Cells 3 PEKEE zitafunguliwa kwenye dirisha bikira
+  2025-01→2026-04 la pairs mpya (nyingine zote za holdout zinabaki SEALED):
+    SIBC-1: nr7_break × EURCHF · SL1.0/TP2.0 · (LONDON,NY) — VALID p=0.0039 EV+4.55 N=94; TRAIN +1.42 N=456
+    SIBC-2: nr7_break × GBPJPY · SL1.0/TP1.5 · (LONDON,NY) — VALID p=0.0204 EV+7.52 N=176; TRAIN +7.37 N=643
+    SIBC-3: nr7_break × EURCHF · SL1.0/TP1.0 · (LONDON,NY) — VALID p=0.0061 EV+2.68 win 70.8% N=96; TRAIN +2.18 N=466
+  CRITERION: BH-FDR q=0.10 (m=3) NA EV>0 kwenye holdout ya pairs mpya. One-time batch.
