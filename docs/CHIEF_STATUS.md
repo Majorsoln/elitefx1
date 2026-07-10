@@ -289,3 +289,13 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
 > remedy — autopsy), (b) maarifa ya Chief (gap/drift/strength) — VYOTE hupita mlango
 > uleule; data ya nyuma ya Operator ndiyo hakimu pekee; hakuna kinacholisha AI (K4)
 > bila OOS proof (EP-3). Kifo cha hypothesis pia ni LESSON.
+
+- **2026-07-09 — PAIRS 11 ACTIVE + EXPOSURE DISCLOSURE (uwazi wa Chief).** GBPJPY + EURCHF:
+  states zimejengwa (2016→2026-05), integrity PASS (diff ya validation = nyongeza za pairs mpya
+  TU; rows zote za zamani byte-identical). XAUUSD: disk ipo, IMEZUIWA na metals guard hadi
+  pip support (IMPLEMENTER-A). **DISCLOSURE:** mpangilio wa maelekezo ya Chief ulisababisha
+  validation 2023-24 ya nr7×GBPJPY/EURCHF kuonekana KABLA ya registration (exposure isiyosajiliwa;
+  kosa la mchakato la Chief — LESSON-015 style). Mitigation: dirisha la 2025-01→2026-04 la pairs
+  mpya ni BIKIRA (halijawahi kufunguliwa) → S3c inayopendekezwa: registration ya kimakanika ya
+  cells chache za nr7×pairs-mpya (kwa idhini ya PD, "option B" style), one-shot kwenye dirisha
+  hilo, exposure ya leo ikitamkwa wazi kwenye registration.
