@@ -3,7 +3,7 @@
 #  Inatumika na src/data/*. Japhet anabadilisha values; mfumo unasoma tu.
 # ============================================================
 
-# --- Pairs 9 kuu (za mfumo; rejea docs/PROGRAM_BOARD.md) ---
+# --- Pairs 12 kuu (za mfumo; rejea docs/PROGRAM_BOARD.md) ---
 pairs:
   - EURUSD
   - GBPUSD
@@ -14,6 +14,8 @@ pairs:
   - AUDUSD
   - NZDUSD
   - EURGBP
+  - GBPJPY
+  - EURCHF
 
 # --- Timeframes za kujenga kutoka ticks ---
 # 1m–30m: microstructure ya Model 2 (Entry, Sehemu 3). H1–D1: HTF ya Model 1
@@ -84,6 +86,8 @@ max_spread_pips:
   AUDUSD: 2.5    # med 0.98, p95 1.55
   NZDUSD: 3.0    # med 1.06, p95 1.84
   EURGBP: 3.0    # med 0.87, p95 1.91
+  GBPJPY: 4.5   # provisional
+  EURCHF: 3.5   # provisional
 
 # --- Vigezo vya quality checks ---
 quality:
