@@ -60,7 +60,13 @@ def cfg():
         return yaml.safe_load(f)
 
 def _posix(p): return str(p).replace("\\", "/")
-def pip(sym): return 0.01 if "JPY" in sym.upper() else 0.0001
+def pip(sym):
+    s = sym.upper()
+    if s.startswith(("XAU", "XAG")):    # CHIEF GATE (2026-07-09): metals bado hazina pip support —
+        raise ValueError(               # bila hii, gold ingejengwa kwa pip ya FX (kosa la mara 100, KIMYA)
+            f"{sym}: metals HAZIJAFUNGULIWA (pip/pip_value support inasubiri IMPLEMENTER-A + Chief approval). "
+            "Ondoa kwenye config/data_config.yaml pairs kwa sasa.")
+    return 0.01 if "JPY" in s else 0.0001
 
 def time_col(con, src):
     sch = con.execute(f"DESCRIBE SELECT * FROM read_parquet('{src}', union_by_name=>true)").fetchall()
