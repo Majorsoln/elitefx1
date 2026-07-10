@@ -474,3 +474,12 @@ OPEN QUESTIONS (ndani ya reports/cycle2_implementation.md):
   3. Exit-grid promotion juu ya STRAT PROVEN inahitaji forward-confirm (EP-3)? Pendekezo: NDIYO.
   4. GRID_C2 event-internal params? Pendekezo: SL/TP+filter tu (kama C1).
 NOTE: byte-identical ni ushahidi wa msingi — episodes() default haijabadilika; strategies PROVEN salama.
+
+=== C2 ADDENDUM (Chief, 2026-07-09): METALS SUPPORT + pairs 2 mpya ===
+Inventory: XAUUSD/GBPJPY/EURCHF ticks kamili zipo disk. KAZI MPYA NDOGO (kabla ya GRID_C2):
+  a. METALS SUPPORT: pip() (market_state_engine + event_quality_report/strategy_lab kupitia
+     pip import; paper_trader PIP_SIZE/PIP_VALUE; strat_signal _pip_size) — ongeza mapping ya
+     metals: XAUUSD pip=0.01 (quote 2dp), pip_value inayolingana (weka wazi assumption kwenye
+     Known Limitations). Self-tests kwa XAUUSD kwenye kila module iliyoguswa. USIvunje pairs za FX
+     (regression: sweep nzima). 
+  b. GRID_C2 sasa ina pairs 11 (9 + GBPJPY + EURCHF); XAUUSD inaingia TU baada ya (a) ku-approve.

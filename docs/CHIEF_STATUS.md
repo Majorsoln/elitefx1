@@ -289,3 +289,45 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
 > remedy — autopsy), (b) maarifa ya Chief (gap/drift/strength) — VYOTE hupita mlango
 > uleule; data ya nyuma ya Operator ndiyo hakimu pekee; hakuna kinacholisha AI (K4)
 > bila OOS proof (EP-3). Kifo cha hypothesis pia ni LESSON.
+
+- **2026-07-09 — PAIRS 11 ACTIVE + EXPOSURE DISCLOSURE (uwazi wa Chief).** GBPJPY + EURCHF:
+  states zimejengwa (2016→2026-05), integrity PASS (diff ya validation = nyongeza za pairs mpya
+  TU; rows zote za zamani byte-identical). XAUUSD: disk ipo, IMEZUIWA na metals guard hadi
+  pip support (IMPLEMENTER-A). **DISCLOSURE:** mpangilio wa maelekezo ya Chief ulisababisha
+  validation 2023-24 ya nr7×GBPJPY/EURCHF kuonekana KABLA ya registration (exposure isiyosajiliwa;
+  kosa la mchakato la Chief — LESSON-015 style). Mitigation: dirisha la 2025-01→2026-04 la pairs
+  mpya ni BIKIRA (halijawahi kufunguliwa) → S3c inayopendekezwa: registration ya kimakanika ya
+  cells chache za nr7×pairs-mpya (kwa idhini ya PD, "option B" style), one-shot kwenye dirisha
+  hilo, exposure ya leo ikitamkwa wazi kwenye registration.
+
+- **2026-07-09 — S3c APPROVED na PD + KANUNI YA UCHAGUZI IMEFUNGWA (kabla ya data kamili).**
+  Universe: cells za nr7_break × {GBPJPY, EURCHF} pekee (grid ileile ya C1). KANUNI (mechanical):
+  kwa kila pair, cell yenye p bora zaidi ya VALIDATION 2023-24 yenye TRAIN EV>0 (coherence);
+  max cells 2 za ziada kama p<0.01 — jumla isiyozidi 4. CRITERION: BH-FDR q=0.10 (m=idadi
+  halisi ya walioorodheshwa) NA EV>0, kwenye dirisha BIKIRA la 2025-01→2026-04 la pairs mpya
+  PEKEE (cells za pairs za zamani zinabaki SEALED; re-run ya holdout haizifungui — namba zao
+  tayari zipo git 86a5977, hakuna exposure mpya). DISCLOSURE inayobebwa: validation ya pairs
+  mpya ilionekana kabla ya registration (07c59df) — uchaguzi unabaki mechanical kwa kanuni hii.
+  Mchakato: Operator anaendesha TRAIN + VALIDATION za pairs 11 (deterministic; rows za zamani
+  byte-identical) → Chief anataja cells kwa kanuni → freeze → one-shot holdout → hukumu.
+
+- **2026-07-09 — S3c REGISTRATION FROZEN (kanuni ya 97b2fdb imetumika kimakanika; determinism
+  2004/2004 rows za zamani identical).** Cells 3 PEKEE zitafunguliwa kwenye dirisha bikira
+  2025-01→2026-04 la pairs mpya (nyingine zote za holdout zinabaki SEALED):
+    SIBC-1: nr7_break × EURCHF · SL1.0/TP2.0 · (LONDON,NY) — VALID p=0.0039 EV+4.55 N=94; TRAIN +1.42 N=456
+    SIBC-2: nr7_break × GBPJPY · SL1.0/TP1.5 · (LONDON,NY) — VALID p=0.0204 EV+7.52 N=176; TRAIN +7.37 N=643
+    SIBC-3: nr7_break × EURCHF · SL1.0/TP1.0 · (LONDON,NY) — VALID p=0.0061 EV+2.68 win 70.8% N=96; TRAIN +2.18 N=466
+  CRITERION: BH-FDR q=0.10 (m=3) NA EV>0 kwenye holdout ya pairs mpya. One-time batch.
+
+- **2026-07-09 — S3c VERDICT: 0/3 PASS (BH-FDR q=0.10, m=3) — HAKUNA STRAT-003 leo.**
+  Dirisha bikira 2025-01→2026-04 la pairs mpya: SIBC-1 EURCHF 1.0/2.0: EV +1.76 p=0.156 ·
+  SIBC-2 GBPJPY 1.0/1.5: EV +0.33 p=0.462 · SIBC-3 EURCHF 1.0/1.0: EV +1.21 (win 64.3%) p=0.131.
+  ZOTE chanya (mwelekeo wa familia unaendelea) lakini HAKUNA aliyefikia significance — criterion
+  pre-registered inasema FAIL, na tunaheshimu. USOMAJI wa Chief: (1) shrinkage kubwa ya GBPJPY
+  (VALID +7.5 → holdout +0.33) inathibitisha KWA NINI dirisha bikira lilihitajika — namba za
+  validation zilizoonekana kabla ya registration zilikuwa zime-overstate; nidhamu imeokoa
+  portfolio kutoka kwenye deployment ya uongo. (2) EURCHF cells mbili (p≈0.13-0.16, EV +1.2..+1.8,
+  maxDD ndogo) = FORWARD-WATCH (kama GBPUSD SIB-5): hazipandi kuwa strategies, zinafuatiliwa
+  kwa forward/paper bila deployment. (3) Portfolio rasmi inabaki: STRAT-001 + STRAT-002.
+  LESSON-material (RESEARCHER-K, L-d): "exposure-tainted selection hushuka OOS; dirisha bikira
+  ndilo hakimu" — mfumo ulikataa kujidanganya. Batch S3c CLOSED; holdout SEALED tena kote.
