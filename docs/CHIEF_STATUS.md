@@ -318,3 +318,16 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
     SIBC-2: nr7_break × GBPJPY · SL1.0/TP1.5 · (LONDON,NY) — VALID p=0.0204 EV+7.52 N=176; TRAIN +7.37 N=643
     SIBC-3: nr7_break × EURCHF · SL1.0/TP1.0 · (LONDON,NY) — VALID p=0.0061 EV+2.68 win 70.8% N=96; TRAIN +2.18 N=466
   CRITERION: BH-FDR q=0.10 (m=3) NA EV>0 kwenye holdout ya pairs mpya. One-time batch.
+
+- **2026-07-09 — S3c VERDICT: 0/3 PASS (BH-FDR q=0.10, m=3) — HAKUNA STRAT-003 leo.**
+  Dirisha bikira 2025-01→2026-04 la pairs mpya: SIBC-1 EURCHF 1.0/2.0: EV +1.76 p=0.156 ·
+  SIBC-2 GBPJPY 1.0/1.5: EV +0.33 p=0.462 · SIBC-3 EURCHF 1.0/1.0: EV +1.21 (win 64.3%) p=0.131.
+  ZOTE chanya (mwelekeo wa familia unaendelea) lakini HAKUNA aliyefikia significance — criterion
+  pre-registered inasema FAIL, na tunaheshimu. USOMAJI wa Chief: (1) shrinkage kubwa ya GBPJPY
+  (VALID +7.5 → holdout +0.33) inathibitisha KWA NINI dirisha bikira lilihitajika — namba za
+  validation zilizoonekana kabla ya registration zilikuwa zime-overstate; nidhamu imeokoa
+  portfolio kutoka kwenye deployment ya uongo. (2) EURCHF cells mbili (p≈0.13-0.16, EV +1.2..+1.8,
+  maxDD ndogo) = FORWARD-WATCH (kama GBPUSD SIB-5): hazipandi kuwa strategies, zinafuatiliwa
+  kwa forward/paper bila deployment. (3) Portfolio rasmi inabaki: STRAT-001 + STRAT-002.
+  LESSON-material (RESEARCHER-K, L-d): "exposure-tainted selection hushuka OOS; dirisha bikira
+  ndilo hakimu" — mfumo ulikataa kujidanganya. Batch S3c CLOSED; holdout SEALED tena kote.

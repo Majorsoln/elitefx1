@@ -123,3 +123,11 @@ Evidence: reports/strategy_lab_report.md (S1 TRAIN commit ccfbb24; S2b VALIDATIO
       S2, single test) alipita p=0.0209. Bila registration tungetangaza "hakuna kitu"; kwa
       registration, strategy rasmi ya kwanza imezaliwa. Implication: nidhamu ya kutaja hypothesis
       KABLA ndiyo inayookoa power ya takwimu. Evidence: commits 3d51727 (pre-reg) + 86a5977 (S3).
+
+=== NYONGEZA (Chief, 2026-07-09): LESSON ya nne (S3c) ===
+  L-d (METHOD): "Selection iliyoathiriwa na exposure hushuka OOS; dirisha bikira ndilo hakimu" —
+      nr7×GBPJPY VALID EV +7.52 (iliyoonekana kabla ya registration) → dirisha bikira +0.33
+      (p=0.46). Criterion pre-registered ilikataa 0/3 licha ya EV zote chanya. Implication:
+      namba zilizoonekana kabla ya registration daima zina upendeleo wa juu; uthibitisho lazima
+      utoke kwenye data ambayo uchaguzi haukuigusa. Evidence: b9cdc55 (registration) + 2cdf625
+      (holdout) + CHIEF_STATUS 2026-07-09.
