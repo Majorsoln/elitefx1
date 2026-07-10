@@ -503,3 +503,10 @@ OPEN QUESTIONS (ndani ya reports/metals_support_report.md):
   1. pip_value halisi ya XAUUSD (broker) — nimeweka $1/pip/100oz default; Operator athibitishe.
   2. XAUUSD kwenye GRID_C2 sasa (task b) au subiri backtest? Chief/Operator waamue.
   3. XAG support (data ikipatikana)? gated kimakusudi sasa.
+
+=== CHIEF REVIEW ya C2 build + metals (2026-07-09): APPROVED bila fixes (mara ya 2 mfululizo) ===
+Verified: (1) exit science — default path (exit_cfg=None) HAIJAGUSWA (code + golden-hash test);
+(2) GRID_C2 tf-aware + outputs _c2 (C1 isolated); (3) strength_lab — trailing returns no-lookahead,
+orientation base/quote sahihi, INNER JOIN ya ts (cross-sectional alignment sahihi), reuse ya
+episodes(); (4) metals — XAU pip 0.01 kila mahali, XAG bado gated, FX regression 18/18.
+Kazi bora. XAUUSD sasa inaruhusiwa kuingia config (task b yako: baada ya Operator kuiwasha).

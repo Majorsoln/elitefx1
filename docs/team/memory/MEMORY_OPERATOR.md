@@ -171,3 +171,15 @@ Paper-trading yako sasa ni nusu-otomatiki. Kila siku (au kila bar ya H1 ikifunga
 Tool inakuambia: kama kuna NR7 + no-LATE -> inakupa amri KAMILI za paper_trader --signal
 (entry/SL/TP zimehesabiwa). Weka OCO stops MT5 (demo); ikijaza moja, futa nyingine, endesha
 amri ya paper_trader iliyotolewa. Ikifika TP/SL: paper_trader --close. Commit data/paper/ kila siku.
+
+## RUNBOOK HAI (2026-07-09): CYCLE-2 TRAIN RUNS + GOLD ACTIVATION
+C2 build APPROVED (sweep 18/18). KAZI (mpangilio; commit BAADA ya kila run — files za _c2):
+  0. GOLD: ongeza "- XAUUSD" kwenye config pairs (metals support iko sasa) →
+     python market_state_engine.py --symbol XAUUSD   (states za gold; guard imefunguliwa kwa XAU)
+  1. cd src\research && python strategy_lab.py --cycle 2 --split train
+     → commit "S1-C2 train H1" (candidates_c2.jsonl + report)
+  2. python strategy_lab.py --cycle 2 --tf H4 --split train
+     → commit "S1-C2 train H4"   (NB: inaandika juu ya _c2 files - ndiyo maana commit kati)
+  3. python strength_lab.py       → commit "strength exploration (TRAIN)"
+Ripoti: "tayari S1-C2". Chief atakagua + kufunga registration ya S2-C2 (USIENDESHE validation).
+Paper-trading ya STRAT-001/002 inaendelea kila siku.
