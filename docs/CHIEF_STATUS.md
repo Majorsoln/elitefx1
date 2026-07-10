@@ -299,3 +299,14 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   mpya ni BIKIRA (halijawahi kufunguliwa) → S3c inayopendekezwa: registration ya kimakanika ya
   cells chache za nr7×pairs-mpya (kwa idhini ya PD, "option B" style), one-shot kwenye dirisha
   hilo, exposure ya leo ikitamkwa wazi kwenye registration.
+
+- **2026-07-09 — S3c APPROVED na PD + KANUNI YA UCHAGUZI IMEFUNGWA (kabla ya data kamili).**
+  Universe: cells za nr7_break × {GBPJPY, EURCHF} pekee (grid ileile ya C1). KANUNI (mechanical):
+  kwa kila pair, cell yenye p bora zaidi ya VALIDATION 2023-24 yenye TRAIN EV>0 (coherence);
+  max cells 2 za ziada kama p<0.01 — jumla isiyozidi 4. CRITERION: BH-FDR q=0.10 (m=idadi
+  halisi ya walioorodheshwa) NA EV>0, kwenye dirisha BIKIRA la 2025-01→2026-04 la pairs mpya
+  PEKEE (cells za pairs za zamani zinabaki SEALED; re-run ya holdout haizifungui — namba zao
+  tayari zipo git 86a5977, hakuna exposure mpya). DISCLOSURE inayobebwa: validation ya pairs
+  mpya ilionekana kabla ya registration (07c59df) — uchaguzi unabaki mechanical kwa kanuni hii.
+  Mchakato: Operator anaendesha TRAIN + VALIDATION za pairs 11 (deterministic; rows za zamani
+  byte-identical) → Chief anataja cells kwa kanuni → freeze → one-shot holdout → hukumu.
