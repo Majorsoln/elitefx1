@@ -101,12 +101,16 @@ def run(months=False, only=None):
         elif r["missing"] is not None:
             print("         miezi: KAMILI (hakuna pengo)")
 
-    have = {r["symbol"].upper() for r in rows}
+    # config-vs-disk daima inalinganisha na DISK NZIMA (sio filter ya --symbol)
+    have = {d.name.split("=", 1)[1].upper() for d in raw_root.glob("symbol=*") if d.is_dir()}
     cfg_pairs = [p.upper() for p in c["pairs"]]
     print("\n=== CONFIG vs DISK ===")
     miss_disk = [p for p in cfg_pairs if p not in have]
-    print(f"pairs za config zisizo na ticks: {miss_disk if miss_disk else 'HAKUNA (zote 9 zipo)'}")
+    print(f"pairs za config zisizo na ticks: {miss_disk if miss_disk else 'HAKUNA (zote zipo)'}")
     print(f"WANTED (upanuzi wa C2) ambazo HAZIPO bado: {[w for w in WANTED_NEW if w not in have] or 'zote zipo!'}")
+    extra = sorted(have - set(cfg_pairs))
+    if extra:
+        print(f"zipo DISK lakini SIO kwenye config bado: {extra}")
 
     if not only:
         st = states_summary(REPO_ROOT / c["paths"]["processed"])

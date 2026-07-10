@@ -451,3 +451,12 @@ loaders, self-test 6/6 (ikiwemo ratio 2.0 ya SL/TP na LATE skip). decision_polic
 kama provenance-wrappers deterministic NJE ya POLICIES za demo — chaguo sahihi, self-test (7) nzuri.
 Sweep 17/17. Kazi safi — hakuna marekebisho. INAYOFUATA KWAKO: CYCLE-2 tasks (GRID_C2 +
 strength framework + exit science — tayari zimo memory yako).
+
+=== C2 ADDENDUM (Chief, 2026-07-09): METALS SUPPORT + pairs 2 mpya ===
+Inventory: XAUUSD/GBPJPY/EURCHF ticks kamili zipo disk. KAZI MPYA NDOGO (kabla ya GRID_C2):
+  a. METALS SUPPORT: pip() (market_state_engine + event_quality_report/strategy_lab kupitia
+     pip import; paper_trader PIP_SIZE/PIP_VALUE; strat_signal _pip_size) — ongeza mapping ya
+     metals: XAUUSD pip=0.01 (quote 2dp), pip_value inayolingana (weka wazi assumption kwenye
+     Known Limitations). Self-tests kwa XAUUSD kwenye kila module iliyoguswa. USIvunje pairs za FX
+     (regression: sweep nzima). 
+  b. GRID_C2 sasa ina pairs 11 (9 + GBPJPY + EURCHF); XAUUSD inaingia TU baada ya (a) ku-approve.
