@@ -483,3 +483,23 @@ Inventory: XAUUSD/GBPJPY/EURCHF ticks kamili zipo disk. KAZI MPYA NDOGO (kabla y
      Known Limitations). Self-tests kwa XAUUSD kwenye kila module iliyoguswa. USIvunje pairs za FX
      (regression: sweep nzima). 
   b. GRID_C2 sasa ina pairs 11 (9 + GBPJPY + EURCHF); XAUUSD inaingia TU baada ya (a) ku-approve.
+
+=== METALS SUPPORT (C2 addendum task a) — 2026-07-09 IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya Cycle-2 + metals)** — sweep 18/18; branch imesync na main (pairs-11).
+LAST COMPLETED: **METALS SUPPORT (XAUUSD)** ✅ (C2 addendum task a):
+  · market_state_engine.pip(): XAU-gate (raise) -> XAU=0.01 (quote 2dp); XAG bado gated (hakuna data).
+    self-test: pip metals (XAUUSD/EURUSD/USDJPY + XAG-gated).
+  · paper_trader: PIP_SIZE/PIP_VALUE (lambda->function) + XAU (0.01 / $1-per-pip-100oz); self-test [5]
+    XAUUSD signal FILLED (sl_pips 500, risk $120).
+  · strat_signal: _pip_size (XAU 0.01), _dec (XAU 2dp); self-test [6].
+  · event_quality_report/strategy_lab/strength_lab: pip transitive (fix moja ya market_state_engine
+    inazifikia; hakuna code change). FULL SWEEP 18/18 PASS (FX HAIJAVUNJIKA). Rule 8:
+    reports/metals_support_report.md.
+  · Merge origin/main (pairs-11 S3c world) -> branch yangu; conflict ya memory pekee (append-log,
+    pande zote zimehifadhiwa). Cycle-2 yangu bado haijamerge main (inasubiri Chief review).
+NEXT: task b (XAUUSD -> config pairs + GRID_C2) = baada ya Chief approval ya metals (grid_c2 tayari
+pair-agnostic). Chief review ya Cycle-2 + metals.
+OPEN QUESTIONS (ndani ya reports/metals_support_report.md):
+  1. pip_value halisi ya XAUUSD (broker) — nimeweka $1/pip/100oz default; Operator athibitishe.
+  2. XAUUSD kwenye GRID_C2 sasa (task b) au subiri backtest? Chief/Operator waamue.
+  3. XAG support (data ikipatikana)? gated kimakusudi sasa.

@@ -36,11 +36,17 @@ LATE_HOURS = set(range(17, 24))          # no-LATE = entry hour 17-23 skip (even
 
 
 def _pip_size(pair):
-    return 0.01 if pair.upper().endswith("JPY") else 0.0001
+    p = pair.upper()
+    if p.startswith("XAU"):                   # gold: pip=0.01 (C2 addendum)
+        return 0.01
+    return 0.01 if p.endswith("JPY") else 0.0001
 
 
 def _dec(pair):
-    return 3 if pair.upper().endswith("JPY") else 5
+    p = pair.upper()
+    if p.startswith("XAU"):                   # gold quote = 2dp
+        return 2
+    return 3 if p.endswith("JPY") else 5
 
 
 def pending_orders(o, h, l, c, hour, pair, strat):
@@ -191,6 +197,13 @@ def self_test():
     ok = len(odsj) > 0 and 100 < odsj[0]["entry"] < 200
     ok_all &= ok
     print(f"[5] USDJPY pip scaling (entry ~145): {odsj[0]['entry'] if odsj else None} -> {'OK' if ok else 'FAIL'}")
+
+    # [6] METALS (C2 addendum): _pip_size/_dec za XAUUSD (2dp, pip 0.01); FX haijavunjika
+    xau_ok = (_pip_size("XAUUSD") == 0.01 and _dec("XAUUSD") == 2
+              and _pip_size("EURUSD") == 0.0001 and _dec("EURUSD") == 5
+              and _pip_size("USDJPY") == 0.01 and _dec("USDJPY") == 3)
+    ok_all &= xau_ok
+    print(f"[6] metals pip scaling: XAUUSD pip={_pip_size('XAUUSD')} dec={_dec('XAUUSD')} (FX intact) -> {'OK' if xau_ok else 'FAIL'}")
 
     print("SELF-TEST:", "PASS" if ok_all else "FAIL")
     return 0 if ok_all else 1

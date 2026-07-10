@@ -37,9 +37,20 @@ LOG_F = os.path.join(PAPER_DIR, "paper_log.jsonl")
 VERSIONS = {"schema_version": "snapshot@v1", "doctrine_version": "V12"}
 OPERATOR_POLICY = {"id": "policy:operator-signal@v1",
                    "decide": lambda s: ("SELECT", "manual signal ya Operator (MWONGOZO)")}
-# pip size ya bei + thamani ya pip kwa LOT 1.0 (approx za MWONGOZO s1; Known Limitation)
-PIP_SIZE = lambda pair: 0.01 if pair.endswith("JPY") else 0.0001
-PIP_VALUE = lambda pair: 6.7 if pair.endswith("JPY") else 10.0
+# pip size ya bei + thamani ya pip kwa LOT 1.0 (approx za MWONGOZO s1; Known Limitation).
+# Metals (C2 addendum): XAUUSD pip=0.01 (quote 2dp); pip_value ~$1/pip kwa lot ya 100oz (broker-dependent).
+def PIP_SIZE(pair):
+    p = pair.upper()
+    if p.startswith("XAU"):
+        return 0.01
+    return 0.01 if p.endswith("JPY") else 0.0001
+
+
+def PIP_VALUE(pair):
+    p = pair.upper()
+    if p.startswith("XAU"):
+        return 1.0
+    return 6.7 if p.endswith("JPY") else 10.0
 
 
 def _load_cfg():
@@ -208,6 +219,17 @@ def self_test():
         ok = repo.integrity_check(LOG_F)["ok"]
         ok_all &= ok
         print(f"[4] log integrity -> {'OK' if ok else 'FAIL'}")
+        # [5] METALS (C2 addendum): XAUUSD pip scaling + signal inapita mnyororo (sl_pips sahihi)
+        pip_ok = PIP_SIZE("XAUUSD") == 0.01 and PIP_VALUE("XAUUSD") == 1.0 and PIP_SIZE("EURUSD") == 0.0001
+        st = _load_state(); st["daily_loss"] = 0.0; _save_state(st)
+        rc = cmd_signal(argparse.Namespace(signal=["XAUUSD", "BUY", "2000.00", "1995.00", "2010.00"],
+                                           pip_value=None))
+        st = _load_state()
+        gold = next((p for p in st["positions"].values() if p["pair"] == "XAUUSD"), None)
+        # sl_pips = |2000-1995|/0.01 = 500; FILLED (bajeti inaruhusu)
+        xau_ok = pip_ok and rc == 0 and gold is not None
+        ok_all &= xau_ok
+        print(f"[5] XAUUSD metals: pip={PIP_SIZE('XAUUSD')} pip_val={PIP_VALUE('XAUUSD')} signal-filled={gold is not None} -> {'OK' if xau_ok else 'FAIL'}")
     print(f"\nSELF-TEST: {'PASS' if ok_all else 'FAIL'}")
     return 0 if ok_all else 1
 

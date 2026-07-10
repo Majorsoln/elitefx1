@@ -62,10 +62,10 @@ def cfg():
 def _posix(p): return str(p).replace("\\", "/")
 def pip(sym):
     s = sym.upper()
-    if s.startswith(("XAU", "XAG")):    # CHIEF GATE (2026-07-09): metals bado hazina pip support —
-        raise ValueError(               # bila hii, gold ingejengwa kwa pip ya FX (kosa la mara 100, KIMYA)
-            f"{sym}: metals HAZIJAFUNGULIWA (pip/pip_value support inasubiri IMPLEMENTER-A + Chief approval). "
-            "Ondoa kwenye config/data_config.yaml pairs kwa sasa.")
+    if s.startswith("XAU"):             # GOLD (Chief C2 addendum 2026-07-09): pip = 0.01 (quote 2dp)
+        return 0.01
+    if s.startswith("XAG"):             # SILVER bado imezuiwa — hakuna data/testing (XAU pekee kwa sasa)
+        raise ValueError(f"{sym}: XAG bado haijafunguliwa (metals support = XAU pekee; hakuna data ya XAG).")
     return 0.01 if "JPY" in s else 0.0001
 
 def time_col(con, src):
@@ -293,7 +293,15 @@ def self_test():
     d1, _ = _dist(tv, ["NORMAL", "WIDE"]); d2, _ = _dist(tv, ["NORMAL", "WIDE"])
     dist_ok = abs(d1["WIDE"] - 0.15) < 0.01 and d1 == d2
     print(f"_dist map: WIDE={d1['WIDE']*100:.0f}% (tarajio 15, deterministic={d1==d2})")
-    ok = (unk > 0 and std_des < std_raw*0.6 and surge_high > 0.50 and 0.05 < frac < 0.25 and dist_ok)
+    # metals (C2 addendum): XAUUSD pip=0.01; FX haijavunjika; XAG bado imezuiwa
+    xag_gated = False
+    try:
+        pip("XAGUSD")
+    except ValueError:
+        xag_gated = True
+    pip_ok = (pip("XAUUSD") == 0.01 and pip("EURUSD") == 0.0001 and pip("USDJPY") == 0.01 and xag_gated)
+    print(f"pip metals: XAUUSD={pip('XAUUSD')} EURUSD={pip('EURUSD')} USDJPY={pip('USDJPY')} XAG-gated={xag_gated}")
+    ok = (unk > 0 and std_des < std_raw*0.6 and surge_high > 0.50 and 0.05 < frac < 0.25 and dist_ok and pip_ok)
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
