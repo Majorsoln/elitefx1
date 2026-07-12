@@ -331,3 +331,18 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   kwa forward/paper bila deployment. (3) Portfolio rasmi inabaki: STRAT-001 + STRAT-002.
   LESSON-material (RESEARCHER-K, L-d): "exposure-tainted selection hushuka OOS; dirisha bikira
   ndilo hakimu" — mfumo ulikataa kujidanganya. Batch S3c CLOSED; holdout SEALED tena kote.
+
+- **2026-07-10 — S1-C2 KAMILI (pairs 11) + REVIEW ya Chief + S2-C2 REGISTRATION FROZEN.**
+  H1 (events 4 mpya): DHAIFU kwa ujumla (EV>0 = 82/1032, 8%): gap_fade KARIBU-KUFA (1/240,
+  mean −4.55) · squeeze_break H1 −2.35 · london_drift hasi ila POCKET ya USDJPY (+1.89, N=1,654!)
+  · nr4_inside H1 pockets za JPY (+2.2..+2.3, N>1,000). H4 (cost-remedy H-C2-1/2): **NYOTA —
+  nr7 237/264 chanya, mean +4.59** (H1 ilikuwa +0.76 — hypothesis ya gharama IMETHIBITIKA
+  in-sample); nr4_inside 159/264 (+1.02); top: nr4×GBPJPY 2.0/3.0 no-LATE **+18.3 (N=351)**,
+  nr7×GBPUSD/GBPJPY +12..+14. shock H4 flat; squeeze H4 hasi. **STRENGTH (usd_drift): DEAD
+  in-sample (pairs 7 zote hasi, N~1,700) → ARCHIVED + LESSON (H-C2-5 imekufa geti la kwanza).**
+  GOLD: states zipo lakini config haikuwa nayo → runs hazina XAUUSD; Chief ame-commit config
+  (pairs 12 rasmi — kuondoa human error ya mara 3). **S2-C2 REGISTRATION FROZEN:** grid_c2
+  code ILEILE, pairs 12, TRAIN re-run (H1+H4, kwa gold) KISHA validation (H1+H4); criterion:
+  BH-FDR q=0.10 kwa kila run (m=cells tested) NA EV>0; hakuna mabadiliko ya code/grid kati
+  ya sasa na hukumu; survivors → mchakato wa S3-C2 (dirisha la OOS litapangwa kwa kanuni za
+  uadilifu zilizopo: compression/shock → 2026-05+/forward; wengine wanaweza 2025+ bikira).

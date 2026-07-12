@@ -16,6 +16,7 @@ pairs:
   - EURGBP
   - GBPJPY
   - EURCHF
+  - XAUUSD   # pair 12 (directive ya PD; metals support APPROVED 2026-07-09 - pip 0.01)
 
 # --- Timeframes za kujenga kutoka ticks ---
 # 1m–30m: microstructure ya Model 2 (Entry, Sehemu 3). H1–D1: HTF ya Model 1
@@ -88,6 +89,7 @@ max_spread_pips:
   EURGBP: 3.0    # med 0.87, p95 1.91
   GBPJPY: 4.5   # provisional
   EURCHF: 3.5   # provisional
+  XAUUSD: 60    # provisional (pip=0.01; spread ya kawaida ya gold ~30 pips) - thibitisha kwa spread_quality
 
 # --- Vigezo vya quality checks ---
 quality:
