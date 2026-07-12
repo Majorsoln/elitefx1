@@ -393,3 +393,12 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   q=0.05, bootstrap engine (R1 KWANZA), EV>0, MDE screen + shrunken forecasts, survivors =
   PROVEN-OOS-PROVISIONAL (capital baada ya forward tranche); makundi ya GOLD yanasubiri R5.**
   Inasubiri: approval ya PD ya B-prime.
+
+- **2026-07-12 — B-PRIME APPROVED na PD.** Mpangilio uliofungwa (sequencing): (1) WAVE-1 ya
+  IMPLEMENTER-A — R1 bootstrap engine NDIYO gate (S3-C2 haitumii z-test tena); (2) SCIENTIST-D
+  referee wa R1; (3) S3-C2 registration: p za bootstrap kwa survivors 30 wa VALID (cells
+  zilizokwisha-funguliwa — halali), wawakilishi 8 kwa kanuni mechanical (best bootstrap-p per
+  group, TRAIN EV>0), MDE screen + shrunken forecast (×0.35-0.5), makundi ya GOLD deferred hadi
+  gold cost model (R5); (4) one-shot dirisha bikira H4 2025-01→2026-04, BH q=0.05 m=(waliobaki
+  baada ya MDE screen), EV>0; (5) survivors = PROVEN-OOS-PROVISIONAL → forward tranche kabla ya
+  paper-portfolio kamili. R4/R5/R6 zinaenda sambamba na hilo.
