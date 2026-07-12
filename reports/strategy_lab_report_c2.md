@@ -1,53 +1,57 @@
-# Strategy Lab — cycle-2 candidates (TRAIN)
+# Strategy Lab — cycle-2 candidates (VALIDATION)
 
-*2026-07-12 17:17 | cycle=2 | TF=H4 | split=train | cells tested=1152 | candidates (N>=30)=1152 | costs ndani (episodes) | RANK=population view*
+*2026-07-12 17:24 | cycle=2 | TF=H1 | split=validation | cells tested=1152 | candidates (N>=30)=1068 | costs ndani (episodes) | RANK=population view*
 
 > **UAMINIFU:** hizi ni CANDIDATES, SIO strategies. TRAIN=in-sample; uthibitisho = S2 (walk-forward VALIDATION + BH-FDR) na S3 (HOLDOUT, mara moja). RED LINES: hakuna kuchagua kwa holdout; hakuna metric bila costs. LESSON-001/002/029/033/034. Profitable != Tradable Edge.
+
+
+## FDR (S2)
+- **BH-FDR (q=0.1)**: 0/1068 survivors; ~0.0 zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)=1152.
 
 
 ## Top candidates (population rank)
 
 | event | pair | SL | TP | session | vol | N | EV net | win% | PF | maxDD | tr/day |
 |-------|------|----|----|---------|-----|---|--------|------|----|-------|--------|
-| shock_follow | XAUUSD | 1.0 | 3.0 | None | None | 247 | +290.683 | 37.2 | 1.587 | 6192.6 | 0.11 |
-| shock_follow | XAUUSD | 1.0 | 3.0 | no-LATE | None | 202 | +292.531 | 37.6 | 1.593 | 8102.5 | 0.09 |
-| shock_follow | XAUUSD | 1.5 | 3.0 | no-LATE | None | 199 | +214.177 | 44.7 | 1.325 | 13122.3 | 0.09 |
-| shock_follow | XAUUSD | 1.5 | 3.0 | None | None | 241 | +206.539 | 44.0 | 1.311 | 9490.8 | 0.11 |
-| shock_follow | XAUUSD | 2.0 | 3.0 | no-LATE | None | 196 | +163.183 | 50.0 | 1.21 | 22249.2 | 0.09 |
-| shock_follow | XAUUSD | 2.0 | 3.0 | None | None | 238 | +154.635 | 49.2 | 1.197 | 19272.6 | 0.11 |
-| shock_follow | XAUUSD | 1.0 | 2.0 | no-LATE | None | 208 | +143.599 | 42.3 | 1.31 | 13909.8 | 0.10 |
-| shock_follow | XAUUSD | 1.0 | 2.0 | None | None | 254 | +136.834 | 42.1 | 1.293 | 11840.5 | 0.12 |
-| nr7_break | XAUUSD | 2.0 | 2.0 | no-LATE | None | 479 | +105.176 | 55.7 | 1.165 | 22488.8 | 0.22 |
-| shock_follow | XAUUSD | 1.0 | 1.5 | no-LATE | None | 211 | +100.550 | 48.3 | 1.24 | 12216.4 | 0.10 |
-| nr7_break | XAUUSD | 2.0 | 2.0 | None | None | 549 | +84.561 | 56.5 | 1.128 | 27549.4 | 0.25 |
-| nr7_break | XAUUSD | 2.0 | 1.0 | no-LATE | None | 580 | +80.175 | 72.1 | 1.195 | 23630.3 | 0.27 |
-| nr4_inside | XAUUSD | 2.0 | 2.0 | None | None | 497 | +81.627 | 53.7 | 1.125 | 27613.0 | 0.23 |
-| shock_follow | XAUUSD | 1.5 | 1.5 | no-LATE | None | 209 | +90.737 | 57.4 | 1.174 | 16040.4 | 0.10 |
-| nr7_break | XAUUSD | 2.0 | 1.5 | no-LATE | None | 518 | +77.222 | 62.0 | 1.138 | 19739.7 | 0.24 |
-| shock_follow | XAUUSD | 1.5 | 2.0 | no-LATE | None | 205 | +90.549 | 49.8 | 1.149 | 17597.7 | 0.09 |
-| shock_follow | XAUUSD | 1.0 | 1.5 | None | None | 257 | +85.688 | 47.5 | 1.201 | 11586.1 | 0.12 |
-| nr7_break | XAUUSD | 2.0 | 3.0 | no-LATE | None | 426 | +71.413 | 45.8 | 1.095 | 25423.5 | 0.20 |
-| shock_follow | XAUUSD | 1.5 | 2.0 | None | None | 249 | +77.666 | 49.4 | 1.126 | 16271.9 | 0.12 |
-| nr7_break | XAUUSD | 1.0 | 2.0 | no-LATE | None | 559 | +65.510 | 39.9 | 1.138 | 20906.9 | 0.26 |
-| nr7_break | XAUUSD | 1.0 | 3.0 | None | None | 588 | +61.035 | 30.8 | 1.108 | 21609.8 | 0.27 |
-| nr7_break | XAUUSD | 1.5 | 2.0 | no-LATE | None | 515 | +61.446 | 49.1 | 1.104 | 29210.5 | 0.24 |
-| nr4_inside | XAUUSD | 2.0 | 3.0 | None | None | 440 | +59.505 | 44.1 | 1.077 | 49965.8 | 0.20 |
-| shock_follow | XAUUSD | 2.0 | 1.5 | no-LATE | None | 207 | +65.136 | 62.8 | 1.109 | 23783.1 | 0.10 |
-| nr7_break | XAUUSD | 1.0 | 3.0 | no-LATE | None | 516 | +54.705 | 30.4 | 1.1 | 21433.1 | 0.24 |
-| nr7_break | XAUUSD | 2.0 | 1.0 | None | None | 672 | +51.302 | 71.4 | 1.118 | 25884.0 | 0.31 |
-| nr7_break | XAUUSD | 1.0 | 1.5 | no-LATE | None | 592 | +48.768 | 46.3 | 1.115 | 18017.5 | 0.27 |
-| nr7_break | XAUUSD | 1.0 | 2.0 | None | None | 663 | +46.215 | 39.7 | 1.094 | 29072.9 | 0.30 |
-| nr4_inside | XAUUSD | 1.0 | 3.0 | None | None | 554 | +47.105 | 30.0 | 1.087 | 54071.8 | 0.26 |
-| shock_follow | XAUUSD | 1.5 | 1.5 | None | None | 255 | +52.950 | 55.7 | 1.098 | 18121.1 | 0.12 |
-| nr4_inside | XAUUSD | 2.0 | 2.0 | no-LATE | None | 434 | +46.906 | 53.2 | 1.071 | 27290.8 | 0.20 |
-| nr7_break | XAUUSD | 1.5 | 2.0 | None | None | 602 | +42.638 | 49.3 | 1.07 | 44149.1 | 0.28 |
-| nr7_break | XAUUSD | 1.5 | 1.5 | no-LATE | None | 549 | +42.797 | 55.4 | 1.082 | 22028.8 | 0.25 |
-| nr4_inside | XAUUSD | 1.5 | 3.0 | None | None | 489 | +42.864 | 38.5 | 1.062 | 50869.3 | 0.23 |
-| nr7_break | XAUUSD | 1.5 | 1.0 | no-LATE | None | 603 | +40.451 | 65.3 | 1.101 | 28475.2 | 0.28 |
-| nr7_break | XAUUSD | 1.0 | 1.0 | no-LATE | None | 628 | +40.031 | 57.0 | 1.117 | 23657.4 | 0.29 |
-| nr7_break | XAUUSD | 2.0 | 3.0 | None | None | 473 | +40.378 | 46.1 | 1.051 | 32195.3 | 0.22 |
-| nr4_inside | XAUUSD | 1.5 | 2.0 | None | None | 549 | +39.344 | 47.0 | 1.066 | 52911.6 | 0.25 |
-| squeeze_break | XAUUSD | 2.0 | 1.0 | no-LATE | None | 309 | +41.114 | 68.0 | 1.101 | 19988.4 | 0.14 |
-| nr4_inside | XAUUSD | 1.0 | 3.0 | no-LATE | None | 481 | +35.927 | 29.7 | 1.067 | 47707.3 | 0.22 |
+| squeeze_break | XAUUSD | 2.0 | 2.0 | None | None | 264 | +100.717 | 57.2 | 1.249 | 7614.6 | 0.43 |
+| squeeze_break | XAUUSD | 2.0 | 2.0 | no-LATE | None | 249 | +89.386 | 57.0 | 1.22 | 8512.3 | 0.41 |
+| squeeze_break | XAUUSD | 2.0 | 1.5 | None | None | 289 | +66.085 | 62.6 | 1.189 | 9539.8 | 0.48 |
+| squeeze_break | XAUUSD | 2.0 | 3.0 | None | None | 252 | +59.608 | 46.0 | 1.118 | 10371.5 | 0.41 |
+| squeeze_break | XAUUSD | 2.0 | 3.0 | no-LATE | None | 237 | +51.975 | 45.6 | 1.102 | 9944.9 | 0.39 |
+| squeeze_break | XAUUSD | 2.0 | 1.5 | no-LATE | None | 272 | +34.340 | 61.4 | 1.094 | 10713.2 | 0.45 |
+| squeeze_break | XAUUSD | 1.5 | 3.0 | None | None | 286 | +28.527 | 38.1 | 1.063 | 14884.6 | 0.47 |
+| gap_fade | XAUUSD | 1.0 | 1.5 | no-LATE | None | 48 | +38.835 | 43.8 | 1.135 | 4266.6 | 0.08 |
+| squeeze_break | XAUUSD | 1.5 | 2.0 | None | None | 296 | +25.716 | 47.0 | 1.065 | 12684.6 | 0.49 |
+| squeeze_break | XAUUSD | 1.5 | 2.0 | no-LATE | None | 280 | +17.532 | 46.8 | 1.045 | 14418.5 | 0.46 |
+| squeeze_break | XAUUSD | 2.0 | 1.0 | None | None | 329 | +13.459 | 69.9 | 1.047 | 12946.4 | 0.54 |
+| squeeze_break | XAUUSD | 1.5 | 3.0 | no-LATE | None | 271 | +8.071 | 36.9 | 1.018 | 14420.6 | 0.45 |
+| london_drift | GBPJPY | 1.5 | 3.0 | None | None | 448 | +5.011 | 40.0 | 1.175 | 1038.9 | 0.72 |
+| london_drift | GBPJPY | 1.5 | 3.0 | no-LATE | None | 448 | +5.011 | 40.0 | 1.175 | 1038.9 | 0.72 |
+| gap_fade | USDJPY | 1.5 | 1.5 | None | None | 40 | +6.138 | 57.5 | 1.368 | 206.1 | 0.08 |
+| london_drift | EURJPY | 1.5 | 3.0 | None | None | 456 | +3.361 | 39.5 | 1.143 | 807.4 | 0.87 |
+| london_drift | EURJPY | 1.5 | 3.0 | no-LATE | None | 456 | +3.361 | 39.5 | 1.143 | 807.4 | 0.87 |
+| squeeze_break | GBPJPY | 2.0 | 3.0 | None | None | 257 | +3.692 | 47.9 | 1.126 | 946.7 | 0.41 |
+| squeeze_break | XAUUSD | 1.5 | 1.5 | None | None | 324 | +3.253 | 52.5 | 1.009 | 12774.8 | 0.53 |
+| gap_fade | USDCHF | 2.0 | 2.0 | None | None | 43 | +4.870 | 60.5 | 1.522 | 110.4 | 0.08 |
+| gap_fade | USDJPY | 1.0 | 1.5 | None | None | 40 | +4.955 | 45.0 | 1.35 | 138.9 | 0.08 |
+| gap_fade | USDCHF | 1.5 | 2.0 | None | None | 43 | +4.811 | 55.8 | 1.556 | 117.5 | 0.08 |
+| london_drift | GBPJPY | 2.0 | 3.0 | None | None | 425 | +2.980 | 44.9 | 1.089 | 1485.7 | 0.68 |
+| london_drift | GBPJPY | 2.0 | 3.0 | no-LATE | None | 425 | +2.980 | 44.9 | 1.089 | 1485.7 | 0.68 |
+| london_drift | EURJPY | 2.0 | 3.0 | None | None | 433 | +2.763 | 45.5 | 1.1 | 798.1 | 0.83 |
+| london_drift | EURJPY | 2.0 | 3.0 | no-LATE | None | 433 | +2.763 | 45.5 | 1.1 | 798.1 | 0.83 |
+| gap_fade | USDJPY | 2.0 | 1.5 | None | None | 40 | +4.487 | 60.0 | 1.234 | 226.3 | 0.08 |
+| squeeze_break | XAUUSD | 1.5 | 1.0 | None | None | 360 | +2.821 | 63.1 | 1.01 | 7835.5 | 0.59 |
+| gap_fade | USDJPY | 1.5 | 2.0 | None | None | 40 | +4.403 | 50.0 | 1.214 | 206.1 | 0.08 |
+| nr4_inside | EURJPY | 2.0 | 1.0 | no-LATE | None | 345 | +2.486 | 71.6 | 1.172 | 527.6 | 0.66 |
+| gap_fade | USDJPY | 1.0 | 2.0 | None | None | 40 | +3.892 | 37.5 | 1.232 | 138.9 | 0.08 |
+| squeeze_break | USDJPY | 2.0 | 1.5 | no-LATE | None | 317 | +2.451 | 60.2 | 1.158 | 412.6 | 0.61 |
+| gap_fade | USDJPY | 1.5 | 1.0 | None | None | 40 | +3.590 | 67.5 | 1.264 | 156.6 | 0.08 |
+| nr4_inside | EURJPY | 1.5 | 1.5 | no-LATE | None | 337 | +2.286 | 55.5 | 1.129 | 535.0 | 0.65 |
+| nr4_inside | USDJPY | 1.5 | 1.0 | no-LATE | None | 354 | +2.238 | 64.7 | 1.178 | 294.2 | 0.68 |
+| london_drift | EURJPY | 1.5 | 2.0 | None | None | 488 | +2.079 | 46.7 | 1.099 | 547.8 | 0.94 |
+| london_drift | EURJPY | 1.5 | 2.0 | no-LATE | None | 488 | +2.079 | 46.7 | 1.099 | 547.8 | 0.94 |
+| gap_fade | USDJPY | 1.0 | 1.0 | None | None | 40 | +3.453 | 57.5 | 1.299 | 99.2 | 0.08 |
+| gap_fade | USDCHF | 1.5 | 1.0 | None | None | 43 | +3.295 | 74.4 | 1.643 | 54.7 | 0.08 |
+| london_drift | GBPJPY | 1.0 | 3.0 | None | None | 479 | +1.990 | 28.8 | 1.084 | 1108.0 | 0.77 |
 
 *S1 = candidates -> S2 walk-forward+FDR -> S3 holdout. Chief directive + GRID RULING.*
