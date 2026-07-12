@@ -365,3 +365,31 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   ilivyo (subiri data 2026-05+ + forward — miezi kadhaa). OPTION B (pendekezo la Chief) =
   amendment yenye disclosure: one-shot ya survivors 30 pre-registered kwenye dirisha bikira
   la H4 2025-01→2026-04, BH-FDR q=0.10 m=30 NA EV>0.
+
+- **2026-07-12 — DATA SCIENCE REVIEW (SCIENTIST-D) IMEPOKELEWA + CHIEF RESPONSE: ACCEPTED.**
+  Ripoti: reports/data_science_review.md + scripts/scientist_d_recompute.py (kila namba
+  inazalishwa kutoka artifacts; hakuna dirisha lililoguswa). **Chief verification:** BH verdicts
+  zote zinarudi ✓; finding kuu (W1: z-test anti-conservative ×1.22-1.41 kwa high-win/small-TP)
+  Chief aliipima kwa MC huru — check ya kwanza ya Chief (idealized 1:2) ilikosea; ujenzi wa
+  SCIENTIST-D (payoffs za net-ya-costs) ulithibitika HASA (0.0609) — reviewer alishinda; hii
+  yenyewe ni funzo la utamaduni wa verification. FINDINGS ZILIZOKUBALIWA (zote 8 W1-W8 + C7 1-4):
+  skew-bias ya p-engine (STRAT-001 p 0.021→0.027 bado PASS; SIB-1 0.049→0.058 = knife-edge —
+  rekodi imewekewa alama; deployment HAIATHIRIKI kwa kuwa SIB si slots); shrinkage slope 0.346
+  (VALID→HOLDOUT −60..−75% kwa significant cells); window 2023-24 imechimbwa ×4 (cells 4,519);
+  costs = 36% ya gross ya STRAT-001; misnomer ya "walk-forward"; m-ya-cells inapoteza power
+  (combos 110 halisi vs cells 1,939); MDE haikuwepo (S3c ilitabirika ex-ante); hakuna portfolio
+  layer. **ACTION PLAN (Chief):** WAVE-1 (IMPLEMENTER-A, kabla ya S3-C2): R1 bootstrap p-engine
+  (stationary block, studentized; self-tests dhidi ya jedwali la W1) + sensitivity restatement ya
+  S3/S3b · R4 portfolio v0 (overlap/corr/joint-DD ya STRAT-001+002; rule: corr>0.4 → nusu size)
+  · R5 cost stress (EV(Δspread) kwenye kila ripoti; WIDE-state split; GOLD spread model kwa
+  spread_quality.py — gold registration BLOCKED hadi hii) · R6 win-rate CUSUM pre-registered
+  (STRAT-001: review<70%/halt<66% @60-trade rolling; STRAT-002 thresholds kwa hesabu ileile).
+  WAVE-2: R3 rolling-origin yearly folds (regime robustness) · R8 tick-compression features (C3).
+  DOCTRINE AMENDMENTS: EP-8 (MDE rule — hakuna registration ya cell ambayo shrunken-EV < MDE) +
+  EP-9 (multiplicity = correlation-aware, "m inahesabu SELECTION yote", si cell-count tu) +
+  rename "walk-forward"→"static validation" hadi R3 + hukumu za holdout zirekodiwe na interval,
+  si binary tu, na deployment iwe na forward-tranche gate. **S3-C2 = OPTION B-PRIME (design ya
+  R2, iliyoungwa mkono na reviewer huru): m=8 (wawakilishi wa makundi, kanuni mechanical),
+  q=0.05, bootstrap engine (R1 KWANZA), EV>0, MDE screen + shrunken forecasts, survivors =
+  PROVEN-OOS-PROVISIONAL (capital baada ya forward tranche); makundi ya GOLD yanasubiri R5.**
+  Inasubiri: approval ya PD ya B-prime.

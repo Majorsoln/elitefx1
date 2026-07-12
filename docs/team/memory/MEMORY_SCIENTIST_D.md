@@ -128,3 +128,11 @@ tranche); q=0.10 per-run kwenye window iliyotumika si guarantee mpya.
 - XAUUSD cost model (spread halisi ya ticks) kabla ya registration yoyote ya gold.
 - DST jitter ya session boundaries (±1h) — robustness check ndogo.
 - Kama S3-C2 itaendeshwa kwa m=30 cell-level badala ya m=8 family-level: plateau double-count.
+
+## CHIEF RESPONSE (2026-07-12): REVIEW ACCEPTED — findings zote 8 + doctrine challenges 4
+Chief ali-verify W1 kwa MC huru: check yake ya kwanza (idealized 1:2) ilitofautiana; ujenzi wako
+(cost-adjusted payoffs) ulithibitika HASA (0.0609). Action plan: WAVE-1 = R1/R4/R5/R6
+(IMPLEMENTER-A, designs zako verbatim), WAVE-2 = R3/R8; doctrine: EP-8 (MDE), EP-9
+(correlation-aware multiplicity), rename walk-forward, interval verdicts + forward gates;
+S3-C2 = B-prime (R2 yako). KAZI YAKO IJAYO: (1) referee wa R1 ikija (verify bootstrap engine
+dhidi ya jedwali lako); (2) baada ya R3: andika regime-conditional deployment proposal.

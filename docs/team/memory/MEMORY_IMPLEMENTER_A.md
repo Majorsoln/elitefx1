@@ -510,3 +510,22 @@ Verified: (1) exit science — default path (exit_cfg=None) HAIJAGUSWA (code + g
 orientation base/quote sahihi, INNER JOIN ya ts (cross-sectional alignment sahihi), reuse ya
 episodes(); (4) metals — XAU pip 0.01 kila mahali, XAG bado gated, FX regression 18/18.
 Kazi bora. XAUUSD sasa inaruhusiwa kuingia config (task b yako: baada ya Operator kuiwasha).
+
+=== WAVE-1 TASKS (Chief, 2026-07-12 — kutoka data_science_review ya SCIENTIST-D; KABLA ya S3-C2) ===
+Soma kwanza: reports/data_science_review.md §B (designs kamili zimo — fuata R1/R4/R5/R6 verbatim).
+  R1 (kipaumbele #1): pvalue_boot() kwenye strategy_lab — stationary block bootstrap
+     (Politis-Romano, mean block ~10, studentized), seed deterministic kutoka cell key.
+     Self-tests: (a) i.i.d. symmetric null → boot ≈ z; (b) two-point negative-skew null →
+     boot size ≈ nominal ambapo z = ×1.2-1.4 (jedwali la §A3-W1); (c) determinism. Kisha
+     sensitivity restatement: p za bootstrap kwa cells ZILIZOKWISHA-FUNGULIWA za S3/S3b/validation
+     (hakuna dirisha jipya) — ripoti two-column.
+  R4: portfolio_v0.py — episodes za STRAT-001+002 (opened windows): overlap ya siku/saa,
+     daily-PnL corr, joint-DD vs sum, worst joint day vs FTMO daily-loss. Rule ya kabla:
+     corr>0.4 → halve size.
+  R5: (1) EV(Δspread) table kwenye write_outputs (analytic); (2) split trades za proven kwa
+     spread_state (NORMAL/WIDE) ya entry bar; (3) GOLD: empirical spread dist kutoka ticks
+     (spread_quality.py) + percentile-based stop slippage — kabla ya gold registration yoyote.
+  R6: win-rate CUSUM/control-chart kwa STRAT-001/002 (thresholds za STRAT-001: review<70%,
+     halt<66% @60-trade rolling; compute za STRAT-002 kwa framework ileile na uziandike KABLA
+     forward data haijaongezeka).
+Zote self-tested, Windows-safe, Rule 8 reports. WAVE-2 baadaye: R3 rolling-origin folds, R8 ticks.
