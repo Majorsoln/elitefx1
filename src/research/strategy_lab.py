@@ -186,7 +186,9 @@ def exit_sweep(cell, data, variants=EXIT_VARIANTS):
 
 # ---------- FDR machinery (S2) ----------
 def pvalue_gt0(pnls):
-    """One-sided p-value: H0 mean<=0 vs H1 mean>0 (normal approx, stdlib erfc)."""
+    """One-sided p-value: H0 mean<=0 vs H1 mean>0 (normal approx, stdlib erfc).
+    R1 (SCIENTIST-D W1): z-test ina skew bias (negative-skew/high-win structures -> size ×1.2-1.4
+    @0.05). Inabaki kama SENSITIVITY column; engine RASMI ya FDR/registration = pvalue_boot (chini)."""
     p = np.asarray(pnls, float); n = len(p)
     if n < 2:
         return 1.0
@@ -195,6 +197,70 @@ def pvalue_gt0(pnls):
         return 0.0 if p.mean() > 0 else 1.0
     t = p.mean() / (sd / math.sqrt(n))
     return 0.5 * math.erfc(t / math.sqrt(2.0))
+
+
+def _seed_from_key(cell):
+    """R1: seed deterministic kutoka cell key (event|pair|sl|tp|filters) — reproducible bit-kwa-bit."""
+    import hashlib
+    key = "|".join(str(cell.get(k)) for k in ("event", "pair", "sl_atr", "tp_atr",
+                                              "session_filter", "vol_filter"))
+    return int(hashlib.sha1(key.encode()).hexdigest()[:12], 16)
+
+
+def _stationary_indices(n, B, mean_block, rng):
+    """Stationary bootstrap ya Politis-Romano: blocks za urefu wa geometric(1/mean_block),
+    circular (wrap-around). Rudisha indices (B, n). Vectorized juu ya B (loop fupi ya n columns)."""
+    p = 1.0 / max(1.0, float(mean_block))
+    starts = rng.integers(0, n, size=(B, n))          # restart points (zinatumika pale restart=True)
+    restart = rng.random((B, n)) < p
+    idx = np.empty((B, n), dtype=np.int64)
+    cur = starts[:, 0].copy()                          # block ya kwanza daima inaanza random
+    idx[:, 0] = cur
+    for j in range(1, n):
+        cur = np.where(restart[:, j], starts[:, j], (cur + 1) % n)
+        idx[:, j] = cur
+    return idx
+
+
+def _se_nw(mat, K):
+    """Newey-West (Bartlett) long-run SE ya mean. mat: (B, n) au (n,). Inafanya studentization
+    iendane na block resampling (denominator ya i.i.d. + block resampling ilipima size 0.063-0.072
+    kwenye skew nulls — jedwali la calibration kwenye reports/wave1_report.md)."""
+    m2 = np.atleast_2d(np.asarray(mat, float))
+    n = m2.shape[1]
+    d = m2 - m2.mean(axis=1, keepdims=True)
+    lrv = (d * d).mean(axis=1)
+    for k in range(1, K + 1):
+        lrv += 2.0 * (1.0 - k / (K + 1)) * (d[:, k:] * d[:, :-k]).sum(axis=1) / n
+    return np.sqrt(np.maximum(lrv, 1e-12) / n)
+
+
+def pvalue_boot(pnls, B=10_000, mean_block=3, seed=None, cell=None):
+    """R1 (ENGINE RASMI ya FDR/registration): one-sided p (H0 mean<=0) kwa STATIONARY BLOCK
+    BOOTSTRAP (Politis-Romano) yenye STUDENTIZATION ya Newey-West (percentile-t):
+      t_obs = mean/se_NW; series ina-CENTER (H0 kweli); kila resample -> t* = mean*/se_NW*;
+      p = (1 + #{t* >= t_obs}) / (B + 1).
+    CALIBRATION (deviation 2 kutoka design ya SCIENTIST-D — evidence: wave1_r1_report.md):
+      (i) mean_block=3 (sio ~10): block kubwa inameza skewness ya t* (skew ya block-means ~ γ/√b)
+          -> size 0.063-0.072 kwenye skew nulls (acceptance test b haiwezekani na mb=10);
+          mb=3: skew size 0.043-0.053 (~nominal) NA AR(rho=0.5)-cluster 0.058 (z: 0.121).
+      (ii) studentization = Newey-West K=mean_block (sio i.i.d. sd): denominator inayoendana na
+          block dependence. Inarekebisha W1 (skew) + W7 (dependence). Seed deterministic:
+    `cell` (cell key) > `seed`; bila yoyote -> 0 (daima reproducible)."""
+    x = np.asarray(pnls, float); n = len(x)
+    if n < 2:
+        return 1.0
+    if x.std(ddof=1) == 0:
+        return 0.0 if x.mean() > 0 else 1.0
+    K = max(1, min(int(mean_block), n - 2))
+    t_obs = float(x.mean() / _se_nw(x, K)[0])
+    y = x - x.mean()                                   # center -> H0 mean=0 ni kweli kwenye resamples
+    if seed is None:
+        seed = _seed_from_key(cell) if cell is not None else 0
+    rng = np.random.default_rng(seed)
+    idx = _stationary_indices(n, B, min(mean_block, n), rng)
+    t_star = y[idx].mean(axis=1) / _se_nw(y[idx], K)
+    return float((1 + int((t_star >= t_obs).sum())) / (B + 1))
 
 
 def bh_fdr(pvals, q=0.10):
@@ -244,10 +310,30 @@ def load_window(sym, tf, split, holdout_token=None):
                 days=df["ts"].dt.date().n_unique())
 
 
-def search(pairs, tf, split, holdout_token=None, cycle=1):
-    """Endesha grid nzima juu ya split. cycle 1 = grid ya C1; cycle 2 = grid_c2 (tf-aware).
+def load_cells_file(path):
+    """R1 restatement: soma cells maalum (jsonl: event/pair/sl_atr/tp_atr/session_filter/vol_filter)
+    badala ya grid nzima — kwa re-run ya cells ZILIZOKWISHA-FUNGULIWA (S3/S3b) na engines zote mbili.
+    Hakuna dirisha jipya: split guards (ikiwemo holdout token) zinabaki zilezile."""
+    cells = []
+    with open(path, encoding="utf-8") as f:
+        for ln in f:
+            if not ln.strip():
+                continue
+            r = json.loads(ln)
+            sf = r.get("session_filter")
+            cells.append(dict(event=r["event"], pair=r["pair"], sl_atr=float(r["sl_atr"]),
+                              tp_atr=float(r["tp_atr"]),
+                              session_filter=tuple(sf) if isinstance(sf, list) else sf,
+                              vol_filter=r.get("vol_filter")))
+    return cells
+
+
+def search(pairs, tf, split, holdout_token=None, cycle=1, cells_override=None):
+    """Endesha grid juu ya split. cycle 1 = grid ya C1; cycle 2 = grid_c2 (tf-aware);
+    cells_override = orodha maalum (R1 restatement — hakuna grid).
     Rudisha (candidates, n_cells_tested, days_total)."""
-    cells = grid_c2(pairs, tf) if cycle == 2 else grid(pairs)
+    cells = cells_override if cells_override is not None else (
+        grid_c2(pairs, tf) if cycle == 2 else grid(pairs))
     cache = {sym: load_window(sym, tf, split, holdout_token) for sym in pairs}   # load mara moja kwa pair
     cands = []; tested = 0
     days_tot = sum(d["days"] for d in cache.values() if d)
@@ -276,19 +362,23 @@ def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, o
     strat_dir.mkdir(parents=True, exist_ok=True)
     suffix = "" if cycle == 1 else f"_c{cycle}"     # C2 haiandiki juu ya candidates za C1
 
-    # FDR KWANZA (kabla ya jsonl) ili p-value + survivor flag ziingie kwenye rekodi zote.
-    # (Amendment ya reporting 2026-07-09: ripoti ya awali ilisema '1 survivor' BILA kumtaja —
-    # statistics hazikuguswa; hii ni kufichua tu kilichokwishahesabiwa.)
+    # FDR KWANZA (kabla ya jsonl) ili p-values + survivor flag ziingie kwenye rekodi zote.
+    # R1 ENGINE SWAP (pre-registered kwa commit hii, KABLA ya dirisha jipya — SCIENTIST-D design 4):
+    # FDR/registration RASMI = pvalue_boot (stationary block bootstrap, studentized; seed=cell key).
+    # pvalue_gt0 (z) inabaki kama SENSITIVITY column -> ripoti two-column (restatement ya R1 design 3).
     fdr_line = ""; surv_rows = []
     if apply_fdr and cands:
-        pvals = [pvalue_gt0(c["pnls"]) for c in cands]
-        surv, k, exp_false = bh_fdr(pvals, q)
-        for c, p, s in zip(cands, pvals, surv):
-            c["p"] = round(float(p), 6)
+        p_boot = [pvalue_boot(c["pnls"], cell=c) for c in cands]
+        p_z = [pvalue_gt0(c["pnls"]) for c in cands]
+        surv, k, exp_false = bh_fdr(p_boot, q)
+        for c, pb, pz, s in zip(cands, p_boot, p_z, surv):
+            c["p"] = round(float(pb), 6)               # p RASMI = bootstrap (R1)
+            c["p_z"] = round(float(pz), 6)             # sensitivity column (engine ya zamani)
             c["fdr_survivor"] = bool(s)
         surv_rows = sorted((c for c in cands if c["fdr_survivor"]), key=lambda x: x["p"])
-        fdr_line = (f"- **BH-FDR (q={q})**: {int(surv.sum())}/{len(cands)} survivors; "
-                    f"~{exp_false} zinatarajiwa kwa bahati (null). Cells tested (multiple-testing m)={tested}.")
+        fdr_line = (f"- **BH-FDR (q={q}) juu ya p_boot (R1 bootstrap engine — RASMI)**: "
+                    f"{int(surv.sum())}/{len(cands)} survivors; ~{exp_false} zinatarajiwa kwa bahati (null). "
+                    f"Cells tested (m)={tested}. p_z (z-test ya zamani) = sensitivity column.")
 
     jl = strat_dir / f"candidates{suffix}.jsonl"
     with open(jl, "w", encoding="utf-8") as f:
@@ -306,14 +396,27 @@ def write_outputs(cands, tested, split, tf, days_tot, apply_fdr=False, q=0.10, o
     if fdr_line:
         L.append("\n## FDR (S2)\n" + fdr_line + "\n")
         if surv_rows:
-            L.append("### SURVIVORS — waliosalia BH-FDR (hawa PEKEE ndio registration ya S3)\n")
-            L.append("| event | pair | SL | TP | session | vol | N | EV net | win% | PF | p |")
-            L.append("|-------|------|----|----|---------|-----|---|--------|------|----|---|")
+            L.append("### SURVIVORS — waliosalia BH-FDR juu ya p_boot (hawa PEKEE ndio registration ya S3)\n")
+            L.append("| event | pair | SL | TP | session | vol | N | EV net | win% | PF | p_boot | p_z |")
+            L.append("|-------|------|----|----|---------|-----|---|--------|------|----|--------|-----|")
             for c in surv_rows:
                 L.append(f"| {c['event']} | {c['pair']} | {c['sl_atr']} | {c['tp_atr']} | "
                          f"{c['session_filter']} | {c['vol_filter']} | {c['n']:,} | {c['ev']:+.3f} | "
-                         f"{c['win']*100:.1f} | {c['pf'] if c['pf'] is not None else 'inf'} | {c['p']:.2e} |")
+                         f"{c['win']*100:.1f} | {c['pf'] if c['pf'] is not None else 'inf'} | "
+                         f"{c['p']:.2e} | {c['p_z']:.2e} |")
             L.append("")
+    # R5(1): EV(Δspread) analytic — cost stress kwa kila ripoti (survivors, au top-10 kama hakuna FDR)
+    from cost_stress import ev_spread_table, SPREAD_DELTAS
+    stress_rows = ev_spread_table(surv_rows if surv_rows else _population_rank(cands)[:10])
+    if stress_rows:
+        L.append("\n## Cost stress — EV(Δspread) analytic (R5; kila trade inalipa spread mara moja)\n")
+        L.append("| cell | EV | " + " | ".join(f"EV@+{d}" for d in SPREAD_DELTAS) + " | breakeven Δspread |")
+        L.append("|------|----|" + "|".join(["----"] * len(SPREAD_DELTAS)) + "|------|")
+        for r in stress_rows:
+            L.append(f"| {r['label']} | {r['ev']:+.3f} | "
+                     + " | ".join(f"{r['ev_dspread'][f'+{d}']:+.3f}" for d in SPREAD_DELTAS)
+                     + f" | {r['breakeven_dspread']:.3f} |")
+
     L.append("\n## Top candidates (population rank)\n")
     L.append("| event | pair | SL | TP | session | vol | N | EV net | win% | PF | maxDD | tr/day |")
     L.append("|-------|------|----|----|---------|-----|---|--------|------|----|-------|--------|")
@@ -445,6 +548,42 @@ def self_test():
         print(f"  [5b] FDR survivor reporting: named-in-report={named} jsonl-flags={flag_ok}")
     ok = ok and named and flag_ok
 
+    # (7) R1a: symmetric i.i.d. null -> bootstrap p ~ z p (hakuna skew -> engines zikubaliane)
+    rng7 = np.random.default_rng(11)
+    diffs = []
+    for i in range(40):
+        x = rng7.normal(0.05, 1.0, 80)
+        diffs.append(abs(pvalue_boot(x, B=600, seed=1000 + i) - pvalue_gt0(x)))
+    sym_ok = float(np.mean(diffs)) < 0.04
+    print(f"  [7] R1 symmetric null: mean|p_boot - p_z|={np.mean(diffs):.4f} (<0.04) -> {sym_ok}")
+    ok = ok and sym_ok
+
+    # (8) R1b: two-point NEGATIVE-SKEW null (SL2/TP1-like: +1 @2/3, -2 @1/3, EV=0, N=100) —
+    # reproduce §A3-W1: z size @0.05 imevimba (~0.07, ×1.4); bootstrap size ~ nominal na < z
+    rng8 = np.random.default_rng(12)
+    M, N8 = 600, 100
+    rej_z = rej_b = 0
+    for i in range(M):
+        x = np.where(rng8.random(N8) < (2.0 / 3.0), 1.0, -2.0)
+        if pvalue_gt0(x) < 0.05:
+            rej_z += 1
+        if pvalue_boot(x, B=400, seed=2000 + i) < 0.05:
+            rej_b += 1
+    size_z, size_b = rej_z / M, rej_b / M
+    skew_ok = size_z > 0.055 and size_b < size_z and 0.015 <= size_b <= 0.085
+    print(f"  [8] R1 skew-null size @0.05 (W1): z={size_z:.3f} (imevimba) boot={size_b:.3f} (~nominal, <z) -> {skew_ok}")
+    ok = ok and skew_ok
+
+    # (9) R1c: determinism — cell key ileile -> p ILEILE bit-kwa-bit; key tofauti -> seed tofauti
+    xd = rng7.normal(0.3, 1.0, 60)
+    cellA = dict(event="nr7_break", pair="USDCHF", sl_atr=2.0, tp_atr=1.0,
+                 session_filter="no-LATE", vol_filter=None)
+    cellB = dict(cellA, pair="USDJPY")
+    pA1 = pvalue_boot(xd, B=800, cell=cellA); pA2 = pvalue_boot(xd, B=800, cell=cellA)
+    det_ok = pA1 == pA2 and _seed_from_key(cellA) != _seed_from_key(cellB)
+    print(f"  [9] R1 determinism: p(cellA) stable={pA1 == pA2} seeds-differ={_seed_from_key(cellA) != _seed_from_key(cellB)} -> {det_ok}")
+    ok = ok and det_ok
+
     # (6) EXIT SCIENCE sweep: 'fixed' variant == default evaluate() N (byte-identical path); variants run
     cell_nr7 = dict(event="nr7_break", pair="EURUSD", sl_atr=2.0, tp_atr=1.0,
                     session_filter=None, vol_filter=None)
@@ -468,13 +607,18 @@ def main():
     ap.add_argument("--tf", default="H1")
     ap.add_argument("--cycle", type=int, default=1, choices=[1, 2], help="1=C1 grid (TIER1/2); 2=GRID_C2")
     ap.add_argument("--holdout-final", dest="token", default=None, help="Chief token kwa holdout (S3)")
+    ap.add_argument("--cells-file", dest="cells_file", default=None,
+                    help="R1 restatement: jsonl ya cells maalum ZILIZOFUNGULIWA (badala ya grid)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
     from market_state_engine import cfg
     pairs = cfg()["pairs"]
-    cands, tested, days = search(pairs, a.tf, a.split, a.token, cycle=a.cycle)
+    override = load_cells_file(a.cells_file) if a.cells_file else None
+    if override is not None:
+        pairs = sorted({c["pair"] for c in override})   # load data za pairs za cells hizo tu
+    cands, tested, days = search(pairs, a.tf, a.split, a.token, cycle=a.cycle, cells_override=override)
     apply_fdr = a.split in ("validation", "holdout")     # FDR = out-of-sample pekee (S2/S3)
     jl, rpt = write_outputs(cands, tested, a.split, a.tf, days, apply_fdr=apply_fdr, cycle=a.cycle)
     print(f"cycle={a.cycle} candidates={len(cands)} (cells tested={tested}) split={a.split}")

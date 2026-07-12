@@ -529,3 +529,34 @@ Soma kwanza: reports/data_science_review.md §B (designs kamili zimo — fuata R
      halt<66% @60-trade rolling; compute za STRAT-002 kwa framework ileile na uziandike KABLA
      forward data haijaongezeka).
 Zote self-tested, Windows-safe, Rule 8 reports. WAVE-2 baadaye: R3 rolling-origin folds, R8 ticks.
+
+=== WAVE-1 (2026-07-12) — IMEKAMILIKA (R1+R4+R5+R6) ===
+CURRENT TASK: **(inasubiri SCIENTIST-D referee + Chief review ya WAVE-1)** — sweep 21/21.
+R1 = GATE ya B-PRIME sequencing; deviation ya calibration inahitaji ridhaa ya referee (OQ#1).
+LAST COMPLETED: **WAVE-1** ✅ (designs za data_science_review §B):
+  R1: pvalue_boot (strategy_lab) — stationary block bootstrap (Politis-Romano) + NW studentization,
+    percentile-t, centered, seed=cell key. **DEVIATIONS 2 kwa EVIDENCE** (jedwali wave1_report.md):
+    mean_block=3 (sio ~10 — block averaging inameza skew ya t*: mb10 size 0.063-0.072 inashindwa
+    acceptance test ya design yenyewe) + NW denominator (i.i.d.-sd + block = distorted). mb=3+NW:
+    skew nulls 0.043-0.053 (~nominal; z 0.051-0.068) NA AR(rho.5) 0.058 (z 0.121). ENGINE SWAP
+    pre-registered kwa commit: FDR rasmi = p_boot; p_z = sensitivity column (two-column kila report);
+    --cells-file kwa restatement ya S3/S3b opened cells. Self-tests [7][8][9] PASS.
+  R4: portfolio_v0.py — analyze(): days-both-fire, hours-both-held (bounds), daily-PnL corr,
+    joint-DD vs sum, worst-joint-day vs FTMO$500; RULE pre-registered corr>0.4->halve. PASS 4/4.
+  R5: cost_stress.py — ev_spread_table (analytic; SASA kwenye kila strategy_lab report) +
+    spread_split (WIDE<0 -> DEPLOYMENT-policy skip, episodes() HAIJAGUSWA) + stop_slippage_percentile
+    (gold p95/2; Chief approval kabla ya cost-model change). PASS 4/4.
+  R6: winrate_monitor.py — registry pre-registered SASA: STRAT-001 REVIEW<70/HALT<66 @60;
+    **STRAT-002 REVIEW<54.0/HALT<50.0** (framework ileile: offsets +1.7/-2.3pp juu ya w_be);
+    posterior alarm (Beta prior kutoka holdout; SE ya POSTERIOR — interpretation note kwa referee);
+    paper-log adapter. PASS 6/6.
+  · SWEEP 21/21 PASS (episodes()/C1/C2 hazikuguswa). Rule 8: reports/wave1_report.md.
+NEXT: (1) SCIENTIST-D referee ya R1 calibration (mean_block=3+NW — OQ#1, BLOCKER ya S3-C2);
+(2) Operator: sensitivity restatement (--split validation + --cells-file S3/S3b) + R4 run + R5
+spread_split/gold runs; (3) baada ya referee -> S3-C2 registration (bootstrap p, reps 8, q=0.05,
+MDE screen, gold defer). WAVE-2 baadaye: R3 rolling folds, R8 ticks.
+OPEN QUESTIONS (ndani ya reports/wave1_report.md):
+  1. **BLOCKER:** R1 calibration (mb=3+NW vs design ~10) — referee/Chief.
+  2. Restatement run — Operator + runbook? (cells za S3 = holdout token, zimefunguliwa).
+  3. R6 alarm-line = posterior SE (sio rolling-60 flat — margin ya STRAT-002 5.5pp < SE@60 6.4pp).
+  4. R4 usd_per_pip=12 placeholder — worst-day $ na sizing halisi ya MWONGOZO.
