@@ -80,17 +80,51 @@ nr7×AUDUSD (4), shock×XAUUSD (2; +949!), nr7×EURJPY/USDJPY/GBPJPY. S3-C2 inas
    src/data!), microstructure, cross-pair — hazitumiki.
 10. Cumulative multiplicity across cycles juu ya validation ileile (garden of forking paths).
 
-## CURRENT TASK (ya kwanza)
-Soma kila kitu (access hapo juu) → andika **`reports/data_science_review.md`** (institutional
-review, kwa Kiingereza au Kiswahili — chagua ubora):
-  A. Tathmini huru ya methodology: nguvu + udhaifu, kila hoja na USHAHIDI wa namba kutoka
-     artifacts (recompute mwenyewe unapoweza — jsonl zote zipo).
-  B. Mapendekezo RANKED (impact × effort), kila moja na experiment design inayotekelezeka
-     kwa data/code zilizopo (Operator ndiye mwenye PC ya data; designs ziwe runnable).
-  C. OUT-OF-THE-BOX: mbinu za kisasa (mf. purged/embargoed CV, block bootstrap, deflated
-     Sharpe/PSR, White's Reality Check/SPA, regime-conditional evaluation, meta-labeling,
-     feature-importance gating, portfolio construction) — chambua NINI kina thamani HALISI
-     kwa mfumo HUU na kwa nini; si orodha ya buzzwords. Ukipinga doctrine yoyote — pinga
-     kwa hoja, kwenye ripoti; hilo ndilo jukumu lako.
-UKIMALIZA: update memory hii (last completed / findings kuu / open questions) + mwambie
-Operator: "tayari SCIENTIST-D".
+## LAST COMPLETED (2026-07-12): reports/data_science_review.md (review ya kwanza)
+Deliverables: `reports/data_science_review.md` (English, institutional) +
+`scripts/scientist_d_recompute.py` (inazalisha KILA namba ya ripoti kutoka git artifacts —
+hakuna dirisha lililoguswa). Verdicts ZOTE za BH-FDR zilithibitika kwa recomputation huru
+(C1 1/1939 · p11 1/2299 · C2H1 0/1068 · C2H4 30/1152 · S3b 3/5).
+
+### FINDINGS KUU (na namba)
+1. **P-VALUE ENGINE INA BIAS YA KIMUUNDO** (finding kubwa zaidi): normal-approx z-test ni
+   anti-conservative kwa negative-skew (high-win/small-TP): true size @0.05 = 6.1-7.0%
+   (×1.22-1.41) kwa SL2/TP1; conservative (×0.76) kwa TP3. Ushahidi kwenye artifacts: TP1.0
+   = 49% ya significant cells vs 24% ya grid; TP3 = 6% vs 26%. Mfumo unachagua structure
+   FRAGILE kwa sehemu kwa sababu ya artifact ya takwimu. Skew-corrected: STRAT-001 p
+   0.021→0.027 (bado PASS); SIB-1 0.049→0.058 (si significant nominal!); S3b verdict k=3
+   inasimama kwa margin ya 0.002 tu kwenye BH space. → R1: block bootstrap engine.
+2. **SHRINKAGE imepimwa**: C1 VALID→HOLDOUT (1,870 cells joined): bucket p<0.01 EV +3.57→+1.42
+   (−60%); p 0.01-0.05 −75%; OLS slope 0.346. C2-H4 survivors median VALID/TRAIN = 2.1×
+   (XAU hadi 41×) = regime ya 2023-24. Tegemeo la S3-C2: survivor EV itapungua nusu-⅔.
+3. **WINDOW 2023-24 imechimbwa mara 4**: cells 4,519 distinct na p-values (1939+360+1068+1152),
+   FDR per-run kamwe si global; C2 hypothesis-formation ilijua matokeo ya holdout ya nr7 →
+   "dirisha bikira" la H4 2025-26 ni CONFIRMATION ya familia inayojulikana, si discovery.
+4. **UCHUMI MWEMBAMBA**: STRAT-001 costs = 36% ya gross; +0.5 pip widening = −26% ya net edge;
+   win-margin 2.2 SE. STRAT-002: 16%/19%/2.0 SE. Hakuna spread stress, hakuna control chart.
+5. **Correlation structure**: C1 = 1,939 cells / 110 combos (~17.6 cells/combo → effective m
+   ndogo sana; B3a "FDR-TAX 87" = artifact ya m iliyovimba); C2 survivors 30 = groups 8.
+6. **Power**: S3c ilihitaji N 2.2-2.6×; SIB-5 3.0× — foreseeable ex-ante; MDE rule inahitajika.
+
+### MAPENDEKEZO RANKED (R1-R8 kwenye ripoti; designs runnable ndani)
+R1 bootstrap p-engine + re-state S3/S3b (HIGH/LOW) · R2 S3-C2 family-level m=8, q=0.05 kwa
+tainted families, bootstrap p, forward deployment gate, shrunken-EV≥MDE (HIGH/LOW — ndiyo
+pendekezo langu kwa uamuzi wa PD unaosubiri: Option B yenye masharti) · R3 rolling-origin
+yearly folds 2016-24 kwa families (HIGH/MED) · R4 portfolio v0: overlap/corr/joint-DD ya
+STRAT-001+002 (HIGH/LOW) · R5 cost stress + WIDE-state + gold cost model (MED/LOW) ·
+R6 win-rate CUSUM control chart pre-registered (MED/LOW) · R7 MDE registration rule (MED/TRIV) ·
+R8 tick-density compression features = minimal meta-labeling + K4 (MED/MED-HIGH).
+Methods triage: Romano-Wolf/SPA + stationary bootstrap = YES kuu; PSR/DSR partial (idea si
+formalism); CPCV overkill (rolling-origin inatosha); meta-labeling minimal-form baadaye;
+HRP/deep/genetic = NO kwa sasa. Doctrine challenges 4: "walk-forward" jina si sahihi; "m=cells"
+si honesty ni power leak; one-shot holdout = regime draw moja (dai interval estimates + forward
+tranche); q=0.10 per-run kwenye window iliyotumika si guarantee mpya.
+
+### OPEN QUESTIONS (za mzunguko ujao)
+- Je, S3b ingesimama chini ya exact bootstrap p (pnls halisi, si two-point approx)? (R1 itajibu
+  — cells zimeshafunguliwa, ni halali.) Two-point null yangu inapuuza timeout exits (inaelekea
+  ku-overstate correction kidogo).
+- Trade-time overlap ya STRAT-001 vs 002 (R4) — hakuna mtu anayejua leo.
+- XAUUSD cost model (spread halisi ya ticks) kabla ya registration yoyote ya gold.
+- DST jitter ya session boundaries (±1h) — robustness check ndogo.
+- Kama S3-C2 itaendeshwa kwa m=30 cell-level badala ya m=8 family-level: plateau double-count.
