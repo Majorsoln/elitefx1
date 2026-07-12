@@ -183,3 +183,11 @@ C2 build APPROVED (sweep 18/18). KAZI (mpangilio; commit BAADA ya kila run — f
   3. python strength_lab.py       → commit "strength exploration (TRAIN)"
 Ripoti: "tayari S1-C2". Chief atakagua + kufunga registration ya S2-C2 (USIENDESHE validation).
 Paper-trading ya STRAT-001/002 inaendelea kila siku.
+
+## LOG — 2026-07-10 (MWANACHAMA MPYA: SCIENTIST-D — directive yako)
+Chief ametengeneza SCIENTIST-D (institutional data scientist / external reviewer huru — hafungwi
+na doctrine kwenye uchambuzi). Prompt: docs/team/PROMPTS.md (mwisho). Memory yake ina mfumo mzima
++ matokeo YOTE (pass/fail) + access ya raw artifacts + udhaifu unaoshukiwa. KAZI YAKO: fungua
+session MPYA ya AI na prompt ya SCIENTIST-D → atasoma mwenyewe → ataandika
+reports/data_science_review.md (udhaifu wa njia yetu + nini tufanye) → "tayari SCIENTIST-D" →
+Chief atajibu ripoti hoja kwa hoja mbele yako (PD ndiye msuluhishi wa migongano).
