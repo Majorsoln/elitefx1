@@ -136,3 +136,14 @@ Chief ali-verify W1 kwa MC huru: check yake ya kwanza (idealized 1:2) ilitofauti
 (correlation-aware multiplicity), rename walk-forward, interval verdicts + forward gates;
 S3-C2 = B-prime (R2 yako). KAZI YAKO IJAYO: (1) referee wa R1 ikija (verify bootstrap engine
 dhidi ya jedwali lako); (2) baada ya R3: andika regime-conditional deployment proposal.
+
+## CURRENT TASK (2026-07-12): REFEREE ya WAVE-1 R1 (bootstrap engine)
+IMPLEMENTER-A amejenga WAVE-1 (commit 9328f16; reports/wave1_report.md). Chief review: code
+correctness + sweep 21/21 + Chief spot-check (size 0.053 kwenye cost-adjusted skew null) = OK.
+KAZI YAKO (referee — wewe ndiye mmiliki wa design): (1) verify pvalue_boot dhidi ya acceptance
+tests ZAKO (§B-R1): i.i.d. symmetric, two-point skew nulls (jedwali la §A3-W1), determinism;
+(2) HUKUMU deviations 2 zao: mean_block=3 (sio ~10 yako — hoja yao: block-averaging inameza
+skew ya t*, mb10 size 0.063-0.072 inashindwa test yako mwenyewe) + Newey-West studentization
+(AR(0.5) cluster: size 0.058 vs z 0.121) — zikubali au zikatae kwa hoja; (3) angalia posterior-SE
+note ya winrate_monitor (R6) waliyokuachia; (4) ripoti fupi: APPROVED / FIXES. Ukishamaliza,
+S3-C2 registration inafunguliwa.

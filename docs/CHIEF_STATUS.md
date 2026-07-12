@@ -402,3 +402,14 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   gold cost model (R5); (4) one-shot dirisha bikira H4 2025-01→2026-04, BH q=0.05 m=(waliobaki
   baada ya MDE screen), EV>0; (5) survivors = PROVEN-OOS-PROVISIONAL → forward tranche kabla ya
   paper-portfolio kamili. R4/R5/R6 zinaenda sambamba na hilo.
+
+- **2026-07-12 — WAVE-1 DELIVERED (IMPLEMENTER-A) + CHIEF REVIEW: OK; referee = SCIENTIST-D.**
+  R1 pvalue_boot (stationary bootstrap + Newey-West, percentile-t, seed=cell; ENGINE SWAP
+  pre-registered kwa commit KABLA ya dirisha jipya; p_z inabaki sensitivity column) — na
+  DEVIATIONS 2 kwa ushahidi (mb=3 sio 10: mb10 ilishindwa acceptance ya design; +NW kwa AR
+  clustering 0.058 vs z 0.121). CHIEF SPOT-CHECK HURU: size 0.053 kwenye cost-adjusted skew
+  null (z=0.061) — inapima kwa haki. R4 portfolio_v0 (rule corr>0.4→halve, pre-registered) ·
+  R5 cost_stress (EV(Δspread) kila report; WIDE-split → deployment-policy tu; gold p95/2
+  slippage inasubiri approval) · R6 winrate_monitor (thresholds PRE-REGISTERED: STRAT-001
+  70/66 @60; STRAT-002 54.0/50.0). Sweep 21/21; episodes()/artifacts hazikuguswa. INAYOFUATA:
+  SCIENTIST-D referee ya R1 (deviations = hukumu yake) → S3-C2 registration.
