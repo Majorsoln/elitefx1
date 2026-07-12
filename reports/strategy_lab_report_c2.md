@@ -1,6 +1,6 @@
 # Strategy Lab — cycle-2 candidates (TRAIN)
 
-*2026-07-10 23:35 | cycle=2 | TF=H4 | split=train | cells tested=1056 | candidates (N>=30)=1056 | costs ndani (episodes) | RANK=population view*
+*2026-07-12 17:12 | cycle=2 | TF=H1 | split=train | cells tested=1152 | candidates (N>=30)=1128 | costs ndani (episodes) | RANK=population view*
 
 > **UAMINIFU:** hizi ni CANDIDATES, SIO strategies. TRAIN=in-sample; uthibitisho = S2 (walk-forward VALIDATION + BH-FDR) na S3 (HOLDOUT, mara moja). RED LINES: hakuna kuchagua kwa holdout; hakuna metric bila costs. LESSON-001/002/029/033/034. Profitable != Tradable Edge.
 
@@ -9,45 +9,45 @@
 
 | event | pair | SL | TP | session | vol | N | EV net | win% | PF | maxDD | tr/day |
 |-------|------|----|----|---------|-----|---|--------|------|----|-------|--------|
-| nr4_inside | GBPJPY | 2.0 | 3.0 | no-LATE | None | 351 | +18.306 | 47.6 | 1.345 | 2095.4 | 0.16 |
-| nr4_inside | GBPJPY | 1.5 | 3.0 | no-LATE | None | 386 | +16.172 | 41.7 | 1.34 | 1408.7 | 0.18 |
-| nr4_inside | GBPUSD | 1.5 | 3.0 | no-LATE | None | 421 | +14.323 | 42.8 | 1.396 | 650.7 | 0.23 |
-| nr7_break | GBPUSD | 2.0 | 3.0 | no-LATE | None | 459 | +13.977 | 50.8 | 1.341 | 1224.3 | 0.25 |
-| nr7_break | GBPUSD | 1.5 | 3.0 | no-LATE | None | 504 | +13.601 | 43.9 | 1.38 | 1140.7 | 0.28 |
-| nr7_break | GBPJPY | 1.5 | 2.0 | no-LATE | None | 538 | +12.988 | 49.8 | 1.322 | 1187.8 | 0.25 |
-| nr7_break | GBPUSD | 1.5 | 3.0 | None | None | 516 | +13.005 | 43.6 | 1.36 | 1069.8 | 0.28 |
-| nr7_break | GBPJPY | 1.5 | 3.0 | no-LATE | None | 466 | +12.925 | 40.6 | 1.278 | 1387.1 | 0.21 |
-| nr7_break | GBPJPY | 1.0 | 3.0 | no-LATE | None | 518 | +12.283 | 32.8 | 1.327 | 1108.2 | 0.24 |
-| nr7_break | GBPJPY | 1.5 | 1.0 | no-LATE | None | 632 | +11.894 | 69.8 | 1.482 | 758.6 | 0.29 |
-| nr7_break | GBPJPY | 1.0 | 2.0 | no-LATE | None | 579 | +11.680 | 41.1 | 1.352 | 985.8 | 0.27 |
-| nr4_inside | GBPJPY | 2.0 | 2.0 | no-LATE | None | 389 | +12.448 | 55.3 | 1.267 | 1974.2 | 0.18 |
-| nr7_break | GBPUSD | 2.0 | 3.0 | None | None | 462 | +12.042 | 50.0 | 1.287 | 1131.9 | 0.25 |
-| nr7_break | GBPJPY | 2.0 | 3.0 | no-LATE | None | 434 | +12.089 | 45.4 | 1.225 | 1767.3 | 0.20 |
-| nr4_inside | GBPUSD | 2.0 | 3.0 | no-LATE | None | 389 | +12.167 | 47.3 | 1.289 | 900.6 | 0.21 |
-| nr7_break | GBPJPY | 1.5 | 1.5 | no-LATE | None | 580 | +10.885 | 56.9 | 1.313 | 964.0 | 0.27 |
-| nr7_break | GBPJPY | 1.0 | 1.5 | no-LATE | None | 614 | +10.460 | 48.5 | 1.363 | 505.2 | 0.28 |
-| nr4_inside | GBPJPY | 1.5 | 2.0 | no-LATE | None | 422 | +10.905 | 48.8 | 1.261 | 1216.4 | 0.19 |
-| nr7_break | GBPJPY | 2.0 | 2.0 | no-LATE | None | 505 | +10.562 | 54.1 | 1.224 | 1537.6 | 0.23 |
-| nr7_break | GBPJPY | 1.0 | 3.0 | None | None | 613 | +10.011 | 32.5 | 1.258 | 1112.5 | 0.28 |
-| nr7_break | GBPJPY | 1.0 | 1.0 | no-LATE | None | 658 | +9.794 | 60.6 | 1.441 | 413.9 | 0.30 |
-| nr7_break | GBPUSD | 1.0 | 3.0 | None | None | 586 | +9.754 | 33.8 | 1.333 | 986.0 | 0.32 |
-| nr7_break | GBPJPY | 1.0 | 2.0 | None | None | 693 | +9.446 | 40.6 | 1.272 | 969.0 | 0.32 |
-| nr7_break | AUDUSD | 2.0 | 2.0 | no-LATE | None | 447 | +9.856 | 61.1 | 1.474 | 519.4 | 0.24 |
-| nr7_break | GBPUSD | 1.5 | 2.0 | no-LATE | None | 578 | +9.399 | 50.0 | 1.297 | 772.4 | 0.32 |
-| nr7_break | GBPJPY | 2.0 | 1.0 | no-LATE | None | 613 | +9.288 | 72.9 | 1.322 | 1168.5 | 0.28 |
-| nr7_break | AUDUSD | 1.5 | 3.0 | no-LATE | None | 407 | +9.835 | 45.7 | 1.439 | 703.7 | 0.22 |
-| nr7_break | GBPUSD | 1.5 | 2.0 | None | None | 594 | +9.097 | 50.2 | 1.285 | 782.3 | 0.33 |
-| nr7_break | EURJPY | 1.0 | 3.0 | no-LATE | None | 469 | +9.409 | 35.2 | 1.353 | 1075.0 | 0.26 |
-| nr7_break | EURJPY | 1.5 | 1.5 | no-LATE | None | 518 | +9.088 | 58.5 | 1.365 | 540.3 | 0.28 |
-| nr4_inside | GBPUSD | 1.0 | 3.0 | no-LATE | None | 467 | +9.122 | 31.9 | 1.306 | 554.1 | 0.26 |
-| nr7_break | EURJPY | 1.0 | 1.5 | no-LATE | None | 561 | +8.816 | 50.8 | 1.433 | 537.7 | 0.31 |
-| nr4_inside | GBPJPY | 2.0 | 1.5 | no-LATE | None | 415 | +9.169 | 61.5 | 1.225 | 1481.9 | 0.19 |
-| nr7_break | EURJPY | 1.5 | 2.0 | no-LATE | None | 461 | +8.981 | 51.6 | 1.312 | 788.0 | 0.25 |
-| nr7_break | GBPUSD | 1.0 | 3.0 | no-LATE | None | 575 | +8.648 | 33.0 | 1.293 | 1049.6 | 0.32 |
-| nr7_break | EURUSD | 2.0 | 3.0 | no-LATE | None | 455 | +8.960 | 48.6 | 1.308 | 580.0 | 0.25 |
-| nr4_inside | GBPUSD | 1.5 | 3.0 | None | None | 456 | +8.899 | 40.4 | 1.233 | 1124.9 | 0.25 |
-| nr7_break | AUDUSD | 1.0 | 3.0 | no-LATE | None | 440 | +8.946 | 37.0 | 1.497 | 522.4 | 0.24 |
-| nr7_break | EURUSD | 1.0 | 3.0 | no-LATE | None | 541 | +8.623 | 33.6 | 1.43 | 474.6 | 0.30 |
-| squeeze_break | EURJPY | 2.0 | 3.0 | None | None | 232 | +9.957 | 50.4 | 1.285 | 998.2 | 0.13 |
+| gap_fade | XAUUSD | 1.5 | 2.0 | None | None | 78 | +153.246 | 53.8 | 1.614 | 3898.3 | 0.04 |
+| gap_fade | XAUUSD | 1.5 | 3.0 | None | None | 77 | +147.870 | 45.5 | 1.496 | 5362.6 | 0.04 |
+| gap_fade | XAUUSD | 1.0 | 3.0 | None | None | 77 | +146.367 | 36.4 | 1.581 | 3317.1 | 0.04 |
+| gap_fade | XAUUSD | 2.0 | 2.0 | None | None | 78 | +133.361 | 57.7 | 1.467 | 4123.3 | 0.04 |
+| gap_fade | XAUUSD | 1.0 | 2.0 | None | None | 78 | +130.425 | 43.6 | 1.604 | 2653.1 | 0.04 |
+| gap_fade | XAUUSD | 2.0 | 3.0 | None | None | 77 | +121.330 | 49.4 | 1.349 | 5402.4 | 0.04 |
+| gap_fade | XAUUSD | 1.5 | 1.5 | None | None | 79 | +118.653 | 59.5 | 1.52 | 3898.3 | 0.04 |
+| gap_fade | XAUUSD | 1.0 | 1.5 | None | None | 79 | +109.424 | 49.4 | 1.562 | 2653.1 | 0.04 |
+| gap_fade | XAUUSD | 2.0 | 1.5 | None | None | 79 | +108.203 | 64.6 | 1.422 | 4123.3 | 0.04 |
+| gap_fade | XAUUSD | 1.5 | 2.0 | no-LATE | None | 75 | +104.128 | 53.3 | 1.407 | 3898.3 | 0.03 |
+| gap_fade | XAUUSD | 1.0 | 2.0 | no-LATE | None | 75 | +89.254 | 44.0 | 1.41 | 2653.1 | 0.03 |
+| gap_fade | XAUUSD | 2.0 | 2.0 | no-LATE | None | 75 | +84.620 | 57.3 | 1.29 | 4123.3 | 0.03 |
+| gap_fade | XAUUSD | 1.5 | 1.5 | no-LATE | None | 76 | +83.739 | 59.2 | 1.359 | 3898.3 | 0.04 |
+| gap_fade | XAUUSD | 1.0 | 1.5 | no-LATE | None | 76 | +81.240 | 50.0 | 1.415 | 2653.1 | 0.04 |
+| gap_fade | XAUUSD | 1.0 | 3.0 | no-LATE | None | 74 | +78.019 | 36.5 | 1.305 | 3317.1 | 0.03 |
+| gap_fade | XAUUSD | 2.0 | 1.5 | no-LATE | None | 76 | +74.035 | 64.5 | 1.283 | 4123.3 | 0.04 |
+| gap_fade | XAUUSD | 1.5 | 1.0 | None | None | 79 | +69.870 | 68.3 | 1.379 | 4141.9 | 0.04 |
+| gap_fade | XAUUSD | 1.5 | 3.0 | no-LATE | None | 74 | +67.214 | 44.6 | 1.22 | 5362.6 | 0.03 |
+| gap_fade | XAUUSD | 1.0 | 1.0 | None | None | 79 | +61.025 | 58.2 | 1.371 | 2653.1 | 0.04 |
+| gap_fade | XAUUSD | 1.5 | 1.0 | no-LATE | None | 76 | +47.956 | 68.4 | 1.255 | 4141.9 | 0.04 |
+| gap_fade | XAUUSD | 2.0 | 1.0 | None | None | 79 | +45.977 | 70.9 | 1.215 | 4123.3 | 0.04 |
+| gap_fade | XAUUSD | 1.0 | 1.0 | no-LATE | None | 76 | +44.204 | 59.2 | 1.269 | 2653.1 | 0.04 |
+| gap_fade | XAUUSD | 2.0 | 3.0 | no-LATE | None | 74 | +40.788 | 48.6 | 1.114 | 5402.4 | 0.03 |
+| gap_fade | XAUUSD | 2.0 | 1.0 | no-LATE | None | 76 | +24.277 | 71.0 | 1.112 | 4123.3 | 0.04 |
+| nr4_inside | USDJPY | 2.0 | 2.0 | no-LATE | None | 1,196 | +2.296 | 54.5 | 1.163 | 718.4 | 0.66 |
+| nr4_inside | USDJPY | 1.5 | 2.0 | no-LATE | None | 1,252 | +2.156 | 48.1 | 1.171 | 874.8 | 0.69 |
+| nr4_inside | EURJPY | 1.5 | 3.0 | no-LATE | None | 1,080 | +2.171 | 40.0 | 1.126 | 933.1 | 0.59 |
+| london_drift | USDJPY | 2.0 | 2.0 | None | None | 1,654 | +1.889 | 51.7 | 1.134 | 827.1 | 0.91 |
+| london_drift | USDJPY | 2.0 | 2.0 | no-LATE | None | 1,654 | +1.889 | 51.7 | 1.134 | 827.1 | 0.91 |
+| nr4_inside | USDJPY | 2.0 | 3.0 | no-LATE | None | 1,104 | +1.963 | 46.5 | 1.121 | 928.5 | 0.60 |
+| nr4_inside | EURJPY | 2.0 | 3.0 | no-LATE | None | 1,024 | +1.762 | 45.4 | 1.089 | 1543.6 | 0.56 |
+| london_drift | USDJPY | 2.0 | 3.0 | None | None | 1,504 | +1.618 | 44.0 | 1.101 | 1424.0 | 0.82 |
+| london_drift | USDJPY | 2.0 | 3.0 | no-LATE | None | 1,504 | +1.618 | 44.0 | 1.101 | 1424.0 | 0.82 |
+| nr4_inside | USDJPY | 1.5 | 3.0 | no-LATE | None | 1,162 | +1.640 | 40.3 | 1.114 | 1079.3 | 0.64 |
+| london_drift | USDJPY | 1.5 | 3.0 | None | None | 1,610 | +1.524 | 38.1 | 1.107 | 1411.6 | 0.88 |
+| london_drift | USDJPY | 1.5 | 3.0 | no-LATE | None | 1,610 | +1.524 | 38.1 | 1.107 | 1411.6 | 0.88 |
+| london_drift | USDJPY | 1.5 | 2.0 | None | None | 1,727 | +1.481 | 45.6 | 1.117 | 742.2 | 0.95 |
+| london_drift | USDJPY | 1.5 | 2.0 | no-LATE | None | 1,727 | +1.481 | 45.6 | 1.117 | 742.2 | 0.95 |
+| nr4_inside | AUDUSD | 2.0 | 3.0 | no-LATE | None | 982 | +1.571 | 45.7 | 1.115 | 718.0 | 0.54 |
+| nr4_inside | USDJPY | 1.0 | 2.0 | no-LATE | None | 1,334 | +1.363 | 37.6 | 1.131 | 1064.4 | 0.73 |
 
 *S1 = candidates -> S2 walk-forward+FDR -> S3 holdout. Chief directive + GRID RULING.*
