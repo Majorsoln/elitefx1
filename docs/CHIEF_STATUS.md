@@ -413,3 +413,16 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   slippage inasubiri approval) · R6 winrate_monitor (thresholds PRE-REGISTERED: STRAT-001
   70/66 @60; STRAT-002 54.0/50.0). Sweep 21/21; episodes()/artifacts hazikuguswa. INAYOFUATA:
   SCIENTIST-D referee ya R1 (deviations = hukumu yake) → S3-C2 registration.
+
+- **2026-07-12 — REFEREE (SCIENTIST-D): R1 APPROVED.** Deviations 2 (mb=3 + Newey-West)
+  zimekubaliwa kwa MC huru ya referee (implementations zake mwenyewe; pvalue_boot ya
+  IMPLEMENTER-A haikuguswa): skew nulls z=0.062/0.071 inarudi HASA, boot=0.050 nominal;
+  verbatim design yake ya awali (mb10) inashindwa test yake mwenyewe (0.0697) — "implementer
+  sahihi". Isolation imeonyeshwa: blocks ndogo=skew fix, NW=dependence fix (AR0.5: 0.098→0.068).
+  R6 posterior-SE note CONFIRMED. Conditions 3 non-blocking: B=50k kwa registered cells kwenye
+  hukumu za mwisho; restatement isiclobber artifacts za awali + m-sensitivity note; lag-1
+  autocorr iwe observable. **S3-C2 REGISTRATION: UNLOCKED.** Hatua: (1) Operator: re-run
+  S2-C2 H4 validation kwa engine mpya (restatement rasmi — survivors watapangwa upya kwa
+  p_boot; inaweza kutofautiana na 30 wa z-test); (2) Chief: groups → reps mechanical (best
+  p_boot per group, TRAIN EV>0) + MDE screen (shrunken ×0.35-0.5) + GOLD DEFERRED (cost model
+  ya R5 inasubiri spread run ya Operator) → FREEZE; (3) one-shot q=0.05.
