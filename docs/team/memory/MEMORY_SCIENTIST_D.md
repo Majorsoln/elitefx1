@@ -137,13 +137,38 @@ Chief ali-verify W1 kwa MC huru: check yake ya kwanza (idealized 1:2) ilitofauti
 S3-C2 = B-prime (R2 yako). KAZI YAKO IJAYO: (1) referee wa R1 ikija (verify bootstrap engine
 dhidi ya jedwali lako); (2) baada ya R3: andika regime-conditional deployment proposal.
 
-## CURRENT TASK (2026-07-12): REFEREE ya WAVE-1 R1 (bootstrap engine)
-IMPLEMENTER-A amejenga WAVE-1 (commit 9328f16; reports/wave1_report.md). Chief review: code
-correctness + sweep 21/21 + Chief spot-check (size 0.053 kwenye cost-adjusted skew null) = OK.
-KAZI YAKO (referee — wewe ndiye mmiliki wa design): (1) verify pvalue_boot dhidi ya acceptance
-tests ZAKO (§B-R1): i.i.d. symmetric, two-point skew nulls (jedwali la §A3-W1), determinism;
-(2) HUKUMU deviations 2 zao: mean_block=3 (sio ~10 yako — hoja yao: block-averaging inameza
-skew ya t*, mb10 size 0.063-0.072 inashindwa test yako mwenyewe) + Newey-West studentization
-(AR(0.5) cluster: size 0.058 vs z 0.121) — zikubali au zikatae kwa hoja; (3) angalia posterior-SE
-note ya winrate_monitor (R6) waliyokuachia; (4) ripoti fupi: APPROVED / FIXES. Ukishamaliza,
-S3-C2 registration inafunguliwa.
+## COMPLETED (2026-07-12): REFEREE ya WAVE-1 R1 — VERDICT: **APPROVED**, deviations 2 ACCEPTED
+Deliverables: `reports/wave1_referee_report.md` + `scripts/scientist_d_referee_r1.py` (MC huru:
+nulls ZANGU + variant implementations zangu, ikiita pvalue_boot yao bila kubadilisha; hakuna
+dirisha la data). Matokeo muhimu (yote kwenye script, seeds fixed):
+- **Acceptance zote PASS kwa engine rasmi (mb3+NW):** sym i.i.d. boot 0.0533 ≈ z 0.0537,
+  |diff| 0.021; skew nulls za §A3-W1: z 0.0620/0.0710 (jedwali langu linarudi HASA), boot
+  **0.0500/0.0497** (nominal); pos-skew N=70: z 0.0397→boot 0.0487 (inarekebisha pande zote
+  mbili); determinism bit-identical ✅.
+- **Deviation (i) mb=3 (sio ~10): NILIKUBALI — implementer yuko sahihi.** Verbatim design YANGU
+  (mb10+iid-sd) inashindwa acceptance test yangu mwenyewe: size 0.0697 @N=100 (claim yao 0.072
+  imethibitika); hata mb10+NW 0.0660 ✗. "~10" yangu ilikuwa intuition ya N≳300; b~n^(1/3) → 3-5
+  kwa N=100-300. Mechanism story yao ("block-averaging inameza skew") si sahihi kikamilifu
+  kinadharia (mean* isiyo-studentized inabaki na skew ~γ/√n) — lakini effect kwenye studentized
+  t* ni halisi na ya maamuzi (~10 resampling units tu @N=100).
+- **Deviation (ii) NW studentization: NILIKUBALI.** Isolation: blocks ndogo → skew fix
+  (mb3+iid 0.0517 kwenye skew); NW → dependence fix (AR0.5: mb3+iid 0.0977 → mb3+NW 0.0680).
+  Residual documented: 0.068 @ρ=0.5, 0.095 @ρ=0.7 (vs z 0.17/0.25) — si defect, ni property;
+  §4.3 inaifanya observable. Power price: 0.670 vs z 0.723 @N=303 (STRAT-001 alternative) —
+  ~5pp, bei ya haki ya kuondoa size bias ×1.2-1.4.
+- **R6 posterior-SE note: CONFIRMED na ZAIDI ya walivyodai** — flat SE@60 ingevunja STRAT-001
+  PIA (line 74.31% > holdout 73.9%), si STRAT-002 tu (58.75% > 57.8%). Trade-off: prior nzito →
+  statistical alarm polepole kwa abrupt decay (45% true win: hakuna alarm @60 fwd, inafira ~120)
+  — inafunikwa na rolling hard thresholds (HALT<50 inafira mara moja). Complementary; sawa.
+- **Conditions 3 (non-blocking):** (1) B=50,000 kwa cells ≤8 za registration (resolution ±0.002
+  vs knife-edge ya 0.002; iandikwe kwenye registration KABLA ya dirisha); (2) restatement
+  isiclobber canonical outputs (--cells-file inaandika kwenye candidates{suffix}.jsonl ileile —
+  scratch checkout au --out-tag; FDR line yake = SENSITIVITY, m=|cells|, kamwe si verdict);
+  (3) restatement iprint lag-1 autocorr ya PnL kila cell; |ρ₁|>0.3 → recalibrate mb + jedwali
+  jipya la skew-size.
+- **S3-C2 registration IMEFUNGULIWA kutoka upande wangu** (B-PRIME sequencing).
+
+## CURRENT TASK (baada ya hapa): (1) verify S3/S3b sensitivity restatement ikija (two-column
+p table — je, S3b k=3 inasimama chini ya exact bootstrap p? Open question yangu ya kwanza);
+(2) referee wa S3-C2 registration text (B=50k imo? MDE screen + shrunken forecasts?);
+(3) baada ya R3 (WAVE-2): andika regime-conditional deployment proposal.
