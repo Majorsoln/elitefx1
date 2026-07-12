@@ -426,3 +426,21 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   p_boot; inaweza kutofautiana na 30 wa z-test); (2) Chief: groups → reps mechanical (best
   p_boot per group, TRAIN EV>0) + MDE screen (shrunken ×0.35-0.5) + GOLD DEFERRED (cost model
   ya R5 inasubiri spread run ya Operator) → FREEZE; (3) one-shot q=0.05.
+
+- **2026-07-12 — S3-C2 RULING (mechanical, kwa kanuni za B-prime): REGISTRATION HAIFANYIKI —
+  dirisha bikira la H4 LIMEHIFADHIWA.** Restatement (p_boot rasmi): survivors 30→**12** (18 wa
+  z-test walikuwa artifact ya skew — utabiri wa W1 umetimia kwenye data yetu wenyewe). **GOLD
+  IMETOWEKA KABISA:** makundi ya XAUUSD (nr7 +319, shock +949) HAYAKUSALIA p_boot — namba za
+  kuvutia zaidi za C2 zilikuwa artifact ya skew + regime ya 2023-24 (LESSON kubwa). Makundi 4
+  yaliyobaki (nr4×GBPJPY 5 cells, nr7×EURGBP 4, nr7×EURJPY 2, nr7×AUDUSD 1; wote TRAIN EV>0).
+  **MDE SCREEN (sd kutoka payoff structure; N_exp kutoka trades/day × 347):** kwa shrink 0.35
+  (ncha conservative ya rule ya B-prime) — **4/4 FAIL** (GBPJPY 15.2<16.8 · EURGBP 1.8<2.4 ·
+  EURJPY 9.6<17.7 · AUDUSD 5.0<9.1). Kwa 0.5, wawili wangepita — LAKINI kuchagua 0.5 BAADA ya
+  kuona kwamba inawapitisha = post-hoc selection (dhambi ileile tunayoikataza); range 0.35-0.5
+  iliachwa wazi kwenye registration — azimio la uaminifu: ncha conservative INAFUNGA. **HUKUMU:
+  hakuna one-shot leo; dirisha bikira linabaki BIKIRA; makundi 4 = C2-WATCH.** Njia mbili mbele:
+  (a) forward window inakua (data 2026-05+ kila mwezi) hadi N itoshe; (b) SCIENTIST-D apewe
+  design ya FAMILY-POOLED test (ATR/R-normalized across pairs — N_exp pooled ~341 inatosha) —
+  registration mpya + referee KABLA ya dirisha lolote. Uzito wa siku: mfumo ULIKATAA kujidanganya
+  mara ya pili leo — kwanza kwa engine, sasa kwa power arithmetic. Portfolio inabaki
+  STRAT-001/002; R3 (rolling folds) inapanda kipaumbele.

@@ -172,3 +172,12 @@ dirisha la data). Matokeo muhimu (yote kwenye script, seeds fixed):
 p table — je, S3b k=3 inasimama chini ya exact bootstrap p? Open question yangu ya kwanza);
 (2) referee wa S3-C2 registration text (B=50k imo? MDE screen + shrunken forecasts?);
 (3) baada ya R3 (WAVE-2): andika regime-conditional deployment proposal.
+
+## CURRENT TASK (2026-07-12): DESIGN ya FAMILY-POOLED HOLDOUT TEST (C2-WATCH groups 4)
+MDE screen (rule YAKO) ilikataa registration ya makundi yote 4 kwa per-cell power (rekodi:
+CHIEF_STATUS 2026-07-12; shrink 0.35 = binding kwa azimio la anti-post-hoc). Kazi: design ya
+test MOJA ya familia "compression-H4 works OOS" — trades za reps 4 (nr4×GBPJPY, nr7×EURGBP,
+nr7×EURJPY, nr7×AUDUSD) zikiunganishwa na NORMALIZATION sahihi (R-units au ATR-units — pips
+hazilingani across pairs), bootstrap p moja (m=1), MDE arithmetic ya pooled (N_exp~341).
+Andika design kamili (acceptance tests included) — Chief ata-register KABLA ya dirisha kufunguliwa.
+NB: GOLD groups zimetoweka kwenye p_boot (skew artifact) — usizijumuishe.
