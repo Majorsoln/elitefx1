@@ -346,3 +346,22 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   BH-FDR q=0.10 kwa kila run (m=cells tested) NA EV>0; hakuna mabadiliko ya code/grid kati
   ya sasa na hukumu; survivors → mchakato wa S3-C2 (dirisha la OOS litapangwa kwa kanuni za
   uadilifu zilizopo: compression/shock → 2026-05+/forward; wengine wanaweza 2025+ bikira).
+
+- **2026-07-10 — S2-C2 VERDICT: H1 = 0/1,068 (events mpya za H1 zimekufa FDR — kifo cha heshima,
+  LESSONS) · H4 = SURVIVORS 30/1,152 (kwa bahati ~3 → ~27 halisi).** Muundo wa survivors:
+  makundi 8 ya (event×pair), YOTE compression/shock kwenye H4, karibu yote no-LATE, na **TRAIN
+  coherence 30/30 (kila survivor ana TRAIN EV>0)**:
+    nr7×EURGBP (plateau 8): TRAIN +3.5..+4.6 → VALID +5.1..+5.8, win 75-82% (uthabiti safi)
+    nr4×GBPJPY (plateau 7): TRAIN +8..+11 → VALID +41..+49 (VALID moto — shrinkage inatarajiwa)
+    nr7×XAUUSD (4): TRAIN +8..+51 → VALID +319..+325 (GOLD mara ya kwanza — bull ya 2023-24;
+      shrinkage inatarajiwa) · shock×XAUUSD (2): VALID +949, TRAIN +155
+    nr7×AUDUSD (4), nr7×EURJPY (2), nr7×USDJPY (2), nr7×GBPJPY (1)
+  TAHADHARI: VALID>>TRAIN kwa GBPJPY/gold = sehemu ni regime ya 2023-24; S3-C2 ndiyo hukumu.
+  **UAMUZI WA PD UNAOSUBIRIWA (S3-C2 window):** kanuni frozen (0e45f73) inasema compression/
+  shock → 2026-05+/forward TU (knowledge-leak guard ya Chief). HOJA ya amendment: uchaguzi wa
+  S2-C2 ulikuwa MECHANICAL (BH-FDR, si hiari ya Chief) → leak haikuweza kuelekeza uchaguzi;
+  dirisha la H4 2025-01→2026-04 ni BIKIRA (halijawahi kuhesabiwa na yeyote); kwa ~0.2-0.35
+  tr/day, miezi 16 inatoa N≈100-170 kwa kila cell (inatosha). OPTION A = heshimu kanuni kama
+  ilivyo (subiri data 2026-05+ + forward — miezi kadhaa). OPTION B (pendekezo la Chief) =
+  amendment yenye disclosure: one-shot ya survivors 30 pre-registered kwenye dirisha bikira
+  la H4 2025-01→2026-04, BH-FDR q=0.10 m=30 NA EV>0.
