@@ -492,3 +492,23 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   (Operator, data halisi) → exact EV_R/sd_R → screen shrink 0.35 kwa N_exp=341. PASS → Chief
   freeze registration → one-shot. FAIL → stop, document becomes LESSON (S3c-style, dirisha bikira
   halijaguswa).
+
+- **2026-07-13 — S3-C2 FAMILY-POOLED: DRY-RUN SCREEN PASS → REGISTRATION FROZEN (Chief §8.4).**
+  Dry-run VALIDATION (data halisi): pooled N=531, EV_R=+0.369 (90% CI [+0.279,+0.453]), sd_R=1.271.
+  **Registration MDE screen (shrink 0.35, N_exp=342 — F1): MDE 0.1131 vs forecast 0.1292 = PASS
+  ×1.14** (precheck ×1.18; tofauti = timeout exits, kama SCIENTIST-D alivyotabiri). 4/4 reps EV_R
+  chanya. Split-N screen (0.0907) = descriptive, NON-gating (F1). **REGISTRATION IMEFUNGWA — hii
+  ni azimio la mwisho kabla dirisha bikira halijaguswa:**
+  - **Universe (FIXED tangu acbc11f, kabla ya holdout yoyote):** REP-1 nr4_inside×GBPJPY 1.5/1.5 ·
+    REP-2 nr7_break×EURGBP 1.5/1.0 · REP-3 nr7_break×EURJPY 1.0/3.0 · REP-4 nr7_break×AUDUSD 1.5/3.0
+    — zote no-LATE, vol=None. (REP-2 tie-break: p_z kwenye bootstrap floor — mechanical, design §1-ii.)
+  - **Statistic:** pvalue_boot(pooled_R, B=50,000, mean_block=3), seed = reg string
+    "FAMILY-POOLED-C2WATCH-H4|<cell keys 4>". **Criterion (m=1): p_boot<0.05 NA pooled EV_R>0.**
+  - **Verdict semantics (§6):** PASS = "compression-H4 family PROVEN-OOS-PROVISIONAL"; inaruhusu
+    forward paper ya reps 4 kama stream MOJA + kipaumbele R3/R8; HAITENGENEZI STRAT-00x, HAITOI
+    capital, per-pair inahitaji forward tranche yake. FAIL = familia inakufa kwa heshima; C2-WATCH
+    = forward-only; HAKUNA re-test ya compression-H4 kwenye 2025-01→2026-04 kwa namna yoyote.
+  - **Caveats §7 (verbatim record):** confirmation si discovery; correlated na STRAT-001/002 era;
+    VALID hot; power 0.62 → FAIL 38% hata forecast sahihi (hakuna kuita "underpowered" baadaye).
+  - Verdict + 90% CI + lag-1 autocorr zitarekodiwa. Token: CHIEF-HOLDOUT-S3. Dirisha 2025-01→2026-04
+    linafunguliwa MARA MOJA kwa reps 4 hizi PEKEE; H4 cells nyingine zote zinabaki SEALED.

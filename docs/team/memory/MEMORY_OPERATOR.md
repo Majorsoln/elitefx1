@@ -232,3 +232,15 @@ Hii inahesabu EV_R/sd_R HASA za reps 4 zikiunganishwa → screen shrink 0.35 kwa
 Ripoti "tayari dry-run". Chief atasoma: screen PASS → freeze registration + one-shot token;
 screen FAIL → stop (LESSON, dirisha bikira salama). USIENDESHE --split holdout (Chief token TU
 baada ya screen PASS). Paper-trading STRAT-001/002 inaendelea.
+
+## RUNBOOK HAI (2026-07-13): S3-C2 FAMILY-POOLED ONE-SHOT (registration FROZEN; token imetolewa)
+Screen PASS ×1.14 → Chief amefunga registration (universe + criterion + semantics zote CHIEF_STATUS
+2026-07-13). KAZI YAKO — one-shot MARA MOJA:
+  git pull
+  cd src\research
+  python family_pooled.py --split holdout --holdout-final CHIEF-HOLDOUT-S3
+  cd ..\..
+  git add -A && git commit -m "S3-C2 family-pooled one-shot (holdout)" && git push origin main
+Ripoti "tayari one-shot". Chief atasoma: p_boot<0.05 NA EV_R>0 → compression-H4 = family
+PROVEN-OOS-PROVISIONAL (forward paper ya reps 4). FAIL → familia inakufa kwa heshima (LESSON;
+dirisha bikira limetumika mara moja either way). Paper-trading STRAT-001/002 inaendelea.
