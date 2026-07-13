@@ -72,7 +72,13 @@ Rationale for R-units over ATR-units (both were on the table in the ruling):
   pnl_R. The pooled mean IS the deployable quantity.
 - A loss is ≈ −(1 + cost_R) for every cell regardless of pair or SL multiple — the mixture is
   aligned on the downside, which is what the one-sided test cares about.
-- Pip-scale invariance is exact (multiply a pair's pips by 100 → pnl_R unchanged; §5-AT1).
+- Pip-scale invariance holds **up to the fixed pip-denominated slippage constants of
+  `episodes()`** (SLIP_MARKET/SLIP_STOP are const pips, a real broker cost that does not scale
+  with price units): multiplying a pair's pips by `s` leaves trade structure exactly invariant
+  and changes pnl_R only by the closed-form slip residual −SLIP·(1−1/s)/R_trade (~0.001–0.013 R
+  here — immaterial vs EV_R 0.14–0.40). *(Wording corrected post-build per OQ#1: the original
+  "exact" claim overlooked the fixed slippage; Chief ruled non-blocker, referee concurs —
+  see `family_pooled_referee_report.md`.)*
 
 **Sensitivity column (recorded, non-gating):** the same test in ATR-units
 (pnl_pips/atr[i]) — guards against the verdict being an artifact of the SL-rescaling choice.
@@ -133,8 +139,11 @@ differ slightly because of timeout exits, which two-point ignores.)
 
 ## 5. Acceptance tests (implementation must pass ALL before freeze; referee = SCIENTIST-D)
 
-- **AT1 pip-scale invariance:** synthetic two-pair fixture; multiply one pair's o/h/l/c/atr/spr
-  by 100 → pooled pnl_R series bit-identical; pooled p identical.
+- **AT1 pip-scale invariance:** synthetic two-pair fixture with FIXED signals (event functions
+  carry an absolute tick threshold — a separate, out-of-scope property); multiply one pair's
+  o/h/l/c/atr/spr by 100 → trade structure (entries/exits/directions) bit-identical, unscaled
+  pair's pnl_R bit-identical, scaled pair's pnl_R differs from base by exactly the closed-form
+  slip residual −SLIP·(1−1/100)/R_trade (tolerance 1e-9). *(Amended per OQ#1 — see §2 note.)*
 - **AT2 R-normalization correctness:** crafted bars with known ATR and forced SL exit →
   pnl_R = −(1 + cost/R) exactly; forced TP exit → +(tp_atr/sl_atr − cost/R) exactly.
 - **AT3 determinism:** two full runs → bit-identical pooled series and p (seed from
