@@ -198,3 +198,11 @@ memory ILIYOPITWA -> ilirudia review ya kwanza (commit 2081453) badala ya task m
 design, iliyoko main 1a3d314). Chief ameongeza "SYNC KWANZA: git checkout main && git pull" kwenye
 prompts zote. KAZI: fungua SCIENTIST-D session UPYA baada ya git checkout main && git pull ->
 atasoma task ya family-pooled design -> commit+push -> "tayari design".
+
+## LOG — 2026-07-12 (FAMILY-POOLED DESIGN APPROVED) + KAZI
+SCIENTIST-D design (reports/family_pooled_design.md) APPROVED na Chief (verification huru
+inarudi hasa: N=341, MDE=0.119 R, screen PASS ×1.18). Pooling inageuza reps 4 dhaifu kuwa
+mtihani MMOJA wenye power. SEQUENCE: (1) IMPLEMENTER-A ajenge family_pooled.py + AT1-AT8
+(memory yake ina task) -> "tayari family-pooled build"; (2) SCIENTIST-D referee (MC ya AT4);
+(3) dry-run VALIDATION -> screen -> Chief freeze -> one-shot. KAZI YAKO: fungua IMPLEMENTER-A
+session (SYNC KWANZA!) -> build. Paper-trading STRAT-001/002 inaendelea.

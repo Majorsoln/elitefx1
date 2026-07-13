@@ -444,3 +444,19 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   registration mpya + referee KABLA ya dirisha lolote. Uzito wa siku: mfumo ULIKATAA kujidanganya
   mara ya pili leo — kwanza kwa engine, sasa kwa power arithmetic. Portfolio inabaki
   STRAT-001/002; R3 (rolling folds) inapanda kipaumbele.
+
+- **2026-07-12 — FAMILY-POOLED DESIGN (SCIENTIST-D): APPROVED (Chief verification huru inarudi
+  hasa).** reports/family_pooled_design.md — mtihani MMOJA (m=1) kwenye dirisha bikira H4:
+  "compression-H4 family (reps 4 mechanical: nr4×GBPJPY 1.5/1.5, nr7×EURGBP 1.5/1.0, nr7×EURJPY
+  1.0/3.0, nr7×AUDUSD 1.5/3.0; wote no-LATE) ikitradiwa kama STREAM MOJA ya R-units ina EV>0
+  net ya costs". Ubunifu wa msingi: **pooling inageuza tests 4 zilizoshindwa MDE (N~60-121)
+  kuwa MOJA yenye power (N=341)** — MDE 0.119 R vs shrunken 0.140 (×0.35 conservative tip) =
+  PASS ×1.18, power 0.62. R-normalization (pips hazi-pool across pairs), GOLD imetengwa (skew
+  artifact), criterion pre-registered (pvalue_boot B=50k <0.05 NA EV_R>0), dry-run ya VALIDATION
+   inahesabu screen HASA kabla ya freeze (fail→stop→LESSON), caveats 4 za uaminifu (confirmation
+  si discovery; correlated na STRAT-001/002 era; power 0.62 = FAIL 38% hata kama forecast sahihi
+  — hakuna kuita "underpowered" baadaye). PASS = "compression-H4 family PROVEN-OOS-PROVISIONAL"
+  → forward paper ya reps 4 kama stream + kipaumbele R3/R8; HAITENGENEZI STRAT-00x, HAITOI
+  capital, per-pair inahitaji forward tranche yake. Chief verification: N=341/EV_R=0.401/MDE=0.119
+  zinarudi hasa (huru). SEQUENCE (§8): IMPLEMENTER-A ajenge family_pooled.py + AT1-AT8 →
+  SCIENTIST-D referee (MC ya AT4) → dry-run VALIDATION → screen 0.35 → Chief freeze → one-shot.

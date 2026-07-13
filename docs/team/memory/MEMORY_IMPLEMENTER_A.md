@@ -560,3 +560,19 @@ OPEN QUESTIONS (ndani ya reports/wave1_report.md):
   2. Restatement run — Operator + runbook? (cells za S3 = holdout token, zimefunguliwa).
   3. R6 alarm-line = posterior SE (sio rolling-60 flat — margin ya STRAT-002 5.5pp < SE@60 6.4pp).
   4. R4 usd_per_pip=12 placeholder — worst-day $ na sizing halisi ya MWONGOZO.
+
+=== BUILD TASK (Chief, 2026-07-12): family_pooled.py (design ya SCIENTIST-D, APPROVED) ===
+Soma KWANZA: reports/family_pooled_design.md (spec kamili §1-§8; fuata verbatim). Jenga
+src/research/family_pooled.py:
+  - REUSE tu (ZERO changes): episodes, _mask_context, load_window (ongeza return ya `ts` array
+    - additive, non-breaking), pvalue_boot. Reps 4 zimefungwa (§1 table); universe FIXED.
+  - R-normalization: pnl_R = pnl_pips / (sl_atr × atr[signal_bar]) — §2. Pool = union ya streams
+    4 sorted by ts_entry (tie: pair alphabetical). Statistic: pvalue_boot(pooled_R, B=50000,
+    mean_block=3), seed kutoka registration string (§3).
+  - Acceptance tests AT1-AT8 ZOTE (§5): pip-scale invariance, R-norm correctness, determinism,
+    **AT4 mixture-null size ∈[0.040,0.060] (muhimu zaidi)**, holdout red-line guard, no-clobber
+    (outputs data/strategies/family_pooled_c2watch.jsonl + reports/family_pooled_report.md TU;
+    candidates*.jsonl HAZIGUSWI), dedup assert, AT8 dry-run VALIDATION.
+  - Split flag: validation (dry-run/screen) | holdout (one-shot, Chief token). Windows-safe,
+    Rule 8 report. USIENDESHE holdout - Chief atatoa token baada ya referee + screen PASS.
+UKIMALIZA: ripoti "tayari family-pooled build". SCIENTIST-D atafanya referee (MC huru ya AT4).
