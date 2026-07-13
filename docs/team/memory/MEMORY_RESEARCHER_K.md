@@ -131,3 +131,13 @@ Evidence: reports/strategy_lab_report.md (S1 TRAIN commit ccfbb24; S2b VALIDATIO
       namba zilizoonekana kabla ya registration daima zina upendeleo wa juu; uthibitisho lazima
       utoke kwenye data ambayo uchaguzi haukuigusa. Evidence: b9cdc55 (registration) + 2cdf625
       (holdout) + CHIEF_STATUS 2026-07-09.
+
+=== NYONGEZA (Chief, 2026-07-13): LESSON L-e (family-pooled one-shot FAIL) ===
+  L-e (METHOD): "Signal chanya iliyopimwa vizuri yaweza kukosa significance — nidhamu inashikilia
+      kwenye ukingo." family-pooled test (compression-H4, reps 4, R-normalized, N=353): EV_R +0.110
+      CHANYA, 4/4 reps chanya, LAKINI p_boot=0.0543 > 0.05 → FAIL kwa criterion pre-registered.
+      Imeheshimiwa bila majadiliano (caveat: power 0.62 → FAIL 38% hata forecast sahihi). Tofauti
+      na S3c-dead: hii ni "haujathibitika", si "haifanyi kazi" → FORWARD-ONLY. Sub-lesson:
+      utabiri wa shrinkage (VALID×0.35 slope) ulithibitika HASA (0.369→0.110). Evidence: commits
+      04bdeb8 (freeze) + c71c161 (one-shot). Implication: pre-registration + power-honesty
+      zinalinda dhidi ya kujidanganya PANDE ZOTE — hata pale point-estimate ni chanya.

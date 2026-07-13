@@ -244,3 +244,12 @@ Screen PASS ×1.14 → Chief amefunga registration (universe + criterion + seman
 Ripoti "tayari one-shot". Chief atasoma: p_boot<0.05 NA EV_R>0 → compression-H4 = family
 PROVEN-OOS-PROVISIONAL (forward paper ya reps 4). FAIL → familia inakufa kwa heshima (LESSON;
 dirisha bikira limetumika mara moja either way). Paper-trading STRAT-001/002 inaendelea.
+
+## LOG — 2026-07-13 (S3-C2 ONE-SHOT: FAIL kwa heshima) + KAZI
+compression-H4 family: N=353, EV_R +0.110 (chanya, 4/4 reps), p_boot 0.0543 > 0.05 → FAIL
+(criterion imeheshimiwa). Si dead — "haujathibitika"; dirisha SEALED (mara moja). Path =
+forward data (2026-05+). Portfolio rasmi INABAKI STRAT-001/002. Mzunguko wa taasisi (design→
+build→referee→fixes→screen→freeze→one-shot) ulikamilika bila dosari. KAZI: (a) paper-trading
+STRAT-001/002 inaendelea (forward evidence); (b) endelea kupakua ticks 2026-05/06 (inakuza
+dirisha la baadaye la C2-WATCH); (c) RESEARCHER-K session — lessons L-a..L-e zinasubiri kuandikwa
+rasmi (LESSON_SPEC).

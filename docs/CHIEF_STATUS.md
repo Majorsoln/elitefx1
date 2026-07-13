@@ -512,3 +512,18 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
     VALID hot; power 0.62 → FAIL 38% hata forecast sahihi (hakuna kuita "underpowered" baadaye).
   - Verdict + 90% CI + lag-1 autocorr zitarekodiwa. Token: CHIEF-HOLDOUT-S3. Dirisha 2025-01→2026-04
     linafunguliwa MARA MOJA kwa reps 4 hizi PEKEE; H4 cells nyingine zote zinabaki SEALED.
+
+- **2026-07-13 — S3-C2 FAMILY-POOLED ONE-SHOT: FAIL (kwa heshima; p=0.0543 vs 0.05).** Dirisha
+  bikira H4 2025-01→2026-04 (reps 4 pooled): N=353, **EV_R=+0.110 (CHANYA), 4/4 reps chanya**,
+  **p_boot=0.0543** (p_z=0.0527, p_atr=0.0503 — zote juu ya 0.05 kwa nywele), 90% CI [−0.005,+0.219],
+  lag-1 ρ=+0.024 (engine safi). Criterion pre-registered: p<0.05 NA EV_R>0 → **FAIL** (EV_R✓, p✗).
+  HUKUMU IMEHESHIMIWA BILA MAJADILIANO (caveat #4: power 0.62 → FAIL 38% hata forecast sahihi;
+  hakuna "underpowered" baadaye). **TOFAUTI muhimu na S3c:** hii SI dead — signal chanya halisi
+  iliyokosa significance TU. **Utabiri wa shrinkage wa SCIENTIST-D ulithibitika HASA:** VALID
+  +0.369 × slope 0.35 ≈ 0.13 forecast; holdout halisi +0.110 — familia ilitoa karibu na forecast
+  yake iliyoshrunk, lakini forecast yenyewe ilikuwa ukingoni. SEMANTICS §6: compression-H4 =
+  **C2-WATCH FORWARD-ONLY** (dirisha halijaguswa tena — limetumika mara moja, SEALED milele kwa
+  familia hii). Path pekee = forward data inakua kila mwezi (2026-05+). HAITENGENEZI STRAT-00x.
+  **Portfolio rasmi inabaki STRAT-001 + STRAT-002.** Mzunguko WOTE wa taasisi (design→build→
+  referee→F1/F2→dry-run screen→freeze→one-shot) ulifanya kazi bila dosari — FAIL ni matokeo
+  halali ya kisayansi, si kushindwa kwa mfumo. LESSON → RESEARCHER-K (L-e).
