@@ -173,11 +173,33 @@ p table — je, S3b k=3 inasimama chini ya exact bootstrap p? Open question yang
 (2) referee wa S3-C2 registration text (B=50k imo? MDE screen + shrunken forecasts?);
 (3) baada ya R3 (WAVE-2): andika regime-conditional deployment proposal.
 
-## CURRENT TASK (2026-07-12): DESIGN ya FAMILY-POOLED HOLDOUT TEST (C2-WATCH groups 4)
-MDE screen (rule YAKO) ilikataa registration ya makundi yote 4 kwa per-cell power (rekodi:
-CHIEF_STATUS 2026-07-12; shrink 0.35 = binding kwa azimio la anti-post-hoc). Kazi: design ya
-test MOJA ya familia "compression-H4 works OOS" — trades za reps 4 (nr4×GBPJPY, nr7×EURGBP,
-nr7×EURJPY, nr7×AUDUSD) zikiunganishwa na NORMALIZATION sahihi (R-units au ATR-units — pips
-hazilingani across pairs), bootstrap p moja (m=1), MDE arithmetic ya pooled (N_exp~341).
-Andika design kamili (acceptance tests included) — Chief ata-register KABLA ya dirisha kufunguliwa.
-NB: GOLD groups zimetoweka kwenye p_boot (skew artifact) — usizijumuishe.
+## COMPLETED (2026-07-13): DESIGN ya FAMILY-POOLED HOLDOUT TEST (C2-WATCH groups 4)
+Deliverables: `reports/family_pooled_design.md` (registration-ready) +
+`scripts/scientist_d_family_pooled_precheck.py` (kila namba inazalishwa kutoka artifacts wazi).
+MAAMUZI YA DESIGN (na sababu):
+- **Reps 4 mechanical** (best p_boot per group, TRAIN EV>0; tie@floor → p_z): nr4×GBPJPY
+  1.5/1.5 no-LATE · nr7×EURGBP 1.5/1.0 no-LATE (tie ya cells 2 @ p=0.0001 floor — p_z
+  inaamua; B=50k registration itapunguza floor hadi 2e-5) · nr7×EURJPY 1.0/3.0 · nr7×AUDUSD
+  1.5/3.0. Zinarudisha HASA namba za MDE za ruling (15.2<16.8 · 1.8<2.4 · 9.6<17.7 · 5.0<9.1).
+- **R-units** (pnl/(sl_atr×atr[signal bar])) sio ATR-units: deployment-consistent (fixed
+  fractional risk), downside aligned ≈ −1 kila cell, pip-scale invariant. ATR-units = sensitivity
+  column non-gating.
+- **Pooling per-trade** (union sorted by entry ts; shares EURGBP 35/EURJPY 25/AUDUSD 22/
+  GBPJPY 17 — hakuna pair >50%). Engine ileile: pvalue_boot B=50k mb3+NW, seed=registration
+  string. Criterion m=1: p_boot<0.05 NA EV_R>0.
+- **POOLED MDE SCREEN INAPITA ncha conservative 0.35**: EV_R(VALID) pooled +0.401, sd_R 1.34,
+  N_exp 341 → MDE 0.119 R vs forecast 0.140 R (×1.18); power 0.62 @shrink 0.35 / 0.87 @0.5.
+  Ndiyo hoja ya kwa nini pooling inaokoa kile per-group screen ilichokataa kihalali.
+- Acceptance tests AT1-AT8 (muhimu: AT4 mixture-null size 4-component [0.04,0.06]; AT8 dry-run
+  VALIDATION inatoa exact EV_R/sd_R kwa screen ya mwisho — two-point yangu inapuuza timeouts).
+- Verdict semantics pre-registered: PASS = PROVEN-OOS-PROVISIONAL **family-level TU** (hakuna
+  STRAT-00x, hakuna capital; forward tranche inabaki); FAIL = hakuna re-test ya compression-H4
+  kwenye dirisha hili MILELE (information consumed). Caveats 4 zinaingia rekodi verbatim
+  (confirmation-not-discovery; era overlap na STRAT-001/002; VALID hot ~2×; power 0.62 =
+  FAIL 38% inawezekana hata forecast ikiwa sahihi — hakuna "underpowered" complaint baadaye).
+SEQUENCING: IMPLEMENTER-A build → SCIENTIST-D referee (AT4 kwa MC yangu huru) → AT8 dry-run →
+screen exact → Chief freeze kwa commit → one-shot token → verdict+CI.
+
+## CURRENT TASK (baada ya hapa): (1) referee wa implementation ya family_pooled.py ikija
+(AT1-AT8; AT4 kwa MC huru yangu); (2) verify exact screen ya AT8 kabla ya freeze; (3) baada
+ya R3 (WAVE-2): regime-conditional deployment proposal (bado pending kutoka Chief response).
