@@ -1,6 +1,6 @@
-# Family-Pooled Holdout Test — C2-WATCH (VALIDATION)
+# Family-Pooled Holdout Test — C2-WATCH (HOLDOUT)
 
-*2026-07-13 20:19 | design: reports/family_pooled_design.md | TF=H4 | m=1 single-hypothesis | reuse-only (episodes/_mask_context/pvalue_boot ZERO changes; load_window +ts additive)*
+*2026-07-13 20:23 | design: reports/family_pooled_design.md | TF=H4 | m=1 single-hypothesis | reuse-only (episodes/_mask_context/pvalue_boot ZERO changes; load_window +ts additive)*
 
 > **H1 (pre-registered):** compression-H4 family (cells 4, risk-normalized stream moja) ina EV chanya net-of-costs. **Criterion:** pvalue_boot(B=50k) < 0.05 NA pooled EV_R > 0 (design §0).
 
@@ -22,27 +22,27 @@
 
 ## Result (R-units, design §2-§4-§6)
 
-- pooled N = **531** · EV_R = **+0.3690** · sd_R = 1.2707
-- **p_boot = 0.00002** (RASMI) · p_z = 0.00000 (sensitivity) · p_atr = 0.00002 (ATR-unit sensitivity)
-- 90% bootstrap CI ya EV_R: [+0.2786, +0.4533]
-- **MDE screen ya REGISTRATION** (shrink 0.35, **N_exp=342** — design §4, F1): MDE=0.1131 vs forecast=0.1292 → PASS (margin ×1.14)
-  - descriptive (NON-gating) split-N screen (pooled N=531): MDE=0.0907 → PASS (SIO screen ya registration — F1)
-- descriptive (NON-gating): shares={'AUDUSD': 0.22, 'EURJPY': 0.24, 'EURGBP': 0.34, 'GBPJPY': 0.2} · timeout_share=0.05 · lag-1 ρ=+0.020 
+- pooled N = **353** · EV_R = **+0.1098** · sd_R = 1.2735
+- **p_boot = 0.05434** (RASMI) · p_z = 0.05265 (sensitivity) · p_atr = 0.05028 (ATR-unit sensitivity)
+- 90% bootstrap CI ya EV_R: [-0.0053, +0.2187]
+- **MDE screen ya REGISTRATION** (shrink 0.35, **N_exp=343** — design §4, F1): MDE=0.1131 vs forecast=0.0384 → FAIL (margin ×0.34)
+  - descriptive (NON-gating) split-N screen (pooled N=353): MDE=0.1115 → FAIL (SIO screen ya registration — F1)
+- descriptive (NON-gating): shares={'EURJPY': 0.27, 'AUDUSD': 0.22, 'EURGBP': 0.34, 'GBPJPY': 0.17} · timeout_share=0.07 · lag-1 ρ=+0.024 
 
 ### Per-rep EV_R (descriptive, NON-gating — N1)
 
 | rep | pair | n | EV_R | sign |
 |-----|------|---|------|------|
-| REP-1 | GBPJPY | 107 | +0.4349 | + |
-| REP-2 | EURGBP | 182 | +0.2260 | + |
-| REP-3 | EURJPY | 127 | +0.4722 | + |
-| REP-4 | AUDUSD | 115 | +0.4201 | + |
+| REP-1 | GBPJPY | 61 | +0.0564 | + |
+| REP-2 | EURGBP | 119 | +0.0629 | + |
+| REP-3 | EURJPY | 96 | +0.1516 | + |
+| REP-4 | AUDUSD | 77 | +0.1723 | + |
 
 - 4/4 reps EV_R chanya (4/4 = mechanism evidence kali).
 
-## VERDICT (pre-registered §6): **PASS**
+## VERDICT (pre-registered §6): **FAIL**
 
-→ FAMILY claim = **PROVEN-OOS-PROVISIONAL (family level)**: inaidhinisha forward paper-trading ya reps 4 kama stream moja + priority ya R3/R8. HAIUNDI STRAT-00x, HAIRUHUSU capital, HAITHIBITISHI pair/cell binafsi (design §6).
+→ Family claim inakufa kwenye dirisha hili kwa heshima; C2-WATCH inabaki forward-only (path a). HAKUNA re-test ya compression-H4 kwenye 2025-01→2026-04 (design §6).
 
 ## Caveats (design §7 — verbatim record)
 
