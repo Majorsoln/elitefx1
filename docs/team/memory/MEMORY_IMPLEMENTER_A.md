@@ -605,3 +605,18 @@ OPEN QUESTIONS (4, ndani ya reports/family_pooled_report.md):
 NOTE (SYNC): main iko mbele SANA ya branch ya zamani — E1-E4 CLOSED, E3 ilitekelezwa na Chief moja kwa
 moja (session yangu ya awali haikupush kwa wakati). Nilianzisha upya branch kutoka main (kesi ya
 SCIENTIST-D 2026-07-12). CURRENT PHASE: Alpha Engineering S-series + WAVE data-science remediation.
+
+=== FIXES F1/F2 (Chief, 2026-07-13 — referee ya SCIENTIST-D; family_pooled.py; ~30 min) ===
+Referee APPROVED WITH FIXES (reports/family_pooled_referee_report.md §4). Fanya KABLA ya freeze:
+  F1 (SERIOUS): mde_screen inaitwa na N ya split (pooled trade count) - kwenye dry-run VALID
+     (N~531) hii inashusha MDE ×1.25 = screen anti-conservative (mtego wa ruling 07-12). Design
+     §4: MDE kwa N_exp = Σ_reps (len(stream_i)/days_i) × 347. FIX: hesabu n_exp (data["days"]
+     ipo per pair kwenye cell_stream/run_family) → ita mde_screen(ev_r, sd_r, n_exp) kwa screen
+     ya REGISTRATION; split-n version yaweza kubaki kama descriptive extra. Acceptance: kwenye
+     fixture, screen MDE = 1.645·sd_R/√n_exp na n_exp kutoka days=250 fixtures, SI pooled N.
+  F2: run_family inaendelea KIMYA kama load_window inarudisha None kwa pair (missing.append) →
+     pooled test ya streams <4. FIX: `if missing: raise RuntimeError(...)` kwa split in
+     (validation, holdout) - test iliyosajiliwa = streams 4 HASA. Acceptance: fixture yenye pair
+     moja imeondolewa lazima i-RAISE, si kuripoti.
+  N1 (non-blocking): print per-rep EV_R + sign kwenye report (data ipo kwenye jsonl).
+Self-tests mpya kwa F1/F2. Sweep intact. UKIMALIZA: "tayari F1F2" - SCIENTIST-D spot-check diff.

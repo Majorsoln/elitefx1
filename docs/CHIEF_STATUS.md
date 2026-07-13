@@ -467,3 +467,18 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   SCIENTIST-D athibitishe). AT4 = scaled-sanity 0.066 → full MC = kazi ya referee. SEQUENCE:
   SCIENTIST-D referee (full AT4 + OQ#1 + verbatim) → Operator dry-run VALIDATION → screen 0.35
   (fail→stop→LESSON) → Chief freeze → one-shot. Portfolio inabaki STRAT-001/002.
+
+- **2026-07-13 — FAMILY-POOLED REFEREE (SCIENTIST-D): APPROVED WITH FIXES (F1/F2); AT4 full MC
+  PASS (bands 6/6).** Verbatim-vs-implemented PASS §1-§8; golden hashes re-verified huru; OQ#1
+  ACCEPTED (implementer sahihi — design wording imerekebishwa; slippage IBAKI pips-constant,
+  residual 0.003-0.013 R immaterial). **AT4 full MC (B-ladder ya busara badala ya 13h compute):
+  size 0.040-0.051 kwenye iid nulls mbili, AR(0.5) 0.064 vs z-test 0.124 — engine inashikilia.**
+  UAMINIFU wa referee: kwenye iid mixture z-test PIA ~nominal (skews za reps 4 zinaghairiana) →
+  bootstrap hapa ni BIMA dhidi ya DEPENDENCE, si kurekebisha bias kubwa ya iid; criterion
+  inabaki kama design. **FIXES 2 za lazima kabla ya freeze (protection logic, SI statistic):**
+  F1 = MDE screen inatumia N ya split (dry-run VALID N~531) badala ya N_exp(holdout)=341 →
+  understates MDE ×1.25 = anti-conservative (mtego ULE ULE ruling ya 07-12 ilikataa!); lazima
+  itumie N_exp=Σ(n_i/days_i)×347. F2 = run_family i-abort kama pair inakosekana (vinginevyo
+  one-shot ingechoma dirisha kwa mtihani WA TOFAUTI na registered). N1 = print per-rep EV_R
+  (non-blocking). SEQUENCE: IMPLEMENTER-A F1+F2 (~30min) → SCIENTIST-D spot-check (diff-level,
+  hakuna MC mpya) → Operator dry-run VALID → screen 0.35 kwa N_exp → Chief freeze → one-shot.

@@ -212,3 +212,10 @@ family_pooled.py APPROVED (sweep 22/22; AT1-AT8; OQ#1 non-blocker). KAZI: (1) fu
 session (SYNC KWANZA) — referee task (full AT4 MC + OQ#1) → "tayari referee-pooled". (2) BAADA ya
 referee PASS, Chief atatoa runbook ya dry-run (validation, data halisi → screen). USIENDESHE
 holdout (Chief token baada ya screen PASS). Paper-trading STRAT-001/002 inaendelea.
+
+## LOG — 2026-07-13 (REFEREE APPROVED WITH FIXES F1/F2) + SEQUENCE
+Referee ya SCIENTIST-D: family_pooled APPROVED, AT4 full MC PASS (bands 6/6), verbatim PASS.
+Fixes 2 ndogo za lazima (protection logic, si statistic): F1 (MDE screen itumie N_exp=341 si
+split-N), F2 (abort kama pair inakosekana). SEQUENCE: (1) IMPLEMENTER-A session -> F1/F2 (~30min)
+-> "tayari F1F2"; (2) SCIENTIST-D spot-check (diff); (3) Chief atatoa runbook ya dry-run VALID ->
+screen. USIENDESHE holdout bado. Paper-trading STRAT-001/002 inaendelea.
