@@ -307,6 +307,7 @@ def load_window(sym, tf, split, holdout_token=None):
                 c=df["c"].to_numpy() / pp, atr=df["atr"].to_numpy() / pp,
                 spr=np.nan_to_num(df["spr"].to_numpy(), nan=0.0), tc=df["tc"].to_numpy().astype(float),
                 hour=df["ts"].dt.hour().to_numpy(), vol=np.asarray(df["volatility_state"].to_list()),
+                ts=df["ts"].to_numpy(),                        # family_pooled (§8.1): cross-pair ordering — ADDITIVE, non-breaking
                 days=df["ts"].dt.date().n_unique())
 
 

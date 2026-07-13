@@ -576,3 +576,32 @@ src/research/family_pooled.py:
   - Split flag: validation (dry-run/screen) | holdout (one-shot, Chief token). Windows-safe,
     Rule 8 report. USIENDESHE holdout - Chief atatoa token baada ya referee + screen PASS.
 UKIMALIZA: ripoti "tayari family-pooled build". SCIENTIST-D atafanya referee (MC huru ya AT4).
+
+=== FAMILY-POOLED BUILD (2026-07-13) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri SCIENTIST-D referee + AT8 dry-run screen + Chief registration/token)** —
+build tayari; AT1-AT8 PASS 8/8; sweep 22/22. HAKUNA holdout run (Rule: Chief token baada ya referee+screen).
+LAST COMPLETED: **family_pooled.py BUILD** ✅ (design SCIENTIST-D reports/family_pooled_design.md §1-§8, verbatim):
+  · src/research/family_pooled.py MPYA — runner + AT1-AT8. REP_CELLS (universe FIXED §1: REP-1
+    nr4_inside×GBPJPY 1.5/1.5; REP-2 nr7_break×EURGBP 1.5/1.0; REP-3 nr7_break×EURJPY 1.0/3.0;
+    REP-4 nr7_break×AUDUSD 1.5/3.0; zote no-LATE). R-units normalization §2 (pnl_R=pnl_pips/
+    (sl_atr×atr[signal_bar])); pool_streams (union sort ts→pair, dedup AT7); registration_string+
+    _seed_from_registration (§3.3 hashing ileile ya _seed_from_key); mde_screen (§4); run_family
+    (§3-6 + AT5 holdout guard kupitia load_window); _write_outputs (AT6 no-clobber: family_pooled_
+    c2watch.jsonl + report TU); _boot_ci (§6). Criterion m=1: pvalue_boot(B=50k)<0.05 AND EV_R>0.
+  · REUSE-ONLY (ZERO changes): episodes/_mask_context/pvalue_boot/pvalue_gt0. strategy_lab.load_window
+    += `ts` (ADDITIVE non-breaking §8.1; callers intact; byte-identical golden hashes mr/nr7 INTACT).
+    run_selftests.py += family_pooled.
+  · Self-test AT1-AT8 PASS 8/8; SWEEP 22/22 PASS. Rule 8: reports/family_pooled_report.md.
+NEXT AFTER: (1) SCIENTIST-D referee (MC huru ya AT4 full 20k×B=50k; verbatim-vs-implemented);
+  (2) Operator: AT8 dry-run VALIDATION halisi → EV_R/sd_R EXACT → §4 screen shrink 0.35 (fail→stop,
+  doc → LESSON); (3) Chief: freeze registration (§8.4) + holdout token → one-shot verdict+CI. WAVE-2: R3/R8.
+OPEN QUESTIONS (4, ndani ya reports/family_pooled_report.md):
+  1. **AT1 fixed-slippage residual (referee):** §2 "exact" vs episodes() SLIP const (0.1/0.3 pip) →
+     pnl_R exact-minus-SLIP·(1-1/scale)/R. Nimetekeleza struct-exact + residual=closed-form (fixed sig,
+     kutenga na event `tick` absolute threshold). Rule 1: sijagusa episodes. Pendekezo: kubali.
+  2. Seed = sha1(reg_string)[:12]→int (hashing ileile ya _seed_from_key juu ya string nzima). Chief athibitishe.
+  3. REP-2 tie-break B=50k recompute = hatua ya registration (Chief §8.4), si build.
+  4. Format ya rekodi ya registration freeze — Chief aelekeze.
+NOTE (SYNC): main iko mbele SANA ya branch ya zamani — E1-E4 CLOSED, E3 ilitekelezwa na Chief moja kwa
+moja (session yangu ya awali haikupush kwa wakati). Nilianzisha upya branch kutoka main (kesi ya
+SCIENTIST-D 2026-07-12). CURRENT PHASE: Alpha Engineering S-series + WAVE data-science remediation.
