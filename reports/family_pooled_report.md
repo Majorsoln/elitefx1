@@ -1,129 +1,54 @@
-# Family-Pooled Holdout Test — Build Report (C2-WATCH; design ya SCIENTIST-D)
+# Family-Pooled Holdout Test — C2-WATCH (VALIDATION)
 
-*2026-07-13 | IMPLEMENTER-A | design-of-record: `reports/family_pooled_design.md` (§1-§8, verbatim) |
-Rules 1-8 | REUSE-ONLY (episodes/_mask_context/pvalue_boot ZERO changes; load_window +ts additive) |
-NO holdout run (Chief token baada ya referee + screen) | NO ML*
+*2026-07-13 20:19 | design: reports/family_pooled_design.md | TF=H4 | m=1 single-hypothesis | reuse-only (episodes/_mask_context/pvalue_boot ZERO changes; load_window +ts additive)*
 
-> **Jukumu (design §8.1):** jenga `src/research/family_pooled.py` (runner + acceptance tests AT1-AT8),
-> reuse tu. **SIYO** registration wala holdout — hiyo ni Chief (§8.4) baada ya SCIENTIST-D referee
-> (§8.2) + AT8 dry-run screen (§8.3). Deliverable = "tayari family-pooled build".
+> **H1 (pre-registered):** compression-H4 family (cells 4, risk-normalized stream moja) ina EV chanya net-of-costs. **Criterion:** pvalue_boot(B=50k) < 0.05 NA pooled EV_R > 0 (design §0).
 
----
 
-## Implementation Report
+## Registration (design §3.3)
 
-**Deliverable (code):**
+- reg string: `FAMILY-POOLED-C2WATCH-H4|nr4_inside|GBPJPY|1.5|1.5|no-LATE|None|nr7_break|EURGBP|1.5|1.0|no-LATE|None|nr7_break|EURJPY|1.0|3.0|no-LATE|None|nr7_break|AUDUSD|1.5|3.0|no-LATE|None`
+- seed (deterministic): `116818170447252` · B=50000 · mean_block=3 · α=0.05
+- pairs missing (no window): none
 
-| Faili | Mabadiliko | Design |
-|-------|-----------|--------|
-| `src/research/family_pooled.py` | **MPYA** — runner + AT1-AT8. `REP_CELLS` (universe FIXED §1); `registration_string`/`_seed_from_registration` (§3.3); `_r_normalize` (R-units §2); `cell_stream` (episodes reuse §3.1); `pool_streams` (union sort ts→pair, dedup §3.2/AT7); `mde_screen` (§4); `run_family` (§3-§6 + AT5 guard); `_write_outputs` (AT6 no-clobber); `_boot_ci` (§6). | §0-§8 |
-| `src/research/strategy_lab.py` | `load_window` — **+`ts`** kwenye return dict (cross-pair ordering). **ADDITIVE, non-breaking** (§3.1/§8.1 authorized); callers waliopo hawaguswi. | §3.1/§8.1 |
-| `src/research/run_selftests.py` | `family_pooled` imeongezwa kwenye MODULES (sweep). | — |
+## Fixed universe (§1)
 
-**REUSE (ZERO changes, design §8.1):** `episodes` · `_mask_context` · `pvalue_boot` · `pvalue_gt0` ·
-`_seed_from_key` (hashing pattern) — zote zimeitwa kama-zilivyo, hakuna byte iliyobadilika. Njia ya
-`cell_stream` ni SAWASAWA na `strategy_lab.evaluate` (event fn default params → `_mask_context` KWENYE
-signals → `episodes`), kisha R-normalization ya §2. Fill rules, byte-identical golden hashes (mr/nr7),
-na sweep zote zimebaki intact (regression chini).
+| rep | event | pair | SL | TP | filter |
+|-----|-------|------|----|----|--------|
+| REP-1 | nr4_inside | GBPJPY | 1.5 | 1.5 | no-LATE |
+| REP-2 | nr7_break | EURGBP | 1.5 | 1.0 | no-LATE |
+| REP-3 | nr7_break | EURJPY | 1.0 | 3.0 | no-LATE |
+| REP-4 | nr7_break | AUDUSD | 1.5 | 3.0 | no-LATE |
 
-**Registration (design §3.3, imefungwa kwa code — Chief atathibitisha wakati wa freeze):**
-- reg string: `FAMILY-POOLED-C2WATCH-H4|<cellkey REP-1>|...|<cellkey REP-4>` (cell key = umbo la
-  `_seed_from_key`: event|pair|sl|tp|sf|vf) → seed deterministic `_seed_from_registration` (sha1→int,
-  hashing ILEILE ya engine). Reproducible bit-kwa-bit (AT3).
-- Universe (§1, hakuna selection freedom): REP-1 nr4_inside×GBPJPY 1.5/1.5 · REP-2 nr7_break×EURGBP
-  1.5/1.0 · REP-3 nr7_break×EURJPY 1.0/3.0 · REP-4 nr7_break×AUDUSD 1.5/3.0 — zote no-LATE, vol=None.
-- Statistic: `pvalue_boot(pooled_R, B=50_000, mean_block=3, seed=reg)`; criterion m=1: `p_boot<0.05
-  AND pooled EV_R>0`. Sensitivity (non-gating): p_z (z-test) + p_atr (ATR-units).
+## Result (R-units, design §2-§4-§6)
 
-**R-normalization (§2):** `pnl_R = pnl_pips / (sl_atr × atr[signal_bar])`, `signal_bar = entry_bar−1`
-= EXACTLY quantity `episodes()` inatumia kwa SL. Deployment-consistent (fixed-fractional risk),
-pip-scale invariant (AT1). Pooling: union sorted na `ts_entry` (tie → pair alphabetical) — inanasa
-same-day cross-pair dependence kwa block resampling.
+- pooled N = **531** · EV_R = **+0.3690** · sd_R = 1.2707
+- **p_boot = 0.00002** (RASMI) · p_z = 0.00000 (sensitivity) · p_atr = 0.00002 (ATR-unit sensitivity)
+- 90% bootstrap CI ya EV_R: [+0.2786, +0.4533]
+- **MDE screen ya REGISTRATION** (shrink 0.35, **N_exp=342** — design §4, F1): MDE=0.1131 vs forecast=0.1292 → PASS (margin ×1.14)
+  - descriptive (NON-gating) split-N screen (pooled N=531): MDE=0.0907 → PASS (SIO screen ya registration — F1)
+- descriptive (NON-gating): shares={'AUDUSD': 0.22, 'EURJPY': 0.24, 'EURGBP': 0.34, 'GBPJPY': 0.2} · timeout_share=0.05 · lag-1 ρ=+0.020 
 
-## Self Tests
+### Per-rep EV_R (descriptive, NON-gating — N1)
 
-`family_pooled.py` acceptance tests **PASS 10/10** (AT1-AT8 + F1/F2 za referee; bila data ya nje, Rule 7):
+| rep | pair | n | EV_R | sign |
+|-----|------|---|------|------|
+| REP-1 | GBPJPY | 107 | +0.4349 | + |
+| REP-2 | EURGBP | 182 | +0.2260 | + |
+| REP-3 | EURJPY | 127 | +0.4722 | + |
+| REP-4 | AUDUSD | 115 | +0.4201 | + |
 
-```text
-[AT2] R-norm EXACT: forced SL → -(1+cost/R); forced TP → tp/sl - cost/R (match 1e-12)
-[AT1] pip-scale invariance (normalization): struct EXACT-invariant · BBB bit-identical · AAA
-      residual = closed-form (-SLIP·(1-1/scale)/R) — referee ACCEPTED (OQ#1, §3)
-[AT3] determinism: pvalue_boot bit-identical mara mbili; seed kutoka registration string stable
-[AT4] mixture-null size (SCALED sanity; full MC = referee §2: 6/6 bands PASS): boot≈0.066 ~nominal & ≤ z
-[AT5] holdout red-line: run_family(holdout) bila/ na token batili → PermissionError (load_window guard)
-[AT6] no-clobber: outputs = family_pooled_c2watch.jsonl + family_pooled_report.md TU; candidates*.jsonl intact
-[AT7] dedup: (pair, entry_bar) UNIQUE kwenye pooled stream (assert; pairs 4 tofauti → hakuna dup)
-[AT8] dry-run shape: pipeline kamili (VALIDATION fixtures) → result {n, ev_r, p_boot, screen, verdict}
-[F1] registration screen uses N_exp = Σ(n_i/days_i)×347 (≠ pooled-N ya split); MDE=1.645·sd/√N_exp
-[F2] missing-pair abort: pair inayokosekana kwa validation/holdout → RuntimeError (si silent report)
+- 4/4 reps EV_R chanya (4/4 = mechanism evidence kali).
 
-Regression (sweep nzima): SELF-TEST SWEEP 22/22 PASS — ikijumuisha strategy_lab (byte-identical
-golden hashes mr=28cc2218/nr7=872edc44 INTACT baada ya load_window +ts), event_quality_report,
-+ family_pooled mpya. load_window +ts HAIJAVUNJA caller yoyote.
-```
+## VERDICT (pre-registered §6): **PASS**
 
-## Known Limitations
+→ FAMILY claim = **PROVEN-OOS-PROVISIONAL (family level)**: inaidhinisha forward paper-trading ya reps 4 kama stream moja + priority ya R3/R8. HAIUNDI STRAT-00x, HAIRUHUSU capital, HAITHIBITISHI pair/cell binafsi (design §6).
 
-1. **AT1 fixed-slippage residual (DEVIATION-with-evidence → OQ#1).** Design §2 inadai pip-scale
-   invariance ni "exact". Kwa kweli `episodes()` ina slippage ISIYO-pip-scaled (`SLIP_MARKET`=0.1,
-   `SLIP_STOP`=0.3 pip, **const**). Kwa hivyo `cost/R` (na hivyo `pnl_R`) SI bit-identical chini ya
-   ×100 scaling — inatofautiana kwa `SLIP·(1-1/scale)/R_trade` EXACTLY (nimehakiki dhidi ya closed-
-   form, 1e-9). Nimetenga AT1 kwa **fixed signals** (event fns kama nr7_break zina absolute `tick`
-   threshold — SI scale-invariant, property tofauti na madai ya §2). Slippage ni broker-cost halisi
-   isiyo-proportional kwa pip — SIYO bug; ni asymmetry ya kimuundo. Rule 1: sijagusa `episodes()`.
-   Referee/Chief waamue kama residual hii inakubalika (ni ~0.001 R kwa ATR ya kawaida).
-2. **AT4 ni SCALED sanity, si gate.** Full spec (≥20k reps, B=50,000, size ∈ [0.040,0.060] + AR(0.5)
-   variant ≤0.08) ni **MC huru ya SCIENTIST-D** (design §5-AT4, §8.2). Self-test yangu (M=500, B=300)
-   inaonyesha boot ~nominal & ≤ z (mirror wave1 [8]); B ndogo inavimbisha size kidogo (0.066).
-3. **AT8 real dry-run inahitaji data (Operator PC).** Self-test inaendesha pipeline kwa fixtures
-   (monkeypatch load_window). VALIDATION halisi (2023-24) → EV_R/sd_R EXACT → §4 screen shrink 0.35
-   ni hatua ya §8.3 (Operator + runbook). Screen ikishindwa → hakuna registration (§8.3).
-4. **Registration HAIJAFUNGWA.** Constants (B, seed, criterion, verdict semantics, caveats) zimo kwa
-   code kutoka design, lakini freeze rasmi = commit ya Chief (§8.4). Sijaendesha holdout.
-5. **Verdict semantics (§6) zimo kwenye report generator**, lakini zinatumika tu holdout ikiendeshwa
-   (Chief token). PASS = PROVEN-OOS-PROVISIONAL (family); HAIUNDI STRAT-00x, HAIRUHUSU capital.
+## Caveats (design §7 — verbatim record)
 
-## Referee Fixes (F1/F2 — 2026-07-13, referee §4; ~30 min)
+1. Confirmation, si discovery (family-era leak §A3-W3) → PROVISIONAL cap + forward gate.
+2. Window overlap na STRAT-001/002 proof era → PASS = correlated evidence, si replication huru.
+3. VALID estimates ni hot (VALID/TRAIN ~2×) → shrink = measured slope (0.346), si pessimism.
+4. One-sided deal: shrink-0.35 truth → power 0.62; FAIL ~38% hata kama forecast ni sahihi.
 
-Referee (SCIENTIST-D, `reports/family_pooled_referee_report.md`) = **APPROVED WITH 2 PRE-FREEZE FIXES**
-(AT4 full MC 6/6 bands PASS; reuse purity verified; OQ#1 ACCEPTED). Zote mbili ni **screen/one-shot
-protection**, hazigusi statistic:
-
-- **F1 (SERIOUS):** `run_family` ilikuwa inaita `mde_screen(ev_r, sd_r, n)` na `n` = pooled-N ya split.
-  Kwenye dry-run VALIDATION (N kubwa) hii inashusha MDE (×√(N/N_exp)) → screen anti-conservative (mtego
-  ule ule ruling 2026-07-12 ilikataa). **FIX:** `n_exp = Σ_reps (n_i/days_i) × 347` (design §4) kutoka
-  `data["days"]` per pair → `screen = mde_screen(ev_r, sd_r, n_exp)` ndio screen ya REGISTRATION;
-  `screen_split` (pooled-N) inabaki kama descriptive extra. Self-test [F1]: MDE = 1.645·sd_R/√N_exp,
-  N_exp ≠ pooled N.
-- **F2:** `run_family` iliendelea KIMYA kama `load_window` inarudisha None kwa pair (streams <4) — kwenye
-  holdout hii ingeteketeza dirisha bikira kwa jaribio TOFAUTI na lililosajiliwa (composition/N tofauti,
-  registration string ile ile). **FIX:** `if missing: raise RuntimeError(...)` kwa `split in
-  (validation, holdout)`. Self-test [F2]: fixture yenye pair moja imeondolewa → RAISE (AT5 holdout guard
-  bado inatangulia kwa PermissionError — load_window inaraise KABLA ya missing-check).
-- **N1 (non-blocking):** per-rep EV_R + sign sasa zinachapishwa kwenye report (jedwali; 4/4 chanya =
-  mechanism evidence kali — design §5).
-
-## Open Questions
-
-1. **AT1 pip-scale "exact" vs fixed-slippage residual — REFEREE ACCEPTED (§3, OQ#1 CLOSED).** Referee:
-   "implementer is right, my design wording was wrong" — `episodes()` slippage ni const-pip (broker cost
-   halisi isiyo-scale); residual −SLIP·(1−1/s)/R (0.003–0.013 R, immaterial vs EV_R). Test yangu (struct-
-   exact + residual=closed-form) ni **stronger** kuliko "bit-identical" ya awali. **USIFANYE** slippage
-   iwe pip-proportional (ingebadilisha kila artifact). Design §2/§5-AT1 imerekebishwa. **Hakuna kazi zaidi.**
-2. **Seed kutoka registration string — REFEREE CONFIRMED (§3, OQ#2):** hashing-scheme juu ya string nzima
-   ndio design ilikusudia. **CLOSED.**
-3. **REP-2 tie-break B=50k recompute (§1 note i):** design inaagiza wakati wa registration ku-recompute
-   p_boot ya EURGBP pair kwa B=50,000 na kurekodi kama tie-break imethibitishwa/imebadilishwa na finer
-   floor (2e-05). Hii ni hatua ya **registration** (Chief §8.4) — runner wangu unatumia REP_CELLS
-   zilizofungwa; sijafanya tie-break re-selection (hakuna data + si jukumu la build).
-4. **`by`-nothing:** runner inaandika result nzima (pooled series + descriptive record: shares,
-   timeout_share, lag-1 ρ, CI) kwenye jsonl + report. Je Chief anataka format tofauti ya rekodi kwa
-   registration freeze?
-
----
-
-*family_pooled = runner ya jaribio MOJA la pre-registered (m=1) kwa C2-WATCH family (design SCIENTIST-D
-§0-§8); REUSE tu (episodes/_mask_context/pvalue_boot ZERO changes; load_window +ts additive); R-units
-normalization (§2); pooling union-sort (§3); MDE screen (§4); AT1-AT8 PASS 8/8; sweep 22/22 PASS. NO
-holdout run (Chief token §8.4). NO ML. Confirmation ≠ discovery (§7). Profitable ≠ Tradable Edge.
-Protect capital first.*
+*design: SCIENTIST-D reports/family_pooled_design.md · engine strategy_lab.pvalue_boot (wave1_referee_report.md) · reuse-only. Profitable != Tradable Edge. Protect capital first.*
