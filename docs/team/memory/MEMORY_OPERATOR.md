@@ -219,3 +219,16 @@ Fixes 2 ndogo za lazima (protection logic, si statistic): F1 (MDE screen itumie 
 split-N), F2 (abort kama pair inakosekana). SEQUENCE: (1) IMPLEMENTER-A session -> F1/F2 (~30min)
 -> "tayari F1F2"; (2) SCIENTIST-D spot-check (diff); (3) Chief atatoa runbook ya dry-run VALID ->
 screen. USIENDESHE holdout bado. Paper-trading STRAT-001/002 inaendelea.
+
+## RUNBOOK HAI (2026-07-13): AT8 DRY-RUN ya VALIDATION (gate ya screen kabla ya freeze)
+F1/F2 APPROVED (Chief spot-check: statistic untouched, sweep 22/22). KAZI YAKO — dry-run kwenye
+VALIDATION (dirisha lililokwisha-funguliwa, HALALI; SIYO holdout):
+  git pull
+  cd src\research
+  python family_pooled.py --split validation
+  cd ..\..
+  git add -A && git commit -m "family-pooled dry-run VALIDATION (screen)" && git push origin main
+Hii inahesabu EV_R/sd_R HASA za reps 4 zikiunganishwa → screen shrink 0.35 kwa N_exp=341.
+Ripoti "tayari dry-run". Chief atasoma: screen PASS → freeze registration + one-shot token;
+screen FAIL → stop (LESSON, dirisha bikira salama). USIENDESHE --split holdout (Chief token TU
+baada ya screen PASS). Paper-trading STRAT-001/002 inaendelea.

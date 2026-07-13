@@ -482,3 +482,13 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   one-shot ingechoma dirisha kwa mtihani WA TOFAUTI na registered). N1 = print per-rep EV_R
   (non-blocking). SEQUENCE: IMPLEMENTER-A F1+F2 (~30min) → SCIENTIST-D spot-check (diff-level,
   hakuna MC mpya) → Operator dry-run VALID → screen 0.35 kwa N_exp → Chief freeze → one-shot.
+
+- **2026-07-13 — F1/F2 FIXED (IMPLEMENTER-A) + CHIEF SPOT-CHECK: PASS.** F1: registration
+  screen sasa inatumia N_exp (self-test: N_exp=634 ≠ pooled N=457; MDE=1.645·sd/√N_exp; split-N
+  = descriptive). F2: missing-pair → RuntimeError (drop GBPJPY → raise, si silent). Sweep 22/22.
+  CHIEF diff verification: F1/F2 zinagusa screen-call + abort TU — ZERO statistic functions
+  zimebadilika (pvalue_boot/pool/R-norm intact) → spot-check ya referee (diff-level, statistic
+  untouched) imetimia; hakuna MC mpya inahitajika. **GATE INAYOFUATA: AT8 dry-run VALIDATION**
+  (Operator, data halisi) → exact EV_R/sd_R → screen shrink 0.35 kwa N_exp=341. PASS → Chief
+  freeze registration → one-shot. FAIL → stop, document becomes LESSON (S3c-style, dirisha bikira
+  halijaguswa).
