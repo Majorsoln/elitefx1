@@ -204,9 +204,29 @@ screen exact → Chief freeze kwa commit → one-shot token → verdict+CI.
 (AT1-AT8; AT4 kwa MC huru yangu); (2) verify exact screen ya AT8 kabla ya freeze; (3) baada
 ya R3 (WAVE-2): regime-conditional deployment proposal (bado pending kutoka Chief response).
 
-## CURRENT TASK (2026-07-13): REFEREE ya family_pooled build (design yako; commit acbc11f)
-sweep 22/22; AT1-AT8 PASS. KAZI: (1) AT4 FULL MC huru — mixture 4-component (win/WL/share za reps,
-design §4) EV=0, interleaved, N=341, ≥20k reps, B=50k → size pvalue_boot@0.05 ∈[0.040,0.060]?
-+ AR(0.5) variant ≤0.08 (build ilitoa 0.066 scaled — thibitisha full). (2) OQ#1 ruling (Chief:
-non-blocker; kubali wording fix au pinga). (3) verbatim-vs-implemented (R-norm, pool sort/dedup,
-seed kutoka reg string). Ripoti "tayari referee-pooled" (APPROVED/FIXES). APPROVED → Operator dry-run.
+## COMPLETED (2026-07-13): REFEREE ya family_pooled build — VERDICT: **APPROVED WITH 2
+REQUIRED PRE-FREEZE FIXES (F1, F2)**; AT4 full MC PASS bands zote 6
+Deliverables: `reports/family_pooled_referee_report.md` + `scripts/scientist_d_referee_pooled.py`.
+- **AT4 FULL MC (huru; nulls zangu 2 + engine variant yangu; pvalue_boot yao haikuguswa):**
+  NULL-A (breakeven-win, W/L za reps R-units) 20k@B=2k size **0.0510**; NULL-B (observed-win,
+  build construction) **0.0508**; B-ladder stable (0.047@10k, 0.040@50k — full 20k@50k=13h
+  infeasible, jitter arithmetic documented); AR(0.5) copula **0.0639** ≤0.08 (z: 0.1244);
+  variant engine yangu 0.0516, agreement |Δ|=0.0006. NB honest: kwenye iid mixture z pia ni
+  ~nominal (skews za reps zina-cancel — 2 neg + 2 pos); bootstrap inalipa hasa kwa CLUSTERING.
+- **Verbatim-vs-implemented: PASS** kila kipengele; reuse purity kwa git show + golden hashes
+  byte-identical kwa run YANGU (mr=28cc2218, nr7=872edc44); self-test 8/8 + engine self-tests
+  PASS locally.
+- **F1 (REQUIRED):** mde_screen inaitwa na N ya split — lazima N_exp=Σ(nᵢ/daysᵢ)×347 (kwenye
+  AT8 dry-run VALID N≈531 → MDE understated ×1.25: 0.119→0.095 R, anti-conservative).
+- **F2 (REQUIRED):** missing pair → run_family inaendelea kimya na streams <4 — one-shot
+  ingeteketea kwa test tofauti na iliyosajiliwa; abort inahitajika kwa validation/holdout.
+- **OQ#1 ACCEPTED** (implementer sahihi; design §2/§5-AT1 nimeisha-amend: invariance up-to
+  fixed pip-slippage, residual closed-form 0.003-0.013 R; episodes() ISIBADILISHWE). OQ#2 seed
+  confirmed; OQ#3 = registration step ya Chief (tie-break EURGBP recompute @B=50k kwenye freeze
+  commit). Nits N1 (print per-rep EV_R kwenye report) / N2 (is_timeout edge) non-blocking.
+- Conditions kwa registration: B=50k verdict; screen exact na N_exp ya F1 (forecast precheck
+  ×1.18 @0.35); lag-1 |ρ₁|>0.3 → recalibrate kabla verdict haijakubaliwa.
+
+## CURRENT TASK (baada ya hapa): (1) spot-check ya diff ya F1+F2 ikija (hakuna MC mpya —
+statistic haiguswi); (2) verify exact screen ya AT8 dry-run ya Operator kabla ya freeze;
+(3) baada ya R3 (WAVE-2): regime-conditional deployment proposal (pending toka Chief response).

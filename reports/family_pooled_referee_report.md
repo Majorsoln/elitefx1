@@ -4,9 +4,8 @@
 Subject: `src/research/family_pooled.py` build (commit `acbc11f`, IMPLEMENTER-A) ·
 MC evidence: `scripts/scientist_d_referee_pooled.py` (pure Monte Carlo — no data window touched)*
 
-## VERDICT: **APPROVED WITH 2 REQUIRED PRE-FREEZE FIXES (F1, F2)** — *provisional until §2 MC
-table is filled (full B-ladder running at commit time; placeholders {…} below will be replaced
-in the finalization commit; approval is void if any §2 band fails)*
+## VERDICT: **APPROVED WITH 2 REQUIRED PRE-FREEZE FIXES (F1, F2)** — final; AT4 full MC
+complete, all 6 bands PASS (§2)
 
 The implementation is faithful to the design, reuse purity is verified, all 8 acceptance tests
 pass (re-run by me locally), and my independent full-scale AT4 Monte Carlo confirms the pooled
@@ -50,15 +49,26 @@ Mixture shares .17/.35/.25/.22, N=341, interleaved.
 
 | Run | Config | Size @ α=0.05 | Band | Result |
 |---|---|---|---|---|
-| 1a | official, NULL-A, 20,000 reps @ B=2,000 | {S1A} | [0.040, 0.060] | {R1A} |
-| 1b | official, NULL-B, 20,000 reps @ B=2,000 | {S1B} | [0.040, 0.060] | {R1B} |
-| 2 | official, NULL-A, 4,000 reps @ B=10,000 | {S2} | [0.035, 0.065] | {R2} |
-| 3 | official, NULL-A, 600 reps @ B=50,000 (registration B) | {S3} | [0.030, 0.070] | {R3} |
-| 4 | official, NULL-A + AR(ρ=0.5) copula clustering, 8,000 reps @ B=2,000 | {S4} | ≤ 0.080 | {R4} |
-| 5 | **referee's own** stationary-bootstrap+NW variant (different construction, own RNG), NULL-A, 8,000 reps @ B=2,000 | {S5} | agree w/ 1a within 2·SE | {R5} |
-| — | z-test reference on the same nulls | {SZ} | (reference) | — |
+| 1a | official, NULL-A, 20,000 reps @ B=2,000 | **0.0510** (SE .0016) | [0.040, 0.060] | ✅ PASS |
+| 1b | official, NULL-B, 20,000 reps @ B=2,000 | **0.0508** (SE .0016) | [0.040, 0.060] | ✅ PASS |
+| 2 | official, NULL-A, 4,000 reps @ B=10,000 | 0.0470 (SE .0033) | [0.035, 0.065] | ✅ PASS |
+| 3 | official, NULL-A, 600 reps @ B=50,000 (registration B) | 0.0400 (SE .0080) | [0.030, 0.070] | ✅ PASS |
+| 4 | official, NULL-A + AR(ρ=0.5) copula clustering, 8,000 reps @ B=2,000 | **0.0639** (SE .0027) | ≤ 0.080 | ✅ PASS |
+| 5 | **referee's own** stationary-bootstrap+NW variant (different construction, own RNG), NULL-A, 8,000 reps @ B=2,000 | 0.0516 (SE .0025) | agree w/ 1a within 2·SE | ✅ |Δ|=0.0006 |
+| — | z-test reference: NULL-A 0.0469 · NULL-B 0.0543 · AR(0.5) **0.1244** | — | (reference) | — |
 
-{MC_SUMMARY}
+**Reading.** The official engine's size is nominal on both honest null constructions and
+B-stable across the ladder (0.051 → 0.047 → 0.040 as B grows — the mild finite-B smoothing
+disappears exactly as the jitter arithmetic predicts). Under AR(0.5) clustering the engine
+holds 0.064 vs the z-test's 0.124 — the documented mb3+NW dependence correction working on
+this mixture. My independent variant implementation agrees to |Δ|=0.0006. One honest
+observation: on the *iid* mixture the z-test is also near-nominal (0.047/0.054) — the reps'
+skews partially cancel (two negative-skew high-win components vs two positive-skew TP3
+components), so the pooled null is nearly symmetric. The bootstrap's protection is therefore
+mostly buying insurance against dependence (run 4) and composition drift, not correcting a
+large iid bias here. That is fine — insurance at a measured ~5pp power price (WAVE-1) — but it
+should temper any claim that pooling *requires* the bootstrap; it requires it for the
+clustering, and the criterion stays as designed. AT4 spec is satisfied in full.
 
 ## 3. OQ rulings (referee)
 
