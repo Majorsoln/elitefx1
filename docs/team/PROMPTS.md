@@ -76,6 +76,65 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [C2-0] (Jenga 15m/30m states + HTF context features)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1) — Track A Engineering.
+KAZI: C2-0 ya MZUNGUKO-2 — jenga msingi wa data unaohitajika ili strategies za 15m/30m
+zenye HTF-context ziweze kupimwa. HAKUNA hii = hakuna entry ya kupima.
+
+SYNC KWANZA (LAZIMA): `git checkout main && git pull origin main`.
+
+SOMA (kwa order):
+  1. docs/CYCLE2_CHARTER.md — muundo + ushauri wa Chief (masharti 4).
+  2. src/research/market_state_engine.py — engine iliyopo (H1/H2/H4/D1). TUMIA TENA logic yake:
+     h1_from_ticks (ticks->bars, spread=median pips), rollup, _atr (Wilder), _deseason,
+     _reg3 (LOW/NORMAL/HIGH), _rank_wide, state_df, self_test. USIVUNJE golden self-test.
+  3. src/research/event_quality_report.py — harness (episodes) itakayotumia states hizi.
+  4. config/data_config.yaml — pairs 12 (XAUUSD pip=0.01, metals APPROVED).
+
+DELIVERABLE 1 — INTRADAY STATES (15m + 30m):
+  - Module mpya src/research/intraday_state_engine.py (au ongeza TFS kwa market_state_engine
+    kwa uangalifu — chaguo lako, lakini USIHARIBU H1/H2/H4/D1 zilizopo wala self-test yao).
+  - Jenga 15m base bars kutoka TICKS: time_bucket(INTERVAL 15 MINUTE ...), o/h/l/c, tc,
+    spr=median((ask-bid)/pip). Rollup 30m kutoka 15m (group_by_dynamic every="30m").
+  - Kwa kila 15m/30m bar toa states (SIGNAL-bar decidable, no-lookahead, .shift(1) kama engine):
+    vol regime (_reg3 kwenye atr_n), activity (_rank_wide kwenye tc), session (saa ya bar).
+  - Andika Hive: data/state/symbol=<SYM>/tf=<15m|30m>/... (fuata mpangilio wa engine iliyopo).
+  - Pairs ZOTE 12. Hakuna pair iliyopendelewa.
+
+DELIVERABLE 2 — HTF CONTEXT FEATURES (picha kubwa, alignment no-lookahead):
+  - Module src/research/htf_context.py. Kutoka H4 na D1 (bars/states za engine iliyopo) kokotoa
+    "big-picture" features zinazohesabika:
+      * trend/slope: sign+ukubwa wa mteremko wa EMA/linreg (H4 na D1).
+      * regime: vol state (LOW/NORMAL/HIGH) + activity.
+      * structure: swing highs/lows (fractal/rolling), umbali wa bei hadi S/R ya karibu (kwa ATR).
+      * momentum: RSI/ROC ya HTF.
+  - ALIGNMENT NGUMU (hii ndiyo hatari kuu — LEAKAGE): kwa kila LTF bar (open-time t), context
+    LAZIMA itoke kwenye HTF bar ya MWISHO iliyo-FUNGWA KABLA ya t (close_time <= t).
+    Tumia as-of BACKWARD join. KAMWE usitumie H4/D1 bar inayomzunguka t (ina future info).
+  - Toa DataFrame/parquet: kwa kila 15m/30m bar, columns za HTF-context tayari kwa
+    _mask_context (context-filter ON signals kama strategy_lab).
+
+SHERIA NGUMU:
+  - No-lookahead KILA MAHALI (.shift(1), as-of backward, closed-bar tu). Hii ndiyo kazi.
+  - Decidability: state ya SIGNAL-bar; session = saa ya bar husika.
+  - Spread kutoka ticks (median pips), pip sahihi kwa pair (XAU*/XAG* = 0.01).
+  - Self-test synthetic (kama market_state_engine.self_test): thibitisha (a) 30m rollup =
+    aggregation sahihi ya 15m; (b) as-of join HAITUMII future bar (jenga kesi ya mtego:
+    context lazima iwe HTF bar iliyotangulia, si inayozunguka). Golden hash/assert.
+  - Ongeza modules kwa src/research/run_selftests.py MODULES list.
+
+DELIVERABLE 3 — REPORT: reports/cycle2_intraday_htf.md — muhtasari: TF, pairs, bar counts,
+  coverage per pair/year, sanity (spread median, session distribution), na uthibitisho wa
+  no-lookahead (matokeo ya self-test ya mtego).
+
+UKIMALIZA: `git add -A && git commit && git push`; update docs/team/memory/MEMORY_IMPLEMENTER_A.md;
+ripoti: "tayari C2-0 — 15m/30m states + HTF context zimejengwa kwa pairs 12, self-test PASS."
+```
+
+---
+
 ## PROMPT — STRATEGIST-M (Market Strategist — HTF-bias → 15m/30m entries) [MZUNGUKO-2]
 
 ```text
