@@ -191,3 +191,10 @@ na doctrine kwenye uchambuzi). Prompt: docs/team/PROMPTS.md (mwisho). Memory yak
 session MPYA ya AI na prompt ya SCIENTIST-D → atasoma mwenyewe → ataandika
 reports/data_science_review.md (udhaifu wa njia yetu + nini tufanye) → "tayari SCIENTIST-D" →
 Chief atajibu ripoti hoja kwa hoja mbele yako (PD ndiye msuluhishi wa migongano).
+
+## LOG — 2026-07-12 (SOMO: branch-hygiene ya agents; SCIENTIST-D design bado)
+Session ya SCIENTIST-D ilifanya kazi kwenye branch ya zamani (data-science-review-n3dm9l) yenye
+memory ILIYOPITWA -> ilirudia review ya kwanza (commit 2081453) badala ya task mpya (family-pooled
+design, iliyoko main 1a3d314). Chief ameongeza "SYNC KWANZA: git checkout main && git pull" kwenye
+prompts zote. KAZI: fungua SCIENTIST-D session UPYA baada ya git checkout main && git pull ->
+atasoma task ya family-pooled design -> commit+push -> "tayari design".
