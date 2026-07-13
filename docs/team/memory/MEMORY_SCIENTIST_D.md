@@ -203,3 +203,10 @@ screen exact → Chief freeze kwa commit → one-shot token → verdict+CI.
 ## CURRENT TASK (baada ya hapa): (1) referee wa implementation ya family_pooled.py ikija
 (AT1-AT8; AT4 kwa MC huru yangu); (2) verify exact screen ya AT8 kabla ya freeze; (3) baada
 ya R3 (WAVE-2): regime-conditional deployment proposal (bado pending kutoka Chief response).
+
+## CURRENT TASK (2026-07-13): REFEREE ya family_pooled build (design yako; commit acbc11f)
+sweep 22/22; AT1-AT8 PASS. KAZI: (1) AT4 FULL MC huru — mixture 4-component (win/WL/share za reps,
+design §4) EV=0, interleaved, N=341, ≥20k reps, B=50k → size pvalue_boot@0.05 ∈[0.040,0.060]?
++ AR(0.5) variant ≤0.08 (build ilitoa 0.066 scaled — thibitisha full). (2) OQ#1 ruling (Chief:
+non-blocker; kubali wording fix au pinga). (3) verbatim-vs-implemented (R-norm, pool sort/dedup,
+seed kutoka reg string). Ripoti "tayari referee-pooled" (APPROVED/FIXES). APPROVED → Operator dry-run.

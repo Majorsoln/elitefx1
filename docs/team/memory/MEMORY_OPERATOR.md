@@ -206,3 +206,9 @@ mtihani MMOJA wenye power. SEQUENCE: (1) IMPLEMENTER-A ajenge family_pooled.py +
 (memory yake ina task) -> "tayari family-pooled build"; (2) SCIENTIST-D referee (MC ya AT4);
 (3) dry-run VALIDATION -> screen -> Chief freeze -> one-shot. KAZI YAKO: fungua IMPLEMENTER-A
 session (SYNC KWANZA!) -> build. Paper-trading STRAT-001/002 inaendelea.
+
+## LOG — 2026-07-13 (FAMILY-POOLED BUILD APPROVED) + SEQUENCE
+family_pooled.py APPROVED (sweep 22/22; AT1-AT8; OQ#1 non-blocker). KAZI: (1) fungua SCIENTIST-D
+session (SYNC KWANZA) — referee task (full AT4 MC + OQ#1) → "tayari referee-pooled". (2) BAADA ya
+referee PASS, Chief atatoa runbook ya dry-run (validation, data halisi → screen). USIENDESHE
+holdout (Chief token baada ya screen PASS). Paper-trading STRAT-001/002 inaendelea.

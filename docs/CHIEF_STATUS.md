@@ -460,3 +460,10 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   capital, per-pair inahitaji forward tranche yake. Chief verification: N=341/EV_R=0.401/MDE=0.119
   zinarudi hasa (huru). SEQUENCE (§8): IMPLEMENTER-A ajenge family_pooled.py + AT1-AT8 →
   SCIENTIST-D referee (MC ya AT4) → dry-run VALIDATION → screen 0.35 → Chief freeze → one-shot.
+
+- **2026-07-13 — FAMILY-POOLED BUILD (IMPLEMENTER-A): APPROVED.** family_pooled.py (runner +
+  AT1-AT8; REUSE-only, load_window +ts additive; sweep 22/22). OQ#1 (AT1 fixed-slip residual
+  SLIP·(1−1/scale)/R) = Chief ruling NON-BLOCKER (hakuna rescaling production; wording fix;
+  SCIENTIST-D athibitishe). AT4 = scaled-sanity 0.066 → full MC = kazi ya referee. SEQUENCE:
+  SCIENTIST-D referee (full AT4 + OQ#1 + verbatim) → Operator dry-run VALIDATION → screen 0.35
+  (fail→stop→LESSON) → Chief freeze → one-shot. Portfolio inabaki STRAT-001/002.
