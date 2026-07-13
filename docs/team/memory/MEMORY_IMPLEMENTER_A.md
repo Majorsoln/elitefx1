@@ -620,3 +620,24 @@ Referee APPROVED WITH FIXES (reports/family_pooled_referee_report.md §4). Fanya
      moja imeondolewa lazima i-RAISE, si kuripoti.
   N1 (non-blocking): print per-rep EV_R + sign kwenye report (data ipo kwenye jsonl).
 Self-tests mpya kwa F1/F2. Sweep intact. UKIMALIZA: "tayari F1F2" - SCIENTIST-D spot-check diff.
+
+=== FIXES F1/F2 (2026-07-13) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri SCIENTIST-D spot-check ya diff → Operator AT8 dry-run → Chief freeze/token)**
+— F1/F2 zimefanyika; self-test 10/10 (AT1-AT8 + F1 + F2); sweep 22/22. HAKUNA holdout run.
+LAST COMPLETED: **F1/F2 referee fixes** ✅ (reports/family_pooled_referee_report.md §4; statistic HAIJAGUSWA):
+  · F1 (SERIOUS): run_family sasa inahesabu n_exp = Σ(n_i/days_i)×347 (design §4) kutoka data["days"]
+    per pair → mde_screen(ev_r, sd_r, n_exp) = screen ya REGISTRATION (SIO pooled-N ya split =
+    anti-conservative). screen_split (pooled-N) inabaki descriptive. Self-test [F1]: MDE=1.645·sd/√N_exp.
+  · F2: run_family inaraise RuntimeError kama pair inakosekana kwa split in (validation, holdout) —
+    linda one-shot (streams 4 HASA = test iliyosajiliwa). AT5 holdout guard bado inatangulia
+    (PermissionError kutoka load_window KABLA ya missing-check). Self-test [F2]: drop pair → RAISE.
+  · N1 (non-blocking): per-rep EV_R + sign zinachapishwa report (jedwali; 4/4 chanya = mechanism evidence).
+  · Referee rulings: OQ#1 (fixed-slip residual) ACCEPTED — test yangu stronger kuliko "bit-identical";
+    USIFANYE slippage pip-proportional. OQ#2 (seed) CONFIRMED. OQ#3 tie-break = registration (Chief §8.4).
+  · Self-test 10/10 PASS; SWEEP 22/22 PASS. Report: reports/family_pooled_report.md (§Referee Fixes).
+NEXT AFTER: (1) SCIENTIST-D spot-check ya F1/F2 diff (no new MC — statistic untouched); (2) Operator
+  AT8 dry-run VALIDATION → EV_R/sd_R EXACT → §4 screen shrink 0.35 kwa N_exp (fail→stop→LESSON);
+  (3) Chief freeze registration (§8.4: B=50k, seed, REP-2 tie-break recompute, criterion) + holdout token
+  → one-shot verdict+CI. WAVE-2: R3 rolling folds, R8 ticks.
+OPEN QUESTIONS: OQ#1/OQ#2 CLOSED na referee. Zilizobaki (Chief, §registration): REP-2 tie-break B=50k
+  recompute; format ya rekodi ya freeze. Hakuna blocker upande wa build.

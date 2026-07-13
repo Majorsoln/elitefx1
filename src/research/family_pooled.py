@@ -169,17 +169,28 @@ def run_family(split, holdout_token=None, out_root=REPO_ROOT, cells=REP_CELLS, t
     Inarudisha result dict. split='holdout' bila token sahihi → PermissionError (kupitia load_window)."""
     reg = registration_string(cells)
     seed = _seed_from_registration(reg)
-    streams, missing = [], []
+    streams, missing, stream_days = [], [], []
     for c in cells:
         data = load_window(c["pair"], tf, split, holdout_token)   # AT5 guard iko HAPA (design §5-AT5)
         if data is None:
             missing.append(c["pair"]); continue
-        streams.append(cell_stream(c, data))
+        s = cell_stream(c, data)
+        streams.append(s)
+        stream_days.append((len(s), data["days"]))                # F1: (n_i, days_i) kwa N_exp
+    # F2 (referee §4): test iliyosajiliwa imefafanuliwa juu ya streams 4 HASA. Pair inayokosekana →
+    # composition/N tofauti kwa registration string ILEILE = jaribio TOFAUTI. Kataa (linda one-shot).
+    if missing and split in ("validation", "holdout"):
+        raise RuntimeError(f"missing_pairs: {missing} — registered test = streams {len(cells)} HASA "
+                           f"(F2; one-shot protection). Windows zote lazima ziwepo kwa {split}.")
     pooled = pool_streams(streams)
     pooled_R = np.array([r["pnl_R"] for r in pooled], float)
     pooled_atr = np.array([r["pnl_atr"] for r in pooled], float)
     n = len(pooled_R)
-    result = dict(split=split, reg_string=reg, seed=seed, n=n, missing=missing,
+    # F1 (referee §4): N_exp = Σ_reps (n_i/days_i) × N_DAYS_WINDOW (design §4) — expected holdout trade
+    # count. Screen ya REGISTRATION LAZIMA itumie N_exp, SIO pooled-N ya split (dry-run VALID N kubwa
+    # → MDE ndogo → screen anti-conservative = mtego wa ruling 2026-07-12).
+    n_exp = N_DAYS_WINDOW * sum(li / di for li, di in stream_days if di > 0)
+    result = dict(split=split, reg_string=reg, seed=seed, n=n, n_exp=n_exp, missing=missing,
                   cells=[dict(c) for c in cells])
     if n >= 2:
         ev_r = float(pooled_R.mean()); sd_r = float(pooled_R.std(ddof=1))
@@ -188,14 +199,19 @@ def run_family(split, holdout_token=None, out_root=REPO_ROOT, cells=REP_CELLS, t
         p_atr = pvalue_boot(pooled_atr, B=B, mean_block=MEAN_BLOCK, seed=seed)  # ATR-unit sensitivity
         ci = _boot_ci(pooled_R, 0.90, seed=seed)
         rho1 = float(np.corrcoef(pooled_R[:-1], pooled_R[1:])[0, 1]) if n > 2 else float("nan")
-        screen = mde_screen(ev_r, sd_r, n)
+        screen = mde_screen(ev_r, sd_r, n_exp)              # F1: REGISTRATION screen (N_exp)
+        screen_split = mde_screen(ev_r, sd_r, n)            # descriptive extra (split-N; NON-gating)
         verdict = "PASS" if (p_boot < ALPHA and ev_r > 0) else "FAIL"
-        shares = {}
+        shares = {}; per_rep = {}
         for r in pooled:
             shares[r["pair"]] = shares.get(r["pair"], 0) + 1
+            per_rep.setdefault(r["pair"], []).append(r["pnl_R"])
+        # N1 (referee): per-rep EV_R + sign (design §5 descriptive list)
+        per_rep_stats = {p: dict(n=len(v), ev_r=float(np.mean(v)),
+                                 sign=("+" if np.mean(v) > 0 else "-")) for p, v in per_rep.items()}
         result.update(ev_r=ev_r, sd_r=sd_r, p_boot=p_boot, p_z=p_z, p_atr=p_atr,
-                      ci90=ci, rho1=rho1, screen=screen, verdict=verdict,
-                      shares={k: v / n for k, v in shares.items()},
+                      ci90=ci, rho1=rho1, screen=screen, screen_split=screen_split, verdict=verdict,
+                      shares={k: v / n for k, v in shares.items()}, per_rep=per_rep_stats,
                       timeout_share=float(np.mean([r["is_timeout"] for r in pooled])))
     else:
         result.update(ev_r=None, verdict="INSUFFICIENT_N")
@@ -241,11 +257,25 @@ def _write_outputs(result, pooled, out_root):
         L.append(f"- **p_boot = {result['p_boot']:.5f}** (RASMI) · p_z = {result['p_z']:.5f} (sensitivity) · "
                  f"p_atr = {result['p_atr']:.5f} (ATR-unit sensitivity)")
         L.append(f"- 90% bootstrap CI ya EV_R: [{result['ci90'][0]:+.4f}, {result['ci90'][1]:+.4f}]")
-        L.append(f"- MDE screen (shrink {SHRINK_TIP}): MDE={s['mde']:.4f} vs forecast={s['forecast']:.4f} → "
+        L.append(f"- **MDE screen ya REGISTRATION** (shrink {SHRINK_TIP}, **N_exp={result['n_exp']:.0f}** — "
+                 f"design §4, F1): MDE={s['mde']:.4f} vs forecast={s['forecast']:.4f} → "
                  f"{'PASS' if s['passes'] else 'FAIL'} (margin ×{s['margin']:.2f})")
+        ss = result["screen_split"]
+        L.append(f"  - descriptive (NON-gating) split-N screen (pooled N={result['n']}): MDE={ss['mde']:.4f} "
+                 f"→ {'PASS' if ss['passes'] else 'FAIL'} (SIO screen ya registration — F1)")
         L.append(f"- descriptive (NON-gating): shares={ {k: round(x, 2) for k, x in result['shares'].items()} } · "
                  f"timeout_share={result['timeout_share']:.2f} · lag-1 ρ={result['rho1']:+.3f} "
                  f"{'(⚠ >0.3 → engine recheck, referee cond 3)' if abs(result['rho1'])>0.3 else ''}")
+        # N1 (referee §4): per-rep EV_R + sign (4/4 chanya = ushahidi wa mechanism; design §5)
+        L.append("\n### Per-rep EV_R (descriptive, NON-gating — N1)\n")
+        L.append("| rep | pair | n | EV_R | sign |")
+        L.append("|-----|------|---|------|------|")
+        cell_pair = {c["pair"]: k for k, c in enumerate(result["cells"], 1)}
+        for pair, st in sorted(result["per_rep"].items(), key=lambda kv: cell_pair.get(kv[0], 99)):
+            L.append(f"| REP-{cell_pair.get(pair, '?')} | {pair} | {st['n']} | {st['ev_r']:+.4f} | {st['sign']} |")
+        n_pos = sum(1 for st in result["per_rep"].values() if st["ev_r"] > 0)
+        L.append(f"\n- {n_pos}/{len(result['per_rep'])} reps EV_R chanya "
+                 f"({'4/4 = mechanism evidence kali' if n_pos == 4 else 'tafsiri kwa tahadhari (design §5)'}).")
         L.append(f"\n## VERDICT (pre-registered §6): **{v}**\n")
         if v == "PASS":
             L.append("→ FAMILY claim = **PROVEN-OOS-PROVISIONAL (family level)**: inaidhinisha forward "
@@ -421,6 +451,33 @@ def self_test():
     print(f"[AT6/7/8] no-clobber(candidates intact={candidates_intact}) + outputs({OUT_JSONL},report="
           f"{report_written}) + dedup(pool assert) + dry-run N={res['n']} verdict={res['verdict']} "
           f"-> {'OK' if at67 else 'FAIL'}")
+
+    # ---- F1 (referee §4): screen ya REGISTRATION inatumia N_exp = Σ(n_i/days_i)×347, SIO pooled-N ya
+    # split. Fixtures days=250 → n_exp_expected = 347·Σ(n_i/250). Screen MDE = 1.645·sd_R/√n_exp.
+    import math as _m
+    z = 1.6448536269514722
+    n_exp_exp = N_DAYS_WINDOW * sum(st["n"] / 250.0 for st in res["per_rep"].values())
+    s = res["screen"]
+    f1_nexp = abs(res["n_exp"] - n_exp_exp) < 1e-6 and abs(res["n_exp"] - res["n"]) > 1.0   # ≠ pooled N
+    f1_mde = abs(s["mde"] - z * res["sd_r"] / _m.sqrt(res["n_exp"])) < 1e-9                  # tumia N_exp
+    f1_split = "screen_split" in res and res["screen_split"]["mde"] != s["mde"]             # split-N = descriptive
+    f1 = f1_nexp and f1_mde and f1_split
+    ok_all &= f1
+    print(f"[F1] registration screen uses N_exp={res['n_exp']:.0f} (≠ pooled N={res['n']}); "
+          f"MDE=1.645·sd/√N_exp={f1_mde}; split-N screen descriptive={f1_split} -> {'OK' if f1 else 'FAIL'}")
+
+    # ---- F2 (referee §4): pair inayokosekana → RuntimeError kwa validation/holdout (one-shot protection)
+    drop = REP_CELLS[0]["pair"]
+    _self.load_window = lambda sym, tf, split, token=None: (None if sym == drop else fx.get(sym))
+    try:
+        run_family("validation", write=False)
+        f2 = False
+    except RuntimeError:
+        f2 = True
+    finally:
+        _self.load_window = orig
+    ok_all &= f2
+    print(f"[F2] missing-pair abort (drop {drop} → RuntimeError, si silent report): {f2} -> {'OK' if f2 else 'FAIL'}")
 
     # ---- reuse purity: episodes/_mask_context/pvalue_boot reused kama-zilivyo; load_window +ts additive
     import inspect

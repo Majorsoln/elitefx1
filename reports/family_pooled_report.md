@@ -42,18 +42,20 @@ same-day cross-pair dependence kwa block resampling.
 
 ## Self Tests
 
-`family_pooled.py` acceptance tests **PASS 8/8** (bila data ya nje, Rule 7):
+`family_pooled.py` acceptance tests **PASS 10/10** (AT1-AT8 + F1/F2 za referee; bila data ya nje, Rule 7):
 
 ```text
 [AT2] R-norm EXACT: forced SL → -(1+cost/R); forced TP → tp/sl - cost/R (match 1e-12)
 [AT1] pip-scale invariance (normalization): struct EXACT-invariant · BBB bit-identical · AAA
-      residual = closed-form (-SLIP·(1-1/scale)/R) — fixed-slippage DEVIATION (OQ#1)
+      residual = closed-form (-SLIP·(1-1/scale)/R) — referee ACCEPTED (OQ#1, §3)
 [AT3] determinism: pvalue_boot bit-identical mara mbili; seed kutoka registration string stable
-[AT4] mixture-null size (SCALED sanity; full 20k×B=50k = referee MC): boot≈0.066 ~nominal & ≤ z
+[AT4] mixture-null size (SCALED sanity; full MC = referee §2: 6/6 bands PASS): boot≈0.066 ~nominal & ≤ z
 [AT5] holdout red-line: run_family(holdout) bila/ na token batili → PermissionError (load_window guard)
 [AT6] no-clobber: outputs = family_pooled_c2watch.jsonl + family_pooled_report.md TU; candidates*.jsonl intact
 [AT7] dedup: (pair, entry_bar) UNIQUE kwenye pooled stream (assert; pairs 4 tofauti → hakuna dup)
 [AT8] dry-run shape: pipeline kamili (VALIDATION fixtures) → result {n, ev_r, p_boot, screen, verdict}
+[F1] registration screen uses N_exp = Σ(n_i/days_i)×347 (≠ pooled-N ya split); MDE=1.645·sd/√N_exp
+[F2] missing-pair abort: pair inayokosekana kwa validation/holdout → RuntimeError (si silent report)
 
 Regression (sweep nzima): SELF-TEST SWEEP 22/22 PASS — ikijumuisha strategy_lab (byte-identical
 golden hashes mr=28cc2218/nr7=872edc44 INTACT baada ya load_window +ts), event_quality_report,
@@ -81,17 +83,35 @@ golden hashes mr=28cc2218/nr7=872edc44 INTACT baada ya load_window +ts), event_q
 5. **Verdict semantics (§6) zimo kwenye report generator**, lakini zinatumika tu holdout ikiendeshwa
    (Chief token). PASS = PROVEN-OOS-PROVISIONAL (family); HAIUNDI STRAT-00x, HAIRUHUSU capital.
 
+## Referee Fixes (F1/F2 — 2026-07-13, referee §4; ~30 min)
+
+Referee (SCIENTIST-D, `reports/family_pooled_referee_report.md`) = **APPROVED WITH 2 PRE-FREEZE FIXES**
+(AT4 full MC 6/6 bands PASS; reuse purity verified; OQ#1 ACCEPTED). Zote mbili ni **screen/one-shot
+protection**, hazigusi statistic:
+
+- **F1 (SERIOUS):** `run_family` ilikuwa inaita `mde_screen(ev_r, sd_r, n)` na `n` = pooled-N ya split.
+  Kwenye dry-run VALIDATION (N kubwa) hii inashusha MDE (×√(N/N_exp)) → screen anti-conservative (mtego
+  ule ule ruling 2026-07-12 ilikataa). **FIX:** `n_exp = Σ_reps (n_i/days_i) × 347` (design §4) kutoka
+  `data["days"]` per pair → `screen = mde_screen(ev_r, sd_r, n_exp)` ndio screen ya REGISTRATION;
+  `screen_split` (pooled-N) inabaki kama descriptive extra. Self-test [F1]: MDE = 1.645·sd_R/√N_exp,
+  N_exp ≠ pooled N.
+- **F2:** `run_family` iliendelea KIMYA kama `load_window` inarudisha None kwa pair (streams <4) — kwenye
+  holdout hii ingeteketeza dirisha bikira kwa jaribio TOFAUTI na lililosajiliwa (composition/N tofauti,
+  registration string ile ile). **FIX:** `if missing: raise RuntimeError(...)` kwa `split in
+  (validation, holdout)`. Self-test [F2]: fixture yenye pair moja imeondolewa → RAISE (AT5 holdout guard
+  bado inatangulia kwa PermissionError — load_window inaraise KABLA ya missing-check).
+- **N1 (non-blocking):** per-rep EV_R + sign sasa zinachapishwa kwenye report (jedwali; 4/4 chanya =
+  mechanism evidence kali — design §5).
+
 ## Open Questions
 
-1. **AT1 pip-scale "exact" vs fixed-slippage residual (kwa SCIENTIST-D referee/Chief).** Design §2
-   inasema invariance ni exact; `episodes()` fixed slippage inaifanya iwe exact-minus-`SLIP·(1-1/
-   scale)/R`. Nimetekeleza kama structural-exact + residual-matches-closed-form. Je referee anakubali
-   framing hii, au anataka `episodes()` slippage iwe pip-proportional (= change ya engine iliyokaguliwa,
-   nje ya jukumu langu — Rule 1)? Napendekeza: kubali (residual ~0.001 R, na ni cost halisi).
-2. **Seed kutoka registration string:** nimetumia `sha1(reg)[:12]→int` (hashing ILEILE ya
-   `_seed_from_key` lakini juu ya string nzima badala ya cell moja). Design §3.3 inasema "via existing
-   `_seed_from_key` hashing" — nafsiri kama hashing-scheme, si function-call moja kwa moja (cell keys 4
-   zinaingia kwenye string). Chief athibitishe.
+1. **AT1 pip-scale "exact" vs fixed-slippage residual — REFEREE ACCEPTED (§3, OQ#1 CLOSED).** Referee:
+   "implementer is right, my design wording was wrong" — `episodes()` slippage ni const-pip (broker cost
+   halisi isiyo-scale); residual −SLIP·(1−1/s)/R (0.003–0.013 R, immaterial vs EV_R). Test yangu (struct-
+   exact + residual=closed-form) ni **stronger** kuliko "bit-identical" ya awali. **USIFANYE** slippage
+   iwe pip-proportional (ingebadilisha kila artifact). Design §2/§5-AT1 imerekebishwa. **Hakuna kazi zaidi.**
+2. **Seed kutoka registration string — REFEREE CONFIRMED (§3, OQ#2):** hashing-scheme juu ya string nzima
+   ndio design ilikusudia. **CLOSED.**
 3. **REP-2 tie-break B=50k recompute (§1 note i):** design inaagiza wakati wa registration ku-recompute
    p_boot ya EURGBP pair kwa B=50,000 na kurekodi kama tie-break imethibitishwa/imebadilishwa na finer
    floor (2e-05). Hii ni hatua ya **registration** (Chief §8.4) — runner wangu unatumia REP_CELLS
