@@ -527,3 +527,27 @@ Workflow: Chief (decision+doctrine) → Implementer → Chief (review+compliance
   **Portfolio rasmi inabaki STRAT-001 + STRAT-002.** Mzunguko WOTE wa taasisi (design→build→
   referee→F1/F2→dry-run screen→freeze→one-shot) ulifanya kazi bila dosari — FAIL ni matokeo
   halali ya kisayansi, si kushindwa kwa mfumo. LESSON → RESEARCHER-K (L-e).
+
+---
+
+## 2026-07-13 — MZUNGUKO WA 2 UMEZINDULIWA (BEST STRATEGIES)
+
+**Amri ya PD:** anza upya kutafuta strategies BORA; mtaalamu wa strategies atumie features
+za data + ujuzi wa kutrade, azingatie HTF (picha kubwa), trade 15m/30m, alist best 10, kisha
+tabia kwa kila pair. **Kizuizi:** STRAT-001/002 HAZIFUTWI (models zitajengwa juu yake).
+
+**Vitendo vya Chief:**
+- **Ulinzi:** `docs/STRATEGIES.md` (IMMUTABLE) — STRAT-001 (nr7×USDCHF H1 SL2/TP1, S3 EV+1.92
+  p=0.021) + STRAT-002 (nr7×USDJPY H1 SL1/TP1, S3b EV+2.65 p=0.029) + C2-WATCH. Gate ya PROVEN.
+- **Archive (si futa):** reports/*.md 82 → `reports/archive/` (git mv). Lessons 36 + harness
+  + S1/S2 factory + bootstrap engine VINABAKI. reports/ top-level safi kwa Mzunguko-2.
+- **Charter:** `docs/CYCLE2_CHARTER.md` — muundo C2-0..C2-7 (jenga 15m/30m states → HTF features
+  → best-10 hypotheses → S1/S2 → tabia-kwa-pair → freeze → HOLDOUT one-shot → PROVEN/FAIL).
+- **Ushauri wa Chief (jibu la PD):** mwelekeo ni sahihi/kitaasisi (top-down HTF→LTF). Masharti 4:
+  (1) jenga 15m/30m states KWANZA (sasa H1/H2/H4/D1 tu); (2) "HTF big-picture" = FEATURES
+  zinazohesabika si maneno; (3) "best 10" = HYPOTHESIS-list si proven — kila moja inapita gate ile ile;
+  (4) tabia-kwa-pair = TRAIN/VALID pekee, holdout ni one-shot takatifu.
+- **Prompt + memory:** STRATEGIST-M imeandikwa (`docs/team/PROMPTS.md` + `MEMORY_STRATEGIST_M.md`).
+
+**Hatua inayofuata:** C2-0 (IMPLEMENTER-A: jenga 15m/30m states) SAMBAMBA na C2-1
+(STRATEGIST-M: list best 10 hypotheses). Discipline ya TRAIN/VALID/HOLDOUT inabaki.
