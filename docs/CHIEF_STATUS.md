@@ -696,3 +696,23 @@ PAST-bars levels, sweep-fail semantics, no-lookahead self-test); (2) gold spread
 **HATUA:** Operator aendeshe agent MBILI sambamba (C2-4 build + WAVE-B-prep). Baada ya build:
 C2-4 → `--validate` (S2); WAVE-B-prep → gold check. Kisha Chief afreeze WAVE-B grid (HC2-02/05/10 +
 gold kama check inaruhusu). STRAT-001/002 portfolio inaendelea.
+
+---
+
+## 2026-07-14 — C2-4 build + WAVE-B-prep builds REVIEW (PASS zote) → tayari kuendesha
+
+**C2-4 S2 build (IMPLEMENTER-A):** `run_s2` kwa wave_c2a.py. Review IMEPITA. S2_CELLS==registration
+(7 EURUSD), pvalue_boot/bh_fdr = engine RASMI za strategy_lab (import; s2_verdict = orchestration),
+guard validation-only, self-test [7-12]. ZERO statistic fns (golden 0 lines).
+
+**WAVE-B-prep build (IMPLEMENTER-A):** `false_break` (HC2-10) + `gold_spread_quality.py`. Review
+IMEPITA. false_break: PAST-bars levels (incl=False, no-lookahead), sweep-fail semantics, market;
+self-test loop ya jumla + test (6) sweep + golden hash. Gold check READ-ONLY (haibadilishi config).
+ZERO statistic fns.
+
+**Merge:** zote → branch yangu (conflict ya memory pekee — imetatuliwa, entries zote zimehifadhiwa).
+Sweep 26/26 PASS (imethibitishwa hapa: wave_c2a + gold_spread_quality zimo).
+
+**HATUA (Operator, runs 2):** (A) `python src/research/wave_c2a.py --validate` → S2 result;
+(B) `python src/research/gold_spread_quality.py` → gold verdict + max_spread. Kisha Chief: review
+S2 (survivor/FAIL) + gold verdict → freeze WAVE-B grid.
