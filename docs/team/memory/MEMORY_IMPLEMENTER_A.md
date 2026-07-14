@@ -749,3 +749,27 @@ LAST COMPLETED: **C2-4 build** ✅ — run_s2 kwenye wave_c2a.py (ADDITIVE; S1 h
     family_pooled = 0 lines (imethibitishwa). Diff = wave_c2a.py pekee (219+/2- CLI). SWEEP 25/25.
 NEXT: Operator --validate kwenye PC ya data (VALIDATION ina-consumed kwa cells 7 pre-registered;
 HOLDOUT HAIJAGUSWI). Matokeo yote halali: survivors -> C2-6; hakuna -> FAIL kwa heshima + LESSON.
+
+=== WAVE-B-prep (2026-07-14) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Operator aendeshe gold check kwenye data + Chief review kabla WAVE-B freeze)**
+— vipande 2 tayari; self-test PASS; sweep 26/26.
+LAST COMPLETED: **WAVE-B-prep** ✅ (prerequisites kabla WAVE-B HC2-02/05/10 + gold haijafreezwa):
+  (1) EVENT `false_break` (HC2-10) — event_library_v2.py: rolling_max/min ya bars `look` ZILIZOPITA
+      (_roll incl=False, no-lookahead kama big_range_mo); short (h>hh)&(c<hh), long (l<ll)&(c>ll);
+      _edge(lc,sc,rearm=8); entry="market"; imesajiliwa EVENTS_V2. Self-test: (a) no-lookahead via
+      generic loop (truncation-invariant, frac=0.053) + (b) sweep semantics (crafted: bar break-fail
+      → signal, normal bar → 0; short+long) + (c) determinism + golden hash cc→09b28990b0ead07b. PASS.
+  (2) GOLD SPREAD-QUALITY CHECK — gold_spread_quality.py MPYA (READ-ONLY): spr dist (median/p90/p95/p99
+      pips; spr column tayari pips) + ATR median (atr column price → /pip) + cost_share@p95 (TP2R) kwa
+      XAUUSD 15m/30m; recommend_max_spread(~p95 round-5); verdict SUITABLE/MARGINAL/COST-FRAGILE/NO-DATA;
+      report reports/xauusd_spread_quality.md. HAIBADILISHI config (Chief ruling — pendekezo tu).
+      Self-test 6/6 (synthetic; missing-parquet→None). Operator ataiendesha kwenye data halisi.
+  · SHERIA NGUMU zimeheshimiwa: episodes/pvalue_boot/_mask_context HAZIJAGUSWA (git diff tupu).
+    run_selftests += gold_spread_quality. SWEEP 26/26 PASS.
+NEXT AFTER: (1) Operator: `python gold_spread_quality.py` kwenye PC ya data → xauusd_spread_quality.md
+  (verdict + max_spread halisi + coverage); (2) Chief: review false_break + gold verdict → freeze WAVE-B
+  grid (HC2-02/05/10 + gold ikiwa SUITABLE); (3) S1-C2 TRAIN ya WAVE-B hypotheses.
+OPEN QUESTIONS / NOTES:
+  - Pendekezo la max_spread ya gold: RULE = ceil(p95_30m/5)×5; kadirio ~50-55 (median≈35 ya C2-0 §0.5);
+    namba HALISI = Operator's run (data iko PC yake, R-1). Config HAIJABADILISHWA (Chief aamue).
+  - false_break params default look=20/rearm=8 (spec HC2-10); grid ya S1 yaweza kupima look/rearm.

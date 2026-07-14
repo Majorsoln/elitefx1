@@ -15,8 +15,8 @@ MODULES = ["frozen", "decision_object", "evidence_snapshot", "decision_policy", 
            "purity_check", "paper_trader", "event_library_v2", "event_quality_report",
            "strategy_lab", "failure_autopsy", "strat_signal", "strength_lab",
            "portfolio_v0", "cost_stress", "winrate_monitor", "family_pooled",
-           "intraday_state_engine", "htf_context", "wave_c2a",
-           "e2e_paper_demo"]     # purity_check=P107; strategy_lab=S1(+R1 boot); WAVE-1 R4/R5/R6; intraday+htf=C2-0; wave_c2a=C2-3 (MZUNGUKO-2)
+           "intraday_state_engine", "htf_context", "wave_c2a", "gold_spread_quality",
+           "e2e_paper_demo"]     # purity_check=P107; strategy_lab=S1(+R1 boot); WAVE-1 R4/R5/R6; intraday+htf=C2-0; wave_c2a=C2-3 (MZUNGUKO-2); false_break+gold=WAVE-B-prep
 
 # Windows CMD hutumia cp1252 kwa child stdout → herufi za Unicode (→ ≠ ✓) zinaanguka kwenye pipe.
 # PYTHONUTF8=1 inalazimisha child zote ziwe UTF-8; encoding="utf-8" inasoma UTF-8 upande huu.
