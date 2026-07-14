@@ -641,3 +641,30 @@ NEXT AFTER: (1) SCIENTIST-D spot-check ya F1/F2 diff (no new MC — statistic un
   → one-shot verdict+CI. WAVE-2: R3 rolling folds, R8 ticks.
 OPEN QUESTIONS: OQ#1/OQ#2 CLOSED na referee. Zilizobaki (Chief, §registration): REP-2 tie-break B=50k
   recompute; format ya rekodi ya freeze. Hakuna blocker upande wa build.
+
+=== C2-0 MZUNGUKO-2 (2026-07-13) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya C2-0 + run za Operator)** — 15m/30m states + HTF context.
+LAST COMPLETED: **C2-0** ✅ (msingi wa data wa "HTF-bias -> 15m/30m entries"):
+  D1: `intraday_state_engine.py` MPYA — ticks->15m bars (time_bucket 15MIN, spr=median pips) ->
+    rollup_30m (semantiki ileile ya engine) -> states (vol/act _reg3 deseasonalized + spread
+    _rank_wide + session). REUSE building blocks za market_state_engine kwa IMPORT (engine
+    HAIJAGUSWA — diff tupu, golden PASS). Deseason window ime-scale muda-sawa (SEAS_WIN_INTRA
+    15m=240/30m=120 = siku 60 kama H1; bila hii surge detection 49%->99%, self-test ilinasa).
+    Hive: processed/state/symbol=X/tf={15m,30m}.parquet (state_path loaders wote wanafanya kazi).
+    Self-test 5 PASS: rollup==manual agg, truncation invariance, surge 99%, session=f(hour), schema.
+  D2: `htf_context.py` MPYA — H4/D1 features: trend (ema_slope/linreg_slope/trend_sign+deadband),
+    regime (vol/act), structure (rolling S/R 20 closed bars, dist kwa ATR), momentum (rsi14 REUSE
+    wilder_rsi, roc10). ALIGNMENT: close_ts=ts+duration -> join_asof BACKWARD (LTF bar inapata HTF
+    bar ya mwisho iliyoFUNGWA <= t). **MTEGO WA LEAKAGE self-tested**: spike bar inayozunguka LTF
+    bar HAIONEKANI (context=prev bar roc -0.008 vs spike +0.968); boundary t==close_ts OK; D1 OK.
+    Output: processed/context/symbol=X/tf=<ltf>.parquet — tayari kwa _mask_context-style filters.
+  D3: `reports/cycle2_intraday_htf.md` — pre-data version (muundo + no-lookahead evidence + amri);
+    run za Operator zinajaza sehemu A (coverage/spread/sessions) na B (context counts).
+  · SWEEP 24/24 PASS (22->24; market_state_engine golden PASS — HAIJAGUSWA). Merge origin/main
+    (S3-C2 FAIL-kwa-heshima + MZUNGUKO-2 launch + family_pooled) kwenye branch — safi.
+NEXT: Operator aendeshe (1) intraday_state_engine.py (2) htf_context.py kwenye PC ya data ->
+report inajaa; kisha C2-0b review (Chief: feature set inatosha kwa STRATEGIST-M?) -> C2-1.
+OPEN QUESTIONS (ndani ya reports/cycle2_intraday_htf.md):
+  1. C2-0b: features 9 zinatosha kwa hypotheses 10 za C2-1? (kuongeza ni additive).
+  2. H2 kama HTF ya tatu? (htf_features ni TF-agnostic — param).
+  3. Trend deadband 0.02 ATR/bar — strategist anaweza ku-grid.
