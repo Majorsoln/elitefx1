@@ -140,6 +140,32 @@ def _mask_context(out, entry, hour, vol, sf, vf):
     return {"long_level": LL, "short_level": SS}
 
 
+def _mask_context_dir(out, entry, allow_long, allow_short):
+    """C2-2a (WAVE-C2-A infra): DIRECTION-AWARE context mask — generalization ya _mask_context
+    (ambayo HAIGUSWI — inazima pande zote). Hii inaruhusu HTF-bias one-sided (HC2-01: upande wa
+    trend TU) na conditions TOFAUTI kwa long/short (HC2-06: long kwenye support, short kwenye
+    resistance). allow_long/allow_short = bool arrays za SIGNAL bar i (context conditions za
+    h4_/d1_ arrays kutoka loader — as-of joined, bar iliyoFUNGWA). Decidability ILEILE ya
+    _mask_context: mask inatumia value ya signal bar i, si entry bar i+1 (self-test [13] trap).
+    Market: sig +1 inahitaji allow_long[i]; sig -1 inahitaji allow_short[i].
+    Stop:   long_level inahitaji allow_long[i]; short_level inahitaji allow_short[i] (NaN=disarm)."""
+    allow_long = np.asarray(allow_long, bool)
+    allow_short = np.asarray(allow_short, bool)
+    if entry == "market":
+        sig = out["sig"].copy()
+        if len(allow_long) != len(sig) or len(allow_short) != len(sig):
+            raise ValueError("allow arrays lazima ziwe urefu wa sig (signal-bar aligned)")
+        sig[(sig == 1) & ~allow_long] = 0
+        sig[(sig == -1) & ~allow_short] = 0
+        return {"sig": sig}
+    LL = out["long_level"].copy(); SS = out["short_level"].copy()
+    if len(allow_long) != len(LL) or len(allow_short) != len(SS):
+        raise ValueError("allow arrays lazima ziwe urefu wa levels (signal-bar aligned)")
+    LL[~allow_long] = np.nan
+    SS[~allow_short] = np.nan
+    return {"long_level": LL, "short_level": SS}
+
+
 def _maxdd(pnls):
     """Max drawdown ya equity curve ya cumulative pnl (pips)."""
     eq = np.cumsum(pnls)
@@ -281,6 +307,40 @@ def bh_fdr(pvals, q=0.10):
 
 
 # ---------- data loading (SACRED SPLITS — enforced) ----------
+def context_path(sym, tf):
+    """Njia ya context parquet ya htf_context.py (h4_*/d1_* per LTF bar, as-of aligned)."""
+    from market_state_engine import cfg
+    return REPO_ROOT / cfg()["paths"]["processed"] / "context" / f"symbol={sym}" / f"tf={tf}.parquet"
+
+
+def _load_context(df, sym, tf, path=None):
+    """C2-2a CONTEXT LOADER: soma context parquet (output ya htf_context — as-of BACKWARD join
+    imekwisha-thibitishwa no-lookahead; HAKUNA join mpya ya HTF hapa) na i-align kwenye state df
+    kwa `ts` (LEFT join EXACT — context ina row kwa kila LTF bar, C2-0 report). Rudisha dict
+    {col: array} ya columns za h4_*/d1_* SAMBAMBA na o/h/l/c (order ya ts ILEILE — row_index
+    inalinda order ya left frame): numeric -> float64 (null->NaN); state (string) -> object.
+    Values ni za SIGNAL bar (decidable). ADDITIVE: parquet ikikosekana -> None + onyo
+    (load ya state HAIVUNJIKI — grids za C1/H1/H4 bila context zinaendelea kama zamani)."""
+    import polars as pl
+    p = Path(path) if path is not None else context_path(sym, tf)
+    if not p.exists():
+        print(f"  ONYO: context parquet haipo ({sym}/{tf}: {p.name}) -> ctx=None "
+              "(HTF context-filters hazipatikani kwa pair hii)")
+        return None
+    cdf = pl.read_parquet(p)
+    j = (df.select("ts").with_row_index("__i")
+           .join(cdf, on="ts", how="left").sort("__i").drop("__i"))
+    ctx = {}
+    for col in j.columns:
+        if col == "ts":
+            continue
+        if j[col].dtype in (pl.Utf8, pl.String, pl.Categorical):
+            ctx[col] = np.asarray(j[col].to_list(), dtype=object)
+        else:
+            ctx[col] = j[col].cast(pl.Float64).to_numpy()
+    return ctx
+
+
 def load_window(sym, tf, split, holdout_token=None):
     """Soma state parquet kwa split. RED LINE: holdout inarefuse bila token sahihi (KABLA ya kusoma)."""
     if split == "holdout" and holdout_token != HOLDOUT_TOKEN:
@@ -308,6 +368,7 @@ def load_window(sym, tf, split, holdout_token=None):
                 spr=np.nan_to_num(df["spr"].to_numpy(), nan=0.0), tc=df["tc"].to_numpy().astype(float),
                 hour=df["ts"].dt.hour().to_numpy(), vol=np.asarray(df["volatility_state"].to_list()),
                 ts=df["ts"].to_numpy(),                        # family_pooled (§8.1): cross-pair ordering — ADDITIVE, non-breaking
+                ctx=_load_context(df, sym, tf),                # C2-2a: HTF context arrays (h4_*/d1_*) au None — ADDITIVE
                 days=df["ts"].dt.date().n_unique())
 
 
@@ -595,6 +656,87 @@ def self_test():
     variants_run = all(m["n"] >= 0 for _, m in rows) and len(rows) == len(EXIT_VARIANTS)
     print(f"  [6] exit_sweep: fixed==default(N={fixed_m['n']})={fixed_matches} variants={len(rows)} run={variants_run}")
     ok = ok and fixed_matches and variants_run
+
+    # ---------- C2-2a: context loader + _mask_context_dir ----------
+    # [10] loader: alignment kwa ts (parquet ROWS SCRAMBLED kwa makusudi — join ni kwa ts, si order),
+    #      dtypes (numeric->float64 NaN, state->object), pengo la ts -> NaN/None, missing -> None+onyo
+    import polars as pl
+    from datetime import timedelta
+    with tempfile.TemporaryDirectory() as tmp:
+        n10 = 60
+        ts10 = [datetime(2024, 1, 1) + timedelta(minutes=15 * k) for k in range(n10)]
+        cdf = pl.DataFrame({
+            "ts": ts10,
+            "h4_trend_sign": pl.Series((np.arange(n10) % 3 - 1), dtype=pl.Int8),
+            "h4_vol_state": [("LOW", "NORMAL", "HIGH")[k % 3] for k in range(n10)],
+            "d1_roc10": np.arange(n10) * 0.01,
+        }).filter(pl.col("ts") != ts10[7])                    # pengo: bar 7 haina context row
+        p10 = Path(tmp) / "ctx.parquet"
+        cdf.sample(fraction=1.0, shuffle=True, seed=0).write_parquet(p10)   # SCRAMBLED order
+        sdf = pl.DataFrame({"ts": ts10})
+        ctx = _load_context(sdf, "TEST", "15m", path=p10)
+        k_chk = [0, 5, 23, 59]
+        align_ok = (ctx is not None and all(len(v) == n10 for v in ctx.values())
+                    and all(ctx["h4_trend_sign"][k] == (k % 3 - 1) for k in k_chk)
+                    and all(ctx["h4_vol_state"][k] == ("LOW", "NORMAL", "HIGH")[k % 3] for k in k_chk)
+                    and all(abs(ctx["d1_roc10"][k] - k * 0.01) < 1e-12 for k in k_chk))
+        gap_ok = (np.isnan(ctx["h4_trend_sign"][7]) and np.isnan(ctx["d1_roc10"][7])
+                  and ctx["h4_vol_state"][7] is None)
+        f64_ok = ctx["h4_trend_sign"].dtype == np.float64 and ctx["h4_vol_state"].dtype == object
+        missing = _load_context(sdf, "TEST", "15m", path=Path(tmp) / "haipo.parquet")
+        miss_ok = missing is None
+    t10 = align_ok and gap_ok and f64_ok and miss_ok
+    print(f"  [10] ctx loader: ts-align(scrambled)={align_ok} gap->NaN/None={gap_ok} "
+          f"dtypes={f64_ok} missing->None={miss_ok}")
+    ok = ok and t10
+
+    # [11] _mask_context_dir MIRROR SYMMETRY: swap (allow_long<->allow_short) + flip ya sig/levels
+    #      -> matokeo yana-mirror HASA (hakuna upande uliopendelewa); inputs HAZIGUSWI (copy)
+    rng11 = np.random.default_rng(11); n11 = 200
+    sig11 = rng11.integers(-1, 2, n11)
+    A = rng11.random(n11) < 0.5; B = rng11.random(n11) < 0.5
+    sig_in = sig11.copy()
+    m1 = _mask_context_dir({"sig": sig11}, "market", A, B)["sig"]
+    m2 = _mask_context_dir({"sig": -sig11}, "market", B, A)["sig"]
+    mkt_mirror = np.array_equal(m2, -m1) and np.array_equal(sig11, sig_in)   # + input intact
+    LL11 = np.where(rng11.random(n11) < 0.4, 100.0 + np.arange(n11), np.nan)
+    SS11 = np.where(rng11.random(n11) < 0.4, 90.0 - np.arange(n11), np.nan)
+    s1 = _mask_context_dir({"long_level": LL11, "short_level": SS11}, "stop", A, B)
+    s2 = _mask_context_dir({"long_level": SS11, "short_level": LL11}, "stop", B, A)
+    stop_mirror = (np.array_equal(s2["long_level"], s1["short_level"], equal_nan=True)
+                   and np.array_equal(s2["short_level"], s1["long_level"], equal_nan=True))
+    t11 = mkt_mirror and stop_mirror
+    print(f"  [11] dir-mask mirror symmetry: market={mkt_mirror} stop={stop_mirror}")
+    ok = ok and t11
+
+    # [12] one-sided (HC2-01): allow_short=all-False -> HAKUNA short (market: sig -1 zote 0;
+    #      stop: SS zote NaN na episodes() haitoi trade yoyote ya d=-1); long leg HAIJAGUSWA
+    none12 = np.zeros(len(c), bool); all12 = np.ones(len(c), bool)
+    from event_library_v2 import nr7_break, mr_zscore as _mrz
+    mm = _mask_context_dir(_mrz(o, h, l, c), "market", all12, none12)["sig"]
+    mkt_os = (mm != -1).all() and (mm == 1).any()
+    st_out = nr7_break(o, h, l, c)
+    st_m = _mask_context_dir(st_out, "stop", all12, none12)
+    trs12 = episodes(st_m, "stop", o, h, l, c, atr, spr, hour)
+    stop_os = (not np.isfinite(st_m["short_level"]).any()
+               and np.array_equal(st_m["long_level"], st_out["long_level"], equal_nan=True)
+               and all(t[2] == 1 for t in trs12) and len(trs12) > 0)
+    t12 = mkt_os and stop_os
+    print(f"  [12] one-sided: market no-shorts={mkt_os} stop SS=NaN+episodes long-only "
+          f"(n={len(trs12)})={stop_os}")
+    ok = ok and t12
+
+    # [13] DECIDABILITY TRAP: mask inatumia value ya SIGNAL bar i, si entry bar i+1 —
+    #      allow[i]=True pekee -> signal inaishi; allow[i+1]=True pekee -> signal inakufa
+    n13 = 12; sig13 = np.zeros(n13, int); sig13[5] = 1
+    aI = np.zeros(n13, bool); aI[5] = True                     # signal bar i TU
+    aI1 = np.zeros(n13, bool); aI1[6] = True                   # entry bar i+1 TU (mtego)
+    surv = _mask_context_dir({"sig": sig13}, "market", aI, np.zeros(n13, bool))["sig"][5] == 1
+    dead = _mask_context_dir({"sig": sig13}, "market", aI1, np.zeros(n13, bool))["sig"][5] == 0
+    t13 = surv and dead
+    print(f"  [13] decidability (signal-bar i, si i+1): allow[i]->survives={surv} "
+          f"allow[i+1]-only->dies={dead}")
+    ok = ok and t13
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

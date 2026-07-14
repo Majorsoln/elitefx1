@@ -64,3 +64,32 @@
 | XAUUSD | 30m | 120,632 |
 
 *No-lookahead: self-test ya MTEGO (htf_context [2]) inathibitisha context ya LTF bar HAIONI HTF bar inayoizunguka (future info) — inatumia bar iliyoFUNGWA kabla.*
+## C) C2-2a — Infra ya context-aware S1 (WAVE-C2-A: HC2-01/03/06)
+
+*2026-07-14 | IMPLEMENTER-A | strategy_lab.py: context loader + `_mask_context_dir` | ADDITIVE — diff ni insertions-only (142+, 0−); ZERO statistic fns zimeguswa (episodes/_mask_context/pvalue_boot/pool_streams/_r_normalize/bh_fdr byte-identical; golden hashes za event_quality_report PASS)*
+
+**Vipande 2 (kwa spec ya STRATEGIST-M §3 + prompt ya Chief):**
+
+1. **CONTEXT LOADER** — `load_window` sasa inarudisha key MPYA `ctx` (ADDITIVE): dict ya
+   arrays za `h4_*`/`d1_*` (zote za context parquet ya `htf_context.py`) SAMBAMBA na o/h/l/c —
+   LEFT-join EXACT kwa `ts` (row_index inalinda order ya left frame; join ni kwa ts, si order ya
+   rows). Numeric → float64 (null→NaN); state → object. Parquet ikikosekana → `ctx=None` + onyo
+   (grids za C1/H1/H4 bila context zinaendelea kama zamani). HAKUNA join mpya ya HTF —
+   alignment ni ya htf_context (no-lookahead imekwisha-thibitishwa kwa mtego).
+2. **`_mask_context_dir(out, entry, allow_long, allow_short)`** — direction-aware mask MPYA
+   sambamba (`_mask_context` HAIJAGUSWA): market `sig=+1` inahitaji `allow_long[i]`, `sig=-1`
+   inahitaji `allow_short[i]`; stop `LL[~allow_long]=NaN`, `SS[~allow_short]=NaN`. Decidability
+   ILEILE — values za SIGNAL bar i. One-sided (HC2-01) na conditions tofauti kwa long/short
+   (HC2-06) zinawezekana.
+
+**Self-test evidence (strategy_lab checks mpya 4 — zote PASS):**
+
+| Check | Nini kinathibitishwa | Matokeo |
+|-------|----------------------|---------|
+| [10] ctx loader | ts-alignment kwa parquet yenye rows SCRAMBLED (join ni kwa ts); pengo la ts → NaN/None; dtypes (float64/object); missing → None + onyo bila kuvunja | PASS |
+| [11] mirror symmetry | swap(allow_long↔allow_short) + flip ya sig/levels → matokeo yana-mirror HASA (market NA stop); inputs haziguswi (copy) | PASS |
+| [12] one-sided | `allow_short=all-False` → market haina sig −1; stop SS zote NaN na `episodes()` inatoa trades za long TU (n=646); long leg haijaguswa | PASS |
+| [13] decidability trap | mask inatumia value ya SIGNAL bar i: `allow[i]=True` pekee → signal inaishi; `allow[i+1]=True` pekee → signal inakufa | PASS |
+
+**SWEEP: 24/24 PASS** (run_selftests — modules zote, ikiwemo family_pooled AT1–AT8+F1/F2 na
+golden byte-identical za event_quality_report). `false_break` ni WAVE-B — HAIJAJENGWA (kwa spec).

@@ -668,3 +668,31 @@ OPEN QUESTIONS (ndani ya reports/cycle2_intraday_htf.md):
   1. C2-0b: features 9 zinatosha kwa hypotheses 10 za C2-1? (kuongeza ni additive).
   2. H2 kama HTF ya tatu? (htf_features ni TF-agnostic — param).
   3. Trend deadband 0.02 ATR/bar — strategist anaweza ku-grid.
+
+=== C2-2a INFRA (2026-07-14) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Chief review ya C2-2a → S1 ya WAVE-C2-A)** — context loader +
+_mask_context_dir; self-test PASS (checks 4 mpya); SWEEP 24/24; ZERO statistic fns zimeguswa.
+LAST COMPLETED: **C2-2a — infra ya context-aware S1 (WAVE-C2-A: HC2-01/03/06)** ✅:
+  · strategy_lab.load_window += key `ctx` (ADDITIVE): _load_context() inasoma context parquet ya
+    htf_context (data/processed/context/symbol=X/tf=Y.parquet), LEFT-join EXACT kwa ts (row_index
+    inalinda order; numeric→float64 NaN, state→object); parquet haipo → ctx=None + onyo (C1/H1/H4
+    grids haziathiriki). context_path() helper. HAKUNA join mpya ya HTF (alignment ya htf_context
+    iliyokwisha-thibitishwa ndiyo inayotumika).
+  · _mask_context_dir(out, entry, allow_long, allow_short) MPYA sambamba (_mask_context HAIJAGUSWA):
+    market sig +1/−1 inahitaji allow_long/allow_short[i]; stop LL/SS → NaN. Decidability ya signal
+    bar i ILEILE. One-sided (HC2-01) + conditions tofauti long/short (HC2-06) zinawezekana.
+  · Self-tests mpya [10] loader (scrambled-order parquet → ts-align; gap → NaN/None; missing → None)
+    · [11] mirror symmetry (market+stop; inputs intact) · [12] one-sided (episodes long-only n=646)
+    · [13] decidability trap (allow[i] survives; allow[i+1]-only dies).
+  · DIFF VERIFICATION: insertions-only 142+/0− kwenye strategy_lab.py PEKEE — episodes/_mask_context/
+    pvalue_boot/pool_streams/_r_normalize/bh_fdr byte-identical; golden hashes event_quality_report
+    PASS kwenye sweep. false_break = WAVE-B (sikuijenga, kwa spec).
+  · Report: reports/cycle2_intraday_htf.md §C. SWEEP 24/24 PASS.
+NEXT AFTER: Chief review → S1 ya WAVE-C2-A (evaluate/grid ya HC2-01/03/06 itajengwa juu ya ctx +
+_mask_context_dir — kazi ya C2-2b/S1 registration ya Chief). WAVE-B: false_break + 15m + gold.
+OPEN QUESTIONS:
+  1. evaluate()/grid ya WAVE-C2-A: nani anafunga context-condition specs (mf. HC2-01 allow_long =
+     (d1_trend_sign==1)&(h4_trend_sign==1)) kwenye grid cells? Pendekezo: Chief a-freeze specs kama
+     TIER1 ruling, mimi niziweke kwenye grid_wave_a (kazi ijayo).
+  2. ctx loading kwenye pairs/TF zisizo na context (H1/H4) inachapisha onyo kila load — kelele ya
+     runs za C1. Ikisumbua Operator: flag quiet au cache ya onyo moja (cosmetic, si logic).
