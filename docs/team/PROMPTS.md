@@ -76,6 +76,91 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [C2-4] (S2 VALIDATION runner — HC2-03 EURUSD + BH-FDR)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: C2-4 — ongeza njia ya
+S2 VALIDATION kwa wave_c2a.py, inayoendesha cells 7 FROZEN (HC2-03 EURUSD) kwenye VALIDATION +
+BH-FDR. Build+self-test; Operator ndiye anaendesha kwenye data.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: docs/WAVE_C2A_S2_REGISTRATION.md (cells 7 FROZEN + test rasmi) · src/research/wave_c2a.py
+(runner ya S1 — ongeza mode, USIVUNJE S1) · strategy_lab.py: pvalue_boot (engine RASMI B=50k
+mean_block=3), bh_fdr (q=0.10), write_outputs (mtindo wa survivors named + p_boot RASMI + p_z
+sensitivity) · load_window (split="validation").
+
+JENGA (ongeza kwa wave_c2a.py — ADDITIVE):
+  - S2_CELLS: tuple FROZEN ya cells 7 (docs/WAVE_C2A_S2_REGISTRATION §Cells) — HC2-03, EURUSD,
+    (trigger, sl, tp, max_hold=32) KAMA ILIVYO. Hakuna cell ya ziada.
+  - run_s2(split="validation"): kwa kila cell -> load_window("EURUSD","30m","validation") ->
+    _masked_signals (allow_long/short za HC2-03) -> episodes(sl,tp,32) -> pnl stream (net).
+    -> pvalue_boot(pnls, B=50_000, mean_block=3, seed=fixed, cell=id) [engine RASMI - HAIBADILIKI].
+    -> bh_fdr(p_boots, q=0.10) kati ya cells 7. Survivor = FDR-pass NA EV_net>0.
+    -> p_z (sensitivity) kama write_outputs.
+  - GUARD: run_s2 inakubali "validation" PEKEE (HOLDOUT inahitaji token CHIEF-HOLDOUT-S3 — SI hapa).
+  - OUTPUT: data/strategies/wave_c2a_s2_valid.jsonl (cells 7: id, n, ev_net, p_boot, p_z, fdr_pass)
+    + reports/wave_c2a_s2_valid.md (survivors NAMED + p_boot RASMI + p_z; kama hakuna survivor,
+    sema wazi "hakuna survivor - HC2-03 haujathibitika OOS").
+  - CLI: `python wave_c2a.py --validate`.
+
+SHERIA NGUMU:
+  - pvalue_boot/bh_fdr/episodes/_mask_context_dir HAZIGUSWI (engine RASMI). Diff = wave_c2a.py +
+    self-test pekee; golden diff 0 lines (thibitisha, ripoti kwenye commit).
+  - Cells FROZEN (7). Hakuna re-selection, hakuna cell mpya, hakuna pair nyingine.
+  - VALIDATION ni consumable lakini SI holdout - guard inakataa holdout bila token.
+  - Self-test synthetic: (a) S2_CELLS == 7 kama registration; (b) pvalue_boot inaitwa engine RASMI
+    (seed determinism); (c) BH-FDR inatumia m=7; (d) guard: holdout/train -> refuse; (e) survivor
+    logic (fixture yenye edge chanya wazi -> FDR-pass; noise -> hakuna). Ongeza run_selftests; sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; update MEMORY_IMPLEMENTER_A.md; ripoti:
+  "tayari C2-4 build - run_s2 (cells 7 FROZEN + BH-FDR), self-test PASS, ZERO statistic fns."
+  (Operator kisha: `python src/research/wave_c2a.py --validate` -> ripoti "tayari C2-4 S2".)
+```
+
+---
+
+## PROMPT — IMPLEMENTER-A [WAVE-B-prep] (`false_break` event + gold spread-quality check)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: WAVE-B-prep — vipande 2
+vya prerequisite kabla WAVE-B (HC2-02/05/10 + gold) haijafreezwa: (1) event fn `false_break`
+(HC2-10); (2) gold spread-quality check (XAUUSD 15m/30m). Build+self-test; Operator anaendesha check.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: reports/cycle2_strategy_hypotheses.md §2/HC2-10 (spec ya false_break) + §6 (XAUUSD spread
+provisional) · src/research/event_library_v2.py (jinsi event fn zinaandikwa: edge-trigger+rearm,
+PAST-bars levels, self-test za no-lookahead; mfano `big_range_mo` kwa incl=False rolling) ·
+src/research/intraday_state_engine.py (15m/30m spr median per bar) · config/data_config.yaml (XAUUSD 60 provisional).
+
+(1) EVENT `false_break` (ongeza EVENTS_V2):
+    false_break(o,h,l,c,tc=None,hour=None, look=20, rearm=8):
+      hh = rolling_max(h, look, PAST bars, incl=False)   # level inayojulikana KABLA ya bar (no-lookahead)
+      ll = rolling_min(l, look, PAST bars, incl=False)
+      short_cond: (h > hh) & (c < hh)     # intrabar break juu, close imerudi chini (sweep fail)
+      long_cond:  (l < ll) & (c > ll)     # intrabar break chini, close imerudi juu
+      return _edge(long_cond, short_cond, rearm)          # entry=market (open ya bar ijayo)
+    - entry="market" kwenye EVENTS_V2. Self-test: (a) no-lookahead (levels za PAST tu — truncation
+      invariance kama events nyingine); (b) sweep semantics (bar yenye break-fail inazalisha signal,
+      bar ya kawaida haizalishi); (c) golden hash/determinism.
+
+(2) GOLD SPREAD-QUALITY CHECK (module ndogo au ongeza kwa data_inventory/spread report):
+    - Kwa XAUUSD 15m NA 30m states (data/processed/state/symbol=XAUUSD): kokotoa spr distribution
+      (median, p90, p95, p99) kwa pips (pip=0.01). Linganisha na max_spread ya sasa (60 provisional).
+    - Pendekeza max_spread ya data-driven (mf. ~p95) kwa report — SI kubadilisha config (Chief ruling).
+    - Output: reports/xauusd_spread_quality.md — je gold inafaa kuingia WAVE-B S1? (spr p95 vs ATR 30m).
+
+SHERIA NGUMU: episodes/pvalue_boot/_mask_context* HAZIGUSWI. `false_break` = event fn mpya + self-test
+  (mtindo wa V2). Gold check ni READ-ONLY (haibadilishi config). Ongeza modules kwa run_selftests; sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; update memory; ripoti: "tayari WAVE-B-prep - false_break
+  (self-test PASS) + gold spread report. Pendekezo la max_spread ya gold: <thamani>."
+  (Operator kisha aendeshe gold check kwenye data kama inahitaji state parquet -> ripoti coverage.)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [C2-3] (Jenga runner wa WAVE-C2-A S1 TRAIN grid)
 
 ```text
