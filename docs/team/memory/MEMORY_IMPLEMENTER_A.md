@@ -696,3 +696,37 @@ OPEN QUESTIONS:
      TIER1 ruling, mimi niziweke kwenye grid_wave_a (kazi ijayo).
   2. ctx loading kwenye pairs/TF zisizo na context (H1/H4) inachapisha onyo kila load — kelele ya
      runs za C1. Ikisumbua Operator: flag quiet au cache ya onyo moja (cosmetic, si logic).
+
+=== C2-3 BUILD (2026-07-14) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Operator kuendesha S1 TRAIN: `python src/research/wave_c2a.py --train`)**
+— runner tayari; self-test PASS 6/6; SWEEP 25/25.
+LAST COMPLETED: **C2-3 — wave_c2a.py, S1 TRAIN runner ya WAVE-C2-A (grid FROZEN m=84)** ✅:
+  · src/research/wave_c2a.py MPYA (module tofauti — strategy_lab HAIJAGUSWA): HYPOTHESES 3 kwa
+    NAMBA za docs/WAVE_C2A_REGISTRATION.md KAMA ZILIVYO (HC2-01 nr7/nr4 stop 2x4x5=40 · HC2-03
+    trend_resume/rsi2 market 2x4x3=24 · HC2-06 bb_fade/engulf market 2x2x5=20; TF=30m; max_hold
+    32/32/24; FX pekee — hakuna gold). allow_long/allow_short = lambdas juu ya ctx za loader
+    (signal-bar i). Pipeline: load_window(train) -> EVENTS_V2 fn -> _mask_context_dir (context ON
+    signals) -> episodes() (fill rules/costs kama zilivyo) -> metrics (n/ev/gross/cost_share/win/
+    pf/timeout_share/days; MIN_N ya strategy_lab).
+  · NaN HANDLING (deviation-with-reason kutoka mfano wa prompt, documented kwenye docstring):
+    nan_to_num(nan->0) ingekosea kwa HC2-06 `trend_sign>=0`/`<=0` (0 inapita -> NaN ingeruhusiwa).
+    Badala yake: np.isfinite guard juu ya KILA column -> NaN=haijulikani=allow False kwa conditions
+    ZOTE. Self-test [2] ina trap ya >=0 inayothibitisha.
+  · GUARDS: run() inakataa split!="train" (PermissionError) — S1 ni TRAIN pekee; sacred splits za
+    load_window zinabaki chini. Pair bila ctx/state -> skip + row ya n=0 kwenye jsonl (accounting
+    ya m=84 inabaki kamili). HAKUNA p-value/FDR (S2 = family-pooled + BH-FDR, Chief).
+  · Outputs: data/strategies/wave_c2a_train.jsonl (rows 84 zote) + reports/wave_c2a_s1_train.md
+    (muhtasari per hypothesis + candidates EV>0).
+  · Self-tests 6: [1] cells==84 (40/24/20, pairs/TP/max_hold frozen, no-gold) · [2] NaN exclusion +
+    >=0 trap + trades=0 · [3] one-sided inafika episodes (stop na market long-only) · [4] HC2-06
+    asymmetric (support->long, resistance->short) · [5] determinism (run x2 identical) + skip-pair
+    · [6] outputs 84 rows + report + TRAIN-only guard. SWEEP 25/25 (run_selftests += wave_c2a).
+  · DIFF: file mpya + MODULES list pekee — strategy_lab/event_quality_report/family_pooled/
+    event_library_v2 diff TUPU (ZERO statistic fns).
+NEXT AFTER: Operator: `python src/research/wave_c2a.py --train` kwenye PC ya data -> jsonl+report
+("tayari C2-3 S1") -> Chief review -> C2-4 (S2 family-pooled VALIDATION + BH-FDR).
+OPEN QUESTIONS:
+  1. Report ya S1 inaorodhesha EV>0 candidates in-sample — Chief anataka pia jedwali la cells ZOTE
+     84 kwenye report (si jsonl tu)? Sasa: jsonl=zote, report=muhtasari+chanya (kuepuka jedwali refu).
+  2. C2-4: pooling ya S2 itahitaji ts kwenye trades za wave_c2a (mtindo wa _r_normalize) — nitaongeza
+     ts_entry kwenye rows wakati wa C2-4 build (additive), si sasa (scope ya C2-3 ni TRAIN runner).
