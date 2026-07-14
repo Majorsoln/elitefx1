@@ -570,3 +570,41 @@ tabia kwa kila pair. **Kizuizi:** STRAT-001/002 HAZIFUTWI (models zitajengwa juu
 **HATUA INAYOFUATA:** C2-1 — STRATEGIST-M list BEST 10 hypotheses (HTF-context + 15m/30m trigger),
 kila moja falsifiable, ranked kwa logic. Prompt tayari (docs/team/PROMPTS.md). Features 9 zilizopo
 (trend 3/regime 2/structure 2/momentum 2) zinatosha kuanza; nyongeza ni additive.
+
+---
+
+## 2026-07-14 — C2-1 REVIEW (Chief) + C2-2 FREEZE ya WAVE-C2-A
+
+**STRATEGIST-M report (reports/cycle2_strategy_hypotheses.md): IMEPITA — daraja la juu.**
+Best 10 hypotheses zote falsifiable (namba/features), ranked, split continuation(#1-5)/
+reversion(#6-10). 9/10 zinatumia triggers zilizopo; costs-first (default 30m); nidhamu ya
+decidability/no-look-ahead; risks 6 zimeinuliwa mwenyewe. Hakuna dirisha bikira lililoguswa.
+
+**UAMUZI WA CHIEF (C2-2) — KWA NINI WAVE, SI ZOTE 10 MARA MOJA:** C2-WATCH ilikufa kwa
+POWER 0.62 (si edge mbaya). Kutest hypotheses 10 × pairs 5 × grid kwa wakati mmoja
+kunapunguza power na kuchelewesha kujifunza. Kwa hiyo: **WAVE-lenye-mechanism-diversity**,
+family-pooled pale mechanism ni moja (funzo la C2-WATCH). Zote 10 zitafuatwa kwa mawimbi.
+
+**WAVE-C2-A (FROZEN — mechanisms 3 tofauti, zote 30m, zote zinatumia _mask_context_dir):**
+| Hypothesis | Mechanism | Prior | Trigger (zilizopo) |
+|---|---|---|---|
+| HC2-01 ALIGNED-COMPRESSION | compression→expansion (ILIYOTHIBITIKA: STRAT-001/002+C2-WATCH) | KALI ZAIDI | nr7_break/nr4_inside one-sided |
+| HC2-03 TREND-PULLBACK-RESUME | buy-dip-in-trend (Phase-12 pocket) | KALI | trend_resume/rsi2_pullback one-sided |
+| HC2-06 HTF-SR-FADE | structure/reversion (PD: "trade za aina tofauti") | wastani | bb_fade/engulf_extreme one-sided |
+
+**INFRA (C2-2a, IMPLEMENTER-A — prerequisite kabla ya S1):** (1) context loader (join context
+parquet -> load_window, additive); (2) `_mask_context_dir` (direction-aware mask, kipande kikuu,
+kinahudumia wave zote). `false_break` (HC2-10) na 15m hypotheses (HC2-02/05) → WAVE-C2-B.
+
+**MAAMUZI YA RISK (kutoka §6 ya report):**
+- **15m cost trap:** WAVE-A ni 30m zote → imeepukwa. HC2-02/05 (15m) → WAVE-B na cost-gate wazi.
+- **XAUUSD spread provisional:** gold HAIINGII S1 ya WAVE-A hadi spread_quality ithibitishe
+  max_spread halisi ya 15m/30m (deferred check). WAVE-A pairs = FX pekee.
+- **Overlap ya mechanisms:** WAVE-A = mechanisms 3 tofauti → overlap ndogo; correlation ya
+  portfolio itashughulikiwa S4 (si sasa).
+- **Multiple testing:** FDR kwa FAMILY (pooled R per mechanism) — pendekezo la STRATEGIST-M
+  limekubaliwa. Grid NDOGO per family: SL{1.0,1.5}×TP{1.5,2.0,3.0} subset × pairs pooled ×
+  trigger variants ≤2. m_total ndogo kwa makusudi (LESSON-002).
+
+**HATUA:** C2-2a (IMPLEMENTER-A infra) → C2-3 (S1 TRAIN grid WAVE-A, Operator) → C2-4 (S2
+VALID family-pooled + BH-FDR) → C2-5 (STRATEGIST-M tabia-kwa-pair, §4) → C2-6 freeze+HOLDOUT.

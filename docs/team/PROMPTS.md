@@ -76,6 +76,70 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [C2-2a] (Infra ya context-aware S1: loader + direction mask)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1) — Track A Engineering.
+KAZI: C2-2a — infra inayowezesha S1 ya WAVE-C2-A (hypotheses HC2-01/03/06 za STRATEGIST-M).
+Bila infra hii, context-filter ya HTF haiwezi kuwekwa ON signals.
+
+SYNC KWANZA (LAZIMA): `git checkout main && git pull origin main`.
+
+SOMA (kwa order):
+  1. reports/cycle2_strategy_hypotheses.md §3 — features/infra zinazohitajika (STRATEGIST-M).
+  2. docs/CYCLE2_CHARTER.md — muundo + masharti ya Chief.
+  3. src/research/strategy_lab.py — load_window (284), _mask_context (116), evaluate (150),
+     grid_c2 (102). HAPA ndipo infra inaingia (ADDITIVE — usivunje iliyopo).
+  4. src/research/htf_context.py — output: data/processed/context/symbol=X/tf=Y.parquet
+     (columns h4_*/d1_*, per LTF bar, as-of joined, no-lookahead).
+  5. src/research/family_pooled.py — muundo wa test ya pooled (utatumika C2-4).
+
+JENGA (vipande 2 TU — false_break ni WAVE-B, SI sasa):
+
+(1) CONTEXT LOADER — load_window (au wrapper) i-join context parquet kwenye data arrays kwa `ts`:
+    - Baada ya kupakia state bars (o/h/l/c/hour/vol/ts...), soma context parquet ya pair×tf,
+      LEFT-join kwa `ts` (exact — context ina row kwa kila LTF bar; angalia C2-0 report: context
+      bars == state bars). Ongeza h4_trend_sign, d1_trend_sign, h4_vol_state, d1_vol_state,
+      h4_dist_res_atr, h4_dist_sup_atr, d1_dist_res_atr, d1_dist_sup_atr, h4_rsi14, d1_rsi14,
+      h4_roc10, d1_roc10 kama arrays sambamba na o/h/l/c (order ya `ts` ILEILE).
+    - ADDITIVE: kama context parquet haipo -> arrays ziwe None/NaN + onyo (usivunje load iliyopo).
+    - Alignment ni ya htf_context (imethibitishwa no-lookahead) — HUFANYI join mpya ya HTF hapa;
+      unasoma tu output iliyokwisha-align. Values ni za SIGNAL bar (decidable).
+
+(2) _mask_context_dir — generalization ya _mask_context (SI kubadilisha _mask_context iliyopo):
+    def _mask_context_dir(out, entry, allow_long, allow_short):
+        # allow_long/allow_short: bool arrays za SIGNAL bar (zinatoka context conditions;
+        # mf. HC2-01: allow_long = (d1_trend_sign==1)&(h4_trend_sign==1), allow_short = mirror).
+        # Decidability ILEILE ya _mask_context (values za signal bar i).
+        # market: sig[~allow_long & sig==+1]=0 ; sig[~allow_short & sig==-1]=0
+        # stop:   LL[~allow_long]=NaN ; SS[~allow_short]=NaN
+    - One-sided: kama allow_short=all-False -> short leg imezimwa (HC2-01 upande wa trend TU).
+    - Conditions tofauti kwa long/short zinaruhusiwa (HC2-06: long kwenye support, short kwenye
+      resistance) — ndio maana ni arrays mbili tofauti, si filter moja.
+
+SHERIA NGUMU:
+  - HAKUNA function ya takwimu (pvalue_boot, pool_streams, _r_normalize, episodes) inayoguswa.
+  - HAKUNA _mask_context iliyopo inabadilishwa — _mask_context_dir ni MPYA sambamba.
+  - Decidability: context = signal-bar (kama _mask_context). Hakuna look-ahead mpya.
+  - Self-test (ongeza strategy_lab self-test au module ndogo, na kwa run_selftests):
+      (a) loader: context arrays zime-align kwa ts (spot-check thamani chache dhidi ya parquet);
+          missing-parquet -> None + onyo (haivunji).
+      (b) _mask_context_dir MIRROR SYMMETRY: kwa allow_long/short zilizobadilishwa (swap),
+          matokeo yana-mirror (long<->short) — uthibitisho wa hakuna upande uliopendelewa.
+      (c) one-sided: allow_short=all-False -> hakuna short entry inayotoka (market NA stop).
+      (d) decidability: mask inatumia value ya signal bar i (si i+1) — trap ndogo kama engine.
+  - Diff verification mwenyewe kabla ya push: `git diff` — thibitisha ZERO statistic fns
+    zimebadilika (ripoti hili kwenye commit — kama F1/F2 spot-check ya awali).
+
+DELIVERABLE: code (loader + _mask_context_dir + self-tests) + sasisha reports/cycle2_intraday_htf.md
+  (au report fupi mpya) kuonyesha self-test PASS. Sweep run_selftests LAZIMA ibaki GREEN.
+
+UKIMALIZA: `git add -A && git commit && git push`; update MEMORY_IMPLEMENTER_A.md; ripoti:
+  "tayari C2-2a — context loader + _mask_context_dir, self-test PASS, ZERO statistic fns zimeguswa."
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [C2-0] (Jenga 15m/30m states + HTF context features)
 
 ```text
