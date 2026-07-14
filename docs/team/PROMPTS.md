@@ -76,6 +76,65 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [C2-3] (Jenga runner wa WAVE-C2-A S1 TRAIN grid)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1) — Track A Engineering.
+KAZI: C2-3 — jenga runner unaoendesha grid ya WAVE-C2-A (FROZEN na Chief) kwenye TRAIN, ukitumia
+infra ya C2-2a (context loader `ctx` + `_mask_context_dir`). Baada ya build+self-test, Operator
+ndiye anaendesha kwenye data (TRAIN 2016–2022 PEKEE).
+
+SYNC KWANZA (LAZIMA): `git checkout main && git pull origin main`.
+
+SOMA (kwa order):
+  1. docs/WAVE_C2A_REGISTRATION.md — GRID FROZEN (HC2-01/03/06: triggers, allow_long/allow_short,
+     SL×TP, max_hold, pairs). HII NDIYO SPEC — usibadilishe thamani; ijenge KAMA ILIVYO.
+  2. src/research/strategy_lab.py — load_window (ina `ctx` sasa), _mask_context_dir, evaluate,
+     grid_c2, write_outputs, pvalue_boot, bh_fdr. TUMIA hizi; USIVUNJE.
+  3. src/research/event_library_v2.py — EVENTS_V2 (entry types: nr7_break/nr4_inside=stop;
+     trend_resume/rsi2_pullback/bb_fade/engulf_extreme=market).
+  4. src/research/family_pooled.py — muundo wa pooled (utatumika C2-4; usiubadilishe).
+  5. reports/cycle2_intraday_htf.md §C — jinsi ctx arrays zinavyokuja.
+
+JENGA src/research/wave_c2a.py (module MPYA — usiingize kwenye strategy_lab):
+  - HYPOTHESES dict/list inayoweka spec ya §WAVE_C2A_REGISTRATION kwa NAMBA (triggers, pairs,
+    SL/TP grid, max_hold) + LAMBDA za context: `allow_long(ctx)`, `allow_short(ctx)` zinazorudisha
+    bool arrays kutoka ctx["d1_trend_sign"], ctx["h4_trend_sign"], ctx["h4_rsi14"],
+    ctx["d1_dist_sup_atr"], ctx["d1_dist_res_atr"] (columns za loader).
+  - NaN/UNKNOWN handling (LAZIMA): kabla ya compare, NaN kwenye numeric context -> allow=False
+    (bar haihesabiwi). Mfano: allow_long = (np.nan_to_num(d1_ts,nan=0)==1) & (np.nan_to_num(h4_ts,nan=0)==1).
+    Hakuna imputation; NaN = "haijulikani" = excluded. (h4_rsi14 NaN -> False pia.)
+  - RUNNER: kwa kila (hypothesis × trigger × pair × SL × TP):
+      data = load_window(pair, "30m", "train")            # TRAIN PEKEE
+      out  = EVENTS_V2[trigger]["fn"](o,h,l,c,tc,hour)
+      aL, aS = hyp["allow_long"](data["ctx"]), hyp["allow_short"](data["ctx"])
+      out  = _mask_context_dir(out, entry, aL, aS)         # context ON signals (kabla ya episodes)
+      trades = episodes(out, entry, o,h,l,c,atr,spr,hour, sl_atr=SL, tp_atr=TP, max_hold=MH)
+      -> metrics + costs (tumia evaluate() ikibidi au njia yake ILEILE — costs, MIN_N).
+  - OUTPUT: candidates zote -> data/strategies/wave_c2a_train.jsonl (kila row: hypothesis,
+    trigger, pair, sl, tp, n, ev_net_pips, gross, cost_share, win, pf, timeout_share, days).
+    Report: reports/wave_c2a_s1_train.md — jedwali per hypothesis (cells, N, EV net, cost_share),
+    NA candidates zenye EV_net>0 zilizoorodheshwa (SI FDR bado — S1 ni exploration; S2=validation).
+  - HAKUNA p-value/FDR hapa (S1 ni TRAIN exploration). HAKUNA VALID/HOLDOUT kusomwa.
+
+SHERIA NGUMU:
+  - Grid ni FROZEN (§WAVE_C2A_REGISTRATION). Cells = 84 (40+24+20). Usiongeze pair/SL/TP.
+  - Context ON signals (kabla ya episodes) — mtindo wa evaluate/_mask_context. Decidability
+    signal-bar i (loader tayari inatoa signal-bar values).
+  - Costs + MIN_N kama evaluate() iliyopo. Hakuna statistic fn mpya; hakuna episodes/pvalue_boot
+    kuguswa. TRAIN PEKEE (split="train").
+  - Self-test synthetic (bila data, ongeza run_selftests): (a) allow_long/short zina-exclude
+    NaN-context (bar yenye NaN haitoi trade); (b) one-sided inafika episodes (long-only inapotoka
+    allow_short=False); (c) cell count == 84; (d) determinism (seed).
+  - Gold HAIINGII (pairs za §spec ni FX pekee).
+
+UKIMALIZA: `git add -A && git commit && git push`; update MEMORY_IMPLEMENTER_A.md; ripoti:
+  "tayari C2-3 build — wave_c2a.py runner (cells 84), self-test PASS. Tayari kwa Operator kuendesha TRAIN."
+  (Operator kisha: `python src/research/wave_c2a.py --train` -> jsonl + report; ripoti "tayari C2-3 S1".)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [C2-2a] (Infra ya context-aware S1: loader + direction mask)
 
 ```text

@@ -608,3 +608,23 @@ kinahudumia wave zote). `false_break` (HC2-10) na 15m hypotheses (HC2-02/05) →
 
 **HATUA:** C2-2a (IMPLEMENTER-A infra) → C2-3 (S1 TRAIN grid WAVE-A, Operator) → C2-4 (S2
 VALID family-pooled + BH-FDR) → C2-5 (STRATEGIST-M tabia-kwa-pair, §4) → C2-6 freeze+HOLDOUT.
+
+---
+
+## 2026-07-14 — C2-2a REVIEW (PASS) + C2-3 grid FROZEN + build prompt
+
+**IMPLEMENTER-A [C2-2a]:** context loader + `_mask_context_dir`. Chief review: IMEPITA.
+Additive (142+, 0−); ZERO statistic fns (golden PASS). Self-test [10] loader ts-align (scrambled
+parquet), [11] mirror symmetry (market+stop, inputs intact), [12] one-sided→episodes long-only,
+[13] decidability trap (signal-bar i, si i+1). Sweep 24/24. `false_break` HAIJAJENGWA (WAVE-B ✓).
+
+**C2-3 GRID FROZEN (docs/WAVE_C2A_REGISTRATION.md):** m=84 cells TRAIN.
+- HC2-01: nr7/nr4 stop, allow=(d1&h4 trend aligned), SL{1,1.5}×TP{2,3}, hold32, pairs 5 → 40.
+- HC2-03: trend_resume/rsi2 market, allow=(h4&d1 up + rsi<70 / mirror), SL{1,1.5}×TP{2,3}, hold32, pairs 3 → 24.
+- HC2-06: bb_fade/engulf market, allow=(dist_sup<=.5&h4>=0 / dist_res<=.5&h4<=0), SL{1,1.5}×TP{1.5}, hold24, pairs 5 → 20.
+- NaN/UNKNOWN context → allow=False (excluded, decidable). FX pekee (gold deferred).
+
+**Build prompt (IMPLEMENTER-A [C2-3]):** wave_c2a.py runner (TRAIN exploration, NO p-value/FDR
+hapa — S2 ndiyo validation). Self-test: NaN-exclude, one-sided→episodes, cell count 84, determinism.
+
+**HATUA:** C2-3 build (IMPLEMENTER-A) → Operator run TRAIN → C2-4 S2 family-pooled+FDR → C2-5 tabia.
