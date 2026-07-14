@@ -89,7 +89,7 @@ max_spread_pips:
   EURGBP: 3.0    # med 0.87, p95 1.91
   GBPJPY: 4.5   # provisional
   EURCHF: 3.5   # provisional
-  XAUUSD: 60    # provisional (pip=0.01; spread ya kawaida ya gold ~30 pips) - thibitisha kwa spread_quality
+  XAUUSD: 75    # DATA-DRIVEN (Chief ruling 2026-07-14): p95 30m=71.0 -> round-5=75; cost-share@p95 12.78% < 25% -> SUITABLE (reports/xauusd_spread_quality.md). Ilikuwa 60 provisional.
 
 # --- Vigezo vya quality checks ---
 quality:

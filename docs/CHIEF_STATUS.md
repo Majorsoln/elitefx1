@@ -716,3 +716,25 @@ Sweep 26/26 PASS (imethibitishwa hapa: wave_c2a + gold_spread_quality zimo).
 **HATUA (Operator, runs 2):** (A) `python src/research/wave_c2a.py --validate` → S2 result;
 (B) `python src/research/gold_spread_quality.py` → gold verdict + max_spread. Kisha Chief: review
 S2 (survivor/FAIL) + gold verdict → freeze WAVE-B grid.
+
+---
+
+## 2026-07-14 — WAVE-C2-A IMEFUNGWA (0 proven) + gold SUITABLE → WAVE-B
+
+**S2 VALIDATION (HC2-03 EURUSD, cells 7): HAKUNA SURVIVOR.** Zote net-HASI (EV -0.12..-1.64),
+p_boot 0.55-0.97, BH-FDR k=0. **Sign imegeuka TRAIN(+)→VALID(−)** — edge ya TRAIN ilikuwa
+overfitting/kelele, si edge halisi. → **LESSON-038** (raw gross+ TRAIN ≠ OOS; edge<gharama +
+pair-single = shukiwa). HOLDOUT HAIJAGUSWA (split-discipline ilikamata kabla ya one-shot).
+
+**HITIMISHO WA WAVE-C2-A: strategies PROVEN mpya = 0.** HC2-01 dead (LESSON-037), HC2-03 FAIL-OOS
+(LESSON-038), HC2-06 WATCH (underpowered). **Portfolio inabaki STRAT-001/002.** Mchakato ULIFANYA
+KAZI KAMILI — machine ilikataa 3/3 kwa usahihi, HOLDOUT safi. FAIL ni sayansi halali, si dosari.
+
+**Gold verdict: SUITABLE** (reports/xauusd_spread_quality.md). cost-share@p95 (30m, TP2R) 12.78%
+< 25%; spr p95=71 = 25.6% ya ATR 30m. **Chief ruling:** config XAUUSD max_spread 60→**75**
+(data-driven p95 round-5). Gold sasa inaruhusiwa WAVE-B (HC2-05/10).
+
+**WAVE-B (mbele):** HC2-02 London-ORB (15m), HC2-05 aligned-shock (15m), HC2-10 false-break-sweep
+(30m). HC2-10 iko TAYARI (false_break built, context d1_dist kama HC2-06, 30m cost bora, gold
+eligible). HC2-02/05 (15m) zinahitaji infra ndogo (session_orb params; spread_state exposure).
+Uamuzi wa mpangilio wa WAVE-B unasubiri (PD checkpoint — wave nzima imeshindwa).
