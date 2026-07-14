@@ -738,3 +738,17 @@ KAZI KAMILI — machine ilikataa 3/3 kwa usahihi, HOLDOUT safi. FAIL ni sayansi 
 (30m). HC2-10 iko TAYARI (false_break built, context d1_dist kama HC2-06, 30m cost bora, gold
 eligible). HC2-02/05 (15m) zinahitaji infra ndogo (session_orb params; spread_state exposure).
 Uamuzi wa mpangilio wa WAVE-B unasubiri (PD checkpoint — wave nzima imeshindwa).
+
+---
+
+## 2026-07-14 — PD: "tujari" (Option A). WAVE-B first cut = HC2-10 FROZEN
+
+**Uamuzi:** HC2-10 FAILED-BREAK-SWEEP pekee (mechanism MPYA: liquidity-sweep; orthogonal na WAVE-A).
+Grid FROZEN (docs/WAVE_C2B_HC210_REGISTRATION.md): false_break 30m, allow=(d1_dist_sup/res<=0.5),
+SL{1,1.5}×TP{2,3}, hold 24, pairs EURGBP/EURCHF/AUDUSD/NZDUSD/XAUUSD (gold SUITABLE), cells 20.
+
+**Build prompt:** IMPLEMENTER-A [WAVE-B/HC2-10] — ongeza HC2-10 kwenye wave_c2a HYPOTHESES +
+_hc210_allow fns + hyp-filter (`--hyp HC2-10` -> cells 20 tu; usifute WAVE-A). ZERO statistic fns.
+
+**HATUA:** build → Operator `--train --hyp HC2-10` → S1 → Chief review → S2 kama survivors.
+Ikishindwa pia → pivot OOB (C). STRAT-001/002 portfolio.

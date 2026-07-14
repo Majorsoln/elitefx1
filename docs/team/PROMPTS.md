@@ -76,6 +76,49 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [WAVE-B/HC2-10] (Ongeza HC2-10 kwenye runner + hyp-filter)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: ongeza hypothesis
+HC2-10 (FAILED-BREAK-SWEEP) kwenye wave_c2a.py + hyp-filter ili S1 iendeshe HC2-10 PEKEE (si
+kurudia WAVE-A dead). Build+self-test; Operator anaendesha TRAIN.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: docs/WAVE_C2B_HC210_REGISTRATION.md (grid FROZEN 20 cells) · src/research/wave_c2a.py
+(HYPOTHESES tuple, cells(), run(), _hcXXX_allow fns — ongeza kwa mtindo uleule) ·
+event_library_v2.py (`false_break` imesajiliwa, entry=market, look=20/rearm=8).
+
+JENGA (ADDITIVE kwa wave_c2a.py — usivunje HC2-01/03/06 wala run_s2):
+  1. _hc210_allow_long(ctx): isfinite(d1_dist_sup_atr) & (d1_dist_sup_atr <= 0.5)
+     _hc210_allow_short(ctx): isfinite(d1_dist_res_atr) & (d1_dist_res_atr <= 0.5)
+     (mtindo uleule wa _hc206 — isfinite guard; hakuna h4 condition).
+  2. Ongeza kwenye HYPOTHESES:
+     dict(id="HC2-10", name="FAILED-BREAK-SWEEP", triggers=("false_break",),
+          allow_long=_hc210_allow_long, allow_short=_hc210_allow_short,
+          sl=(1.0,1.5), tp=(2.0,3.0), max_hold=24,
+          pairs=("EURGBP","EURCHF","AUDUSD","NZDUSD","XAUUSD"))     # cells 1x4x5 = 20
+  3. HYP-FILTER: run() ipate arg `only=None` (au `--hyp HC2-10` CLI) inayochuja HYPOTHESES kwa id.
+     `--train --hyp HC2-10` -> cells za HC2-10 PEKEE (20). Bila --hyp -> tabia ya zamani (WAVE-A).
+     Output jsonl/report: kama --hyp imetolewa, tumia suffix (mf. wave_c2a_train_HC2-10.jsonl /
+     reports/wave_c2b_hc210_s1_train.md) ili USIFUTE matokeo ya WAVE-A.
+
+SHERIA NGUMU:
+  - ZERO statistic fns (episodes/pvalue_boot/bh_fdr/_mask_context_dir HAZIGUSWI). golden diff 0 lines.
+  - Grid FROZEN (20 cells). XAUUSD imo (gold SUITABLE, max_spread 75 config). NaN->allow=False.
+  - S1 = TRAIN exploration (hakuna p-value/FDR). TRAIN-only guard inabaki.
+  - Self-test (ongeza kwa wave_c2a self_test au sehemu mpya): (a) HC2-10 cells==20 (pairs 5, SL/TP 4,
+    trigger 1); (b) allow fns isfinite-exclude NaN; (c) false_break -> _mask_context_dir -> episodes
+    (both long@support & short@resistance zafika); (d) hyp-filter: run(only="HC2-10") -> 20 rows za
+    HC2-10 tu; run() default bado 84 (WAVE-A). Sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; update MEMORY_IMPLEMENTER_A.md; ripoti:
+  "tayari WAVE-B/HC2-10 build - cells 20 + hyp-filter, self-test PASS, ZERO statistic fns."
+  (Operator kisha: `python src/research/wave_c2a.py --train --hyp HC2-10` -> ripoti "tayari HC2-10 S1".)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [C2-4] (S2 VALIDATION runner — HC2-03 EURUSD + BH-FDR)
 
 ```text
