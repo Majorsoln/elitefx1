@@ -628,3 +628,22 @@ parquet), [11] mirror symmetry (market+stop, inputs intact), [12] one-sided→ep
 hapa — S2 ndiyo validation). Self-test: NaN-exclude, one-sided→episodes, cell count 84, determinism.
 
 **HATUA:** C2-3 build (IMPLEMENTER-A) → Operator run TRAIN → C2-4 S2 family-pooled+FDR → C2-5 tabia.
+
+---
+
+## 2026-07-14 — C2-3 BUILD REVIEW (PASS) → tayari kwa S1 TRAIN run
+
+**IMPLEMENTER-A [C2-3]:** `src/research/wave_c2a.py` — runner ya grid FROZEN. Chief review: IMEPITA.
+- **Grid == registration:** cells 84 (HC2-01 40 + HC2-03 24 + HC2-06 20), FX pekee, TF=30m,
+  hold 32/32/24. Hakuna pair/SL/TP ya ziada. Gold nje.
+- **NaN-handling (CATCH ya agent):** mfano wangu `nan_to_num(nan→0)` ungekosea kwa HC2-06
+  (`>=0`/`<=0`: 0 ingepita, NaN ingeruhusiwa). Agent ilitumia `np.isfinite` guard kwa kila
+  column — deviation-with-reason SAHIHI; self-test [2] trap inathibitisha. Uboreshaji halali.
+- **Pipeline C2-2a:** signals → allow kutoka ctx (signal-bar i) → `_mask_context_dir` ON signals
+  → episodes; signals cached per (hyp,trig,pair). Costs ndani ya episodes.
+- **Guards:** split≠train → PermissionError (S1=TRAIN pekee); skip-pair → n=0 (accounting 84);
+  HAKUNA p-value/FDR (S1=exploration). ZERO statistic fns (golden diff 0 lines). Sweep 25/25.
+- Merged main (PR #10, `c581dcf`).
+
+**HATUA:** Operator sync main → `python src/research/wave_c2a.py --train` → jsonl + report →
+"tayari C2-3 S1". Kisha C2-4: S2 family-pooled + BH-FDR kwenye VALIDATION (Chief).
