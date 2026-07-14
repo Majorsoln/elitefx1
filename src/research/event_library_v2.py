@@ -401,6 +401,22 @@ def london_drift(o, h, l, c, tc=None, hour=None, open_hr=8, mom=2, rearm=6):
     return {"sig": _edge(lc, sc, rearm)}
 
 
+def false_break(o, h, l, c, tc=None, hour=None, look=20, rearm=8):
+    """CYCLE-2 (HC2-10, familia F6 structure-fade): LIQUIDITY SWEEP / stop-hunt. hh/ll = rolling
+    max/min ya bars `look` ZILIZOPITA (incl=False -> level inayojulikana KABLA ya bar; no-lookahead
+    kama big_range_mo). Intrabar break inayoSHINDWA kufunga nje ya level:
+      short: (h > hh) & (c < hh)   # break juu ya HH(look) imesweep stops, kisha close imerudi ndani
+      long:  (l < ll) & (c > ll)   # break chini ya LL(look), kisha close imerudi ndani
+    Mechanism: breakout traders wamenaswa; exit yao ndiyo fuel ya reversal (LESSON-011 payoff
+    asymmetry: entry karibu na sweep -> SL fupi). Edge-trigger + rearm; entry=market (open ya i+1)."""
+    hh = _roll(h, look, np.max, incl=False)
+    ll = _roll(l, look, np.min, incl=False)
+    with np.errstate(invalid="ignore"):
+        sc = (h > hh) & (c < hh)
+        lc = (l < ll) & (c > ll)
+    return {"sig": _edge(lc, sc, rearm)}
+
+
 # ---------- Registry rasmi V2 ----------
 # entry: "market" (sig -> open ya bar ijayo) | "stop" (levels -> touch ya bar ijayo)
 # needs: data za ziada zinazohitajika ("tc" = volume, "hour" = time-of-day)
@@ -429,6 +445,7 @@ EVENTS_V2 = {
     "nr4_inside":      dict(fn=nr4_inside,      entry="stop",   needs=(),        v1=None),
     "gap_fade":        dict(fn=gap_fade,        entry="market", needs=(),        v1=None),
     "london_drift":    dict(fn=london_drift,    entry="market", needs=("hour",), v1=None),
+    "false_break":     dict(fn=false_break,     entry="market", needs=(),        v1=None),  # HC2-10 (WAVE-B-prep)
 }
 
 
@@ -498,6 +515,32 @@ def self_test():
     needs_ok = (no_tc == 0).all() and not np.isfinite(no_hr["long_level"]).any()
     print(f"  needs: tc=None->0 fires={bool((no_tc == 0).all())}  hour=None->no arms={not np.isfinite(no_hr['long_level']).any()}")
     ok = ok and needs_ok
+
+    # (6) HC2-10 false_break — sweep semantics: bar yenye break-fail inazalisha signal, bar ya
+    #     kawaida haizalishi (crafted; look=3, rearm=0 kwa ukaguzi wa moja kwa moja).
+    #     bar[3]: h=12 > hh(past3=10) NA c=9.6 < 10 -> SHORT sweep; bar[4]: hakuna break -> 0.
+    hs = np.array([10., 10, 10, 12.0, 10.5, 10, 10, 10], float)
+    ls = np.array([9.,  9,  9,  9.5,  9.0,  9,  9,  9], float)
+    csx = np.array([9.5, 9.5, 9.5, 9.6, 10.2, 9.5, 9.5, 9.5], float)   # bar3 close IMERUDI ndani ya HH
+    ss = false_break(csx, hs, ls, csx, look=3, rearm=0)["sig"]         # (o=c hapa; fn haitumii o)
+    # long sweep: bar[3] l=7 < ll(past3=9) NA c=9.2 > 9 -> LONG
+    hl = np.array([10., 10, 10, 10.0, 10, 10, 10, 10], float)
+    ll_ = np.array([9., 9, 9, 7.0, 9, 9, 9, 9], float)
+    clx = np.array([9.5, 9.5, 9.5, 9.2, 9.5, 9.5, 9.5, 9.5], float)
+    sl_ = false_break(clx, hl, ll_, clx, look=3, rearm=0)["sig"]
+    sweep_ok = (ss[3] == -1 and ss[4] == 0 and int((ss != 0).sum()) == 1     # short sweep pekee bar3
+                and sl_[3] == 1 and int((sl_ != 0).sum()) == 1)             # long sweep pekee bar3
+    print(f"  false_break sweep: short@bar3={ss[3]} long@bar3={sl_[3]} normal-bar4={ss[4]} single-fire={sweep_ok}")
+    ok = ok and sweep_ok
+
+    # (6b) determinism + golden hash (byte-identical — reproducibility ya event fn mpya)
+    import hashlib
+    fb = false_break(o, h, l, c, tc, hour)["sig"]
+    fb2 = false_break(o, h, l, c, tc, hour)["sig"]
+    gh = hashlib.sha1(fb.tobytes()).hexdigest()[:16]
+    golden_ok = np.array_equal(fb, fb2) and gh == "09b28990b0ead07b"
+    print(f"  false_break determinism={np.array_equal(fb, fb2)} golden-hash={gh} (fires={int((fb!=0).sum())})")
+    ok = ok and golden_ok
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
