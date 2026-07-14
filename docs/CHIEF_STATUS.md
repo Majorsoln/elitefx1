@@ -647,3 +647,34 @@ hapa — S2 ndiyo validation). Self-test: NaN-exclude, one-sided→episodes, cel
 
 **HATUA:** Operator sync main → `python src/research/wave_c2a.py --train` → jsonl + report →
 "tayari C2-3 S1". Kisha C2-4: S2 family-pooled + BH-FDR kwenye VALIDATION (Chief).
+
+---
+
+## 2026-07-14 — C2-3 S1 TRAIN MATOKEO + uchambuzi wa Chief + uamuzi wa C2-4
+
+**S1 TRAIN (in-sample, 2016-2022 — SI proof). Cells chanya net: 10/84.**
+
+| Hypothesis | GROSS>0 | median gross | EV_net>0 | median EV_net | Hukumu ya Chief |
+|---|---|---|---|---|---|
+| HC2-01 compression | 14/40 | **-0.234** | 0/40 | -1.51 | **DEAD** — gross hasi (mechanism imekufa 30m one-sided, si gharama) |
+| HC2-03 pullback | 19/24 | **+0.599** | 7/24 | -0.61 | **RAW EDGE ipo** lakini net cost-limited → EURUSD PEKEE inanusurika |
+| HC2-06 SR-fade | 3/6 | +1.19 | 3/6 | +0.06 | **UNDERPOWERED** — condition rare (N=32-389 tu; 6/20 zafika MIN_N) |
+
+**Ugunduzi mkuu:** HC2-01 (prior yangu KALI ZAIDI) imekufa — gross hasi hata kabla ya gharama.
+Compression iliyothibitika H1+OCO HAIHAMII 30m+one-sided; HTF-alignment HAIKUOKOA. → **LESSON-037**
+(re-prove per TF×entry-mode×direction-mode; pima GROSS kutofautisha "mechanism dead" na "cost-killed").
+STRAT-001/002 zinabaki PROVEN (tuple yao H1-OCO — hazitupwi).
+
+**UAMUZI WA C2-4 (Chief):**
+1. **HC2-01 → DROP** (dead on TRAIN, gross hasi). LESSON-037 imeandikwa. Haitumii VALIDATION/one-shot.
+2. **HC2-03 → S2 VALIDATION** kwa **EURUSD PEKEE** (TRAIN-selection halali: mechanism ina raw edge broad
+   19/24, lakini net inanusurika kwenye pair ya spread ndogo tu — EURUSD 0.30). trend_resume ndio
+   consistent zaidi (4/4 EURUSD cells chanya). Test moja pre-registered kwenye VALIDATION + p_boot.
+3. **HC2-06 → WATCH (si one-shot)** — rare condition = underpowered by construction (kama C2-WATCH power 0.62).
+   EURGBP bb_fade (EV+4.49, PF2.05, N=32) ni ya kuvutia lakini N ndogo mno kuamini. Revisit = grid mpya
+   (threshold relaxed) WAVE-B, si cell hii.
+
+**UAMINIFU:** WAVE-A haikutoa candidate wa nguvu — prior kali imekufa, survivor ni marginal/cost-fragile
+(HC2-03 EURUSD cost_share 53-80% > 50% ya CORE). Hii ni sayansi halali. Njia mbili mbele (chagua):
+(A) S2 VALIDATION ya HC2-03 EURUSD (cheap check — confirm/reject marginal edge), na/au
+(B) fungua WAVE-B (15m ORB/shock, false_break, gold) kwa "shots on goal" zaidi.
