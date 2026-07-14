@@ -730,3 +730,22 @@ OPEN QUESTIONS:
      84 kwenye report (si jsonl tu)? Sasa: jsonl=zote, report=muhtasari+chanya (kuepuka jedwali refu).
   2. C2-4: pooling ya S2 itahitaji ts kwenye trades za wave_c2a (mtindo wa _r_normalize) — nitaongeza
      ts_entry kwenye rows wakati wa C2-4 build (additive), si sasa (scope ya C2-3 ni TRAIN runner).
+
+=== C2-4 BUILD (2026-07-14) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri run ya Operator: `python src/research/wave_c2a.py --validate`)** -> ripoti
+"tayari C2-4 S2". Kisha: survivors -> C2-6 freeze + HOLDOUT one-shot; hakuna -> LESSON.
+LAST COMPLETED: **C2-4 build** ✅ — run_s2 kwenye wave_c2a.py (ADDITIVE; S1 haiguswi):
+  · S2_CELLS: tuple FROZEN ya cells 7 (HC2-03 x EURUSD x 30m; triggers trend_resume/rsi2_pullback;
+    SL/TP/max_hold=32 KAMA registration §Cells — self-test [7] inalinganisha na registration hasa).
+  · run_s2("validation"): load_window(EURUSD,30m,validation) -> _masked_signals (HC2-03 allow fns
+    zilezile za S1) -> episodes(sl,tp,32) -> pnl net -> pvalue_boot (ENGINE RASMI: B=50k,
+    mean_block=3, seed=cell key — [8] inathibitisha == direct call) -> bh_fdr q=0.10 m=7 ([9]
+    flags==recompute) -> survivor = fdr_pass NA EV_net>0 ([11]). p_z = sensitivity (SI decision).
+  · GUARD: validation PEKEE — train/holdout -> PermissionError KABLA ya kusoma ([10]).
+  · OUTPUT: data/strategies/wave_c2a_s2_valid.jsonl (id/n/ev_net/p_boot/p_z/fdr_pass/survivor) +
+    reports/wave_c2a_s2_valid.md (survivors NAMED; kama hakuna: "HAKUNA SURVIVOR — HC2-03
+    haujathibitika OOS" wazi). CLI: --validate. Pipeline test [12]: rows 7 + determinism + outputs.
+  · **ZERO statistic fns**: git diff ya strategy_lab/event_quality_report/event_library_v2/
+    family_pooled = 0 lines (imethibitishwa). Diff = wave_c2a.py pekee (219+/2- CLI). SWEEP 25/25.
+NEXT: Operator --validate kwenye PC ya data (VALIDATION ina-consumed kwa cells 7 pre-registered;
+HOLDOUT HAIJAGUSWI). Matokeo yote halali: survivors -> C2-6; hakuna -> FAIL kwa heshima + LESSON.

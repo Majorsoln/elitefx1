@@ -39,12 +39,31 @@ import numpy as np
 
 from event_library_v2 import EVENTS_V2, _synthetic
 from event_quality_report import episodes, _metrics, SLIP_MARKET, SLIP_STOP
-from strategy_lab import _mask_context_dir, load_window, MIN_N
+from strategy_lab import _mask_context_dir, load_window, MIN_N, pvalue_boot, pvalue_gt0, bh_fdr
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TF = "30m"                                     # registration: TF ya entry = 30m (shared)
 OUT_JSONL = "wave_c2a_train.jsonl"
 OUT_REPORT = "wave_c2a_s1_train.md"
+
+# ---------- C2-4: S2 VALIDATION (docs/WAVE_C2A_S2_REGISTRATION.md — FROZEN na Chief) ----------
+# HC2-03 PEKEE, EURUSD PEKEE, 30m. Cells 7 KAMA ZILIVYO kwenye registration §Cells (order ya
+# jedwali; (trigger, sl, tp, max_hold)). Hakuna cell ya ziada, hakuna re-selection.
+S2_HYP_ID = "HC2-03"
+S2_PAIR = "EURUSD"
+S2_CELLS = (
+    ("trend_resume", 1.0, 3.0, 32),
+    ("trend_resume", 1.5, 3.0, 32),
+    ("trend_resume", 1.5, 2.0, 32),
+    ("trend_resume", 1.0, 2.0, 32),
+    ("rsi2_pullback", 1.0, 2.0, 32),
+    ("rsi2_pullback", 1.5, 2.0, 32),
+    ("rsi2_pullback", 1.0, 3.0, 32),
+)
+S2_B = 50_000                                  # registration: pvalue_boot B=50k (engine RASMI)
+S2_Q = 0.10                                    # registration: BH-FDR q=0.10 kati ya cells 7
+S2_OUT_JSONL = "wave_c2a_s2_valid.jsonl"
+S2_OUT_REPORT = "wave_c2a_s2_valid.md"
 
 
 # ---------- context conditions (FROZEN — docs/WAVE_C2A_REGISTRATION.md) ----------
@@ -251,6 +270,105 @@ def _write_outputs(rows, split, out_root, skipped=()):
     return jl, rpt
 
 
+# ---------- C2-4: S2 VALIDATION runner (ADDITIVE — S1 haiguswi) ----------
+
+def _s2_cell_id(trig, sl, tp):
+    """dict ya cell kwa seed ya pvalue_boot (_seed_from_key: event/pair/sl/tp/filters) + `id` string.
+    session_filter=S2_HYP_ID inatofautisha seeds na grids nyingine za pair/trigger ileile."""
+    return dict(hypothesis=S2_HYP_ID, event=trig, pair=S2_PAIR, sl_atr=sl, tp_atr=tp,
+                session_filter=S2_HYP_ID, vol_filter=None,
+                id=f"{S2_HYP_ID}|{trig}|{S2_PAIR}|SL{sl}/TP{tp}")
+
+
+def s2_verdict(cells_pnls, q=S2_Q, B=S2_B):
+    """Test RASMI ya registration juu ya streams za cells 7: kila cell -> pvalue_boot (engine RASMI
+    ya strategy_lab — B, mean_block=3, seed deterministic kutoka cell) + p_z (sensitivity, SI
+    decision) -> bh_fdr(q) kati ya cells ZOTE zilizopita (m=len). Survivor = fdr_pass NA EV_net>0.
+    HAKUNA statistic mpya hapa — orchestration tu (pvalue_boot/pvalue_gt0/bh_fdr haziguswi)."""
+    rows = []
+    for cid, pnls in cells_pnls:
+        m = _metrics(pnls)
+        rows.append(dict(cid, n=m["n"],
+                         ev_net=(round(m["ev"], 4) if m["n"] else None),
+                         win=(round(m["win"], 4) if m["n"] else None),
+                         p_boot=round(float(pvalue_boot(pnls, B=B, mean_block=3, cell=cid)), 6),
+                         p_z=round(float(pvalue_gt0(pnls)), 6)))
+    surv, k, exp_false = bh_fdr([r["p_boot"] for r in rows], q)
+    for r, s in zip(rows, surv):
+        r["fdr_pass"] = bool(s)
+        r["survivor"] = bool(s and (r["ev_net"] is not None) and r["ev_net"] > 0)
+    return rows, int(k), exp_false
+
+
+def run_s2(split="validation", out_root=REPO_ROOT, write=True, B=S2_B):
+    """C2-4: endesha cells 7 FROZEN kwenye VALIDATION + BH-FDR. GUARD: 'validation' PEKEE —
+    TRAIN imekwisha (S1); HOLDOUT inahitaji token CHIEF-HOLDOUT-S3 kwenye C2-6, SI hapa."""
+    if split != "validation":
+        raise PermissionError("C2-4 S2 ni VALIDATION PEKEE — TRAIN imekwisha (S1); "
+                              "HOLDOUT = C2-6 one-shot (token CHIEF-HOLDOUT-S3), SI hapa")
+    data = load_window(S2_PAIR, TF, split)
+    if data is None or data.get("ctx") is None:
+        print(f"HITILAFU: {S2_PAIR}/{TF} state/context parquet haipo (endesha intraday_state_engine"
+              " + htf_context kwanza).", file=sys.stderr)
+        return None
+    hyp = next(h for h in HYPOTHESES if h["id"] == S2_HYP_ID)
+    sig_cache = {}
+    cells_pnls = []
+    for trig, sl, tp, mh in S2_CELLS:
+        if trig not in sig_cache:
+            sig_cache[trig] = _masked_signals(hyp, trig, data)
+        out_masked, entry = sig_cache[trig]
+        trs = episodes(out_masked, entry, data["o"], data["h"], data["l"], data["c"],
+                       data["atr"], data["spr"], data["hour"], data.get("vol"),
+                       sl_atr=sl, tp_atr=tp, max_hold=mh)
+        cells_pnls.append((_s2_cell_id(trig, sl, tp), [t[3] for t in trs]))
+    rows, k, exp_false = s2_verdict(cells_pnls, q=S2_Q, B=B)
+    if write:
+        _write_s2(rows, k, exp_false, split, out_root)
+    return rows
+
+
+def _write_s2(rows, k, exp_false, split, out_root):
+    out_root = Path(out_root)
+    sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
+    jl = sdir / S2_OUT_JSONL
+    with open(jl, "w", encoding="utf-8") as f:
+        for r in rows:
+            rec = {kk: vv for kk, vv in r.items() if kk not in ("session_filter", "vol_filter")}
+            rec["split"] = split
+            f.write(json.dumps(rec, sort_keys=True) + "\n")
+
+    survivors = [r for r in rows if r["survivor"]]
+    L = [f"# WAVE-C2-A — S2 VALIDATION (cells 7 FROZEN; docs/WAVE_C2A_S2_REGISTRATION.md)\n",
+         f"*{datetime.now():%Y-%m-%d %H:%M} | {S2_HYP_ID} x {S2_PAIR} x {TF} | split={split.upper()} "
+         f"(2023-2024) | m={len(rows)} | engine RASMI: pvalue_boot B={S2_B:,} mean_block=3 | "
+         f"BH-FDR q={S2_Q} | criterion: fdr_pass NA EV_net>0 | p_z = sensitivity (SI decision)*\n"]
+    if survivors:
+        L.append(f"## SURVIVORS ({len(survivors)}) — wanaendelea C2-6 freeze -> HOLDOUT one-shot\n")
+        L.append("| id | N | EV net | win% | p_boot (RASMI) | p_z (sens.) |")
+        L.append("|----|---|--------|------|----------------|-------------|")
+        for r in sorted(survivors, key=lambda x: x["p_boot"]):
+            L.append(f"| {r['id']} | {r['n']:,} | {r['ev_net']:+.3f} | {r['win']*100:.1f} | "
+                     f"{r['p_boot']:.4f} | {r['p_z']:.4f} |")
+    else:
+        L.append("## HAKUNA SURVIVOR — HC2-03 haujathibitika OOS\n")
+        L.append("Cells 7 za FROZEN hazikupita BH-FDR (q=0.10) NA EV_net>0 kwenye VALIDATION. "
+                 "Kwa registration: hii ni FAIL kwa heshima — LESSON; portfolio inabaki "
+                 "STRAT-001/002. (Tahadhari ya awali ya registration: TRAIN EVs ndogo + shrinkage.)")
+    L.append(f"\n## Cells zote 7 (accounting kamili; BH k={k}, ~{exp_false} kwa bahati)\n")
+    L.append("| id | N | EV net | p_boot | p_z | fdr_pass | survivor |")
+    L.append("|----|---|--------|--------|-----|----------|----------|")
+    for r in rows:
+        ev = f"{r['ev_net']:+.3f}" if r["ev_net"] is not None else "—"
+        L.append(f"| {r['id']} | {r['n']:,} | {ev} | {r['p_boot']:.4f} | {r['p_z']:.4f} | "
+                 f"{'YES' if r['fdr_pass'] else 'no'} | {'**YES**' if r['survivor'] else 'no'} |")
+    L.append("\n*VALIDATION ime-consumed kwa cells hizi 7 (pre-registered). HOLDOUT HAIJAGUSWA "
+             "(token C2-6). Engine RASMI haijabadilika. Profitable != Tradable Edge.*")
+    rpt = out_root / "reports" / S2_OUT_REPORT; rpt.parent.mkdir(parents=True, exist_ok=True)
+    rpt.write_text("\n".join(L), encoding="utf-8")
+    return jl, rpt
+
+
 # ---------- self-test (synthetic — bila data ya nje) ----------
 
 def _fixture(seed, n=4000, ctx=None):
@@ -376,6 +494,92 @@ def self_test():
           f"TRAIN-only guard (validation->refuse)={guard_ok}")
     ok = ok and t56
 
+    # ===== C2-4: S2 VALIDATION checks =====
+
+    # [7] S2_CELLS FROZEN == registration §Cells: 7 hasa, HC2-03/EURUSD/30m, triggers/SL/TP/max_hold
+    reg = {("trend_resume", 1.0, 3.0, 32), ("trend_resume", 1.5, 3.0, 32),
+           ("trend_resume", 1.5, 2.0, 32), ("trend_resume", 1.0, 2.0, 32),
+           ("rsi2_pullback", 1.0, 2.0, 32), ("rsi2_pullback", 1.5, 2.0, 32),
+           ("rsi2_pullback", 1.0, 3.0, 32)}
+    t7 = (len(S2_CELLS) == 7 and set(S2_CELLS) == reg and S2_PAIR == "EURUSD"
+          and S2_HYP_ID == "HC2-03" and TF == "30m" and S2_B == 50_000 and S2_Q == 0.10)
+    print(f"  [7] S2_CELLS FROZEN == registration (7; HC2-03/EURUSD/30m; B=50k q=0.10) -> {t7}")
+    ok = ok and t7
+
+    # [8] engine RASMI + seed determinism: p_boot ya s2_verdict == pvalue_boot(cell=cid) direct,
+    #     na inarudiwa bit-kwa-bit (seed kutoka cell key)
+    rng8 = np.random.default_rng(88)
+    pn8 = list(rng8.normal(0.5, 2.0, 90))
+    cid8 = _s2_cell_id("trend_resume", 1.0, 3.0)
+    rows8a, _, _ = s2_verdict([(cid8, pn8)], B=1500)
+    rows8b, _, _ = s2_verdict([(cid8, pn8)], B=1500)
+    direct = round(float(pvalue_boot(pn8, B=1500, mean_block=3, cell=cid8)), 6)
+    t8 = rows8a[0]["p_boot"] == rows8b[0]["p_boot"] == direct
+    print(f"  [8] engine RASMI (pvalue_boot cell-seeded, mean_block=3) + determinism: "
+          f"{rows8a[0]['p_boot']} == direct {direct} -> {t8}")
+    ok = ok and t8
+
+    # [9] BH-FDR m=7: s2_verdict flags == bh_fdr(p_boots zote 7, q=0.10) recomputed nje
+    rng9 = np.random.default_rng(99)
+    fix9 = [(_s2_cell_id(tr, sl, tp), list(rng9.normal(0.2 * i, 2.0, 80)))
+            for i, (tr, sl, tp, mh) in enumerate(S2_CELLS)]
+    rows9, k9, _ = s2_verdict(fix9, B=1200)
+    surv9, k9b, _ = bh_fdr([r["p_boot"] for r in rows9], S2_Q)
+    t9 = (len(rows9) == 7 and k9 == k9b
+          and [r["fdr_pass"] for r in rows9] == list(map(bool, surv9)))
+    print(f"  [9] BH-FDR m=7 (flags == recompute nje; k={k9}) -> {t9}")
+    ok = ok and t9
+
+    # [10] GUARD: run_s2 inakubali validation PEKEE — train/holdout -> refuse KABLA ya kusoma data
+    g_train = g_hold = False
+    try:
+        run_s2("train", write=False)
+    except PermissionError:
+        g_train = True
+    try:
+        run_s2("holdout", write=False)
+    except PermissionError:
+        g_hold = True
+    print(f"  [10] guard: train-refused={g_train} holdout-refused={g_hold} -> {g_train and g_hold}")
+    ok = ok and g_train and g_hold
+
+    # [11] survivor logic: edge chanya wazi -> FDR-pass + survivor; noise -> hakuna
+    rng11 = np.random.default_rng(11)
+    strong = list(rng11.normal(2.0, 1.0, 120))                       # edge wazi (EV +2)
+    fix11 = [(_s2_cell_id("trend_resume", 1.0, 3.0), strong)]
+    fix11 += [(_s2_cell_id("rsi2_pullback", 1.0, 2.0 + i), list(rng11.normal(0.0, 2.0, 100)))
+              for i in range(6)]                                     # noise 6
+    rows11, _, _ = s2_verdict(fix11, B=1500)
+    sv = [r for r in rows11 if r["survivor"]]
+    t11 = (len(sv) == 1 and sv[0]["id"].startswith("HC2-03|trend_resume") and sv[0]["ev_net"] > 0
+           and all(not r["survivor"] for r in rows11[1:]))
+    print(f"  [11] survivor logic: strong-edge->survivor(1), noise->0 -> {t11}")
+    ok = ok and t11
+
+    # [12] full S2 pipeline (monkeypatch load_window; B ndogo): rows 7, outputs, determinism
+    import tempfile
+    _self = sys.modules[__name__]
+    orig = _self.load_window
+    fx12 = _fixture(77)
+    _self.load_window = lambda sym, tf, split, token=None: fx12 if sym == S2_PAIR else None
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            ra = run_s2("validation", out_root=tmp, B=800)
+            rb = run_s2("validation", out_root=tmp, B=800)
+            det12 = json.dumps(ra, sort_keys=True) == json.dumps(rb, sort_keys=True)
+            jl = Path(tmp) / "data" / "strategies" / S2_OUT_JSONL
+            rpt = Path(tmp) / "reports" / S2_OUT_REPORT
+            recs = [json.loads(ln) for ln in open(jl, encoding="utf-8")]
+            fields12 = all({"id", "n", "ev_net", "p_boot", "p_z", "fdr_pass", "survivor",
+                            "split"} <= set(r) for r in recs)
+            txt = rpt.read_text(encoding="utf-8")
+            named12 = ("SURVIVORS" in txt) or ("HAKUNA SURVIVOR" in txt and "haujathibitika OOS" in txt)
+            t12 = det12 and len(ra) == 7 and len(recs) == 7 and fields12 and named12
+    finally:
+        _self.load_window = orig
+    print(f"  [12] S2 pipeline: rows=7 determinism={det12} jsonl-fields={fields12} report-verdict={named12} -> {t12}")
+    ok = ok and t12
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -385,12 +589,25 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--train", action="store_true", help="endesha grid FROZEN kwenye TRAIN (PC ya data)")
+    ap.add_argument("--validate", action="store_true",
+                    help="C2-4: S2 VALIDATION — cells 7 FROZEN (HC2-03 EURUSD) + BH-FDR")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
+    if a.validate:
+        rows = run_s2("validation")
+        if rows is None:
+            return 1
+        sv = [r for r in rows if r["survivor"]]
+        if sv:
+            print(f"WAVE-C2-A S2: SURVIVORS {len(sv)}/7 -> " + ", ".join(r["id"] for r in sv))
+        else:
+            print("WAVE-C2-A S2: hakuna survivor - HC2-03 haujathibitika OOS (FAIL kwa heshima)")
+        print(f"  data/strategies/{S2_OUT_JSONL}\n  reports/{S2_OUT_REPORT}")
+        return 0
     if not a.train:
-        print("Tumia --train (S1 TRAIN run) au --self-test.", file=sys.stderr)
+        print("Tumia --train (S1 TRAIN) | --validate (C2-4 S2) | --self-test.", file=sys.stderr)
         return 2
     rows = run("train")
     traded = [r for r in rows if r.get("min_n_ok")]
