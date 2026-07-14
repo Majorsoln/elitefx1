@@ -678,3 +678,21 @@ STRAT-001/002 zinabaki PROVEN (tuple yao H1-OCO — hazitupwi).
 (HC2-03 EURUSD cost_share 53-80% > 50% ya CORE). Hii ni sayansi halali. Njia mbili mbele (chagua):
 (A) S2 VALIDATION ya HC2-03 EURUSD (cheap check — confirm/reject marginal edge), na/au
 (B) fungua WAVE-B (15m ORB/shock, false_break, gold) kwa "shots on goal" zaidi.
+
+---
+
+## 2026-07-14 — PD: "sawa" (A+B). C2-4 (S2) FROZEN + WAVE-B-prep zaanza sambamba
+
+**Track A — C2-4 (S2 VALIDATION):** `docs/WAVE_C2A_S2_REGISTRATION.md` FROZEN — HC2-03 EURUSD
+PEKEE, cells 7 (trend_resume 4 + rsi2_pullback 3 zilizonusurika TRAIN net+). Test: VALIDATION
+2023-2024, pvalue_boot (B=50k, m=3, engine RASMI) + BH-FDR q=0.10 kati ya 7. Survivor = FDR-pass
+NA EV_net>0. Tahadhari: EVs ndogo + shrinkage (~0.35) → inaweza kukosa significance (FAIL kwa
+heshima ni jibu). Prompt: IMPLEMENTER-A [C2-4] (run_s2 kwa wave_c2a, ADDITIVE, ZERO statistic fns).
+
+**Track B — WAVE-B-prep:** prompt IMPLEMENTER-A [WAVE-B-prep] — (1) event `false_break` (HC2-10;
+PAST-bars levels, sweep-fail semantics, no-lookahead self-test); (2) gold spread-quality check
+(XAUUSD 15m/30m spr p90/95/99 vs ATR → je gold inafaa WAVE-B?). Read-only kwa config.
+
+**HATUA:** Operator aendeshe agent MBILI sambamba (C2-4 build + WAVE-B-prep). Baada ya build:
+C2-4 → `--validate` (S2); WAVE-B-prep → gold check. Kisha Chief afreeze WAVE-B grid (HC2-02/05/10 +
+gold kama check inaruhusu). STRAT-001/002 portfolio inaendelea.
