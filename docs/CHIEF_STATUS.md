@@ -551,3 +551,22 @@ tabia kwa kila pair. **Kizuizi:** STRAT-001/002 HAZIFUTWI (models zitajengwa juu
 
 **Hatua inayofuata:** C2-0 (IMPLEMENTER-A: jenga 15m/30m states) SAMBAMBA na C2-1
 (STRATEGIST-M: list best 10 hypotheses). Discipline ya TRAIN/VALID/HOLDOUT inabaki.
+
+---
+
+## 2026-07-14 — C2-0 IMEKAMILIKA (msingi wa Mzunguko-2 umejengwa)
+
+**IMPLEMENTER-A [C2-0]** → 15m/30m intraday states + HTF context features. Chief review: IMEPITA.
+- **Code:** `intraday_state_engine.py` (ticks→15m→30m rollup, states no-lookahead) + `htf_context.py`
+  (H4/D1 trend/regime/structure/momentum, as-of BACKWARD join). Building-blocks za engine kwa
+  IMPORT; `market_state_engine.py` HAIJAGUSWA (golden PASS). Sweep 24/24. Merged branch yangu.
+- **No-lookahead (hatari kuu):** mtego wa leakage [2] PASS — LTF bar haioni HTF bar inayoizunguka;
+  inatumia bar iliyofungwa. Boundary [2b] + D1 [3] + truncation-invariance [b] zote PASS.
+- **Data build halisi (PC ya Operator):** pairs 12 × {15m,30m} zote. ~251k bars/pair (15m),
+  ~126k (30m), miaka 2016→2026. Context bars == state bars (as-of haikupoteza row). Spread sanity:
+  EURUSD 0.30, GBPUSD 0.90, XAUUSD 35.0 (gold pip 0.01 ✅). data/processed/state + context (gitignored).
+- **Path integrity:** `state_path()` inasomeka na engine zote (15m/30m NA H4/D1) — context si tupu.
+
+**HATUA INAYOFUATA:** C2-1 — STRATEGIST-M list BEST 10 hypotheses (HTF-context + 15m/30m trigger),
+kila moja falsifiable, ranked kwa logic. Prompt tayari (docs/team/PROMPTS.md). Features 9 zilizopo
+(trend 3/regime 2/structure 2/momentum 2) zinatosha kuanza; nyongeza ni additive.
