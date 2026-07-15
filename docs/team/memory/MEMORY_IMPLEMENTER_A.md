@@ -782,3 +782,29 @@ OPEN QUESTIONS / NOTES:
   (golden-hash 09b28990b0ead07b, nolook=True, sweep short@bar3=-1/long@bar3=1/normal=0, single-fire);
   gold_spread_quality self-test PASS 6/6; report SUITABLE (max_spread=75); config XAUUSD=75.
   Vipande vyote viwili tayari kwenye main (vilimergwa via PR mzunguko uliopita). Hakuna re-implement.
+
+=== WAVE-B / HC2-10 build (2026-07-15) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Operator aendeshe `python src/research/wave_c2a.py --train --hyp HC2-10` kwenye PC ya data)**
+LAST COMPLETED: **WAVE-B HC2-10 (FAILED-BREAK-SWEEP) S1 build** ✅ (ADDITIVE kwa wave_c2a.py; docs/WAVE_C2B_HC210_REGISTRATION.md):
+  (1) allow fns MPYA: `_hc210_allow_long(ctx)` = isfinite(d1_dist_sup_atr)&(<=0.5);
+      `_hc210_allow_short(ctx)` = isfinite(d1_dist_res_atr)&(<=0.5). Mtindo wa _hc206 lakini
+      HAKUNA h4 condition (pure D1-extreme sweep). NaN->allow=False (isfinite guard).
+  (2) HYPOTHESES += HC2-10: trigger `false_break` (entry=market, look20/rearm8), SL{1.0,1.5}x
+      TP{2.0,3.0}, max_hold=24, pairs (EURGBP,EURCHF,AUDUSD,NZDUSD,XAUUSD) -> cells 1x4x5 = **20**.
+  (3) HYP-FILTER: `WAVE_A_IDS=(HC2-01,03,06)`; `cells(only)`/`run(only)`/`--hyp` CLI. `only=None`->
+      WAVE-A (84 cells, tabia ya zamani); `only=HC2-10`->20 cells. Outputs zenye suffix:
+      data/strategies/wave_c2a_train_HC2-10.jsonl + reports/wave_c2b_hc210_s1_train.md (HAIFUTI WAVE-A).
+      bad id -> ValueError. HC2-10 haimo kwenye default (opt-in) -> S2 FDR enumeration (m=84) haijaguswa.
+  · SHERIA NGUMU: ZERO statistic fns (episodes/pvalue_boot/bh_fdr/_mask_context_dir HAZIJAGUSWA;
+    golden diff = **0 lines** vs origin/main). Grid FROZEN 20. XAUUSD imo (gold SUITABLE max_spread 75).
+  Self-test wave_c2a: checks za awali [1]-[12] (WAVE-A + S2) ZOTE PASS + MPYA [13]-[16]:
+    [13] HC2-10 cells==20 & default cells()==84 (no HC2-10); [14] allow isfinite/threshold (no h4);
+    [15] false_break->_mask_context_dir->episodes (support->long-only, resistance->short-only, market);
+    [16] hyp-filter run(only=HC2-10)->20 rows + suffix files (WAVE-A intact 84) + bad-id ValueError.
+  SWEEP 26/26 PASS.
+NEXT AFTER: Operator: `python src/research/wave_c2a.py --train --hyp HC2-10` (PC ya data) ->
+  reports/wave_c2b_hc210_s1_train.md (candidates net+ TRAIN). Kisha Chief: survivors N>=MIN_N ->
+  S2 VALIDATION (family HC2-10) + pvalue_boot B=50k + BH-FDR q=0.10 -> C2-6 HOLDOUT one-shot.
+OPEN QUESTIONS / NOTES:
+  - false_break params default look=20/rearm=8 (hakuna param-grid wave hii — registration).
+  - S2 ya HC2-10 (baada ya S1) itahitaji registration mpya + run_s2 variant (HC2-10 family) — SI wave hii.
