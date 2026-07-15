@@ -839,3 +839,29 @@ NEXT AFTER: Operator (PC ya data): [1] `python src/research/htf_context.py --ltf
 OPEN QUESTIONS / NOTES:
   - H1 state parquet (market_state_engine) LAZIMA ipo kabla htf_context --ltf H1 (Operator R-1).
   - S2 ya HB2 = pooled per family (m=2) — itahitaji registration + runner variant (SI wave hii).
+
+=== WAVE-B2-S2 build (2026-07-15) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Operator: `python src/research/wave_c2a.py --validate --s2 hb210-eurchf`)**
+LAST COMPLETED: **run_s2 generalized (spec-driven)** ✅ (docs/WAVE_B2_S2_REGISTRATION.md; ADDITIVE):
+  - `S2_SPECS` dict: kila S2 registration = spec (hyp_id/pair/tf/cells/jsonl_name/report_name/reg_doc).
+    "hc203-eurusd" (S2 ya zamani, values zilezile — rejea ya kihistoria, DEFAULT backward-compat) +
+    "hb210-eurchf" MPYA: HB2-10 x EURCHF x H1, cells 2 (false_break SL1.5/TP{3.0,2.0} hold16),
+    reg docs/WAVE_B2_S2_REGISTRATION.md, outputs wave_b2_s2_valid.{jsonl,md}.
+  - `run_s2(spec_key=S2_DEFAULT, split="validation", ...)` — logic ILEILE (load_window(pair,tf) ->
+    _masked_signals -> episodes -> pvalue_boot B=50k m=3 engine RASMI -> bh_fdr q=0.10 m=len(cells)
+    -> survivor=fdr_pass NA EV>0). `_s2_cell_id(trig,sl,tp,hyp_id,pair)` + `_write_s2(...,spec)`
+    spec-driven (title/verdict/paths). Guard: validation PEKEE (PermissionError); spec mbaya->ValueError.
+  - CLI: `--validate --s2 hb210-eurchf` (default hc203-eurusd). Signature ya run_s2 sasa spec_key kwanza
+    (self-test [10]/[12] zilihaririwa kwa keyword `split=` kudumisha regression).
+  · SHERIA NGUMU: ZERO statistic fns (pvalue_boot/bh_fdr/episodes/pool_streams golden diff = **0 lines**;
+    s2_verdict/run_s2/_write_s2 ni orchestration TU). Cells FROZEN 2 (hakuna kuongeza). HOLDOUT bila token
+    inakataliwa. File 1 iliyoguswa: wave_c2a.py.
+  Self-test: [1]-[18] za awali ZOTE PASS + MPYA/updated:
+    [10] guard += bad-spec->ValueError; [19] S2_SPECS FROZEN (hb210 cells2/H1/EURCHF + hc203 cells7/30m
+    regression); [20] hb210-eurchf pipeline (2 rows, id=HB2-10|false_break|EURCHF, outputs
+    wave_b2_s2_valid.*, determinism, verdict named, reg_doc kwenye report). SWEEP 26/26 PASS.
+NEXT AFTER: Operator (PC ya data): `python src/research/wave_c2a.py --validate --s2 hb210-eurchf` ->
+  reports/wave_b2_s2_valid.md (survivor au HAKUNA). Survivor -> C2-6 HOLDOUT one-shot (token) -> STRAT-003.
+OPEN QUESTIONS / NOTES:
+  - HB2-06 = CLOSED-BY-POWER @ H1 (0/40 cells zilifika MIN_N — haipimiki, si mechanism-dead; registration §HB2-06).
+  - S2 ya HB2-10 ni single-pair concentration (LESSON-038 caveat) — VALIDATION ndiyo mwamuzi; FAIL halali.

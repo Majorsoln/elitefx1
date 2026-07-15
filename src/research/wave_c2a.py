@@ -61,9 +61,23 @@ S2_CELLS = (
     ("rsi2_pullback", 1.0, 3.0, 32),
 )
 S2_B = 50_000                                  # registration: pvalue_boot B=50k (engine RASMI)
-S2_Q = 0.10                                    # registration: BH-FDR q=0.10 kati ya cells 7
+S2_Q = 0.10                                    # registration: BH-FDR q=0.10 kati ya cells
 S2_OUT_JSONL = "wave_c2a_s2_valid.jsonl"
 S2_OUT_REPORT = "wave_c2a_s2_valid.md"
+
+# S2_SPECS: kila S2 registration = spec moja (hyp/pair/tf/cells FROZEN + majina ya output). run_s2
+# inaendesha spec yoyote — logic ILEILE (load->mask->episodes->pvalue_boot->bh_fdr). Cells FROZEN
+# kwa kila spec; hakuna kuongeza. `hc203-eurusd` = S2 ya zamani (rejea ya kihistoria, backward-compat).
+S2_SPECS = {
+    "hc203-eurusd": dict(hyp_id=S2_HYP_ID, pair=S2_PAIR, tf="30m", cells=S2_CELLS,
+                         jsonl_name=S2_OUT_JSONL, report_name=S2_OUT_REPORT,
+                         reg_doc="docs/WAVE_C2A_S2_REGISTRATION.md"),
+    "hb210-eurchf": dict(hyp_id="HB2-10", pair="EURCHF", tf="H1",
+                         cells=(("false_break", 1.5, 3.0, 16), ("false_break", 1.5, 2.0, 16)),
+                         jsonl_name="wave_b2_s2_valid.jsonl", report_name="wave_b2_s2_valid.md",
+                         reg_doc="docs/WAVE_B2_S2_REGISTRATION.md"),
+}
+S2_DEFAULT = "hc203-eurusd"                    # backward-compat: --validate bila --s2
 
 
 # ---------- context conditions (FROZEN — docs/WAVE_C2A_REGISTRATION.md) ----------
@@ -349,12 +363,13 @@ def _write_outputs(rows, split, out_root, skipped=(), only=None):
 
 # ---------- C2-4: S2 VALIDATION runner (ADDITIVE — S1 haiguswi) ----------
 
-def _s2_cell_id(trig, sl, tp):
+def _s2_cell_id(trig, sl, tp, hyp_id=S2_HYP_ID, pair=S2_PAIR):
     """dict ya cell kwa seed ya pvalue_boot (_seed_from_key: event/pair/sl/tp/filters) + `id` string.
-    session_filter=S2_HYP_ID inatofautisha seeds na grids nyingine za pair/trigger ileile."""
-    return dict(hypothesis=S2_HYP_ID, event=trig, pair=S2_PAIR, sl_atr=sl, tp_atr=tp,
-                session_filter=S2_HYP_ID, vol_filter=None,
-                id=f"{S2_HYP_ID}|{trig}|{S2_PAIR}|SL{sl}/TP{tp}")
+    session_filter=hyp_id inatofautisha seeds na grids nyingine za pair/trigger ileile. Defaults =
+    spec ya zamani (HC2-03/EURUSD) kwa backward-compat; run_s2 inapitisha za spec inayoendesha."""
+    return dict(hypothesis=hyp_id, event=trig, pair=pair, sl_atr=sl, tp_atr=tp,
+                session_filter=hyp_id, vol_filter=None,
+                id=f"{hyp_id}|{trig}|{pair}|SL{sl}/TP{tp}")
 
 
 def s2_verdict(cells_pnls, q=S2_Q, B=S2_B):
@@ -377,38 +392,45 @@ def s2_verdict(cells_pnls, q=S2_Q, B=S2_B):
     return rows, int(k), exp_false
 
 
-def run_s2(split="validation", out_root=REPO_ROOT, write=True, B=S2_B):
-    """C2-4: endesha cells 7 FROZEN kwenye VALIDATION + BH-FDR. GUARD: 'validation' PEKEE —
-    TRAIN imekwisha (S1); HOLDOUT inahitaji token CHIEF-HOLDOUT-S3 kwenye C2-6, SI hapa."""
+def run_s2(spec_key=S2_DEFAULT, split="validation", out_root=REPO_ROOT, write=True, B=S2_B):
+    """C2-4/S2 generic: endesha S2 spec yoyote (S2_SPECS) — cells FROZEN kwenye VALIDATION + BH-FDR.
+    Logic ILEILE kwa spec zote (load_window(pair,tf) -> _masked_signals -> episodes -> pvalue_boot
+    B m=3 -> bh_fdr q). GUARD: 'validation' PEKEE — TRAIN imekwisha (S1); HOLDOUT = C2-6 one-shot
+    (token CHIEF-HOLDOUT-S3), SI hapa. spec_key mbaya -> ValueError."""
     if split != "validation":
         raise PermissionError("C2-4 S2 ni VALIDATION PEKEE — TRAIN imekwisha (S1); "
                               "HOLDOUT = C2-6 one-shot (token CHIEF-HOLDOUT-S3), SI hapa")
-    data = load_window(S2_PAIR, TF, split)
+    if spec_key not in S2_SPECS:
+        raise ValueError(f"S2 spec haipo: {spec_key} (chagua: {', '.join(S2_SPECS)})")
+    spec = S2_SPECS[spec_key]
+    pair, tf, hyp_id = spec["pair"], spec["tf"], spec["hyp_id"]
+    data = load_window(pair, tf, split)
     if data is None or data.get("ctx") is None:
-        print(f"HITILAFU: {S2_PAIR}/{TF} state/context parquet haipo (endesha intraday_state_engine"
+        print(f"HITILAFU: {pair}/{tf} state/context parquet haipo (endesha intraday_state_engine"
               " + htf_context kwanza).", file=sys.stderr)
         return None
-    hyp = next(h for h in HYPOTHESES if h["id"] == S2_HYP_ID)
+    hyp = next(h for h in HYPOTHESES if h["id"] == hyp_id)
     sig_cache = {}
     cells_pnls = []
-    for trig, sl, tp, mh in S2_CELLS:
+    for trig, sl, tp, mh in spec["cells"]:
         if trig not in sig_cache:
             sig_cache[trig] = _masked_signals(hyp, trig, data)
         out_masked, entry = sig_cache[trig]
         trs = episodes(out_masked, entry, data["o"], data["h"], data["l"], data["c"],
                        data["atr"], data["spr"], data["hour"], data.get("vol"),
                        sl_atr=sl, tp_atr=tp, max_hold=mh)
-        cells_pnls.append((_s2_cell_id(trig, sl, tp), [t[3] for t in trs]))
+        cells_pnls.append((_s2_cell_id(trig, sl, tp, hyp_id, pair), [t[3] for t in trs]))
     rows, k, exp_false = s2_verdict(cells_pnls, q=S2_Q, B=B)
     if write:
-        _write_s2(rows, k, exp_false, split, out_root)
+        _write_s2(rows, k, exp_false, split, out_root, spec)
     return rows
 
 
-def _write_s2(rows, k, exp_false, split, out_root):
+def _write_s2(rows, k, exp_false, split, out_root, spec):
     out_root = Path(out_root)
+    hyp_id, pair, tf, m = spec["hyp_id"], spec["pair"], spec["tf"], len(rows)
     sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
-    jl = sdir / S2_OUT_JSONL
+    jl = sdir / spec["jsonl_name"]
     with open(jl, "w", encoding="utf-8") as f:
         for r in rows:
             rec = {kk: vv for kk, vv in r.items() if kk not in ("session_filter", "vol_filter")}
@@ -416,9 +438,9 @@ def _write_s2(rows, k, exp_false, split, out_root):
             f.write(json.dumps(rec, sort_keys=True) + "\n")
 
     survivors = [r for r in rows if r["survivor"]]
-    L = [f"# WAVE-C2-A — S2 VALIDATION (cells 7 FROZEN; docs/WAVE_C2A_S2_REGISTRATION.md)\n",
-         f"*{datetime.now():%Y-%m-%d %H:%M} | {S2_HYP_ID} x {S2_PAIR} x {TF} | split={split.upper()} "
-         f"(2023-2024) | m={len(rows)} | engine RASMI: pvalue_boot B={S2_B:,} mean_block=3 | "
+    L = [f"# {hyp_id} — S2 VALIDATION (cells {m} FROZEN; {spec['reg_doc']})\n",
+         f"*{datetime.now():%Y-%m-%d %H:%M} | {hyp_id} x {pair} x {tf} | split={split.upper()} "
+         f"(2023-2024) | m={m} | engine RASMI: pvalue_boot B={S2_B:,} mean_block=3 | "
          f"BH-FDR q={S2_Q} | criterion: fdr_pass NA EV_net>0 | p_z = sensitivity (SI decision)*\n"]
     if survivors:
         L.append(f"## SURVIVORS ({len(survivors)}) — wanaendelea C2-6 freeze -> HOLDOUT one-shot\n")
@@ -428,20 +450,19 @@ def _write_s2(rows, k, exp_false, split, out_root):
             L.append(f"| {r['id']} | {r['n']:,} | {r['ev_net']:+.3f} | {r['win']*100:.1f} | "
                      f"{r['p_boot']:.4f} | {r['p_z']:.4f} |")
     else:
-        L.append("## HAKUNA SURVIVOR — HC2-03 haujathibitika OOS\n")
-        L.append("Cells 7 za FROZEN hazikupita BH-FDR (q=0.10) NA EV_net>0 kwenye VALIDATION. "
-                 "Kwa registration: hii ni FAIL kwa heshima — LESSON; portfolio inabaki "
-                 "STRAT-001/002. (Tahadhari ya awali ya registration: TRAIN EVs ndogo + shrinkage.)")
-    L.append(f"\n## Cells zote 7 (accounting kamili; BH k={k}, ~{exp_false} kwa bahati)\n")
+        L.append(f"## HAKUNA SURVIVOR — {hyp_id} haujathibitika OOS\n")
+        L.append(f"Cells {m} za FROZEN hazikupita BH-FDR (q={S2_Q}) NA EV_net>0 kwenye VALIDATION. "
+                 "Kwa registration: hii ni FAIL kwa heshima — LESSON; mechanism haijathibitika OOS.")
+    L.append(f"\n## Cells zote {m} (accounting kamili; BH k={k}, ~{exp_false} kwa bahati)\n")
     L.append("| id | N | EV net | p_boot | p_z | fdr_pass | survivor |")
     L.append("|----|---|--------|--------|-----|----------|----------|")
     for r in rows:
         ev = f"{r['ev_net']:+.3f}" if r["ev_net"] is not None else "—"
         L.append(f"| {r['id']} | {r['n']:,} | {ev} | {r['p_boot']:.4f} | {r['p_z']:.4f} | "
                  f"{'YES' if r['fdr_pass'] else 'no'} | {'**YES**' if r['survivor'] else 'no'} |")
-    L.append("\n*VALIDATION ime-consumed kwa cells hizi 7 (pre-registered). HOLDOUT HAIJAGUSWA "
+    L.append(f"\n*VALIDATION ime-consumed kwa cells hizi {m} (pre-registered). HOLDOUT HAIJAGUSWA "
              "(token C2-6). Engine RASMI haijabadilika. Profitable != Tradable Edge.*")
-    rpt = out_root / "reports" / S2_OUT_REPORT; rpt.parent.mkdir(parents=True, exist_ok=True)
+    rpt = out_root / "reports" / spec["report_name"]; rpt.parent.mkdir(parents=True, exist_ok=True)
     rpt.write_text("\n".join(L), encoding="utf-8")
     return jl, rpt
 
@@ -607,18 +628,24 @@ def self_test():
     print(f"  [9] BH-FDR m=7 (flags == recompute nje; k={k9}) -> {t9}")
     ok = ok and t9
 
-    # [10] GUARD: run_s2 inakubali validation PEKEE — train/holdout -> refuse KABLA ya kusoma data
-    g_train = g_hold = False
+    # [10] GUARD: run_s2 inakubali validation PEKEE — train/holdout -> refuse KABLA ya kusoma data;
+    #      spec_key mbaya -> ValueError
+    g_train = g_hold = g_spec = False
     try:
-        run_s2("train", write=False)
+        run_s2(split="train", write=False)
     except PermissionError:
         g_train = True
     try:
-        run_s2("holdout", write=False)
+        run_s2(split="holdout", write=False)
     except PermissionError:
         g_hold = True
-    print(f"  [10] guard: train-refused={g_train} holdout-refused={g_hold} -> {g_train and g_hold}")
-    ok = ok and g_train and g_hold
+    try:
+        run_s2("nonesuch-spec", write=False)
+    except ValueError:
+        g_spec = True
+    print(f"  [10] guard: train-refused={g_train} holdout-refused={g_hold} bad-spec={g_spec} "
+          f"-> {g_train and g_hold and g_spec}")
+    ok = ok and g_train and g_hold and g_spec
 
     # [11] survivor logic: edge chanya wazi -> FDR-pass + survivor; noise -> hakuna
     rng11 = np.random.default_rng(11)
@@ -641,8 +668,8 @@ def self_test():
     _self.load_window = lambda sym, tf, split, token=None: fx12 if sym == S2_PAIR else None
     try:
         with tempfile.TemporaryDirectory() as tmp:
-            ra = run_s2("validation", out_root=tmp, B=800)
-            rb = run_s2("validation", out_root=tmp, B=800)
+            ra = run_s2(split="validation", out_root=tmp, B=800)      # default spec (HC2-03/EURUSD)
+            rb = run_s2(split="validation", out_root=tmp, B=800)
             det12 = json.dumps(ra, sort_keys=True) == json.dumps(rb, sort_keys=True)
             jl = Path(tmp) / "data" / "strategies" / S2_OUT_JSONL
             rpt = Path(tmp) / "reports" / S2_OUT_REPORT
@@ -784,6 +811,50 @@ def self_test():
           f"WAVE-A intact 84 -> {t18}")
     ok = ok and t18
 
+    # ===== WAVE-B2-S2: generic run_s2 (spec-driven) checks =====
+
+    # [19] SPECS FROZEN: hb210-eurchf == registration (cells 2, tf H1, pair EURCHF, HB2-10,
+    #      false_break look/rearm default SL1.5); hc203-eurusd (rejea) bado == S2_CELLS 7 (regression)
+    sp_hb = S2_SPECS["hb210-eurchf"]; sp_hc = S2_SPECS["hc203-eurusd"]
+    t19 = (sp_hb["hyp_id"] == "HB2-10" and sp_hb["pair"] == "EURCHF" and sp_hb["tf"] == "H1"
+           and sp_hb["cells"] == (("false_break", 1.5, 3.0, 16), ("false_break", 1.5, 2.0, 16))
+           and sp_hb["reg_doc"] == "docs/WAVE_B2_S2_REGISTRATION.md"
+           and sp_hb["jsonl_name"] == "wave_b2_s2_valid.jsonl"
+           and sp_hc["hyp_id"] == "HC2-03" and sp_hc["pair"] == "EURUSD" and sp_hc["tf"] == "30m"
+           and sp_hc["cells"] == S2_CELLS and len(S2_CELLS) == 7
+           and sp_hc["jsonl_name"] == S2_OUT_JSONL)
+    print(f"  [19] S2_SPECS: hb210-eurchf(cells={len(sp_hb['cells'])} H1 EURCHF) + "
+          f"hc203-eurusd(cells={len(sp_hc['cells'])} 30m EURUSD, regression) -> {t19}")
+    ok = ok and t19
+
+    # [20] hb210-eurchf pipeline (monkeypatch load_window -> EURCHF fixture): 2 rows, id=HB2-10|...,
+    #      cell-id/seed inatumia HB2-10/EURCHF, outputs wave_b2_s2_valid.* (distinct na hc203),
+    #      determinism, verdict named, guard-consistency (hc203 default haiathiriki)
+    import tempfile
+    _self = sys.modules[__name__]
+    orig = _self.load_window
+    fx20 = _fixture(88)
+    _self.load_window = lambda sym, tf, split, token=None: fx20 if sym == "EURCHF" else None
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            r20a = run_s2("hb210-eurchf", "validation", out_root=tmp, B=800)
+            r20b = run_s2("hb210-eurchf", "validation", out_root=tmp, B=800)
+            det20 = json.dumps(r20a, sort_keys=True) == json.dumps(r20b, sort_keys=True)
+            jl20 = Path(tmp) / "data" / "strategies" / "wave_b2_s2_valid.jsonl"
+            rp20 = Path(tmp) / "reports" / "wave_b2_s2_valid.md"
+            recs20 = [json.loads(ln) for ln in open(jl20, encoding="utf-8")]
+            id_ok = all(r["id"].startswith("HB2-10|false_break|EURCHF|") for r in r20a)
+            txt20 = rp20.read_text(encoding="utf-8")
+            named20 = (("SURVIVORS" in txt20) or ("HAKUNA SURVIVOR" in txt20)) and "HB2-10" in txt20
+            t20 = (det20 and len(r20a) == 2 and len(recs20) == 2 and id_ok
+                   and jl20.exists() and rp20.exists() and named20
+                   and "docs/WAVE_B2_S2_REGISTRATION.md" in txt20)
+    finally:
+        _self.load_window = orig
+    print(f"  [20] hb210-eurchf S2 pipeline: rows=2 id=HB2-10|EURCHF determinism={det20} "
+          f"outputs wave_b2_s2_valid.* verdict-named={named20} -> {t20}")
+    ok = ok and t20
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -794,7 +865,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--train", action="store_true", help="endesha grid FROZEN kwenye TRAIN (PC ya data)")
     ap.add_argument("--validate", action="store_true",
-                    help="C2-4: S2 VALIDATION — cells 7 FROZEN (HC2-03 EURUSD) + BH-FDR")
+                    help="S2 VALIDATION — spec FROZEN (--s2) + BH-FDR")
+    ap.add_argument("--s2", default=S2_DEFAULT,
+                    help=f"S2 spec key ({' | '.join(S2_SPECS)}); default {S2_DEFAULT} (backward-compat)")
     ap.add_argument("--hyp", default=None,
                     help="chuja hypothesis moja au comma-list kwa --train (mf. HC2-10 -> 20; "
                          "HB2-06,HB2-10 -> 60; outputs zenye suffix). Bila hii -> WAVE-A (84 cells).")
@@ -803,15 +876,19 @@ def main():
     if a.self_test:
         return self_test()
     if a.validate:
-        rows = run_s2("validation")
+        if a.s2 not in S2_SPECS:
+            print(f"S2 spec haipo: {a.s2} (chagua: {', '.join(S2_SPECS)})", file=sys.stderr)
+            return 2
+        spec = S2_SPECS[a.s2]; tag = spec["hyp_id"]
+        rows = run_s2(a.s2, "validation")
         if rows is None:
             return 1
         sv = [r for r in rows if r["survivor"]]
         if sv:
-            print(f"WAVE-C2-A S2: SURVIVORS {len(sv)}/7 -> " + ", ".join(r["id"] for r in sv))
+            print(f"{tag} S2: SURVIVORS {len(sv)}/{len(rows)} -> " + ", ".join(r["id"] for r in sv))
         else:
-            print("WAVE-C2-A S2: hakuna survivor - HC2-03 haujathibitika OOS (FAIL kwa heshima)")
-        print(f"  data/strategies/{S2_OUT_JSONL}\n  reports/{S2_OUT_REPORT}")
+            print(f"{tag} S2: hakuna survivor - {tag} haujathibitika OOS (FAIL kwa heshima)")
+        print(f"  data/strategies/{spec['jsonl_name']}\n  reports/{spec['report_name']}")
         return 0
     if not a.train:
         print("Tumia --train (S1 TRAIN) | --validate (C2-4 S2) | --self-test.", file=sys.stderr)
