@@ -100,6 +100,25 @@ def _hc206_allow_short(ctx):
         return np.isfinite(res) & np.isfinite(h4) & (res <= 0.5) & (h4 <= 0)
 
 
+# HC2-10 FAILED-BREAK-SWEEP (WAVE-B; docs/WAVE_C2B_HC210_REGISTRATION.md) — pure sweep kwenye D1
+# extreme, HAKUNA h4 condition (tofauti na HC2-06). isfinite guard: NaN -> allow False.
+def _hc210_allow_long(ctx):
+    sup = _fin(ctx, "d1_dist_sup_atr")
+    with np.errstate(invalid="ignore"):
+        return np.isfinite(sup) & (sup <= 0.5)
+
+
+def _hc210_allow_short(ctx):
+    res = _fin(ctx, "d1_dist_res_atr")
+    with np.errstate(invalid="ignore"):
+        return np.isfinite(res) & (res <= 0.5)
+
+
+# WAVE-A (C2-3/C2-4) = hypotheses 3 za awali. HC2-10 ni WAVE-B — ni opt-in kupitia --hyp/only PEKEE;
+# run()/cells() bila `only` zinabaki WAVE-A (tabia ya zamani, cells=84).
+WAVE_A_IDS = ("HC2-01", "HC2-03", "HC2-06")
+
+
 # ---------- HYPOTHESES (grid FROZEN — thamani KAMA ZILIVYO kwenye registration) ----------
 HYPOTHESES = (
     dict(id="HC2-01", name="ALIGNED-COMPRESSION",
@@ -120,13 +139,22 @@ HYPOTHESES = (
          allow_short=_hc206_allow_short,
          sl=(1.0, 1.5), tp=(1.5,), max_hold=24,
          pairs=("EURGBP", "EURCHF", "USDCHF", "AUDUSD", "NZDUSD")),          # cells 2x2x5 = 20
+    dict(id="HC2-10", name="FAILED-BREAK-SWEEP",
+         triggers=("false_break",),
+         allow_long=_hc210_allow_long, allow_short=_hc210_allow_short,
+         sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=24,
+         pairs=("EURGBP", "EURCHF", "AUDUSD", "NZDUSD", "XAUUSD")),          # cells 1x4x5 = 20
 )
 
 
-def cells():
-    """Enumerate cells ZOTE za grid FROZEN (m=84). FDR ya S2 itahesabu enumeration HII."""
+def cells(only=None):
+    """Enumerate cells za grid FROZEN. `only=None` -> WAVE-A (m=84; FDR ya S2 inahesabu HII);
+    `only=<id>` -> hypothesis moja (mf. HC2-10 -> m=20). HC2-10 haimo kwenye default (opt-in)."""
+    active = WAVE_A_IDS if only is None else (only,)
     out = []
     for hyp in HYPOTHESES:
+        if hyp["id"] not in active:
+            continue
         for trig in hyp["triggers"]:
             for pair in hyp["pairs"]:
                 for sl in hyp["sl"]:
@@ -174,12 +202,17 @@ def eval_cell(out_masked, entry, data, sl, tp, max_hold):
     return row
 
 
-def run(split="train", out_root=REPO_ROOT, write=True):
+def run(split="train", out_root=REPO_ROOT, write=True, only=None):
     """Endesha grid FROZEN. GUARD: S1 ya WAVE-C2-A ni TRAIN PEKEE — split nyingine inakataliwa
-    hapa (na sacred-splits guard ya load_window inabaki chini yake). Rudisha rows za cells zote."""
+    hapa (na sacred-splits guard ya load_window inabaki chini yake). Rudisha rows za cells zote.
+    `only=<id>` (mf. HC2-10) inachuja hypothesis moja + inaandika outputs zenye suffix (HAIFUTI
+    WAVE-A). `only=None` -> WAVE-A (tabia ya zamani, 84 cells)."""
     if split != "train":
         raise PermissionError("C2-3 ni TRAIN PEKEE (S1 exploration) — VALID/HOLDOUT haziguswi hapa")
-    pairs_all = sorted({p for hyp in HYPOTHESES for p in hyp["pairs"]})
+    if only is not None and only not in {h["id"] for h in HYPOTHESES}:
+        raise ValueError(f"--hyp {only} haipo kwenye HYPOTHESES")
+    active = WAVE_A_IDS if only is None else (only,)
+    pairs_all = sorted({p for hyp in HYPOTHESES if hyp["id"] in active for p in hyp["pairs"]})
     cache = {p: load_window(p, TF, split) for p in pairs_all}
     skipped = sorted(p for p in pairs_all
                      if cache[p] is None or cache[p].get("ctx") is None)
@@ -189,7 +222,7 @@ def run(split="train", out_root=REPO_ROOT, write=True):
 
     rows = []
     sig_cache = {}
-    for cell in cells():
+    for cell in cells(only):
         pair = cell["pair"]
         data = cache[pair]
         rec = dict(cell, days=(data["days"] if data is not None else 0))
@@ -206,22 +239,34 @@ def run(split="train", out_root=REPO_ROOT, write=True):
                              cell["max_hold"]))
         rows.append(rec)
     if write:
-        _write_outputs(rows, split, out_root, skipped)
+        _write_outputs(rows, split, out_root, skipped, only=only)
     return rows
 
 
 # ---------- outputs ----------
 
-def _write_outputs(rows, split, out_root, skipped=()):
+def _write_outputs(rows, split, out_root, skipped=(), only=None):
     out_root = Path(out_root)
+    # `only` -> suffix ili USIFUTE outputs za WAVE-A (mf. HC2-10 -> wave_c2a_train_HC2-10.jsonl /
+    # reports/wave_c2b_hc210_s1_train.md). None -> majina ya zamani (byte-identical).
+    if only is None:
+        jl_name, rpt_name = OUT_JSONL, OUT_REPORT
+        head, title_m = "WAVE-C2-A", "grid FROZEN m=84; docs/WAVE_C2A_REGISTRATION.md"
+    else:
+        slug = only.replace("-", "").lower()                       # HC2-10 -> hc210
+        jl_name = f"wave_c2a_train_{only}.jsonl"
+        rpt_name = f"wave_c2b_{slug}_s1_train.md"
+        title_m = (f"{only} grid FROZEN m={len(rows)}; "
+                   f"docs/WAVE_C2B_{only.replace('-', '').upper()}_REGISTRATION.md")
+        head = "WAVE-B"
     sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
-    jl = sdir / OUT_JSONL
+    jl = sdir / jl_name
     with open(jl, "w", encoding="utf-8") as f:
         for r in rows:
             rec = dict(r); rec["split"] = split
             f.write(json.dumps(rec, sort_keys=True) + "\n")
 
-    L = [f"# WAVE-C2-A — S1 TRAIN (grid FROZEN m=84; docs/WAVE_C2A_REGISTRATION.md)\n",
+    L = [f"# {head} — S1 TRAIN ({title_m})\n",
          f"*{datetime.now():%Y-%m-%d %H:%M} | TF={TF} | split={split.upper()} (2016-2022 PEKEE) | "
          f"cells={len(rows)} | context ON signals (_mask_context_dir, signal-bar i; NaN→excluded) | "
          f"costs ndani ya episodes (spread+slip) | MIN_N={MIN_N}*\n",
@@ -235,7 +280,10 @@ def _write_outputs(rows, split, out_root, skipped=()):
     L.append("\n## Muhtasari kwa hypothesis\n")
     L.append("| hypothesis | cells | cells N>=MIN_N | jumla N | EV>0 cells | median EV net | median cost_share |")
     L.append("|------------|-------|----------------|---------|------------|----------------|--------------------|")
+    present_ids = {r["hypothesis"] for r in rows}
     for hyp in HYPOTHESES:
+        if hyp["id"] not in present_ids:
+            continue
         hr = [r for r in rows if r["hypothesis"] == hyp["id"]]
         okr = [r for r in hr if r.get("min_n_ok")]
         n_tot = sum(r.get("n", 0) for r in hr)
@@ -265,7 +313,7 @@ def _write_outputs(rows, split, out_root, skipped=()):
              "(pool R, mtindo wa family_pooled) kwenye VALIDATION + BH-FDR (Chief). "
              "Grid frozen — hakuna cell mpya baada ya hapa.*")
 
-    rpt = out_root / "reports" / OUT_REPORT; rpt.parent.mkdir(parents=True, exist_ok=True)
+    rpt = out_root / "reports" / rpt_name; rpt.parent.mkdir(parents=True, exist_ok=True)
     rpt.write_text("\n".join(L), encoding="utf-8")
     return jl, rpt
 
@@ -390,7 +438,7 @@ def self_test():
 
     # [1] GRID FROZEN: cells 84 (40+24+20); pairs/SL/TP/max_hold KAMA registration; hakuna gold
     cs = cells()
-    per = {h["id"]: sum(1 for c_ in cs if c_["hypothesis"] == h["id"]) for h in HYPOTHESES}
+    per = {hid: sum(1 for c_ in cs if c_["hypothesis"] == hid) for hid in WAVE_A_IDS}
     p01 = {c_["pair"] for c_ in cs if c_["hypothesis"] == "HC2-01"}
     tp06 = {c_["tp_atr"] for c_ in cs if c_["hypothesis"] == "HC2-06"}
     t1 = (len(cs) == 84 and per == {"HC2-01": 40, "HC2-03": 24, "HC2-06": 20}
@@ -580,6 +628,88 @@ def self_test():
     print(f"  [12] S2 pipeline: rows=7 determinism={det12} jsonl-fields={fields12} report-verdict={named12} -> {t12}")
     ok = ok and t12
 
+    # ===== WAVE-B: HC2-10 FAILED-BREAK-SWEEP checks =====
+
+    # [13] HC2-10 cells == 20 (pairs 5 x SL/TP 4 x trigger 1); default cells() bado 84 (WAVE-A;
+    #      HC2-10 haimo). Grid KAMA registration (false_break; SL{1,1.5}xTP{2,3}; max_hold 24).
+    c10 = cells(only="HC2-10")
+    t13 = (len(c10) == 20 and len(cells()) == 84
+           and {c_["trigger"] for c_ in c10} == {"false_break"}
+           and {c_["pair"] for c_ in c10} == {"EURGBP", "EURCHF", "AUDUSD", "NZDUSD", "XAUUSD"}
+           and {(c_["sl_atr"], c_["tp_atr"]) for c_ in c10} == {(1.0, 2.0), (1.0, 3.0), (1.5, 2.0), (1.5, 3.0)}
+           and all(c_["max_hold"] == 24 for c_ in c10)
+           and not any(c_["hypothesis"] == "HC2-10" for c_ in cells()))
+    print(f"  [13] HC2-10 grid: cells={len(c10)}(==20) default-cells={len(cells())}(==84, no HC2-10) -> {t13}")
+    ok = ok and t13
+
+    # [14] allow fns: isfinite guard (NaN -> False) + threshold (<=0.5 True, >0.5 False); hakuna h4
+    n14 = 6
+    ctx_nan10 = dict(d1_dist_sup_atr=np.full(n14, np.nan), d1_dist_res_atr=np.full(n14, np.nan))
+    ctx_in = dict(d1_dist_sup_atr=np.full(n14, 0.3), d1_dist_res_atr=np.full(n14, 0.4))
+    ctx_out = dict(d1_dist_sup_atr=np.full(n14, 0.9), d1_dist_res_atr=np.full(n14, 1.2))
+    t14 = (not _hc210_allow_long(ctx_nan10).any() and not _hc210_allow_short(ctx_nan10).any()
+           and _hc210_allow_long(ctx_in).all() and _hc210_allow_short(ctx_in).all()
+           and not _hc210_allow_long(ctx_out).any() and not _hc210_allow_short(ctx_out).any())
+    print(f"  [14] HC2-10 allow: NaN->False + (<=0.5)->True + (>0.5)->False (no h4) -> {t14}")
+    ok = ok and t14
+
+    # [15] false_break -> _mask_context_dir -> episodes: support extreme -> long TU;
+    #      resistance extreme -> short TU (conditions tofauti long/short zafika episodes)
+    n15 = 4000
+    fx_sup10 = _fixture(21, n=n15, ctx=dict(d1_dist_sup_atr=np.full(n15, 0.3),
+                                            d1_dist_res_atr=np.full(n15, 2.0)))
+    fx_res10 = _fixture(21, n=n15, ctx=dict(d1_dist_sup_atr=np.full(n15, 2.0),
+                                            d1_dist_res_atr=np.full(n15, 0.3)))
+    hyp10 = next(h for h in HYPOTHESES if h["id"] == "HC2-10")
+    oms10, es10 = _masked_signals(hyp10, "false_break", fx_sup10)
+    omr10, _ = _masked_signals(hyp10, "false_break", fx_res10)
+    ts10 = episodes(oms10, es10, fx_sup10["o"], fx_sup10["h"], fx_sup10["l"], fx_sup10["c"],
+                    fx_sup10["atr"], fx_sup10["spr"], fx_sup10["hour"], fx_sup10["vol"],
+                    sl_atr=1.0, tp_atr=2.0, max_hold=24)
+    tr10 = episodes(omr10, es10, fx_res10["o"], fx_res10["h"], fx_res10["l"], fx_res10["c"],
+                    fx_res10["atr"], fx_res10["spr"], fx_res10["hour"], fx_res10["vol"],
+                    sl_atr=1.0, tp_atr=2.0, max_hold=24)
+    t15 = (es10 == "market" and len(ts10) > 0 and all(t[2] == 1 for t in ts10)
+           and len(tr10) > 0 and all(t[2] == -1 for t in tr10))
+    print(f"  [15] false_break->mask->episodes: support->long(n={len(ts10)}) "
+          f"resistance->short(n={len(tr10)}) entry=market -> {t15}")
+    ok = ok and t15
+
+    # [16] HYP-FILTER pipeline: run(only=HC2-10) -> 20 rows HC2-10 TU + outputs zenye suffix
+    #      (HAIFUTI WAVE-A); run() default -> 84 rows WAVE-A (hakuna HC2-10)
+    import tempfile
+    _self = sys.modules[__name__]
+    pairs16 = sorted({p for h in HYPOTHESES for p in h["pairs"]})
+    fx16 = {p: _fixture(40 + k) for k, p in enumerate(pairs16)}
+    orig = _self.load_window
+    _self.load_window = lambda sym, tf, split, token=None: fx16.get(sym)
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            r10 = run("train", out_root=tmp, only="HC2-10")
+            rA = run("train", out_root=tmp)
+            jl10 = Path(tmp) / "data" / "strategies" / "wave_c2a_train_HC2-10.jsonl"
+            rp10 = Path(tmp) / "reports" / "wave_c2b_hc210_s1_train.md"
+            jlA = Path(tmp) / "data" / "strategies" / OUT_JSONL
+            rpA = Path(tmp) / "reports" / OUT_REPORT
+            recs10 = [json.loads(ln) for ln in open(jl10, encoding="utf-8")]
+            filt_ok = (len(r10) == 20 and all(r["hypothesis"] == "HC2-10" for r in r10)
+                       and len(rA) == 84 and not any(r["hypothesis"] == "HC2-10" for r in rA))
+            files_ok = (jl10.exists() and rp10.exists() and jlA.exists() and rpA.exists()
+                        and jl10 != jlA and len(recs10) == 20
+                        and all(r["hypothesis"] == "HC2-10" for r in recs10))
+            title_ok = "WAVE-B" in rp10.read_text(encoding="utf-8")
+            # bad id -> ValueError
+            try:
+                run("train", out_root=tmp, only="HC9-99"); bad_ok = False
+            except ValueError:
+                bad_ok = True
+        t16 = filt_ok and files_ok and title_ok and bad_ok
+    finally:
+        _self.load_window = orig
+    print(f"  [16] hyp-filter: run(only=HC2-10)->20 rows + suffix files (WAVE-A intact, 84); "
+          f"bad-id->ValueError={bad_ok} -> {t16}")
+    ok = ok and t16
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -591,6 +721,9 @@ def main():
     ap.add_argument("--train", action="store_true", help="endesha grid FROZEN kwenye TRAIN (PC ya data)")
     ap.add_argument("--validate", action="store_true",
                     help="C2-4: S2 VALIDATION — cells 7 FROZEN (HC2-03 EURUSD) + BH-FDR")
+    ap.add_argument("--hyp", default=None,
+                    help="chuja hypothesis moja kwa --train (mf. HC2-10 -> cells 20; outputs zenye "
+                         "suffix). Bila hii -> WAVE-A (84 cells).")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -609,11 +742,16 @@ def main():
     if not a.train:
         print("Tumia --train (S1 TRAIN) | --validate (C2-4 S2) | --self-test.", file=sys.stderr)
         return 2
-    rows = run("train")
+    rows = run("train", only=a.hyp)
     traded = [r for r in rows if r.get("min_n_ok")]
     pos = [r for r in traded if r.get("ev", 0) > 0]
-    print(f"WAVE-C2-A S1 TRAIN: cells={len(rows)} N>=MIN_N={len(traded)} EV>0={len(pos)}")
-    print(f"  data/strategies/{OUT_JSONL}\n  reports/{OUT_REPORT}")
+    tag = a.hyp if a.hyp else "WAVE-A"
+    print(f"WAVE-C2-A S1 TRAIN [{tag}]: cells={len(rows)} N>=MIN_N={len(traded)} EV>0={len(pos)}")
+    if a.hyp:
+        slug = a.hyp.replace("-", "").lower()
+        print(f"  data/strategies/wave_c2a_train_{a.hyp}.jsonl\n  reports/wave_c2b_{slug}_s1_train.md")
+    else:
+        print(f"  data/strategies/{OUT_JSONL}\n  reports/{OUT_REPORT}")
     return 0
 
 
