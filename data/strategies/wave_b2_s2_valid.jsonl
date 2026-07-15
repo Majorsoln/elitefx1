@@ -1,0 +1,2 @@
+{"ev_net": -1.9348, "event": "false_break", "fdr_pass": false, "hypothesis": "HB2-10", "id": "HB2-10|false_break|EURCHF|SL1.5/TP3.0", "n": 93, "p_boot": 0.852383, "p_z": 0.856274, "pair": "EURCHF", "sl_atr": 1.5, "split": "validation", "survivor": false, "tp_atr": 3.0, "win": 0.3871}
+{"ev_net": -1.5048, "event": "false_break", "fdr_pass": false, "hypothesis": "HB2-10", "id": "HB2-10|false_break|EURCHF|SL1.5/TP2.0", "n": 93, "p_boot": 0.800204, "p_z": 0.824196, "pair": "EURCHF", "sl_atr": 1.5, "split": "validation", "survivor": false, "tp_atr": 2.0, "win": 0.4731}
