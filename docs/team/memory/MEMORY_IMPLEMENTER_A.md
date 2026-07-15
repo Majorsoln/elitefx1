@@ -770,6 +770,15 @@ NEXT AFTER: (1) Operator: `python gold_spread_quality.py` kwenye PC ya data → 
   (verdict + max_spread halisi + coverage); (2) Chief: review false_break + gold verdict → freeze WAVE-B
   grid (HC2-02/05/10 + gold ikiwa SUITABLE); (3) S1-C2 TRAIN ya WAVE-B hypotheses.
 OPEN QUESTIONS / NOTES:
-  - Pendekezo la max_spread ya gold: RULE = ceil(p95_30m/5)×5; kadirio ~50-55 (median≈35 ya C2-0 §0.5);
-    namba HALISI = Operator's run (data iko PC yake, R-1). Config HAIJABADILISHWA (Chief aamue).
+  - Pendekezo la max_spread ya gold: RULE = ceil(p95_30m/5)×5. **IMEFUNGWA (2026-07-15):** data-run
+    ya gold_spread_quality.py ilitoa **p95 30m = 71.0 → round-5 = 75**; ATR 30m med = 277.7 pips;
+    cost-share@p95 (TP2R) = 12.78% < 25% → VERDICT **SUITABLE** (gold inafaa WAVE-B S1). Chief ruling
+    (2026-07-14): config/data_config.yaml XAUUSD 60→**75** (DATA-DRIVEN). Kitanzi kimefungwa —
+    pendekezo la mwisho la max_spread ya gold = **75**.
   - false_break params default look=20/rearm=8 (spec HC2-10); grid ya S1 yaweza kupima look/rearm.
+
+=== WAVE-B-prep RE-VERIFY (2026-07-15) ===
+  Nilithibitisha (baada ya SYNC): branch synced 0/0 vs origin/main; false_break self-test PASS
+  (golden-hash 09b28990b0ead07b, nolook=True, sweep short@bar3=-1/long@bar3=1/normal=0, single-fire);
+  gold_spread_quality self-test PASS 6/6; report SUITABLE (max_spread=75); config XAUUSD=75.
+  Vipande vyote viwili tayari kwenye main (vilimergwa via PR mzunguko uliopita). Hakuna re-implement.
