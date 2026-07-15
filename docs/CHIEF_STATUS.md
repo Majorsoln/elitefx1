@@ -817,3 +817,24 @@ SL1.5/TP2.0), VALIDATION + p_boot B=50k + BH-FDR q=0.10 m=2. **LESSON-038 caveat
 registration** (single-pair kama HC2-03 — lakini margins kubwa + cross-TF consistency; VALIDATION
 ndiyo mwamuzi). Survivor → C2-6 HOLDOUT → STRAT-003. Prompt: IMPLEMENTER-A [WAVE-B2-S2]
 (generalize run_s2 → S2_SPECS; backward-compat na hc203).
+
+---
+
+## 2026-07-15 — WAVE-B2 S2: FAIL OOS (HB2-10 EURCHF) → LESSON-040; sweep-fade family IMEFUNGWA
+
+**S2 VALIDATION (cells 2 FROZEN): HAKUNA SURVIVOR.** EV -1.94/-1.51, p_boot 0.85/0.80, k=0.
+Sign flip TRAIN(+1.42)→VALID(−1.94) — mara ya PILI (kesi 1: HC2-03 EURUSD). Margin kubwa +
+"cross-TF consistency" HAZIKUOKOA → **LESSON-040**: TF mbili za TRAIN ileile = evidence
+correlated (paths zilezile), si mashahidi wawili; ushahidi huru = kipindi kingine cha muda.
+VALIDATION consumed kwa cells 2; HOLDOUT HAIJAGUSWA. Build ya S2_SPECS: review PASS (statistic 0).
+
+**MZUNGUKO-2 hadi sasa (uaminifu kamili):** hypotheses 6 za reversion/fade zimepimwa OOS-mchakato
+→ **0 proven** (01 dead, 03 FAIL-OOS, 06 power, 10@30m dead-net, HB2-06 power, HB2-10 FAIL-OOS).
+Machine imefanya kazi kila mara (holdout bikira; overfitting imekamatwa VALIDATION mara 2).
+**Kila kilichowahi kuthibitika kwetu ni BREAKOUT/CONTINUATION + stop-entry** (STRAT-001/002 nr7;
+C2-WATCH compression pooled 4/4 reps +EV). Reversion/fade @ intraday = imefungwa mzunguko huu.
+
+**MWELEKEO PENDEKEZWA (checkpoint ya PD):** MOMENTUM ARM — HC2-02 London-ORB + HC2-05 aligned-shock
+(big-move continuation; inalingana na LESSON-039 cost-ratio NA na kila proven-edge yetu; ORB pia
+hu-fire kila siku ya London → lengo la PD la "sokoni kila siku"). Mbadala: OOB (usd_strength /
+vol-transition) au kusitisha mzunguko na ku-consolidate.
