@@ -772,3 +772,26 @@ unaofuata (badala ya OOB au kuacha).
 **UAMUZI WA PD unasubiri:** njia mbele baada ya reversion-family kufeli 4/4 (momentum test / OOB /
 reconsider TF). Chief lean: jaribu MOMENTUM (HC2-02/05) — direct test ya "big-move clears cost".
 Portfolio inabaki STRAT-001/002.
+
+---
+
+## 2026-07-15 — PD: "ndio" → WAVE-B2 FROZEN (high-conviction selective-structure @ H1)
+
+**Muktadha wa uamuzi (mazungumzo na PD):** PD aliuliza kama tuna-filter kupita kiasi na akasisitiza
+"trade sio kila saa — tunahitaji highest possibility; pattern zinajirudia." Data iliunga mkono:
+selectivity↑ → edge-per-trade↑ (HC2-06 EURGBP +4.49 N=32 vs HC2-01 58k trades @ -1.5). Hofu yake:
+AI itatrade nadra. Jibu la Chief: frequency inatoka PORTFOLIO (STRAT-001/002 tayari ~2/siku;
+kila wave inayofaulu inaongeza tofali), si kwa kulegeza filter — kuwa sokoni kila siku na edge
+dhaifu = kulipa spread kila siku. PD: "ndio" (freeze WAVE-B2).
+
+**WAVE-B2 FROZEN (docs/WAVE_B2_REGISTRATION.md):** HB2-06 (SR-fade: bb_fade/engulf, 40 cells) +
+HB2-10 (sweep: false_break, 20 cells) — zote **H1** (cost-ratio; recipe ya STRAT-001/002), pairs 5
+(EURGBP/EURCHF/USDCHF/AUDUSD/NZDUSD — waliocheza gross+), hold 16. m=60. **XAUUSD NJE** (LESSON-039
+fade-mismatch). S2 = family-pooled per mechanism (m=2) — power-by-pooling kwa rare setups.
+
+**Prerequisites (prompt IMPLEMENTER-A [WAVE-B2]):** (1) htf_context --ltf H1 (+ ltf-trap self-test);
+(2) per-hypothesis `tf` kwenye runner (WAVE-A default 30m haiathiriki); (3) HYPOTHESES 2 mpya +
+--hyp comma-list. ZERO statistic fns.
+
+**HATUA:** agent build → Operator: htf_context H1 + `--train --hyp HB2-06,HB2-10` → S1 → Chief
+review (gross-vs-cost @ H1 ndio swali) → S2 pooled → HOLDOUT. Momentum arm (HC2-02/05) kwenye foleni.

@@ -76,6 +76,50 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [WAVE-B2] (H1 context + per-hyp TF + HB2-06/HB2-10)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: WAVE-B2 — selective-
+structure mechanisms @ H1 (grid FROZEN docs/WAVE_B2_REGISTRATION.md). Vipande 3. Build+self-test;
+Operator anaendesha data runs.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: docs/WAVE_B2_REGISTRATION.md (grid 60 cells + prerequisites) · src/research/htf_context.py
+(build/align — as-of backward tayari ni ltf-agnostic) · src/research/wave_c2a.py (HYPOTHESES,
+TF="30m" global, run/--hyp) · strategy_lab.load_window / context_path.
+
+JENGA:
+  1. htf_context: ruhusu `--ltf H1` (choices += "H1"; build() tayari inafanya kazi kwa ltf yoyote
+     yenye state parquet — H1 IPO kutoka market_state_engine). Self-test ndogo: H1 ltf bar katikati
+     ya H4 bar inapata context ya H4 bar iliyoTANGULIA (mtego ule ule wa [2] kwa ltf=H1).
+  2. wave_c2a: HYPOTHESES zipate field `tf` (default "30m" — HC2-01/03/06/10 za WAVE-A
+     HAZIBADILIKI, run_s2 haibadiliki). Runner itumie hyp["tf"] kwenye load_window + cells()
+     iweke tf kwenye kila cell (jsonl accounting). ADDITIVE.
+  3. Ongeza HYPOTHESES mbili MPYA (KAMA registration):
+     dict(id="HB2-06", name="HTF-SR-FADE-H1", tf="H1", triggers=("bb_fade","engulf_extreme"),
+          allow_long=_hc206_allow_long, allow_short=_hc206_allow_short,   # fns zilezile (D1/H4 conditions)
+          sl=(1.0,1.5), tp=(1.5,2.0), max_hold=16,
+          pairs=("EURGBP","EURCHF","USDCHF","AUDUSD","NZDUSD"))            # 40
+     dict(id="HB2-10", name="FAILED-BREAK-SWEEP-H1", tf="H1", triggers=("false_break",),
+          allow_long=_hc210_allow_long, allow_short=_hc210_allow_short,
+          sl=(1.0,1.5), tp=(2.0,3.0), max_hold=16,
+          pairs=("EURGBP","EURCHF","USDCHF","AUDUSD","NZDUSD"))            # 20
+     `--hyp` ikubali comma-list (mf. --hyp HB2-06,HB2-10 -> cells 60). Output suffix kama awali
+     (wave_c2a_train_HB2-06+HB2-10 au sawa — USIFUTE matokeo ya zamani).
+
+SHERIA NGUMU: ZERO statistic fns (golden diff 0 — thibitisha na ripoti kwenye commit). XAUUSD
+  HAIMO (LESSON-039). NaN->allow=False. S1=TRAIN-only guard inabaki. Self-test: (a) HB2 cells==60
+  (40+20), tf=="H1" zote; (b) WAVE-A default bado 84 @30m (regression); (c) H1 ltf-trap ya htf_context;
+  (d) hyp-filter comma-list. Sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; update MEMORY_IMPLEMENTER_A.md; ripoti "tayari WAVE-B2 build".
+  (Operator kisha: [1] `python src/research/htf_context.py --ltf H1`  [2] `python src/research/
+  wave_c2a.py --train --hyp HB2-06,HB2-10`  [3] commit+push -> ripoti "tayari WAVE-B2 S1".)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [WAVE-B/HC2-10] (Ongeza HC2-10 kwenye runner + hyp-filter)
 
 ```text
