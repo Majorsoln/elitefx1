@@ -128,6 +128,19 @@ def _hc210_allow_short(ctx):
         return np.isfinite(res) & (res <= 0.5)
 
 
+# WAVE-M MOMENTUM (docs/WAVE_M_REGISTRATION.md) — D1 bias one-sided; hour = ratiba (decidable ex-ante).
+# cx = ctx_plus (ctx + key 'hour' za signal-bar). isfinite guard: NaN -> allow False.
+def _hm_d1(cx, s):
+    d1 = _fin(cx, "d1_trend_sign")
+    with np.errstate(invalid="ignore"):
+        return np.isfinite(d1) & (d1 == s)
+
+
+def _hm_d1_hours(cx, s):
+    hour = np.asarray(cx["hour"])
+    return _hm_d1(cx, s) & (hour >= 7) & (hour <= 16)
+
+
 # WAVE-A (C2-3/C2-4) = hypotheses 3 za awali. HC2-10 ni WAVE-B — ni opt-in kupitia --hyp/only PEKEE;
 # run()/cells() bila `only` zinabaki WAVE-A (tabia ya zamani, cells=84).
 WAVE_A_IDS = ("HC2-01", "HC2-03", "HC2-06")
@@ -170,6 +183,20 @@ HYPOTHESES = (
          allow_long=_hc210_allow_long, allow_short=_hc210_allow_short,       # D1-extreme, hakuna h4
          sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=16,
          pairs=("EURGBP", "EURCHF", "USDCHF", "AUDUSD", "NZDUSD")),          # cells 1x4x5 = 20
+    # WAVE-M (docs/WAVE_M_REGISTRATION.md) — momentum arm (continuation + big-move). D1-bias one-sided;
+    # trigger_params (ORB range/trade hours) + hour-in-allow (HM-05 session). XAUUSD imo HM-05 PEKEE
+    # (momentum — LESSON-039 ilifunga fade tu). tf tofauti: HM-02=30m, HM-05=15m.
+    dict(id="HM-02", name="LONDON-ORB-D1", tf="30m",
+         triggers=("session_orb",),
+         trigger_params=dict(range_hours=(7, 9), trade_hours=(9, 13)),
+         allow_long=lambda cx: _hm_d1(cx, +1), allow_short=lambda cx: _hm_d1(cx, -1),
+         sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=16,
+         pairs=("GBPUSD", "EURUSD", "EURGBP", "GBPJPY", "USDJPY")),          # cells 1x4x5 = 20
+    dict(id="HM-05", name="ALIGNED-SHOCK", tf="15m",
+         triggers=("shock_follow",),
+         allow_long=lambda cx: _hm_d1_hours(cx, +1), allow_short=lambda cx: _hm_d1_hours(cx, -1),
+         sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=16,
+         pairs=("EURJPY", "USDJPY", "GBPJPY", "XAUUSD")),                    # cells 1x4x4 = 16
 )
 
 
@@ -208,11 +235,16 @@ def cells(only=None):
 
 def _masked_signals(hyp, trig, data):
     """Signals za trigger + context mask ya direction (ON signals, kabla ya episodes).
-    Inarudishwa mara moja kwa (hyp, trig, pair) — SL/TP hazibadilishi signals."""
+    Inarudishwa mara moja kwa (hyp, trig, pair) — SL/TP hazibadilishi signals.
+    ADDITIVE (WAVE-M): `trigger_params` (dict ya hiari) zinapitishwa kwa event fn (default {} ->
+    events za zamani hazibadiliki); allow fns zinapata `ctx_plus` = ctx + `hour` (ratiba, decidable —
+    allow fns za zamani zinatumia keys za h4_/d1_ tu, hazivunjiki)."""
     spec = EVENTS_V2[trig]
-    out = spec["fn"](data["o"], data["h"], data["l"], data["c"], data.get("tc"), data.get("hour"))
-    aL = hyp["allow_long"](data["ctx"])
-    aS = hyp["allow_short"](data["ctx"])
+    out = spec["fn"](data["o"], data["h"], data["l"], data["c"], data.get("tc"), data.get("hour"),
+                     **hyp.get("trigger_params", {}))
+    ctx_plus = dict(data["ctx"], hour=data["hour"])
+    aL = hyp["allow_long"](ctx_plus)
+    aS = hyp["allow_short"](ctx_plus)
     return _mask_context_dir(out, spec["entry"], aL, aS), spec["entry"]
 
 
@@ -504,7 +536,7 @@ def self_test():
     n2 = 8
     ctx_nan = dict(d1_trend_sign=np.full(n2, np.nan), h4_trend_sign=np.full(n2, np.nan),
                    h4_rsi14=np.full(n2, np.nan), d1_dist_sup_atr=np.full(n2, np.nan),
-                   d1_dist_res_atr=np.full(n2, np.nan))
+                   d1_dist_res_atr=np.full(n2, np.nan), hour=np.arange(n2) % 24)  # hour halali (WAVE-M)
     all_false = all(not fn(ctx_nan).any() for h in HYPOTHESES for fn in (h["allow_long"], h["allow_short"]))
     ctx_trap = dict(ctx_nan, d1_dist_sup_atr=np.full(n2, 0.1))       # sup iko OK, trend=NaN
     trap_ok = not _hc206_allow_long(ctx_trap).any()                  # >=0 trap: NaN -> False
@@ -854,6 +886,62 @@ def self_test():
     print(f"  [20] hb210-eurchf S2 pipeline: rows=2 id=HB2-10|EURCHF determinism={det20} "
           f"outputs wave_b2_s2_valid.* verdict-named={named20} -> {t20}")
     ok = ok and t20
+
+    # ===== WAVE-M: momentum arm (trigger_params + hour-in-allow) checks =====
+
+    # [21] HM grid: cells == 36 (HM-02 20 + HM-05 16), tf sahihi (HM-02=30m, HM-05=15m), XAUUSD imo
+    #      HM-05 PEKEE; REGRESSION: WAVE-A default 84 @30m + HB2 60 @H1, hakuna HM kwenye default
+    cHM = cells(only="HM-02,HM-05")
+    per_hm = {hid: sum(1 for c_ in cHM if c_["hypothesis"] == hid) for hid in ("HM-02", "HM-05")}
+    tf_hm = {c_["hypothesis"]: c_["tf"] for c_ in cHM}
+    xau_hyps = {c_["hypothesis"] for c_ in cHM if c_["pair"] == "XAUUSD"}
+    dfltM = cells()
+    t21 = (len(cHM) == 36 and per_hm == {"HM-02": 20, "HM-05": 16}
+           and tf_hm == {"HM-02": "30m", "HM-05": "15m"} and xau_hyps == {"HM-05"}
+           and len(dfltM) == 84 and {c_["tf"] for c_ in dfltM} == {"30m"}
+           and not any(c_["hypothesis"].startswith("HM") for c_ in dfltM)
+           and len(cells(only="HB2-06,HB2-10")) == 60)
+    print(f"  [21] HM grid: cells={len(cHM)}(==36) per-hyp={per_hm} tf={tf_hm} XAUUSD-in={xau_hyps} | "
+          f"WAVE-A 84@30m + HB2 60 (regression) -> {t21}")
+    ok = ok and t21
+
+    # [22] trigger_params zinafika event fn: session_orb na params za HM-02 (range 7-9, trade 9-13)
+    #      inatofautiana na default (7-8/9-12) + inajenga levels; njia ya runner (_masked_signals)
+    #      inatoa levels ZILEZILE za params (allow all-True kwa d1=+1) -> params ziliwasilishwa
+    o22, h22, l22, c22, tc22, hr22 = _synthetic(n=4000, seed=1)
+    sorb_def = EVENTS_V2["session_orb"]["fn"](o22, h22, l22, c22, tc22, hr22)
+    sorb_par = EVENTS_V2["session_orb"]["fn"](o22, h22, l22, c22, tc22, hr22,
+                                              range_hours=(7, 9), trade_hours=(9, 13))
+    params_differ = not np.array_equal(np.nan_to_num(sorb_def["long_level"]),
+                                       np.nan_to_num(sorb_par["long_level"]))
+    fx22 = _fixture(1, n=4000)                                    # seed=1 -> bars zilezile; d1=+1
+    hyp_hm02 = next(h for h in HYPOTHESES if h["id"] == "HM-02")
+    om22, e22 = _masked_signals(hyp_hm02, "session_orb", fx22)
+    built = int(np.isfinite(om22["long_level"]).sum())
+    via_runner = np.array_equal(np.nan_to_num(om22["long_level"]), np.nan_to_num(sorb_par["long_level"]))
+    t22 = params_differ and built > 0 and via_runner and e22 == "stop"
+    print(f"  [22] trigger_params->session_orb: params-differ={params_differ} levels-built={built} "
+          f"runner==params-call={via_runner} entry=stop -> {t22}")
+    ok = ok and t22
+
+    # [23] HM-05 hour-filter: shock_follow @ hour NJE ya [7,16] -> excluded; @ ndani -> included.
+    #      d1=+1 (allow_short=False) -> survivors ni long TU na hour zote ndani ya dirisha
+    fx23 = _fixture(2, n=6000)
+    hyp_hm05 = next(h for h in HYPOTHESES if h["id"] == "HM-05")
+    raw23 = EVENTS_V2["shock_follow"]["fn"](fx23["o"], fx23["h"], fx23["l"], fx23["c"],
+                                            fx23["tc"], fx23["hour"])["sig"]
+    om23, e23 = _masked_signals(hyp_hm05, "shock_follow", fx23)
+    msig = om23["sig"]; hr = fx23["hour"]
+    surv = np.where(msig != 0)[0]
+    excl = [i for i in np.where(raw23 == 1)[0] if not (7 <= hr[i] <= 16)]   # long-fires nje ya dirisha
+    incl = [i for i in np.where(raw23 == 1)[0] if 7 <= hr[i] <= 16]
+    t23 = (e23 == "market" and len(surv) > 0
+           and all(7 <= hr[i] <= 16 for i in surv) and all(msig[i] == 1 for i in surv)
+           and len(excl) > 0 and all(msig[i] == 0 for i in excl)               # nje -> 0
+           and any(msig[i] == 1 for i in incl))                                # ndani -> hai
+    print(f"  [23] HM-05 hour-filter: survivors={len(surv)} all-in[7,16]=True long-only=True | "
+          f"excluded-outside={len(excl)}(all 0) included-inside kept -> {t23}")
+    ok = ok and t23
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

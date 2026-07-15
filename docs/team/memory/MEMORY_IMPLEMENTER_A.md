@@ -865,3 +865,35 @@ NEXT AFTER: Operator (PC ya data): `python src/research/wave_c2a.py --validate -
 OPEN QUESTIONS / NOTES:
   - HB2-06 = CLOSED-BY-POWER @ H1 (0/40 cells zilifika MIN_N — haipimiki, si mechanism-dead; registration §HB2-06).
   - S2 ya HB2-10 ni single-pair concentration (LESSON-038 caveat) — VALIDATION ndiyo mwamuzi; FAIL halali.
+
+=== WAVE-M build (2026-07-15) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Operator: `python src/research/wave_c2a.py --train --hyp HM-02,HM-05`)**
+LAST COMPLETED: **WAVE-M (momentum arm) S1 build** ✅ (docs/WAVE_M_REGISTRATION.md; ADDITIVE, vipande 3):
+  (1) INFRA trigger_params: HYPOTHESES zapata field ya hiari `trigger_params` (dict); _masked_signals
+      inapitisha `spec["fn"](o,h,l,c,tc,hour, **hyp.get("trigger_params",{}))`. Default {} -> events za
+      zamani hazibadiliki (regression).
+  (2) INFRA hour-in-allow: _masked_signals inajenga `ctx_plus = dict(data["ctx"], hour=data["hour"])`
+      na kupitisha kwa allow fns. allow fns za zamani (h4_/d1_ keys) hazivunjiki. Hour = ratiba (decidable).
+  (3) HYPOTHESES 2 MPYA (opt-in, si WAVE_A_IDS):
+      - HM-02 LONDON-ORB-D1 @30m: session_orb (stop) trigger_params range_hours=(7,9)/trade_hours=(9,13),
+        allow=_hm_d1(cx,±1) [isfinite d1_trend_sign==±1, one-sided], SL{1,1.5}xTP{2,3}, hold16,
+        pairs GBPUSD/EURUSD/EURGBP/GBPJPY/USDJPY -> 20 cells.
+      - HM-05 ALIGNED-SHOCK @15m: shock_follow (market, defaults), allow=_hm_d1_hours(cx,±1)
+        [_hm_d1 & 7<=hour<=16, London/NY], SL{1,1.5}xTP{2,3}, hold16, pairs EURJPY/USDJPY/GBPJPY/XAUUSD
+        -> 16 cells. TOTAL 36. XAUUSD imo HM-05 PEKEE (momentum — LESSON-039 ilifunga fade tu).
+  · SHERIA NGUMU: ZERO statistic fns (episodes/pvalue_boot/bh_fdr/_mask_context_dir/pool_streams +
+    event_library_v2 golden diff = **0 lines**; session_orb/shock_follow zimetumika KAMA ZILIVYO).
+    Grid FROZEN 36. NaN->allow=False (isfinite). TRAIN-only guard inabaki. File 1: wave_c2a.py.
+  Self-test wave_c2a: [1]-[20] za awali ZOTE PASS (check [2] NaN-exclusion iliongezwa hour halali kwa
+    HM allow fns) + MPYA:
+    [21] HM cells==36 (20+16), tf HM-02=30m/HM-05=15m, XAUUSD=HM-05 tu; WAVE-A default 84@30m + HB2 60
+    (regression, no HM); [22] trigger_params->session_orb (params (7,9)/(9,13) differ na default;
+    runner-path levels==params-call; entry=stop); [23] HM-05 hour-filter (shock nje ya [7,16]->0,
+    ndani->hai; long-only kwa d1=+1). SWEEP 26/26 PASS.
+NEXT AFTER: Operator (PC ya data): `python src/research/wave_c2a.py --train --hyp HM-02,HM-05`
+  (15m context ya XAUUSD/EURJPY/USDJPY/GBPJPY TAYARI kutoka C2-0) ->
+  reports/wave_c2b_hm02+hm05_s1_train.md; commit+push. Kisha Chief: cells net+ za pairs ZOTE chanya
+  (si pair-bora — kinga ya LESSON-040) -> S2 family-pooled (m=2) kupitia S2_SPECS.
+OPEN QUESTIONS / NOTES:
+  - ORB deviation 15m->30m (registration §Deviations #1, LESSON-039 cost-trap). Range (7,9)@30m = bars 4.
+  - S2 ya HM = family-pooled multi-pair (LESSON-040 kinga) — itaongezwa kwenye S2_SPECS wave ijayo.
