@@ -838,3 +838,19 @@ C2-WATCH compression pooled 4/4 reps +EV). Reversion/fade @ intraday = imefungwa
 (big-move continuation; inalingana na LESSON-039 cost-ratio NA na kila proven-edge yetu; ORB pia
 hu-fire kila siku ya London → lengo la PD la "sokoni kila siku"). Mbadala: OOB (usd_strength /
 vol-transition) au kusitisha mzunguko na ku-consolidate.
+
+---
+
+## 2026-07-15 — PD: "ndio" → WAVE-M FROZEN (momentum arm)
+
+**WAVE-M (docs/WAVE_M_REGISTRATION.md):** HM-02 LONDON-ORB-D1 (session_orb stop @30m, range 07-09
+trade 09-13, one-sided D1, pairs 5, cells 20) + HM-05 ALIGNED-SHOCK (shock_follow market @15m,
+D1-aligned + hours 7-16, pairs 4 ikiwemo XAUUSD — momentum inaruhusiwa gold, fade tu ndiyo
+imefungwa, cells 16). m=36. Deviations-with-reason 3 zimerekodiwa (ORB 30m; spread-guard → policy
+layer; hour ya signal bar). Kinga ya LESSON-040: S2 = family-pooled multi-pair (si pair-bora moja).
+
+**Infra ndogo (prompt IMPLEMENTER-A [WAVE-M]):** trigger_params per hyp + hour-in-allow (ctx_plus).
+Zote additive; regression za WAVE-A/B2/run_s2 kwenye self-test.
+
+**HATUA:** agent build → review → Operator `--train --hyp HM-02,HM-05` (15m/30m context zipo tayari
+C2-0) → S1 → review (gross-vs-cost; multi-pair breadth ndio swali) → S2 pooled → HOLDOUT.
