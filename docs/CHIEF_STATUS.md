@@ -752,3 +752,23 @@ _hc210_allow fns + hyp-filter (`--hyp HC2-10` -> cells 20 tu; usifute WAVE-A). Z
 
 **HATUA:** build → Operator `--train --hyp HC2-10` → S1 → Chief review → S2 kama survivors.
 Ikishindwa pia → pivot OOB (C). STRAT-001/002 portfolio.
+
+---
+
+## 2026-07-15 — HC2-10 S1: 0/20 net edge → MUUNDO wa mwelekeo (LESSON-039)
+
+**HC2-10 S1 TRAIN:** 0/20 net chanya (median EV -1.74). Gross per pair: EURCHF +1.16, EURGBP +0.40
+(RAW edge kwenye EUR-crosses tight) lakini net ~break-even (gharama ~1.1 inameza); AUDUSD/NZDUSD
+gross hasi; **XAUUSD gross -24.6** (gold inaharibu fade — breaks za gold huendelea, hazi-revert).
+
+**MUUNDO (hypotheses 4, edges 0):** HC2-01/03/06/10 — zote SMALL-MOVE reversion/fade — hazizidi
+gharama kwenye 30m (move ~1 pip vs cost ~1 pip). STRAT-001/002 (H1) zilifanikiwa kwa moves kubwa +
+cost-ratio bora. → **LESSON-039** (gross-vs-cost margin; 30m-reversion cost-trap; fade-on-gold mismatch).
+
+**BADO HAZIJAJARIBIWA:** MOMENTUM/big-move hypotheses (HC2-02 ORB-breakout, HC2-05 shock-continuation)
+— hizi huhitaji move KUBWA (ride continuation) → zaweza kuzidi cost. Hii ndio mtihani wenye mantiki
+unaofuata (badala ya OOB au kuacha).
+
+**UAMUZI WA PD unasubiri:** njia mbele baada ya reversion-family kufeli 4/4 (momentum test / OOB /
+reconsider TF). Chief lean: jaribu MOMENTUM (HC2-02/05) — direct test ya "big-move clears cost".
+Portfolio inabaki STRAT-001/002.
