@@ -76,6 +76,43 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [WAVE-B2-S2] (Generalize run_s2 → HB2-10 EURCHF @ H1)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: generalize run_s2 ya
+wave_c2a.py (sasa imefungwa kwa HC2-03/EURUSD/30m) ili iendeshe S2 SPEC yoyote ya registration —
+ya sasa: docs/WAVE_B2_S2_REGISTRATION.md (HB2-10 × EURCHF × H1, cells 2). Build+self-test;
+Operator anaendesha.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: docs/WAVE_B2_S2_REGISTRATION.md (cells 2 FROZEN + test rasmi + m=2) · src/research/wave_c2a.py
+(run_s2/S2_CELLS/S2_PAIR/S2_HYP_ID/s2_verdict — muundo uliopo) · HYPOTHESES (HB2-10 ina tf="H1").
+
+JENGA (ADDITIVE — S2 ya zamani IBAKI inafanya kazi kama rejea ya kihistoria):
+  - S2_SPECS dict: key -> dict(hyp_id, pair, tf, cells, jsonl_name, report_name, reg_doc).
+    Entry "hc203-eurusd" (ya zamani, values zilezile) + "hb210-eurchf" MPYA:
+      hyp_id="HB2-10", pair="EURCHF", tf="H1",
+      cells=(("false_break",1.5,3.0,16), ("false_break",1.5,2.0,16)),
+      reg_doc="docs/WAVE_B2_S2_REGISTRATION.md"
+  - run_s2(spec_key, split="validation") — logic ILEILE (load_window(pair,tf,"validation") ->
+    _masked_signals za hyp -> episodes -> pvalue_boot B=50k m=3 engine RASMI -> bh_fdr q=0.10
+    m=len(cells) -> survivor=fdr_pass NA EV>0). Guard validation-only inabaki.
+  - CLI: `--validate --s2 hb210-eurchf` (default ibaki hc203-eurusd kwa backward-compat).
+  - Output: data/strategies/wave_b2_s2_valid.jsonl + reports/wave_b2_s2_valid.md (survivors NAMED
+    au "HAKUNA SURVIVOR" wazi; mtindo ule ule).
+
+SHERIA NGUMU: ZERO statistic fns (pvalue_boot/bh_fdr/episodes HAZIGUSWI — orchestration tu; golden
+  diff 0, thibitisha kwenye commit). Cells FROZEN 2 — hakuna kuongeza. HOLDOUT inakataliwa bila token.
+  Self-test: (a) spec hb210-eurchf == registration (cells 2, tf H1, pair EURCHF); (b) spec ya zamani
+  bado inatoa cells 7 za HC2-03 (regression); (c) guard; (d) survivor logic fixture. Sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; update MEMORY_IMPLEMENTER_A.md; ripoti "tayari WAVE-B2-S2 build".
+  (Operator kisha: `python src/research/wave_c2a.py --validate --s2 hb210-eurchf` -> "tayari WAVE-B2 S2".)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [WAVE-B2] (H1 context + per-hyp TF + HB2-06/HB2-10)
 
 ```text

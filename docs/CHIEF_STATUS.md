@@ -795,3 +795,25 @@ fade-mismatch). S2 = family-pooled per mechanism (m=2) — power-by-pooling kwa 
 
 **HATUA:** agent build → Operator: htf_context H1 + `--train --hyp HB2-06,HB2-10` → S1 → Chief
 review (gross-vs-cost @ H1 ndio swali) → S2 pooled → HOLDOUT. Momentum arm (HC2-02/05) kwenye foleni.
+
+---
+
+## 2026-07-15 — WAVE-B2 S1: THESIS YA H1 IMETHIBITIKA (EURCHF) → S2 FROZEN
+
+**Build review: PASS** (statistic 0 lines; htf_context H1 + ltf-trap [5]; per-hyp tf — WAVE-A
+default 84 @30m regression OK; refactor deletions = mistari ile ile).
+
+**S1 TRAIN @ H1 (m=60):**
+- **HB2-06 SR-fade: CLOSED-BY-POWER** — 0/40 cells zafika MIN_N (N/cell: min 4, med 10, max 16).
+  Trigger×D1-extreme ni adimu mno H1. Si mechanism verdict; revisit = grid mpya pre-registered.
+- **HB2-10 sweep: THESIS CONFIRMED kwenye EURCHF** — gross +2.30 median (mara 2 ya +1.16 @30m;
+  H1-cost-ratio inafanya kazi kama LESSON-039 ilivyotabiri), **net +1.42** (cell bora, N=299,
+  cost_share 0.50, PF 1.18) na +0.89 (cell ya pili). EURGBP gross +0.98, net −0.06 (karibu).
+  Cross-TF consistency: EURCHF/EURGBP top-2 kwenye 30m NA H1, mpangilio ule ule — mechanism halisi
+  kwenye EUR-crosses. AUDUSD/NZDUSD/USDCHF hasi.
+
+**S2 FROZEN (docs/WAVE_B2_S2_REGISTRATION.md):** HB2-10 × EURCHF × H1, cells 2 (SL1.5/TP3.0,
+SL1.5/TP2.0), VALIDATION + p_boot B=50k + BH-FDR q=0.10 m=2. **LESSON-038 caveat WAZI kwenye
+registration** (single-pair kama HC2-03 — lakini margins kubwa + cross-TF consistency; VALIDATION
+ndiyo mwamuzi). Survivor → C2-6 HOLDOUT → STRAT-003. Prompt: IMPLEMENTER-A [WAVE-B2-S2]
+(generalize run_s2 → S2_SPECS; backward-compat na hc203).
