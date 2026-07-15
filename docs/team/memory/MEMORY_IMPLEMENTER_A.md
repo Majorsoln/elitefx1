@@ -808,3 +808,34 @@ NEXT AFTER: Operator: `python src/research/wave_c2a.py --train --hyp HC2-10` (PC
 OPEN QUESTIONS / NOTES:
   - false_break params default look=20/rearm=8 (hakuna param-grid wave hii — registration).
   - S2 ya HC2-10 (baada ya S1) itahitaji registration mpya + run_s2 variant (HC2-10 family) — SI wave hii.
+
+=== WAVE-B2 build (2026-07-15) — IMEKAMILIKA ===
+CURRENT TASK: **(inasubiri Operator: [1] htf_context --ltf H1  [2] wave_c2a --train --hyp HB2-06,HB2-10)**
+LAST COMPLETED: **WAVE-B2 (selective-structure @ H1) S1 build** ✅ (docs/WAVE_B2_REGISTRATION.md; vipande 3):
+  (1) htf_context: `--ltf` choices += "H1" (build()/align_context ni ltf-agnostic — as-of backward
+      inazuia leakage kwa ltf yoyote). Self-test [5] MPYA: H1 bars (spacing 1h) NDANI ya H4-spike bar
+      -> context ya H4 iliyotangulia (imefungwa), si spike; boundary@+4h -> spike. PASS.
+  (2) wave_c2a: HYPOTHESES zote zikapata field `tf` (WAVE-A HC2-01/03/06/10 = "30m"; HAZIBADILIKI,
+      run_s2 haibadiliki). run() sasa cache keyed na (pair, tf) -> load_window(pair, hyp.tf, split);
+      cells() inaweka `tf` kwenye kila cell (jsonl accounting); report TF-header inatoka rows. ADDITIVE.
+  (3) HYPOTHESES += 2 MPYA @ H1 (opt-in, si WAVE_A_IDS):
+      - HB2-06 HTF-SR-FADE-H1: bb_fade/engulf_extreme, allow=_hc206 (D1 extreme + h4 aligned),
+        SL{1,1.5}xTP{1.5,2.0}, hold 16, pairs 5 (EURGBP,EURCHF,USDCHF,AUDUSD,NZDUSD) -> 40 cells.
+      - HB2-10 FAILED-BREAK-SWEEP-H1: false_break, allow=_hc210 (D1 extreme, hakuna h4),
+        SL{1,1.5}xTP{2,3}, hold 16, pairs 5 (zilezile) -> 20 cells. TOTAL 60.
+      `--hyp` sasa inakubali comma-list (HB2-06,HB2-10 -> 60); outputs suffix
+      data/strategies/wave_c2a_train_HB2-06+HB2-10.jsonl + reports/wave_c2b_hb206+hb210_s1_train.md.
+  · SHERIA NGUMU: ZERO statistic fns (episodes/pvalue_boot/bh_fdr/_mask_context_dir/pool_streams
+    golden diff = **0 lines** vs origin/main). XAUUSD NJE (LESSON-039 fade-on-gold mismatch gross-24.6).
+    NaN->allow=False (isfinite guard, fns zilezile). S1 TRAIN-only guard inabaki.
+  Self-test wave_c2a: [1]-[16] za awali (WAVE-A + S2 + HC2-10) ZOTE PASS + MPYA:
+    [17] HB2 cells==60 (40+20), tf=="H1", XAUUSD nje; WAVE-A default bado 84 @30m (regression, no HB2);
+    [18] comma-list run(only=HB2-06,HB2-10)->60 rows H1 + suffix files (report TF=H1; WAVE-A intact 84).
+  htf_context [1]-[5] PASS. SWEEP 26/26 PASS. Files zilizoguswa: htf_context.py + wave_c2a.py TU.
+NEXT AFTER: Operator (PC ya data): [1] `python src/research/htf_context.py --ltf H1` (pairs 5+) ->
+  context parquet za H1; [2] `python src/research/wave_c2a.py --train --hyp HB2-06,HB2-10` ->
+  reports/wave_c2b_hb206+hb210_s1_train.md; [3] commit+push. Kisha Chief: cells net+ per family ->
+  S2 POWER-BY-POOLING (family_pooled R-normalized, VALIDATION, test moja/family + BH-FDR m=2).
+OPEN QUESTIONS / NOTES:
+  - H1 state parquet (market_state_engine) LAZIMA ipo kabla htf_context --ltf H1 (Operator R-1).
+  - S2 ya HB2 = pooled per family (m=2) — itahitaji registration + runner variant (SI wave hii).

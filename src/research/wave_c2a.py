@@ -121,36 +121,62 @@ WAVE_A_IDS = ("HC2-01", "HC2-03", "HC2-06")
 
 # ---------- HYPOTHESES (grid FROZEN — thamani KAMA ZILIVYO kwenye registration) ----------
 HYPOTHESES = (
-    dict(id="HC2-01", name="ALIGNED-COMPRESSION",
+    dict(id="HC2-01", name="ALIGNED-COMPRESSION", tf="30m",
          triggers=("nr7_break", "nr4_inside"),
          allow_long=lambda ctx: _hc201_allow(ctx, +1),
          allow_short=lambda ctx: _hc201_allow(ctx, -1),
          sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=32,
          pairs=("USDCHF", "USDJPY", "EURJPY", "AUDUSD", "GBPJPY")),          # cells 2x4x5 = 40
-    dict(id="HC2-03", name="TREND-PULLBACK-RESUME",
+    dict(id="HC2-03", name="TREND-PULLBACK-RESUME", tf="30m",
          triggers=("trend_resume", "rsi2_pullback"),
          allow_long=lambda ctx: _hc203_allow(ctx, +1),
          allow_short=lambda ctx: _hc203_allow(ctx, -1),
          sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=32,
          pairs=("USDJPY", "GBPJPY", "EURUSD")),                              # cells 2x4x3 = 24
-    dict(id="HC2-06", name="HTF-SR-FADE",
+    dict(id="HC2-06", name="HTF-SR-FADE", tf="30m",
          triggers=("bb_fade", "engulf_extreme"),
          allow_long=_hc206_allow_long,
          allow_short=_hc206_allow_short,
          sl=(1.0, 1.5), tp=(1.5,), max_hold=24,
          pairs=("EURGBP", "EURCHF", "USDCHF", "AUDUSD", "NZDUSD")),          # cells 2x2x5 = 20
-    dict(id="HC2-10", name="FAILED-BREAK-SWEEP",
+    dict(id="HC2-10", name="FAILED-BREAK-SWEEP", tf="30m",
          triggers=("false_break",),
          allow_long=_hc210_allow_long, allow_short=_hc210_allow_short,
          sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=24,
          pairs=("EURGBP", "EURCHF", "AUDUSD", "NZDUSD", "XAUUSD")),          # cells 1x4x5 = 20
+    # WAVE-B2 (docs/WAVE_B2_REGISTRATION.md) — selective-structure @ H1 (moves kubwa per trade ->
+    # cost-ratio bora; LESSON-039). XAUUSD NJE kwa makusudi (fade-on-gold mismatch). tf="H1".
+    dict(id="HB2-06", name="HTF-SR-FADE-H1", tf="H1",
+         triggers=("bb_fade", "engulf_extreme"),
+         allow_long=_hc206_allow_long, allow_short=_hc206_allow_short,       # fns zilezile (D1/H4)
+         sl=(1.0, 1.5), tp=(1.5, 2.0), max_hold=16,
+         pairs=("EURGBP", "EURCHF", "USDCHF", "AUDUSD", "NZDUSD")),          # cells 2x4x5 = 40
+    dict(id="HB2-10", name="FAILED-BREAK-SWEEP-H1", tf="H1",
+         triggers=("false_break",),
+         allow_long=_hc210_allow_long, allow_short=_hc210_allow_short,       # D1-extreme, hakuna h4
+         sl=(1.0, 1.5), tp=(2.0, 3.0), max_hold=16,
+         pairs=("EURGBP", "EURCHF", "USDCHF", "AUDUSD", "NZDUSD")),          # cells 1x4x5 = 20
 )
+
+
+def _active_ids(only):
+    """Rudisha tuple ya hypothesis-ids zilizochaguliwa. `only=None` -> WAVE_A_IDS (default @30m).
+    `only` = string moja au comma-list (mf. 'HB2-06,HB2-10'). Bad id -> ValueError."""
+    if only is None:
+        return WAVE_A_IDS
+    ids = [x.strip() for x in str(only).split(",") if x.strip()]
+    valid = {h["id"] for h in HYPOTHESES}
+    bad = [i for i in ids if i not in valid]
+    if bad:
+        raise ValueError(f"--hyp id haipo kwenye HYPOTHESES: {', '.join(bad)}")
+    return tuple(ids)
 
 
 def cells(only=None):
     """Enumerate cells za grid FROZEN. `only=None` -> WAVE-A (m=84; FDR ya S2 inahesabu HII);
-    `only=<id>` -> hypothesis moja (mf. HC2-10 -> m=20). HC2-10 haimo kwenye default (opt-in)."""
-    active = WAVE_A_IDS if only is None else (only,)
+    `only=<id[,id...]>` -> hypotheses zilizochaguliwa (mf. HC2-10 -> 20; HB2-06,HB2-10 -> 60).
+    Kila cell inabeba `tf` ya hypothesis (default '30m'). WAVE-B (HC2-10/HB2-*) haimo kwenye default."""
+    active = _active_ids(only)
     out = []
     for hyp in HYPOTHESES:
         if hyp["id"] not in active:
@@ -159,7 +185,7 @@ def cells(only=None):
             for pair in hyp["pairs"]:
                 for sl in hyp["sl"]:
                     for tp in hyp["tp"]:
-                        out.append(dict(hypothesis=hyp["id"], trigger=trig, pair=pair,
+                        out.append(dict(hypothesis=hyp["id"], tf=hyp["tf"], trigger=trig, pair=pair,
                                         sl_atr=sl, tp_atr=tp, max_hold=hyp["max_hold"]))
     return out
 
@@ -209,29 +235,31 @@ def run(split="train", out_root=REPO_ROOT, write=True, only=None):
     WAVE-A). `only=None` -> WAVE-A (tabia ya zamani, 84 cells)."""
     if split != "train":
         raise PermissionError("C2-3 ni TRAIN PEKEE (S1 exploration) — VALID/HOLDOUT haziguswi hapa")
-    if only is not None and only not in {h["id"] for h in HYPOTHESES}:
-        raise ValueError(f"--hyp {only} haipo kwenye HYPOTHESES")
-    active = WAVE_A_IDS if only is None else (only,)
-    pairs_all = sorted({p for hyp in HYPOTHESES if hyp["id"] in active for p in hyp["pairs"]})
-    cache = {p: load_window(p, TF, split) for p in pairs_all}
-    skipped = sorted(p for p in pairs_all
-                     if cache[p] is None or cache[p].get("ctx") is None)
-    for p in skipped:
-        why = "state parquet haipo/fupi" if cache[p] is None else "context parquet haipo (ctx=None)"
-        print(f"  ONYO: {p}/{TF} — {why}; cells za pair hii zinarukwa (zinabaki kwenye jsonl kama n=0)")
+    active = _active_ids(only)                        # raises ValueError kwa id mbaya
+    # load_window kwa (pair, tf) — hypotheses zinaweza kuwa na TF tofauti (WAVE-A 30m, WAVE-B2 H1).
+    pairs_tf = sorted({(p, hyp["tf"]) for hyp in HYPOTHESES if hyp["id"] in active
+                       for p in hyp["pairs"]})
+    cache = {(p, tf): load_window(p, tf, split) for (p, tf) in pairs_tf}
+    skipped = []
+    for (p, tf) in pairs_tf:
+        d = cache[(p, tf)]
+        if d is None or d.get("ctx") is None:
+            why = "state parquet haipo/fupi" if d is None else "context parquet haipo (ctx=None)"
+            print(f"  ONYO: {p}/{tf} — {why}; cells za pair hii zinarukwa (zinabaki kwenye jsonl kama n=0)")
+            skipped.append(f"{p}/{tf}")
 
     rows = []
     sig_cache = {}
     for cell in cells(only):
-        pair = cell["pair"]
-        data = cache[pair]
+        pair = cell["pair"]; tf = cell["tf"]
+        data = cache[(pair, tf)]
         rec = dict(cell, days=(data["days"] if data is not None else 0))
         if data is None or data.get("ctx") is None:
             rec.update(n=0, skipped=True)
             rows.append(rec)
             continue
         hyp = next(h for h in HYPOTHESES if h["id"] == cell["hypothesis"])
-        key = (cell["hypothesis"], cell["trigger"], pair)
+        key = (cell["hypothesis"], cell["trigger"], pair, tf)
         if key not in sig_cache:
             sig_cache[key] = _masked_signals(hyp, cell["trigger"], data)
         out_masked, entry = sig_cache[key]
@@ -253,12 +281,13 @@ def _write_outputs(rows, split, out_root, skipped=(), only=None):
         jl_name, rpt_name = OUT_JSONL, OUT_REPORT
         head, title_m = "WAVE-C2-A", "grid FROZEN m=84; docs/WAVE_C2A_REGISTRATION.md"
     else:
-        slug = only.replace("-", "").lower()                       # HC2-10 -> hc210
-        jl_name = f"wave_c2a_train_{only}.jsonl"
+        suffix = "+".join(_active_ids(only))                       # HC2-10 | HB2-06+HB2-10
+        slug = suffix.replace("-", "").lower()                     # -> hc210 | hb206+hb210
+        jl_name = f"wave_c2a_train_{suffix}.jsonl"
         rpt_name = f"wave_c2b_{slug}_s1_train.md"
-        title_m = (f"{only} grid FROZEN m={len(rows)}; "
-                   f"docs/WAVE_C2B_{only.replace('-', '').upper()}_REGISTRATION.md")
+        title_m = f"{suffix} grid FROZEN m={len(rows)}"
         head = "WAVE-B"
+    tfs = "/".join(sorted({r.get("tf", TF) for r in rows}))        # 30m (WAVE-A) | H1 (WAVE-B2)
     sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
     jl = sdir / jl_name
     with open(jl, "w", encoding="utf-8") as f:
@@ -267,7 +296,7 @@ def _write_outputs(rows, split, out_root, skipped=(), only=None):
             f.write(json.dumps(rec, sort_keys=True) + "\n")
 
     L = [f"# {head} — S1 TRAIN ({title_m})\n",
-         f"*{datetime.now():%Y-%m-%d %H:%M} | TF={TF} | split={split.upper()} (2016-2022 PEKEE) | "
+         f"*{datetime.now():%Y-%m-%d %H:%M} | TF={tfs} | split={split.upper()} (2016-2022 PEKEE) | "
          f"cells={len(rows)} | context ON signals (_mask_context_dir, signal-bar i; NaN→excluded) | "
          f"costs ndani ya episodes (spread+slip) | MIN_N={MIN_N}*\n",
          "> **UAMINIFU:** S1 = TRAIN EXPLORATION — hakuna p-value/FDR hapa; namba zote ni in-sample. "
@@ -710,6 +739,51 @@ def self_test():
           f"bad-id->ValueError={bad_ok} -> {t16}")
     ok = ok and t16
 
+    # ===== WAVE-B2: selective-structure @ H1 checks =====
+
+    # [17] HB2 grid: cells == 60 (HB2-06 40 + HB2-10 20), tf=="H1" zote, XAUUSD NJE; WAVE-A default
+    #      bado 84 @30m (regression) na haina HB2-*
+    cH = cells(only="HB2-06,HB2-10")
+    per_hb = {hid: sum(1 for c_ in cH if c_["hypothesis"] == hid) for hid in ("HB2-06", "HB2-10")}
+    dflt = cells()
+    t17 = (len(cH) == 60 and per_hb == {"HB2-06": 40, "HB2-10": 20}
+           and {c_["tf"] for c_ in cH} == {"H1"}
+           and not any(c_["pair"] == "XAUUSD" for c_ in cH)
+           and len(dflt) == 84 and {c_["tf"] for c_ in dflt} == {"30m"}
+           and not any(c_["hypothesis"] in ("HB2-06", "HB2-10") for c_ in dflt))
+    print(f"  [17] HB2 grid: cells={len(cH)}(==60) per-hyp={per_hb} tf=H1 no-gold=True | "
+          f"WAVE-A default={len(dflt)}(==84)@30m -> {t17}")
+    ok = ok and t17
+
+    # [18] HYP-FILTER comma-list pipeline: run(only='HB2-06,HB2-10') -> 60 rows (H1, HB2 tu) +
+    #      outputs suffix wa comma-list (HAIFUTI WAVE-A); WAVE-A default bado 84
+    import tempfile
+    _self = sys.modules[__name__]
+    pairs18 = sorted({p for h in HYPOTHESES for p in h["pairs"]})
+    fx18 = {p: _fixture(60 + k) for k, p in enumerate(pairs18)}
+    orig = _self.load_window
+    _self.load_window = lambda sym, tf, split, token=None: fx18.get(sym)
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            rHB = run("train", out_root=tmp, only="HB2-06,HB2-10")
+            rA18 = run("train", out_root=tmp)
+            jlHB = Path(tmp) / "data" / "strategies" / "wave_c2a_train_HB2-06+HB2-10.jsonl"
+            rpHB = Path(tmp) / "reports" / "wave_c2b_hb206+hb210_s1_train.md"
+            jlA18 = Path(tmp) / "data" / "strategies" / OUT_JSONL
+            recsHB = [json.loads(ln) for ln in open(jlHB, encoding="utf-8")]
+            filt18 = (len(rHB) == 60 and {r["hypothesis"] for r in rHB} == {"HB2-06", "HB2-10"}
+                      and all(r["tf"] == "H1" for r in rHB)
+                      and len(rA18) == 84 and not any(r["hypothesis"].startswith("HB2") for r in rA18))
+            files18 = (jlHB.exists() and rpHB.exists() and jlA18.exists()
+                       and len(recsHB) == 60 and all(r["tf"] == "H1" for r in recsHB))
+            hdr18 = "TF=H1" in rpHB.read_text(encoding="utf-8")
+        t18 = filt18 and files18 and hdr18
+    finally:
+        _self.load_window = orig
+    print(f"  [18] comma-list: run(only=HB2-06,HB2-10)->60 rows H1 + suffix files (report TF=H1); "
+          f"WAVE-A intact 84 -> {t18}")
+    ok = ok and t18
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -722,8 +796,8 @@ def main():
     ap.add_argument("--validate", action="store_true",
                     help="C2-4: S2 VALIDATION — cells 7 FROZEN (HC2-03 EURUSD) + BH-FDR")
     ap.add_argument("--hyp", default=None,
-                    help="chuja hypothesis moja kwa --train (mf. HC2-10 -> cells 20; outputs zenye "
-                         "suffix). Bila hii -> WAVE-A (84 cells).")
+                    help="chuja hypothesis moja au comma-list kwa --train (mf. HC2-10 -> 20; "
+                         "HB2-06,HB2-10 -> 60; outputs zenye suffix). Bila hii -> WAVE-A (84 cells).")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -748,8 +822,8 @@ def main():
     tag = a.hyp if a.hyp else "WAVE-A"
     print(f"WAVE-C2-A S1 TRAIN [{tag}]: cells={len(rows)} N>=MIN_N={len(traded)} EV>0={len(pos)}")
     if a.hyp:
-        slug = a.hyp.replace("-", "").lower()
-        print(f"  data/strategies/wave_c2a_train_{a.hyp}.jsonl\n  reports/wave_c2b_{slug}_s1_train.md")
+        suffix = "+".join(_active_ids(a.hyp)); slug = suffix.replace("-", "").lower()
+        print(f"  data/strategies/wave_c2a_train_{suffix}.jsonl\n  reports/wave_c2b_{slug}_s1_train.md")
     else:
         print(f"  data/strategies/{OUT_JSONL}\n  reports/{OUT_REPORT}")
     return 0

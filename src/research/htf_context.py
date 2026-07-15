@@ -16,9 +16,10 @@ bar (open-time t), context LAZIMA itoke kwenye HTF bar ya MWISHO iliyoFUNGWA kab
 KAMWE bar inayomzunguka t (bado inaendelea — ina future info). Self-test ina MTEGO wa wazi:
 H4 bar inayozunguka LTF bar ina spike kubwa; context ya LTF LAZIMA isione spike.
 
-Output: data/processed/context/symbol=<SYM>/tf=<15m|30m>.parquet — kwa kila LTF bar, columns za
-h4_* + d1_* TAYARI kwa context-filter ON signals (_mask_context style ya strategy_lab).
-Endesha (PC ya data): python src/research/htf_context.py [--symbol X] [--ltf 15m]
+Output: data/processed/context/symbol=<SYM>/tf=<15m|30m|H1>.parquet — kwa kila LTF bar, columns za
+h4_* + d1_* TAYARI kwa context-filter ON signals (_mask_context style ya strategy_lab). LTF yoyote
+yenye state parquet inafanya kazi (as-of backward ni ltf-agnostic — H1 = WAVE-B2).
+Endesha (PC ya data): python src/research/htf_context.py [--symbol X] [--ltf 15m|30m|H1]
 Self-test (bila data): python src/research/htf_context.py --self-test
 """
 from __future__ import annotations
@@ -243,6 +244,19 @@ def self_test():
     print(f"  [4] determinism + schema kamili -> {t4}")
     ok = ok and t4
 
+    # [5] H1 LTF-TRAP (WAVE-B2): align_context ni ltf-agnostic — H1 bars (spacing 1h) NDANI ya H4
+    #     bar yenye spike LAZIMA zipate context ya H4 bar iliyoTANGULIA (imefungwa), si spike.
+    #     Boundary: H1 bar @ t_open+4h (== close_ts ya spike bar) sasa inaruhusiwa kuiona spike.
+    h1_inside = pl.DataFrame({"ts": [t_open + timedelta(hours=k) for k in (1, 2, 3)]})
+    h1_boundary = pl.DataFrame({"ts": [t_open + timedelta(hours=4)]})
+    ji = align_context(h1_inside, feats); jb = align_context(h1_boundary, feats)
+    t5 = ((abs(ji["h4_roc10"] - prev_roc) < 1e-12).all()             # H1 ndani -> bar iliyotangulia
+          and (abs(ji["h4_roc10"] - spike_roc) > 0.1).all()          # HAIONI spike
+          and abs(jb["h4_roc10"][0] - spike_roc) < 1e-12)            # boundary -> spike (imefungwa)
+    print(f"  [5] H1 ltf-trap: H1 bars ndani ya H4-spike -> prev context (roc {ji['h4_roc10'][0]:+.4f}) "
+          f"!= spike ({spike_roc:+.4f}); boundary@+4h -> spike -> {t5}")
+    ok = ok and bool(t5)
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -252,7 +266,7 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbol", default=None)
-    ap.add_argument("--ltf", default=None, choices=["15m", "30m"])
+    ap.add_argument("--ltf", default=None, choices=["15m", "30m", "H1"])   # H1: WAVE-B2 (state ipo)
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
