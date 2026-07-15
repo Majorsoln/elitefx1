@@ -76,6 +76,53 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [WAVE-M] (Momentum arm: trigger_params + hour-in-allow + HM-02/HM-05)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: WAVE-M (momentum arm) —
+grid FROZEN docs/WAVE_M_REGISTRATION.md. Vipande 3 (2 infra ndogo + hypotheses 2). Build+self-test;
+Operator anaendesha TRAIN.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: docs/WAVE_M_REGISTRATION.md (grid 36 cells + deviations + infra) · src/research/wave_c2a.py
+(HYPOTHESES/tf/_masked_signals/run/--hyp) · event_library_v2.py: session_orb (stop; kwargs
+range_hours/trade_hours) na shock_follow (market; defaults).
+
+JENGA (ADDITIVE — WAVE-A/B2 na run_s2 HAZIBADILIKI):
+  1. trigger_params: HYPOTHESES zipate field ya hiari `trigger_params` (dict); _masked_signals
+     ipitishe `spec["fn"](o,h,l,c,tc,hour, **hyp.get("trigger_params", {}))`. Default {} — events
+     za zamani hazibadiliki (regression).
+  2. hour-in-allow: runner ijenge `ctx_plus = dict(data["ctx"], hour=data["hour"])` na kupitisha
+     kwa allow fns (badala ya ctx tupu). allow fns za zamani zinatumia keys za h4_/d1_ tu —
+     hazivunjiki (regression). Hour ni ratiba — decidable (registration §Deviations #3).
+  3. HYPOTHESES mbili MPYA (KAMA registration):
+     dict(id="HM-02", name="LONDON-ORB-D1", tf="30m", triggers=("session_orb",),
+          trigger_params=dict(range_hours=(7,9), trade_hours=(9,13)),
+          allow_long=lambda cx: _hm_d1(cx,+1), allow_short=lambda cx: _hm_d1(cx,-1),
+          sl=(1.0,1.5), tp=(2.0,3.0), max_hold=16,
+          pairs=("GBPUSD","EURUSD","EURGBP","GBPJPY","USDJPY"))                 # 20
+     dict(id="HM-05", name="ALIGNED-SHOCK", tf="15m", triggers=("shock_follow",),
+          allow_long=lambda cx: _hm_d1_hours(cx,+1), allow_short=lambda cx: _hm_d1_hours(cx,-1),
+          sl=(1.0,1.5), tp=(2.0,3.0), max_hold=16,
+          pairs=("EURJPY","USDJPY","GBPJPY","XAUUSD"))                          # 16
+     ambapo: _hm_d1(cx,s) = isfinite(d1_trend_sign) & (d1_trend_sign==s)
+             _hm_d1_hours(cx,s) = _hm_d1(cx,s) & (7 <= cx["hour"]) & (cx["hour"] <= 16)
+
+SHERIA NGUMU: ZERO statistic fns (golden diff 0 — thibitisha kwenye commit). Grid FROZEN (36).
+  XAUUSD imo HM-05 PEKEE (momentum — LESSON-039 ilifunga fade tu). NaN->allow=False. TRAIN-only.
+  Self-test: (a) HM cells==36 (20+16), tf sahihi (30m/15m); (b) trigger_params zinafika event fn
+  (session_orb range (7,9) — thibitisha kwa synthetic hour array kwamba levels zinajengwa 07-09);
+  (c) hour-filter ya HM-05 (shock @ hour 3 -> excluded, @ hour 10 -> included); (d) regression:
+  WAVE-A default 84 @30m + HB2 60 @H1 + run_s2 specs zinabaki sawa. Sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; update MEMORY_IMPLEMENTER_A.md; ripoti "tayari WAVE-M build".
+  (Operator kisha: `python src/research/wave_c2a.py --train --hyp HM-02,HM-05` [15m context ya
+  XAUUSD/EURJPY/USDJPY/GBPJPY TAYARI ipo kutoka C2-0] -> commit+push -> "tayari WAVE-M S1".)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [WAVE-B2-S2] (Generalize run_s2 → HB2-10 EURCHF @ H1)
 
 ```text
