@@ -76,6 +76,76 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [M3-1] (Swap model + R-MAP runner — ATLAS ya mazingira) [MZUNGUKO-3]
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: M3-1 ya MZUNGUKO-3 —
+vipande 2: (1) SWAP MODEL (gharama ya kubeba usiku — swing); (2) R-MAP RUNNER (ramani ya tabia:
+events × pairs × TF × params, kila trade TAGGED na mazingira yake). TRAIN PEKEE.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/CYCLE3_CHARTER.md (Tabaka 2 + kinga) · event_quality_report.py (episodes — trade tuple
+ina entry/exit bar) · wave_c2a.py (runner pattern, per-hyp tf, ctx_plus) · event_library_v2.py
+(EVENTS_V2 zote 20) · config/data_config.yaml.
+
+(1) SWAP MODEL (additive — episodes HAIGUSWI):
+    - config: `swap_pips_per_night` per pair (default conservative 0.5; XAUUSD 1.5). Symmetric
+      kwa unyenyekevu (long/short sawa) — limitation documented.
+    - Baada ya episodes(), kwa kila trade: nights = idadi ya midnight-crossings kati ya entry_ts
+      na exit_ts (ts arrays zipo) → pnl_swing = pnl − nights×swap. Fanya kama WRAPPER/helper
+      (apply_swap(trades, ts, swap)) — golden hashes za episodes HAZIGUSWI. Self-test: trade ya
+      intraday nights=0; ya siku 3 nights=3; determinism.
+(2) R-MAP RUNNER (src/research/rmap.py, MPYA):
+    - Grid: EVENTS_V2 ZOTE zenye needs zinazopatikana × pairs 12 × TF {H1,H4,D1} × SL {1.0,1.5,2.0}
+      × TP {1.0,1.5,2.0,3.0} × max_hold per TF {H1:24, H4:24, D1:20}. (Kubwa — lakini ni ATLAS ya
+      TRAIN, si hypothesis test; hakuna FDR hapa kwa makusudi. Runtime: kadiria na ripoti.)
+    - Kwa kila TRADE rekodi tags za SIGNAL bar: vol_state, session, h4_trend_sign/d1_trend_sign
+      (ctx kama ipo kwa TF hiyo; H4/D1 entries: d1 tu au NaN — additive), MWAKA wa entry.
+    - Swap inatumika (helper ya (1)) kwa kila trade.
+    - OUTPUT: data/strategies/rmap_train.parquet (mstari 1 kwa kila CELL×MWAKA×VOL_STATE:
+      event,pair,tf,sl,tp,year,vol_state,n,ev_net,gross,win,cost_share) — compact, inayochambulika.
+      + reports/rmap_atlas.md: muhtasari (per event-family: pairs ngapi zina EV+ kwa regime gani;
+      top-20 (event×tf×regime) kwa BREADTH ya pairs (si kwa EV ya cell moja — L-041)).
+    - GUARD: TRAIN pekee (PermissionError vinginevyo). HOLDOUT/VALID kamwe.
+SHERIA: ZERO statistic/golden fns kuguswa (episodes/pvalue/mask byte-identical). Self-test:
+  swap-nights, tags decidability (signal-bar), TRAIN-guard, determinism, schema. Sweep GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-1" + kadirio la runtime ya full run.
+  (Operator: `python src/research/rmap.py --train` — itachukua muda; run overnight kama inahitajika.)
+```
+
+---
+
+## PROMPT — IMPLEMENTER-A [M3-4] (K4 dataset builder — signals za STRAT-001/002 + features + outcome)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: M3-4 — jenga TRAINING
+DATASET ya Model K4: kila signal ya nr7_break kwenye USDCHF/USDJPY H1 (configs HASA za
+STRAT-001/002), TRAIN + VALID, na features za mazingira + matokeo yake.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/CYCLE3_CHARTER.md (Tabaka 3) · docs/STRATEGIES.md (configs HASA: STRAT-001 SL2/TP1
+no-LATE; STRAT-002 SL1/TP1 no-LATE) · strat_signal.py · event_quality_report.py · htf_context.py.
+
+JENGA src/research/k4_dataset.py:
+  - Kwa kila split {train, validation} × strategy {STRAT-001, STRAT-002}: zalisha signals
+    (nr7_break + no-LATE mask kama policy), endesha episodes na config HASA ya strategy,
+    na kwa KILA TRADE rekodi:
+      features za SIGNAL bar (decidable — hakuna kitu cha baadaye): vol_state, activity_state,
+      spread_state, session ya entry, hour, day-of-week, atr_n, h4_*/d1_* zote za ctx (kama
+      zipo kwa H1 — htf_context --ltf H1 ipo), range ya nr7 bar /ATR, mwaka;
+      outcome: pnl_pips, pnl_R (pnl/(sl_atr×atr)), win (pnl>0), exit_type (TP/SL/timeout),
+      bars_held, MFE/MAE kama zinapatikana kwa urahisi (hiari — usibadilishe episodes).
+  - OUTPUT: data/strategies/k4_dataset.parquet + reports/k4_dataset.md (counts per
+    strategy×split, win rate baseline, class balance, feature completeness/NaN%).
+  - HOLDOUT HAIGUSWI KABISA (hakuna signal ya 2025+ kwenye dataset — hard guard).
+SHERIA: ZERO golden fns. Features = signal-bar (self-test trap kama za awali). Self-test:
+  no-holdout-guard, decidability, determinism, schema. Sweep GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-4" + baseline win rates.
+  (Baadaye M3-5: SCIENTIST-D atabuni model interpretable juu ya dataset hii — SI kazi yako.)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [WAVE-M-S2] (Ongeza spec hm05-usdjpy kwenye S2_SPECS)
 
 ```text
