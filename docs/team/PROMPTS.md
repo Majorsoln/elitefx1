@@ -76,6 +76,33 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [WAVE-M-S2] (Ongeza spec hm05-usdjpy kwenye S2_SPECS)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI NDOGO: ongeza S2 spec
+moja kwenye S2_SPECS ya wave_c2a.py — docs/WAVE_M_S2_REGISTRATION.md (HM-05 × USDJPY × 15m, cells 4).
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+
+SOMA: docs/WAVE_M_S2_REGISTRATION.md (cells 4 FROZEN, m=4) · wave_c2a.py S2_SPECS (muundo upo —
+entry mpya tu).
+
+JENGA (ADDITIVE):
+  - S2_SPECS["hm05-usdjpy"] = dict(hyp_id="HM-05", pair="USDJPY", tf="15m",
+      cells=(("shock_follow",1.5,2.0,16),("shock_follow",1.0,2.0,16),
+             ("shock_follow",1.5,3.0,16),("shock_follow",1.0,3.0,16)),
+      jsonl/report names: wave_m_s2_valid.*, reg_doc="docs/WAVE_M_S2_REGISTRATION.md")
+  - Hakuna logic mpya — run_s2 ya spec-driven tayari ipo. BH-FDR m=4 (len(cells)).
+
+SHERIA: ZERO statistic fns (golden diff 0). Cells FROZEN 4. Guard validation-only inabaki.
+  Self-test: spec == registration (cells 4, tf 15m, pair USDJPY); regression za specs za zamani. Sweep GREEN.
+
+UKIMALIZA: git add -A && commit && push; ripoti "tayari WAVE-M-S2 build".
+  (Operator: `python src/research/wave_c2a.py --validate --s2 hm05-usdjpy` -> "tayari WAVE-M S2".)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [WAVE-M] (Momentum arm: trigger_params + hour-in-allow + HM-02/HM-05)
 
 ```text
