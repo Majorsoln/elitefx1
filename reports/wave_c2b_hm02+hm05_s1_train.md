@@ -1,6 +1,6 @@
 # WAVE-B — S1 TRAIN (HM-02+HM-05 grid FROZEN m=36)
 
-*2026-07-15 21:33 | TF=15m/30m | split=TRAIN (2016-2022 PEKEE) | cells=36 | context ON signals (_mask_context_dir, signal-bar i; NaN→excluded) | costs ndani ya episodes (spread+slip) | MIN_N=30*
+*2026-07-16 12:22 | TF=15m/30m | split=TRAIN (2016-2022 PEKEE) | cells=36 | context ON signals (_mask_context_dir, signal-bar i; NaN→excluded) | costs ndani ya episodes (spread+slip) | MIN_N=30*
 
 > **UAMINIFU:** S1 = TRAIN EXPLORATION — hakuna p-value/FDR hapa; namba zote ni in-sample. Uthibitisho = S2 (family-pooled + BH-FDR kwenye VALIDATION) → C2-6 freeze → HOLDOUT one-shot. LESSON-001/002/029. Profitable != Tradable Edge.
 
