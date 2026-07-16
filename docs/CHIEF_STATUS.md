@@ -854,3 +854,23 @@ Zote additive; regression za WAVE-A/B2/run_s2 kwenye self-test.
 
 **HATUA:** agent build → review → Operator `--train --hyp HM-02,HM-05` (15m/30m context zipo tayari
 C2-0) → S1 → review (gross-vs-cost; multi-pair breadth ndio swali) → S2 pooled → HOLDOUT.
+
+---
+
+## 2026-07-15 — WAVE-M S1: ORB DEAD; SHOCK-USDJPY = candidate BORA wa mzunguko → S2 FROZEN
+
+**Build review PASS** (statistic 0; trigger_params + hour-in-allow additive; regressions OK).
+
+**S1 TRAIN (m=36):**
+- **HM-02 ORB: DEAD** — gross HASI pairs 5/5 (mechanism verdict; London-ORB+D1 @30m haifanyi kazi).
+- **HM-05 shock: mechanism hai** — gross chanya 3/4 pairs (USDJPY +1.56, GBPJPY +0.41, **XAUUSD
+  +11.5** — gold continuation inafanya kazi ila spread ~36 inameza @15m). **USDJPY: cells 4/4 net+**
+  (median +1.11, bora +1.26, cost_share 0.26, N=730/cell, PF 1.2).
+
+**S2 FROZEN (docs/WAVE_M_S2_REGISTRATION.md):** HM-05 × USDJPY × 15m, cells 4, BH-FDR m=4.
+Jaribio la TATU la single-pair (LESSON-040 kaveat wazi + expectations chini). Tofauti zilizoandikwa
+KABLA: margin 3.8× cost (vs ~2× za waliofeli), N=730 (×2.4), gross-breadth 3/4, continuation-type.
+Shrinkage 0.35 ingeacha net ~+0.4 bado chanya — hoja ya kwa nini hii ina nafasi.
+
+**Kando (wave ijayo, si sasa):** gold-momentum @ H1/H4 (gross +11.5 @15m ni signal; ATR kubwa ya
+HTF vs spread ile ile). Prompt: IMPLEMENTER-A [WAVE-M-S2] (spec entry moja).
