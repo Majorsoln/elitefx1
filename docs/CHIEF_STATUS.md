@@ -874,3 +874,27 @@ Shrinkage 0.35 ingeacha net ~+0.4 bado chanya — hoja ya kwa nini hii ina nafas
 
 **Kando (wave ijayo, si sasa):** gold-momentum @ H1/H4 (gross +11.5 @15m ni signal; ATR kubwa ya
 HTF vs spread ile ile). Prompt: IMPLEMENTER-A [WAVE-M-S2] (spec entry moja).
+
+---
+
+## 2026-07-16 — WAVE-M S2: FAIL OOS (3/3 single-pair) → LESSON-041; CHECKPOINT ya mzunguko
+
+**S2 (HM-05 USDJPY cells 4): HAKUNA SURVIVOR.** EV -0.59..-0.90, p_boot 0.65-0.72, k=0. TRAIN
++1.26 → VALID hasi — mara ya TATU. Hata margin 3.8×/N=730/gross-breadth hazikutabiri. →
+**LESSON-041**: best-pair-of-N kwenye TRAIN = max-selection bias (E[max]≈+1.16σ kwa pairs 5 za
+kelele); **design rule mpya: S2 lazima iwe multi-pair pooled au isiwe.** VALIDATION consumed
+(cells 4); HOLDOUT BIKIRA mzunguko mzima.
+
+**MZUNGUKO-2 SCOREBOARD (uaminifu):** hypotheses 8 kupitia machine → **0 proven** (2 dead-gross,
+4 FAIL-OOS, 2 closed-by-power). Machine: 8/8 iliamua kwa usahihi, holdout safi, lessons 5 mpya
+(037-041). Assets halisi za mzunguko: intraday states+HTF context (pairs 12), runner ya spec-driven,
+LESSON-039 (cost/move ratio) na LESSON-041 (selection bias) — hizi zinaokoa miaka ya kelele mbele.
+
+**CHECKPOINT ya PD — njia mbele (pendekezo la Chief = A+B):**
+- **(A) GOLD-HTF MOMENTUM** — wave moja focused ya mwisho ya mzunguko: shock/momentum ya XAUUSD @
+  H1/H4 (gross +11.5 @15m ni ushahidi wa mechanism; ATR ya HTF kubwa vs spread ile ile → cost-share
+  inashuka). Ikiwa TRAIN inaonyesha breadth (au gold pekee kwa ukubwa mkubwa kweli) → S2; sivyo close.
+- **(B) MODEL LAYER (K4) juu ya STRAT-001/002** — lengo la asili la PD: "models kutoka strategies +
+  lessons". Tuna strategies 2 PROVEN + lessons 41 + paper-trading inayoendelea. Kuanza kujenga
+  thamani kutoka kwa kilichothibitika badala ya kuwinda tu.
+- (C) C2-WATCH forward inaendelea kukusanya (2026-05+; p=0.0543 ilikosa kwa nywele).
