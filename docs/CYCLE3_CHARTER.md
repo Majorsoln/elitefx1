@@ -62,3 +62,30 @@ daily-loss/max-loss ya FTMO (algorithm rules, kama Master Architecture inavyotak
 **Kinga za nidhamu (zisizojadilika):** atlas=TRAIN only · kila claim OOS inapita S2-pooled-breadth
 (L-041) · hakuna cell-mining (atlas inaeleza, haichagui) · K4 haioni HOLDOUT kamwe · swap/costs
 ndani ya kila namba.
+
+---
+
+## MBINU YA PAIR-LESSONS (directive ya PD 2026-07-16: "lesson ya kufundisha KILA pair
+## how to entries and exit at highest probability")
+
+Kutoka atlas + trade-paths, kwa **KILA pair kati ya 12** tunazalisha somo lake rasmi
+(`docs/pair_lessons/LESSONS_<PAIR>.md` — human-readable NA machine-readable kwa models):
+
+**A. ENTRY LESSONS (highest probability):**
+   - Kutoka R-MAP: mechanisms × mazingira (vol/session/trend/mwaka) zenye win% na EV ya juu
+     kwa pair HIYO — ranked kwa STABILITY (miaka mingapi chanya, L-010) si kwa cell moja bora.
+   - Kila lesson ina namba: "EURUSD: nr7 hushinda 58% kwenye NORMAL-vol + London + D1-trend,
+     lakini 31% kwenye HIGH-vol LATE" — hiyo ndiyo elimu ya model ya entries.
+
+**B. EXIT LESSONS (kutoka trade-paths — MFE/MAE):**
+   - Kwa kila trade ya atlas: **MFE** (faida kubwa iliyofikiwa kabla ya exit) na **MAE**
+     (hasara kubwa iliyopitiwa) — zinahesabiwa na helper additive (episodes HAIGUSWI).
+   - Maswali yanayojibiwa kwa kila pair×mazingira: washindi hufikia kilele lini (bars ngapi)?
+     walioshindwa huwa hawarudi baada ya MAE gani? timeout-trades zilikuwa na MFE gani
+     iliyopotea? → sheria za exit: "USDJPY LOW-vol: chukua 1.5R ndani ya bars 8, usisubiri" /
+     "trade iliyofika -0.7R kwenye HIGH-vol hurudi 12% tu — funga mapema".
+
+**C. NIDHAMU YA LESSON:** lesson yoyote inayotaka kuwa SEHEMU YA STRATEGY/live inapita gate
+   (S2 pooled breadth → HOLDOUT). Lessons ni elimu ya TRAIN kwa models — si ruhusa ya kutrade
+   bila uthibitisho. Format: kila lesson ina evidence (namba+chanzo), validity_conditions,
+   when_to_use/when_not (muundo ule ule wa docs/lessons).

@@ -922,3 +922,17 @@ Zinaweza kwenda SAMBAMBA.
 
 **HATUA:** Operator aendeshe agents 2 (M3-1, M3-4) → runs → M3-3 atlas review (Chief+STRATEGIST-M)
 + M3-5 K4 model design (SCIENTIST-D). Paper STRAT-001/002 inaendelea.
+
+---
+
+## 2026-07-16 — PD directive: PAIR-LESSONS (kila pair — entries+exits at highest probability)
+
+Charter §Mbinu ya Pair-Lessons imeongezwa: kwa KILA pair 12 → `docs/pair_lessons/LESSONS_<PAIR>.md`
+(A) ENTRY lessons kutoka atlas (mechanisms×mazingira zenye win%/EV juu, ranked kwa STABILITY ya
+miaka — L-010, si cell-bora — L-041); (B) EXIT lessons kutoka MFE/MAE za trade-paths (washindi
+hufikia kilele lini; MAE gani hairudi; timeout-MFE iliyopotea) — helper additive ya excursions
+imeongezwa kwenye prompt ya M3-1 (rmap parquet +mfe/mae columns); (C) nidhamu: lesson→live
+inapita gate kamili. Muundo wa lesson = ule ule wa docs/lessons (evidence/validity/when_to_use).
+
+**HATUA (haijabadilika):** agents M3-1 (sasa na exit-science) + M3-4 sambamba → runs → atlas +
+pair-lessons drafting (M3-3) + K4 (M3-5).
