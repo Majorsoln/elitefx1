@@ -91,6 +91,25 @@ max_spread_pips:
   EURCHF: 3.5   # provisional
   XAUUSD: 75    # DATA-DRIVEN (Chief ruling 2026-07-14): p95 30m=71.0 -> round-5=75; cost-share@p95 12.78% < 25% -> SUITABLE (reports/xauusd_spread_quality.md). Ilikuwa 60 provisional.
 
+# --- Swap (gharama ya kubeba usiku, pips per night) — M3-1 MZUNGUKO-3 (swing costs) ---
+# Additive kwa harness: pnl_swing = pnl_net - nights*swap (nights = midnight-crossings). Default
+# CONSERVATIVE 0.5 pip/night (kadirio; broker swaps hutofautiana, zinaweza kuwa +/- kwa direction).
+# LIMITATION (documented): symmetric (long/short sawa) kwa unyenyekevu — carry ya kweli ni asymmetric
+# (interest-rate differential). Refine ikiwa broker swap-table itapatikana. XAUUSD kubwa (storage/carry).
+swap_pips_per_night:
+  EURUSD: 0.5
+  GBPUSD: 0.5
+  USDJPY: 0.5
+  EURJPY: 0.5
+  USDCAD: 0.5
+  USDCHF: 0.5
+  AUDUSD: 0.5
+  NZDUSD: 0.5
+  EURGBP: 0.5
+  GBPJPY: 0.5
+  EURCHF: 0.5
+  XAUUSD: 1.5    # gold carry/storage kubwa zaidi
+
 # --- Vigezo vya quality checks ---
 quality:
   max_gap_minutes: 60        # pengo kubwa zaidi linalokubalika ndani ya session

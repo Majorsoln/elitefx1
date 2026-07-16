@@ -909,3 +909,33 @@ LAST COMPLETED: **S2_SPECS += hm05-usdjpy** ✅ (docs/WAVE_M_S2_REGISTRATION.md;
   (4 rows, id=HM-05|shock_follow|USDJPY, outputs wave_m_s2_valid.*, determinism, verdict named).
   SWEEP 26/26 PASS. (Kando: gold-momentum @ HTF = hypothesis ya baadaye, HAIMO S2 hii.)
 NEXT AFTER: Operator: `python src/research/wave_c2a.py --validate --s2 hm05-usdjpy` -> reports/wave_m_s2_valid.md.
+
+=== M3-1 build (2026-07-16) — MZUNGUKO-3 TABAKA-2 — IMEKAMILIKA ===
+LAST COMPLETED: **M3-1 R-MAP atlas + swap model + MFE/MAE** ✅ (docs/CYCLE3_CHARTER.md; ADDITIVE):
+  (1) SWAP MODEL: config/data_config.yaml `swap_pips_per_night` (default 0.5, XAUUSD 1.5; symmetric,
+      LIMITATION documented). helper `apply_swap(trades, ts, swap)` (rmap.py): nights = midnight-
+      crossings (date-diff ya ts[entry]/ts[exit]); pnl_swing = pnl_net - nights*swap. WRAPPER —
+      episodes HAIGUSWI.
+  (2) R-MAP RUNNER `src/research/rmap.py` (MPYA): events 21 (EVENTS_V2 zote — needs hour/tc zapatikana)
+      x pairs 12 x TF {H1,H4,D1} x SL{1,1.5,2} x TP{1,1.5,2,3} x max_hold{H1:24,H4:24,D1:20}. Kila
+      trade TAGGED (signal-bar): vol_state, session (_sess(hour[i])), d1_trend_sign (ctx kama ipo),
+      mwaka wa entry. Output data/strategies/rmap_train.parquet (mstari 1 kwa CELL×MWAKA×VOL_STATE:
+      event,pair,tf,sl,tp,year,vol_state,n,ev_net(swing),gross,win,cost_share + MFE/MAE cols +
+      d1_align_frac,sess_top). reports/rmap_atlas.md: top-20 (event×tf×vol_state) kwa BREADTH ya pairs
+      (L-041 — si cell moja) + per-event breadth. GUARD TRAIN-only (PermissionError); HAKUNA FDR (ramani,
+      si test).
+  (3) MFE/MAE helper `excursions(trades,o,h,l,c,out,entry,atr,sl_atr)` (rmap.py): MFE/MAE kwa pips NA R
+      (÷ sl_atr*atr[signal bar]) + mfe_peak_bar. Entry price = ILE ILE ya episodes (market o[i+1];
+      stop max/min(level,open)). parquet cols: mfe_r_med, mae_r_med, mfe_peak_bar_med, timeout_mfe_r_med.
+  · SHERIA: ZERO statistic/golden fns (episodes/pvalue_boot/_mask_context/wave_c2a byte-identical;
+    golden diff 0). run_selftests += rmap. Files: data_config.yaml + run_selftests.py + rmap.py(mpya).
+  Self-test rmap [1]-[6]: swap-nights (0/3, det), MFE/MAE exactness (market+stop entry), TRAIN-guard
+    (valid/holdout refused), full-run (schema/years/vol/swap-drag/determinism/outputs), usable_events 21.
+    SWEEP 27/27 PASS. RUNTIME kadirio: ~5 min full 12 pairs (1 pair=23s synthetic; sio overnight).
+NEXT AFTER: Operator: `python src/research/rmap.py --train` -> rmap_train.parquet + rmap_atlas.md ->
+  commit+push. Kisha M3-3: Chief+STRATEGIST-M soma atlas -> hypotheses zenye breadth -> S2 pooled.
+OPEN QUESTIONS / NOTES:
+  - Swap symmetric (long/short sawa) — refine ikiwa broker swap-table itapatikana (asymmetric carry).
+  - Atlas group-key = vol_state (schema ya charter); session/d1-trend zimehifadhiwa kama summary cols
+    (sess_top, d1_align_frac) — si group-axis (kuepuka row-explosion). H4/D1: h4-trend NaN (ctx ya HTF
+    haijengwi kwa H4/D1 LTF) -> d1_align_frac None kwa TF hizo (additive, si kosa).
