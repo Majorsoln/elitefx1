@@ -898,3 +898,27 @@ LESSON-039 (cost/move ratio) na LESSON-041 (selection bias) — hizi zinaokoa mi
   lessons". Tuna strategies 2 PROVEN + lessons 41 + paper-trading inayoendelea. Kuanza kujenga
   thamani kutoka kwa kilichothibitika badala ya kuwinda tu.
 - (C) C2-WATCH forward inaendelea kukusanya (2026-05+; p=0.0543 ilikosa kwa nywele).
+
+---
+
+## 2026-07-16 — MUONGOZO WA PD → MZUNGUKO-3 CHARTER ("AI YA MAZINGIRA")
+
+**Muongozo wa PD:** pairs 12, utafiti wa kila pair (set ya strategies × mbinu × parameters) ili
+kujua MAZINGIRA na mabadiliko yake (EURUSD 2016≠2018; pair≠pair); model inayotambua STATES +
+nyingine inayojua "mazingira haya → entries/exits". PD pia: win rate ipandishwe kwa UCHAMBUZI
+(model ya kuchagua best entries/exits) kwa sababu ya path-risk ya FTMO (daily/max loss — EV
+haipewi muda wa kukusanyika kama streak inakuvunja kwanza). Chief: hoja sahihi kihesabu
+(streak ya 5-loss @40% win ≈ 85%+ kwa mwezi; @60% ≈ nadra).
+
+**docs/CYCLE3_CHARTER.md:** Tabaka 4 — (1) STATE model ✅ ipo (state engines + htf_context);
+(2) R-MAP/ATLAS 🔨 (events 20 × pairs 12 × H1/H4/D1 × params, regime+year tagged, TRAIN only,
+swing + swap model — ramani si madai; claims zinapita S2-pooled-breadth L-041); (3) K4 model 🔨
+(p(win|mazingira) + exit intelligence juu ya STRAT-001/002; HOLDOUT kamwe); (4) sizing/compliance
+deterministic. WAVE-S imefyonzwa ndani ya R-MAP (swing TF + swap ni sehemu ya atlas).
+
+**Prompts:** IMPLEMENTER-A [M3-1] (swap model + rmap.py runner) na [M3-4] (k4_dataset.py —
+signals za STRAT-001/002 + state features + outcomes, TRAIN/VALID, no-holdout hard guard).
+Zinaweza kwenda SAMBAMBA.
+
+**HATUA:** Operator aendeshe agents 2 (M3-1, M3-4) → runs → M3-3 atlas review (Chief+STRATEGIST-M)
++ M3-5 K4 model design (SCIENTIST-D). Paper STRAT-001/002 inaendelea.
