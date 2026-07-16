@@ -939,3 +939,32 @@ OPEN QUESTIONS / NOTES:
   - Atlas group-key = vol_state (schema ya charter); session/d1-trend zimehifadhiwa kama summary cols
     (sess_top, d1_align_frac) — si group-axis (kuepuka row-explosion). H4/D1: h4-trend NaN (ctx ya HTF
     haijengwi kwa H4/D1 LTF) -> d1_align_frac None kwa TF hizo (additive, si kosa).
+
+=== M3-4 build (2026-07-16) — MZUNGUKO-3 TABAKA-3 — IMEKAMILIKA ===
+LAST COMPLETED: **K4 training dataset builder** ✅ (docs/CYCLE3_CHARTER.md §Tabaka-3; src/research/k4_dataset.py MPYA):
+  Kwa kila split {train,validation} × strategy {STRAT-001 USDCHF SL2/TP1, STRAT-002 USDJPY SL1/TP1}:
+  pipeline HASA ya proven (nr7_break + _mask_context('no-LATE') + episodes, max_hold default 24 —
+  outcomes zinalingana na STRAT-001/002). Kwa KILA TRADE, row moja:
+  - features za SIGNAL bar (decidable): vol_state, activity_state, spread_state (kutoka state parquet,
+    aligned+assert ts), session_entry(_sess(hour[entry])), hour(signal), dow, atr_pips, atr_n,
+    range_nr7_atr((h-l)/atr), h4_*/d1_* zote za ctx (kama H1 context ipo), mwaka(signal).
+  - outcome: pnl_pips, pnl_R(pnl/(sl*atr)), win, exit_type(TP/SL/timeout, tie->SL kama episodes),
+    bars_held, mfe_r/mae_r/mfe_peak_bar (rmap.excursions).
+  OUTPUT: data/strategies/k4_dataset.parquet + reports/k4_dataset.md (counts+win_rate baseline+EV,
+  exit-type dist, feature NaN% completeness — curriculum gate §M3-QA).
+  · HOLDOUT HAIGUSWI: splits {train,validation} PEKEE (PermissionError vinginevyo) + HARD assert
+    max(ts) < 2025 (RED LINE, hata 'validation' yenye leak inakataliwa).
+  · SHERIA: ZERO golden fns (episodes/_mask_context/nr7_break byte-identical; golden diff 0). REUSE
+    _mask_context (no-LATE proven) + rmap.excursions (MFE/MAE). run_selftests += k4_dataset.
+  Self-test [1]-[5]: HOLDOUT-guard (holdout/mixed refused), RED-LINE ts>=2025 refuse, decidability
+    EXACT (vol_state==vol[signal i], si entry i+1 — trap), full build (schema/splits/strat/no-holdout/
+    exit/ctx/determinism/outputs), exit_type correctness (TP/SL/timeout). SWEEP 28/28 PASS.
+  BASELINE win rates (rejea, proven registry holdout): STRAT-001 73.9%, STRAT-002 57.8%. TRAIN/VALID
+  halisi = Operator's `--build` run (data PC).
+NEXT AFTER: Operator: `python src/research/k4_dataset.py --build` -> k4_dataset.parquet + report ->
+  commit+push. Kisha M3-QA: SCIENTIST-D certify dataset (label integrity/leakage/balance/coverage)
+  KABLA ya M3-5 (SCIENTIST-D design model p(win|state)).
+OPEN QUESTIONS / NOTES:
+  - ctx (h4_/d1_) inahitaji htf_context --ltf H1 iwe imejengwa; ikikosekana -> ctx cols None (additive).
+  - Baseline win_rate ya TRAIN/VALID (ndani ya dataset) inaweza kutofautiana kidogo na holdout provenance
+    (window tofauti) — hii ni sawa; curriculum inahitaji per-regime N + mwaka-coverage (report ina hizo).
