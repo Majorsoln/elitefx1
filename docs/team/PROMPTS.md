@@ -107,8 +107,16 @@ ina entry/exit bar) · wave_c2a.py (runner pattern, per-hyp tf, ctx_plus) · eve
       + reports/rmap_atlas.md: muhtasari (per event-family: pairs ngapi zina EV+ kwa regime gani;
       top-20 (event×tf×regime) kwa BREADTH ya pairs (si kwa EV ya cell moja — L-041)).
     - GUARD: TRAIN pekee (PermissionError vinginevyo). HOLDOUT/VALID kamwe.
+(3) MFE/MAE HELPER (exit-science ya PAIR-LESSONS — charter §Mbinu B; additive, episodes HAIGUSWI):
+    - helper `excursions(trades, o,h,l,c, entry_rule)` : kwa kila trade (entry bar, exit bar,
+      dir, pnl), rudisha MFE na MAE kwa pips NA kwa R (÷ sl_atr×atr ya signal bar) + bar-index
+      ya MFE peak. Entry price = ile ile ya episodes (market: open ya i+1; stop: level/open max).
+    - rmap parquet: ongeza columns mfe_r_med, mae_r_med, mfe_peak_bar_med, timeout_mfe_r_med
+      (za kila cell×mwaka×vol_state) — malighafi ya exit lessons per pair.
+    - Self-test: trade synthetic yenye path inayojulikana -> MFE/MAE exact; determinism.
 SHERIA: ZERO statistic/golden fns kuguswa (episodes/pvalue/mask byte-identical). Self-test:
-  swap-nights, tags decidability (signal-bar), TRAIN-guard, determinism, schema. Sweep GREEN.
+  swap-nights, tags decidability (signal-bar), TRAIN-guard, MFE/MAE exactness, determinism, schema.
+  Sweep GREEN.
 UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-1" + kadirio la runtime ya full run.
   (Operator: `python src/research/rmap.py --train` — itachukua muda; run overnight kama inahitajika.)
 ```
