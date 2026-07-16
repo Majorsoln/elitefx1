@@ -76,6 +76,11 @@ S2_SPECS = {
                          cells=(("false_break", 1.5, 3.0, 16), ("false_break", 1.5, 2.0, 16)),
                          jsonl_name="wave_b2_s2_valid.jsonl", report_name="wave_b2_s2_valid.md",
                          reg_doc="docs/WAVE_B2_S2_REGISTRATION.md"),
+    "hm05-usdjpy": dict(hyp_id="HM-05", pair="USDJPY", tf="15m",
+                        cells=(("shock_follow", 1.5, 2.0, 16), ("shock_follow", 1.0, 2.0, 16),
+                               ("shock_follow", 1.5, 3.0, 16), ("shock_follow", 1.0, 3.0, 16)),
+                        jsonl_name="wave_m_s2_valid.jsonl", report_name="wave_m_s2_valid.md",
+                        reg_doc="docs/WAVE_M_S2_REGISTRATION.md"),
 }
 S2_DEFAULT = "hc203-eurusd"                    # backward-compat: --validate bila --s2
 
@@ -942,6 +947,50 @@ def self_test():
     print(f"  [23] HM-05 hour-filter: survivors={len(surv)} all-in[7,16]=True long-only=True | "
           f"excluded-outside={len(excl)}(all 0) included-inside kept -> {t23}")
     ok = ok and t23
+
+    # ===== WAVE-M-S2: hm05-usdjpy spec =====
+
+    # [24] SPEC FROZEN: hm05-usdjpy == registration (cells 4, tf 15m, pair USDJPY, HM-05, shock_follow
+    #      SL{1,1.5}xTP{2,3} hold16); specs za zamani (hc203/hb210) zinabaki (regression, 3 specs)
+    sp_hm = S2_SPECS["hm05-usdjpy"]
+    reg_hm = (("shock_follow", 1.5, 2.0, 16), ("shock_follow", 1.0, 2.0, 16),
+              ("shock_follow", 1.5, 3.0, 16), ("shock_follow", 1.0, 3.0, 16))
+    t24 = (sp_hm["hyp_id"] == "HM-05" and sp_hm["pair"] == "USDJPY" and sp_hm["tf"] == "15m"
+           and sp_hm["cells"] == reg_hm and len(reg_hm) == 4
+           and sp_hm["jsonl_name"] == "wave_m_s2_valid.jsonl"
+           and sp_hm["report_name"] == "wave_m_s2_valid.md"
+           and sp_hm["reg_doc"] == "docs/WAVE_M_S2_REGISTRATION.md"
+           and set(S2_SPECS) == {"hc203-eurusd", "hb210-eurchf", "hm05-usdjpy"})
+    print(f"  [24] S2_SPECS hm05-usdjpy: cells={len(sp_hm['cells'])}(==4) 15m USDJPY HM-05 | "
+          f"specs={sorted(S2_SPECS)} (regression) -> {t24}")
+    ok = ok and t24
+
+    # [25] hm05-usdjpy pipeline (monkeypatch load_window -> USDJPY fixture): 4 rows, id=HM-05|...,
+    #      outputs wave_m_s2_valid.*, determinism, verdict named, BH-FDR m=4
+    import tempfile
+    _self = sys.modules[__name__]
+    orig = _self.load_window
+    fx25 = _fixture(91)
+    _self.load_window = lambda sym, tf, split, token=None: fx25 if sym == "USDJPY" else None
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            r25a = run_s2("hm05-usdjpy", "validation", out_root=tmp, B=800)
+            r25b = run_s2("hm05-usdjpy", "validation", out_root=tmp, B=800)
+            det25 = json.dumps(r25a, sort_keys=True) == json.dumps(r25b, sort_keys=True)
+            jl25 = Path(tmp) / "data" / "strategies" / "wave_m_s2_valid.jsonl"
+            rp25 = Path(tmp) / "reports" / "wave_m_s2_valid.md"
+            recs25 = [json.loads(ln) for ln in open(jl25, encoding="utf-8")]
+            id_ok25 = all(r["id"].startswith("HM-05|shock_follow|USDJPY|") for r in r25a)
+            txt25 = rp25.read_text(encoding="utf-8")
+            named25 = (("SURVIVORS" in txt25) or ("HAKUNA SURVIVOR" in txt25)) and "HM-05" in txt25
+            t25 = (det25 and len(r25a) == 4 and len(recs25) == 4 and id_ok25
+                   and jl25.exists() and rp25.exists() and named25
+                   and "docs/WAVE_M_S2_REGISTRATION.md" in txt25)
+    finally:
+        _self.load_window = orig
+    print(f"  [25] hm05-usdjpy S2 pipeline: rows=4 id=HM-05|USDJPY determinism={det25} "
+          f"outputs wave_m_s2_valid.* verdict-named={named25} -> {t25}")
+    ok = ok and t25
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

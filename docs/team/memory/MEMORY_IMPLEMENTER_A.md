@@ -897,3 +897,15 @@ NEXT AFTER: Operator (PC ya data): `python src/research/wave_c2a.py --train --hy
 OPEN QUESTIONS / NOTES:
   - ORB deviation 15m->30m (registration §Deviations #1, LESSON-039 cost-trap). Range (7,9)@30m = bars 4.
   - S2 ya HM = family-pooled multi-pair (LESSON-040 kinga) — itaongezwa kwenye S2_SPECS wave ijayo.
+
+=== WAVE-M-S2 build (2026-07-15) — IMEKAMILIKA ===
+LAST COMPLETED: **S2_SPECS += hm05-usdjpy** ✅ (docs/WAVE_M_S2_REGISTRATION.md; ADDITIVE, entry moja):
+  S2_SPECS["hm05-usdjpy"] = HM-05 x USDJPY x 15m, cells 4 (shock_follow SL{1.5,1.0}xTP{2.0,3.0} hold16),
+  outputs wave_m_s2_valid.{jsonl,md}, reg docs/WAVE_M_S2_REGISTRATION.md. Hakuna logic mpya —
+  run_s2 spec-driven tayari ipo; BH-FDR m=4. HM-02 ORB = DEAD TRAIN (gross 5/5 hasi). LESSON-040
+  jaribio la 3 la single-pair (USDJPY) — margin 3.8x + N=730 + continuation; VALIDATION ndiyo mwamuzi.
+  · SHERIA: ZERO statistic fns (golden diff 0). Cells FROZEN 4. Guard validation-only. File 1: wave_c2a.py.
+  Self-test: [24] spec == registration (4/15m/USDJPY/HM-05, specs 3 regression); [25] pipeline
+  (4 rows, id=HM-05|shock_follow|USDJPY, outputs wave_m_s2_valid.*, determinism, verdict named).
+  SWEEP 26/26 PASS. (Kando: gold-momentum @ HTF = hypothesis ya baadaye, HAIMO S2 hii.)
+NEXT AFTER: Operator: `python src/research/wave_c2a.py --validate --s2 hm05-usdjpy` -> reports/wave_m_s2_valid.md.
