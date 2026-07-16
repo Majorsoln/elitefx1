@@ -89,3 +89,31 @@ Kutoka atlas + trade-paths, kwa **KILA pair kati ya 12** tunazalisha somo lake r
    (S2 pooled breadth → HOLDOUT). Lessons ni elimu ya TRAIN kwa models — si ruhusa ya kutrade
    bila uthibitisho. Format: kila lesson ina evidence (namba+chanzo), validity_conditions,
    when_to_use/when_not (muundo ule ule wa docs/lessons).
+
+---
+
+## CURRICULUM CERTIFICATION — "KITABU LAZIMA KITHIBITISHWE KABLA YA KUFUNDISHIA"
+## (Directive ya PD 2026-07-16: model ikishindwa, chanzo ni MWALIMU/source — GIGO)
+
+**Kanuni (PD, verbatim spirit):** model haina uwezo wa kuhoji kama mwanadamu — inajua TU
+ulichomfundisha, hata kama ni kibaya. Wajibu wa somo zuri ni wa mwalimu. Kwa hiyo: **HAKUNA
+model inayofundishwa kwa material ambayo haijathibitishwa (certified).**
+
+**GATE M3-QA (kabla ya M3-5 model training — LAZIMA):**
+1. **Uthibitisho wa STATES (kitabu cha 1):** state engines + htf_context — no-lookahead traps
+   PASS (zipo: truncation-invariance, as-of trap, decidability [13]); coverage audit (NaN% per
+   feature per pair per mwaka — feature yenye pengo kubwa HAIFUNDISHWI); deseason sanity
+   (surge-detection golden). Certification report.
+2. **Uthibitisho wa K4 DATASET (kitabu cha 2):** (a) label integrity — outcomes zote kutoka
+   honest harness (costs ndani; hakuna trade iliyo-overlap/duplicate); (b) hakuna leakage —
+   kila feature ni ya signal-bar (trap tests); (c) class balance + N per regime (regime yenye
+   trades <30 inaandikwa "haifundishiki bado" badala ya kufundisha kelele); (d) mwaka-coverage
+   (model isijifunze mwaka mmoja wa kipekee kama "dunia yote" — L-010).
+3. **Uthibitisho wa ATLAS/PAIR-LESSONS (kitabu cha 3):** kila lesson ya entry/exit ina N ya
+   kutosha + stability ya miaka; lessons za "afya mbovu" (cell moja, mwaka mmoja, N ndogo)
+   zinawekwa QUARANTINE — haziingii kitabu cha kufundishia.
+4. **Mkaguzi huru:** SCIENTIST-D (external reviewer, doctrine-unbound) anakagua vitabu vyote 3
+   KABLA ya mafunzo — kama mtaalamu wa mitaala. Hati yake ndiyo ruhusa ya M3-5 kuanza.
+5. **Baada ya mafunzo:** model inapimwa VALID (siyo TRAIN iliyofundishwa) — na tafsiri ya
+   makosa yake DAIMA inaanza na swali la PD: "tulimfundisha nini kilichosababisha hili?"
+   (error analysis inarudi kwenye curriculum, si kwenye kubadilisha model kiholela).

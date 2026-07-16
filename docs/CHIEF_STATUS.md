@@ -936,3 +936,17 @@ inapita gate kamili. Muundo wa lesson = ule ule wa docs/lessons (evidence/validi
 
 **HATUA (haijabadilika):** agents M3-1 (sasa na exit-science) + M3-4 sambamba → runs → atlas +
 pair-lessons drafting (M3-3) + K4 (M3-5).
+
+---
+
+## 2026-07-16 — PD directive: CURRICULUM CERTIFICATION (GIGO — "mwalimu ndiye mwenye wajibu")
+
+**Kanuni ya PD:** model inajua TU ilichofundishwa — ikishindwa, chanzo ni mwalimu/source. Kwa hiyo
+vitabu vya kufundishia (states, K4 dataset, atlas/pair-lessons) LAZIMA vithibitishwe KABLA ya
+mafunzo. Charter §Curriculum Certification imeongezwa: gate M3-QA (no-lookahead evidence, coverage/
+NaN audit, label integrity, leakage hunt, class balance, N-per-regime, stability, QUARANTINE ya
+lessons mbovu) + **SCIENTIST-D kama mkaguzi huru wa mitaala** — hati yake ndiyo ruhusa ya M3-5.
+Error analysis ya model DAIMA inarudi kwenye curriculum kwanza.
+
+**Prompt mpya:** SCIENTIST-D [M3-QA] (inasubiri outputs za M3-1/M3-4 kwanza).
+**MPANGILIO:** M3-1 + M3-4 (agents, sambamba) → runs → **M3-QA certification** → M3-5 model.

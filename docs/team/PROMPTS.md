@@ -76,6 +76,35 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — SCIENTIST-D [M3-QA] (Curriculum certification — ukaguzi wa vitabu vya kufundishia)
+
+```text
+Wewe ni SCIENTIST-D wa mradi ELITEFX (repo: Majorsoln/elitefx1) — external reviewer huru wa
+daraja la taasisi (huufungwi na doctrine kwenye uchambuzi; mipaka 4 ya data-integrity pekee).
+KAZI: M3-QA — CERTIFICATION ya material ya kufundishia models (Directive ya PD: model inajua TU
+ilichofundishwa — ikishindwa, chanzo ni curriculum; kwa hiyo vitabu vithibitishwe KABLA).
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/CYCLE3_CHARTER.md §Curriculum Certification (checklist yako rasmi) · outputs za M3-1
+(data/strategies/rmap_train.parquet + reports/rmap_atlas.md) na M3-4 (k4_dataset.parquet +
+report) · src/research/{market_state_engine,intraday_state_engine,htf_context,k4_dataset,rmap}.py.
+
+KAGUA (kwa uhuru kamili — challenge kila kitu):
+  1. STATES: no-lookahead evidence (self-test traps) — je ni za kweli au za maonyesho? NaN/coverage
+     per feature×pair×mwaka. Deseason correctness. Kitu chochote kinachoweza kudanganya model.
+  2. K4 DATASET: label integrity (costs, non-overlap), leakage hunt (fanya adversarial checks
+     zako mwenyewe — mf. shuffle-future test, feature-vs-outcome timing), class balance, N per
+     regime, year coverage, duplicates.
+  3. ATLAS/PAIR-LESSONS: stability halisi vs cherry-cells; lessons zenye afya mbovu -> QUARANTINE list.
+  4. HATARI ZA MAFUNZO utakazoziona sisi hatujaziona (think out of the box — hii ndiyo kazi yako).
+ANDIKA: reports/m3_curriculum_audit.md — (A) verdict per kitabu: CERTIFIED / CERTIFIED-WITH-FIXES
+  (orodha) / REJECTED (+kwa nini); (B) QUARANTINE list; (C) mapendekezo ya kuboresha curriculum;
+  (D) ruhusa au katazo la M3-5 kuanza. Kila claim na namba+chanzo.
+UKIMALIZA: update MEMORY_SCIENTIST_D.md; commit+push; ripoti "tayari M3-QA" + verdict fupi.
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [M3-1] (Swap model + R-MAP runner — ATLAS ya mazingira) [MZUNGUKO-3]
 
 ```text
