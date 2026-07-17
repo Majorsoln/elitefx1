@@ -1048,3 +1048,24 @@ p_boot<0.05 NA EV_R>0. PASS → HOLDOUT → STRAT-003. N_valid ~110 (power ya wa
 
 **Prompts:** IMPLEMENTER-A [M3-3-S2] (swing_family.py runner) + SCIENTIST-D [M3-5-DESIGN]
 (design ya model kwa §D ya audit yake mwenyewe). SAMBAMBA.
+
+---
+
+## 2026-07-17 — Swing S2 build PASS + K4 design APPROVED (design-of-record)
+
+**[M3-3-S2] swing_family.py: review PASS.** Spec halisi (nr7×D1×LOW SL2/TP1 hold20, pairs 12,
+UNKNOWN nje, apply_swap, R-pool, p_boot B=50k, F2 RuntimeError, validation-guard). Imports tu
+za engines RASMI; golden 0. Main (`4496d8f`). Inasubiri run ya Operator: `--validate`.
+
+**[M3-5-DESIGN] k4_model_design.md (SCIENTIST-D): CHIEF-APPROVED kama design-of-record.**
+Nguzo: per-strategy logistic-L2 (+tree challenger d≤3), blocked leave-one-year-out CV + purge
+24 TRAIN-ONLY, grid 16 pre-declared + prune-once + FREEZE-by-commit KABLA ya VALID; metrics
+RASMI ΔEV_R@70% / EV-retention / loss-streak (accuracy MARUFUKU); **H0="hakuna lift" na
+criterion imefungwa kabla ya namba** (ΔEV_R@70%>0 p<0.05 NA ≥+0.05R NA retention≥0.90);
+VALID=sign-check MOJA (taint documented); threshold p* TRAIN-CV absolute; artifact JSON;
+AT1-AT4 (leak trap, blocked-CV correctness, no-VALID-tuning, metric exactness). "CV-FAIL =
+LESSON halali" — hakuna kulazimisha model. Prompt [M3-5-BUILD] imeandikwa (design=spec).
+
+**HATUA (sambamba):** (A) Operator: `swing_family.py --validate` → hukumu ya swing family
+(PASS → C2-6 HOLDOUT → STRAT-003). (B) Agent [M3-5-BUILD] → `k4_model.py --cv` → Chief
+anasoma verdict ya H0.

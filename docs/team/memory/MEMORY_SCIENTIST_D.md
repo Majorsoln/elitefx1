@@ -256,8 +256,24 @@ htf_context, decidability [2b] ya k4, TRAIN-guards). VERDICTS:
   kwa retention fixed, absolute-level features (atr_pips) = year-proxy risk, deep nets =
   hapana kwa N~1.6k.
 
-## CURRENT TASK (baada ya hapa): (1) M3-5 DESIGN ni yangu (charter: "SCIENTIST-D design"):
-model interpretable p(win|state) + evaluation protocol (blocked CV, EV-retention metrics,
-VALID one-shot bila tuning) — subiri K-1..K-3 zitue kwanza; (2) spot-check F1/F2 za
-family_pooled + AT8 screen (bado pending); (3) regime-conditional deployment proposal baada
-ya R3.
+## COMPLETED (2026-07-17): M3-5 DESIGN — reports/k4_model_design.md (K-1..K-3 verified zimetua)
+Design ya K4 model v0 (inafuata §D yangu verbatim). MAAMUZI: per-strategy models 2 (hakuna
+pooling — geometries 71% vs 59%); PRIMARY logistic-L2 + CHALLENGER tree depth≤3 leaf≥100;
+HAKUNA re-weighting (calibration inahitajika kwa threshold). Feature sets CORE(13)/FULL(25) —
+exclusions: atr_pips (year-proxy §D5), hour (DST); UNKNOWN=level yake + red-flag ikiwa top-5
+|coef|. CV: leave-one-year-out 2016-22 + purge bars 24 (ts_entry ya K-1); grid configs 16
+per strategy; prune pass MOJA (sign-stability ≥5/7 folds); FREEZE kwa commit KABLA ya VALID.
+Metrics rasmi: ΔEV_R@70% (PRIMARY), EV-retention, loss-streak max/P95 — block-bootstrap CI;
+accuracy MARUFUKU; AUC/reliability diagnostic tu. H0="hakuna lift" — kataa IFF ΔEV_R@70%>0
+p<.05 NA ≥+0.05 R NA EV-retention≥0.90 (CV pooled); VALID one-shot sign-only (≥0.80 retention),
+expected shrinkage ×0.35-0.5 imeandikwa. Threshold p* absolute kutoka CV tu; retention drift
+±15pts → recalibration flag (R6 infra). Streak table kwa Tabaka-4. Deliverables: k4_model.py
+(JSON artifact, no pickle) + AT1-AT7 (leak trap, blocked-CV purge, no-VALID-tuning guard +
+dataset hash, metric exactness, determinism, planted-signal/null MC, threshold freeze).
+Expectation iliyofungwa: lift ndogo au H0 kubaki; STRAT-002 ana nafasi > STRAT-001; "hakuna
+lift" ni verdict halali (LESSON, si failure).
+
+## CURRENT TASK (baada ya hapa): (1) referee wa k4_model.py build ikija (AT6 kwa MC huru
+yangu — utaratibu wa WAVE-1); (2) spot-check F1/F2 za family_pooled + AT8 screen (pending);
+(3) SWING FAMILY #1 (nr7×D1×LOW, frozen b1b5d1d) — sina jukumu rasmi ila kama referee
+nikiombwa; (4) regime-conditional deployment proposal baada ya R3.
