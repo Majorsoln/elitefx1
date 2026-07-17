@@ -968,3 +968,28 @@ OPEN QUESTIONS / NOTES:
   - ctx (h4_/d1_) inahitaji htf_context --ltf H1 iwe imejengwa; ikikosekana -> ctx cols None (additive).
   - Baseline win_rate ya TRAIN/VALID (ndani ya dataset) inaweza kutofautiana kidogo na holdout provenance
     (window tofauti) — hii ni sawa; curriculum inahitaji per-regime N + mwaka-coverage (report ina hizo).
+
+=== M3-FIX (2026-07-17) — certification audit fixes — IMEKAMILIKA ===
+LAST COMPLETED: **M3-FIX** ✅ (reports/m3_curriculum_audit.md §A/§C; Chief ameidhinisha; deterministic, hakuna re-research):
+  K4 (k4_dataset.py):
+  - K-1: `ts_entry` (ISO str ya ts[entry_bar]) + `entry_bar` (int) kwenye kila row -> time-aware/blocked CV.
+  - K-2: MANIFEST rasmi top-level: `FEATURES` (decidable signal-bar: base 9 + ctx 18), `OUTCOMES`
+    (pnl_*/win/exit_type/bars_held/mfe_*/mae_*/mfe_peak_bar), `META` (identifiers incl year/dir/ts_entry).
+    `load_k4(features_only=True)` -> (X,y) + ASSERT hakuna OUTCOMES ndani ya X (trap ya leak #1). Report
+    inaandika FEATURES+OUTCOMES.
+  - K-3: `atr_n` IMEONDOLEWA (100% NaN — state parquet haiihifadhi); badala yake `atr_rel` =
+    atr/rolling_median(atr,60 PAST bars,shift(1)) — relative vol level, no-lookahead (self-test trap).
+  - K-4: string "None"/"null"/"nan" (htf warmup null-cast) -> null halisi kwenye ctx state-cols.
+  - K-5: report inaorodhesha cells N<30 "hazifundishiki" (§Q6 quarantine) + notes VALID-taint(§D1) + DST(§C5).
+  ATLAS (rmap.py) A-1:
+  - Breadth Top-20 + columns "miaka EV+ /present" + "median N"; rank kwa (breadth, years_pos).
+  - Q1: vol_state=UNKNOWN (=2016 warmup) HAIMO kwenye ranking-tables za report (ipo kwenye parquet — data).
+  - Notes: Q2 (D1 sess_top='ASIA' artifact), Q3/Q5 (row!=lesson, MFE-SL inflate), lesson-generator isome PARQUET.
+  · SHERIA: ZERO statistic/golden fns (episodes/pvalue_boot/_mask_context/nr7_break byte-identical; golden 0).
+    Files: k4_dataset.py + rmap.py TU. Self-test k4 [1]-[9] (+manifest-assert, ts_entry monotonic, atr_rel
+    trap, K-4 null); rmap [1]-[7] (+UNKNOWN nje ya ranking, columns miaka/median-N). SWEEP 28/28 PASS.
+NEXT AFTER: Operator: `python src/research/k4_dataset.py --build` + `python src/research/rmap.py --train`
+  (dakika) -> commit+push -> "tayari M3 rebuilds" -> M3-5 GO (SCIENTIST-D design model p(win|state)).
+OPEN QUESTIONS / NOTES:
+  - M3-5 loader itumie k4_dataset.load_k4() (manifest-asserted) + blocked-CV (ts_entry, purge bars 24, §D3).
+  - atr_rel warmup (bars < 60) = NaN by design (no-lookahead); rows za mwanzo wa TRAIN zinaweza kuwa None.

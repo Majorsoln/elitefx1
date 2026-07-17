@@ -217,19 +217,37 @@ def _write_outputs(rows, out_root, elapsed, n_ev, n_pairs, n_tf):
     pq = sdir / OUT_PARQUET
     df.write_parquet(pq)
 
-    # breadth (L-041): pooled ev per (event,tf,vol_state,pair); positive-pair count = breadth
+    # breadth (L-041): pooled ev per (event,tf,vol_state,pair); positive-pair count = breadth.
+    # A-1: + YEAR-STABILITY (miaka EV+ pooled cross-pair) + median-N. Q1: vol_state=UNKNOWN (=2016
+    # warmup confound) HAITOKEI kwenye ranking-tables za report (inabaki kwenye parquet — ni data).
     from collections import defaultdict
+    import numpy as _np
     pair_ev = defaultdict(lambda: [0.0, 0])          # (ev,tf,vs,pair) -> [sum(ev*n), sum(n)]
+    yr_ev = defaultdict(lambda: [0.0, 0])            # (ev,tf,vs,year) -> [sum(ev*n), sum(n)] (pooled pairs)
+    ns = defaultdict(list)                            # (ev,tf,vs) -> [n za rows] (median-N)
     for r in rows:
-        k = (r["event"], r["tf"], r["vol_state"], r["pair"])
-        pair_ev[k][0] += r["ev_net"] * r["n"]; pair_ev[k][1] += r["n"]
+        if r["vol_state"] == "UNKNOWN":              # Q1: exclude warmup confound kutoka ranking
+            continue
+        key3 = (r["event"], r["tf"], r["vol_state"])
+        pair_ev[(*key3, r["pair"])][0] += r["ev_net"] * r["n"]; pair_ev[(*key3, r["pair"])][1] += r["n"]
+        yr_ev[(*key3, r["year"])][0] += r["ev_net"] * r["n"]; yr_ev[(*key3, r["year"])][1] += r["n"]
+        ns[key3].append(r["n"])
     breadth = defaultdict(lambda: [0, 0])            # (ev,tf,vs) -> [pos_pairs, tested_pairs]
     for (ev, tf, vs, pair), (s, nn) in pair_ev.items():
         b = breadth[(ev, tf, vs)]
         b[1] += 1
         if nn > 0 and s / nn > 0:
             b[0] += 1
-    top = sorted(breadth.items(), key=lambda kv: (kv[1][0], kv[1][1]), reverse=True)[:20]
+    yrs = defaultdict(lambda: [0, 0])                # (ev,tf,vs) -> [years_pos, years_present]
+    for (ev, tf, vs, year), (s, nn) in yr_ev.items():
+        y = yrs[(ev, tf, vs)]
+        y[1] += 1
+        if nn > 0 and s / nn > 0:
+            y[0] += 1
+    med_n = {k: int(_np.median(v)) for k, v in ns.items()}
+    # rank kwa (breadth, years_pos) pamoja (A-1: stability inaonekana papo hapo, Q4 inajitekeleza)
+    top = sorted(breadth.items(),
+                 key=lambda kv: (kv[1][0], yrs[kv[0]][0], kv[1][1]), reverse=True)[:20]
 
     ev_breadth = defaultdict(lambda: [0, 0])         # per event: [pos (ev,tf,vs) combos, total]
     for (ev, tf, vs), (pos, tot) in breadth.items():
@@ -245,21 +263,37 @@ def _write_outputs(rows, out_root, elapsed, n_ev, n_pairs, n_tf):
          "test). Breadth = pairs NGAPI zina EV+ (L-041 anti-selection-bias), si cell moja bora. "
          "Hypothesis yoyote kutoka hapa inapita gate: S2 pooled multi-pair → HOLDOUT one-shot.\n"]
 
-    L.append("\n## Top-20 (event × TF × vol_state) kwa BREADTH ya pairs (EV+ swing)\n")
-    L.append("| event | TF | vol_state | pairs EV+ | / tested |")
-    L.append("|-------|----|-----------|-----------|----------|")
+    L.append("\n## Top-20 (event × TF × vol_state) kwa BREADTH + YEAR-STABILITY (EV+ swing)\n")
+    L.append("> Rank = (pairs EV+, miaka EV+). **Q4-screen:** miaka EV+ < 5/7 = breadth ya "
+             "utegemezi wa mwaka mmoja-mbili (si lesson). vol_state=UNKNOWN (=2016 warmup, Q1) "
+             "HAIMO hapa (ipo kwenye parquet).\n")
+    L.append("| event | TF | vol_state | pairs EV+ | / tested | miaka EV+ | median N |")
+    L.append("|-------|----|-----------|-----------|----------|-----------|----------|")
     for (ev, tf, vs), (pos, tot) in top:
-        L.append(f"| {ev} | {tf} | {vs} | {pos} | {tot} |")
+        yp, ypr = yrs[(ev, tf, vs)]
+        L.append(f"| {ev} | {tf} | {vs} | {pos} | {tot} | {yp}/{ypr} | {med_n[(ev, tf, vs)]} |")
 
-    L.append("\n## Breadth kwa event (combos za (TF×vol_state) zenye pair-yoyote EV+)\n")
+    L.append("\n## Breadth kwa event (combos za (TF×vol_state) zenye pair-yoyote EV+; UNKNOWN nje)\n")
     L.append("| event | regimes EV+ | / total |")
     L.append("|-------|-------------|---------|")
     for ev, (pos, tot) in sorted(ev_breadth.items(), key=lambda kv: kv[1][0], reverse=True):
         L.append(f"| {ev} | {pos} | {tot} |")
 
+    L.append("\n## Tahadhari za ramani (§B quarantine — binding kwa lesson-generator)\n")
+    L.append("- **Q1 (UNKNOWN=2016):** vol_state=UNKNOWN ni mwaka 2016 PEKEE (warmup ya terciles) — "
+             "regime-label ya uongo. Imeondolewa kwenye ranking-tables hapo juu; ipo kwenye parquet "
+             "kama data. Lesson-generator i-filter UNKNOWN.")
+    L.append("- **Q2 (D1 session artifact):** `sess_top` kwa TF=D1 ni 'ASIA' 100% (hour(D1 bar)=00 "
+             "daima) — ARTIFACT, si taarifa. H4 session = open-hour ya bar ya masaa 4 (coarse). "
+             "Session-lessons zitumike kwa H1/intraday PEKEE.")
+    L.append("- **Q3/Q5:** row moja ya atlas SI lesson (55%+ zina n<30); lessons = aggregations "
+             "(N pamoja + miaka EV+ ≥5/7). MFE ya SL-exit ime-inflate (excursions inajumuisha bar "
+             "ya exit nzima) — exit-lessons za walioshindwa kwa tahadhari.")
+
     L.append("\n*Malighafi kamili: data/strategies/rmap_train.parquet (mstari 1 kwa "
              "event×pair×tf×sl×tp×mwaka×vol_state; + MFE/MAE R medians kwa exit-lessons). "
-             "Next (M3-3): Chief+STRATEGIST-M -> hypotheses zenye breadth -> S2 pooled.*")
+             "Lesson-generator isome PARQUET (+ quarantine §B), KAMWE si report hii. "
+             "Next (M3-3): Chief+STRATEGIST-M -> hypotheses zenye breadth+stability -> S2 pooled.*")
 
     rpt = out_root / "reports" / OUT_REPORT; rpt.parent.mkdir(parents=True, exist_ok=True)
     rpt.write_text("\n".join(L), encoding="utf-8")
@@ -381,6 +415,34 @@ def self_test():
     t6 = (len(ue) == len(EVENTS_V2) and "session_orb" in ue and "lowvol_reversal" in ue)
     print(f"  [6] usable_events={len(ue)} (==EVENTS_V2 {len(EVENTS_V2)}; needs hour/tc zapatikana) -> {t6}")
     ok = ok and t6
+
+    # [7] A-1/Q1: vol_state=UNKNOWN ipo kwenye PARQUET lakini HAIMO kwenye Top-20 ranking-table;
+    #     report ina columns 'miaka EV+' + 'median N'
+    fxu = _fixture(3, tf_hours=1)
+    nfu = len(fxu["c"])
+    fxu["vol"] = np.where(np.arange(nfu) < nfu // 3, "UNKNOWN", "NORMAL")   # warmup UNKNOWN
+    orig_lw2 = _self.load_window; orig_cfg2 = mse.cfg
+    _self.load_window = lambda sym, tf, split, token=None: fxu if sym == "EURUSD" else None
+    mse.cfg = lambda: dict(pairs=["EURUSD"], paths=orig_cfg2()["paths"],
+                           swap_pips_per_night={"EURUSD": 0.5})
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            ru = run("train", out_root=tmp, events=["nr7_break"], pairs=["EURUSD"],
+                     tfs=("H1",), verbose=False)
+            import polars as pl
+            pqu = pl.read_parquet(Path(tmp) / "data" / "strategies" / OUT_PARQUET)
+            txt = (Path(tmp) / "reports" / OUT_REPORT).read_text(encoding="utf-8")
+            in_parquet = "UNKNOWN" in set(pqu["vol_state"].to_list())
+            top_block = txt.split("## Top-20")[1].split("\n## ")[0]        # Top-20 section
+            top_rows = [ln for ln in top_block.splitlines() if ln.startswith("| ")]  # table rows tu
+            not_in_top = not any("UNKNOWN" in ln for ln in top_rows)
+            cols_ok = "miaka EV+" in txt and "median N" in txt
+    finally:
+        _self.load_window = orig_lw2; mse.cfg = orig_cfg2
+    t7 = in_parquet and not_in_top and cols_ok
+    print(f"  [7] A-1/Q1: UNKNOWN in-parquet={in_parquet} not-in-top-ranking={not_in_top} "
+          f"cols(miaka/median-N)={cols_ok} -> {t7}")
+    ok = ok and t7
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
