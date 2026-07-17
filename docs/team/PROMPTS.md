@@ -76,6 +76,65 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [M3-3-S2] (Swing family runner: nr7×D1×LOW pooled → VALIDATION)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: jenga runner ya S2 ya
+SWING FAMILY #1 (docs/M3_SWING_FAMILY_REGISTRATION.md — FROZEN). Build+self-test; Operator anaendesha.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: registration (spec FROZEN) · family_pooled.py (_r_normalize, pool_streams, muundo wa pooled
+test — TUMIA hizi) · strategy_lab.py (pvalue_boot, load_window) · rmap.py (apply_swap helper).
+
+JENGA src/research/swing_family.py (MPYA, additive):
+  - run_s2(split="validation"): kwa KILA pair 12: load_window(pair,"D1","validation") ->
+    nr7_break signals -> filter: volatility_state ya SIGNAL bar == "LOW" (UNKNOWN excluded;
+    tumia _mask_context vf="LOW" au sawa yake ON signals) -> episodes(SL2.0/TP1.0, hold 20)
+    -> apply_swap (nights, config) -> _r_normalize per pair -> pool_streams (ts ordering) ->
+    pooled stream MOJA -> pvalue_boot(B=50k, mean_block=3, seed fixed) -> criterion p<0.05 NA
+    EV_R>0 (m=1). p_z sensitivity.
+  - GUARD: validation PEKEE (train imekwisha via atlas; holdout inahitaji token — SI hapa).
+    Pair bila data -> RuntimeError (F2 discipline — hakuna silent skip; pairs ZOTE 12 LAZIMA).
+  - OUTPUT: data/strategies/swing_family_s2.jsonl (per-pair n/ev_R + pooled n/ev_R/p_boot/p_z/
+    verdict) + reports/swing_family_s2.md (verdict WAZI: PASS -> C2-6; FAIL -> LESSON).
+SHERIA: ZERO statistic fns (pvalue_boot/pool_streams/_r_normalize/episodes imports tu). Spec
+  FROZEN (param 1, pairs 12, vol LOW). Self-test: vol-LOW filter decidability (signal-bar),
+  UNKNOWN-excluded, swap inatumika, guard, determinism, R-pooling sanity (gold haitawali — R
+  units). Sweep GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-3-S2 build".
+  (Operator: `python src/research/swing_family.py --validate` -> "tayari swing S2".)
+```
+
+---
+
+## PROMPT — SCIENTIST-D [M3-5-DESIGN] (Design ya model K4 — kwa masharti ya audit yako)
+
+```text
+Wewe ni SCIENTIST-D wa mradi ELITEFX. M3-QA yako imetoa GO (K-1..K-3 zimetua, rebuilds
+zimefanyika). KAZI: M3-5-DESIGN — design rasmi ya model ya K4 entry-quality, ukifuata §D ya
+hati yako MWENYEWE (reports/m3_curriculum_audit.md) verbatim.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: reports/m3_curriculum_audit.md §D (yako) · k4_dataset.py (FEATURES/OUTCOMES/META manifest,
+load_k4) · reports/k4_dataset.md · docs/CYCLE3_CHARTER.md §Tabaka-3.
+
+ANDIKA reports/k4_model_design.md — design inayotekelezeka na IMPLEMENTER-A:
+  1. Model class: interpretable (logistic-L2 na/au shallow tree depth<=3) — D6. Per-strategy
+     (payoff geometries tofauti — C3) au strategy-indicator + per-strategy calibration.
+  2. CV protocol: BLOCKED time-CV ndani ya TRAIN PEKEE (kwa mwaka au blocks+purge, D3, K-1 ts).
+     VALID = check MOJA baada ya freeze (selection-taint D1 — hakuna tuning juu yake; andika
+     expected shrinkage ×0.35-0.5 kwenye design).
+  3. Metrics RASMI (D4): EV-per-trade filtered vs unfiltered @ retention pre-declared (70%/50%),
+     loss-streak reduction, EV retention — CI za bootstrap. Accuracy NI MARUFUKU kama decision metric.
+  4. H0 = "hakuna lift ya maana" (D6) — criterion ya wazi ya kukataa/kukubali KABLA ya kuona namba.
+  5. Threshold policy: jinsi p(win) cutoff itakavyowekwa (kwenye TRAIN-CV tu) + streak/FTMO math.
+  6. Feature hygiene: FEATURES manifest tu; per-year coefficient stability check (D5).
+  7. Deliverables za IMPLEMENTER build + acceptance tests.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-5 design".
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [M3-FIX] (Fixes za certification K-1..K-5 + S1 + A-1)
 
 ```text

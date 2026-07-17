@@ -1028,3 +1028,23 @@ itafuata D1/D3/D4/D6 verbatim (blocked-CV TRAIN-only, metrics za EV/streak, inte
 7/7 EV+)** — umbo kamili la lesson halali (Q4-compliant); registration baada ya rebuilds.
 
 **HATUA:** M3-FIX agent → rebuilds 2 (dakika) → M3-5 GO + M3-3 registration.
+
+---
+
+## 2026-07-17 — M3-FIX + rebuilds REVIEW PASS → M3-5 GO rasmi + SWING FAMILY #1 FROZEN
+
+**M3-FIX + rebuilds (main `30aa2ba`): PASS.** Manifest FEATURES/OUTCOMES/META + load_k4 assert ✓;
+ts_entry/entry_bar ✓; atr_rel (no-lookahead) badala ya atr_n ✓; atlas ranking = breadth+stability,
+UNKNOWN nje ✓. Golden 0. **Masharti ya certification yametimia → M3-5 GO RASMI.**
+
+**Atlas mpya (Q4-screened) #1: nr7×D1×LOW — pairs 10/12 NA miaka 7/7.** Chief param analysis
+(parquet): SL2.0/TP1.0 top-pooled (jiometri ILE ILE ya STRAT-001 — high-win); per-pair 10/12+
+(neg: USDCAD/EURGBP ndogo); miaka 7/7; N=384 TRAIN (~4-5 trades/mwaka/pair — swing halisi).
+Tahadhari: pooled-raw ina gold-bias → test rasmi ni R-normalized.
+
+**docs/M3_SWING_FAMILY_REGISTRATION.md FROZEN:** family moja (m=1), pairs ZOTE 12 pooled R
+(L-041 — hakuna pair-selection), param 1 (SL2/TP1), vol-LOW signal-bar, swap ndani, VALIDATION
+p_boot<0.05 NA EV_R>0. PASS → HOLDOUT → STRAT-003. N_valid ~110 (power ya wastani — tahadhari wazi).
+
+**Prompts:** IMPLEMENTER-A [M3-3-S2] (swing_family.py runner) + SCIENTIST-D [M3-5-DESIGN]
+(design ya model kwa §D ya audit yake mwenyewe). SAMBAMBA.
