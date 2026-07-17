@@ -227,6 +227,37 @@ Deliverables: `reports/family_pooled_referee_report.md` + `scripts/scientist_d_r
 - Conditions kwa registration: B=50k verdict; screen exact na N_exp ya F1 (forecast precheck
   ×1.18 @0.35); lag-1 |ρ₁|>0.3 → recalibrate kabla verdict haijakubaliwa.
 
-## CURRENT TASK (baada ya hapa): (1) spot-check ya diff ya F1+F2 ikija (hakuna MC mpya —
-statistic haiguswi); (2) verify exact screen ya AT8 dry-run ya Operator kabla ya freeze;
-(3) baada ya R3 (WAVE-2): regime-conditional deployment proposal (pending toka Chief response).
+## COMPLETED (2026-07-17): M3-QA CURRICULUM CERTIFICATION (gate ya charter — hati ya M3-5)
+Deliverables: `reports/m3_curriculum_audit.md` + `scripts/scientist_d_m3_audit.py`. Self-tests
+ZOTE za engines nimeziendesha mwenyewe (PASS; traps za leakage ni HALISI — spike-trap ya
+htf_context, decidability [2b] ya k4, TRAIN-guards). VERDICTS:
+- **Kitabu 1 STATES: CERTIFIED-WITH-FIXES** — S1 atr_n 100% NaN (state parquet haina column;
+  persist au ondoa); S2 coverage audit ya pairs 12 = runbook ya Operator (pairs 2 za K4 ni
+  safi: d1/h4 NaN ≤0.9%, UNKNOWN=2016 warmup tu); S3 semantiki za session D1/H4 ziandikwe.
+- **Kitabu 2 K4: CERTIFIED-WITH-FIXES** — label integrity PASS ya kiwango cha juu (baselines
+  zina-MATCH ccfbb24/e1a0d27 combos 4/4 EXACT; win==(pnl>0); SL 100% neg; TP-anomaly 1 tu =
+  cost-honesty); leak hunt CLEAN (max single-feature AUC 0.532); duplicates 0. FIXES REQUIRED
+  kabla ya M3-5: **K-1 ts_entry column** (bila ts: time-CV haiwezekani, non-overlap
+  haithibitiki kutoka kitabu), **K-2 FEATURES manifest + loader assert** (outcome cols
+  mfe/mae/bars_held zimo jedwali moja — leak isiyo na trap), **K-3 ondoa atr_n**; K-4 "None"
+  string category; K-5 cells N<30 documented.
+- **Kitabu 3 ATLAS: CERTIFIED-WITH-FIXES kama RAMANI + QUARANTINE binding (Q1-Q7):**
+  Q1 vol_state=UNKNOWN = 2016 PEKEE (warmup confound) — **7/20 ya top-20 ya report ni UNKNOWN
+  combos** (lessons za 2016 zilizojificha); Q2 D1 sess_top = ASIA 100% (hour=00 artifact);
+  Q3 rows n<30 = 55.7% (median n=25) — lessons ni aggregations tu; Q4 breadth≠stability:
+  lowvol_rev×D1×NORMAL 10/12 pairs LAKINI miaka 3/7 (2022 +205 inabeba), nr7×H4×HIGH 4/7;
+  star halali = nr7×D1×LOW (10/12 pairs NA 7/7 miaka); Q5 MFE ya SL-exits ime-inflate (exit
+  bar nzima imo kwenye excursions); Q6 K4 cells N<30; Q7 D1 lessons |EV|≲10 pips ndani ya
+  error band ya swap model (symmetric, hakuna weekend-triple).
+- **M3-5: GO YA MASHARTI** — baada ya K-1..K-3 (rebuild deterministic ya dakika). Hatari za
+  mafunzo nilizoziweka rekodi (§D): VALID ni selection-tainted (STRAT-001/002 walichaguliwa
+  KWA VALID hii — lift ya VALID ita-overstate; tarajia ×0.35-0.5 mbele), blocked-CV ndani ya
+  TRAIN tu, accuracy ni metric ya uongo (baseline 71/59%) — EV-retention + streak-reduction
+  kwa retention fixed, absolute-level features (atr_pips) = year-proxy risk, deep nets =
+  hapana kwa N~1.6k.
+
+## CURRENT TASK (baada ya hapa): (1) M3-5 DESIGN ni yangu (charter: "SCIENTIST-D design"):
+model interpretable p(win|state) + evaluation protocol (blocked CV, EV-retention metrics,
+VALID one-shot bila tuning) — subiri K-1..K-3 zitue kwanza; (2) spot-check F1/F2 za
+family_pooled + AT8 screen (bado pending); (3) regime-conditional deployment proposal baada
+ya R3.

@@ -1000,3 +1000,31 @@ ataithibitisha/kuiondoa). HOLDOUT haijaguswa (guards zilifanya kazi).
 
 **HATUA: SCIENTIST-D [M3-QA]** — certification ya vitabu 3 (hati yake = ruhusa ya M3-5).
 Sambamba: Chief ataanza kuchora M3-3 (hypotheses za breadth kutoka atlas — swing families).
+
+---
+
+## 2026-07-17 — M3-QA VERDICT: vitabu 3 CERTIFIED-WITH-FIXES; M3-5 = GO baada ya K-1..K-3
+
+**Hati (reports/m3_curriculum_audit.md — SCIENTIST-D, adversarial):** hakuna kitabu REJECTED;
+msingi "imara kuliko alivyotarajia" — K4 outcomes zina-MATCH proven artifacts byte-karibu;
+leak-hunt CLEAN (max single-feature AUC 0.532); HOLDOUT guards halisi. Findings kuu:
+- **QUARANTINE (binding):** Q1 UNKNOWN-vol = 2016-warmup confound (7/20 ya top-20 ya atlas
+  report!); Q2 D1-session artifact; Q3 rows n<30 (55.7%); Q4 breadth-bila-stability
+  (lowvol_rev×D1×NORMAL = miaka 3/7 tu — bahati ya 2022); Q5 MFE-ya-SL-exit inflate; Q7 D1
+  |EV|≲10 ndani ya swap error-band.
+- **Fixes REQUIRED kabla ya M3-5:** K-1 ts_entry (time-aware CV), K-2 FEATURE MANIFEST
+  (outcome-leak trap), K-3 atr_n (100% NaN — ondoa/badilisha). K-4/K-5/S1-S3/A-1 ndogo.
+- **Hatari D (out-of-box):** D1 VALID selection-taint (STRAT-001 VALID 79.3% ni order
+  statistic; holdout halisi 73.9% — model selection LAZIMA iwe blocked-CV ndani ya TRAIN;
+  VALID = check moja; lift halisi tarajia ×0.35-0.5); D3 serial-corr → blocked CV; D4
+  accuracy ni metric ya uongo (baseline 71%) — metrics rasmi: EV-filtered@retention + streak
+  reduction + CI; D6 matarajio ya wastani (interpretable model, "hakuna lift" ni H0); D7
+  M3-3 hypotheses zangu zipite Q4-screen KABLA ya kuangalia EV.
+
+**MAAMUZI YA CHIEF:** (1) Fixes ZOTE zimeidhinishwa → prompt IMPLEMENTER-A [M3-FIX] (K-3 kama
+atr_rel decidable); (2) Quarantine §B ni BINDING kwa lesson-generators na K4; (3) M3-5 design
+itafuata D1/D3/D4/D6 verbatim (blocked-CV TRAIN-only, metrics za EV/streak, interpretable);
+(4) M3-3: mgombea wa kwanza wa swing family = **nr7_break×D1×LOW-vol (breadth 10/12 NA miaka
+7/7 EV+)** — umbo kamili la lesson halali (Q4-compliant); registration baada ya rebuilds.
+
+**HATUA:** M3-FIX agent → rebuilds 2 (dakika) → M3-5 GO + M3-3 registration.

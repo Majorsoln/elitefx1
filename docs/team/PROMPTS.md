@@ -76,6 +76,44 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [M3-FIX] (Fixes za certification K-1..K-5 + S1 + A-1)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: M3-FIX — tekeleza
+fixes za hati ya certification (reports/m3_curriculum_audit.md §A/§C). Ndogo, deterministic,
+hakuna re-research. Chief ameidhinisha ZOTE.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: reports/m3_curriculum_audit.md (§A1 S1-S3, §A2 K-1..K-5, §A3/§C A-1, §B quarantine).
+
+FIXES (kwa mpangilio):
+  K-1 (k4_dataset.py): ongeza `ts_entry` (ISO string au epoch) + `entry_bar` kwenye kila row.
+  K-2 (k4_dataset.py): constant rasmi `FEATURES = [...]` (signal-bar decidable PEKEE) na
+      `OUTCOMES = [...]` (pnl_*, win, exit_type, bars_held, mfe_*, mae_*, mfe_peak_bar) —
+      top-level, importable; report iandike zote mbili; ongeza `load_k4(features_only=True)`
+      helper inayorudisha X,y na ASSERT kwamba hakuna outcome column ndani ya X.
+  K-3 (S1 variant rahisi): ONDOA `atr_n` kwenye schema ya K4 (usiiweke tena); badala yake
+      ongeza feature `atr_rel = atr_pips / rolling_median(atr_pips, 60 PAST bars, shift(1))`
+      — relative vol level, decidable, inayoziba nafasi ya atr_n (audit §D5: absolute levels
+      = year-proxy risk). Self-test: no-lookahead ya atr_rel (truncation invariance).
+  K-4: `d1_vol_state` string "None" -> null halisi.
+  K-5: report ya k4 iorodheshe cells "hazifundishiki" (§Q6) wazi.
+  A-1 (rmap.py): breadth tables za report ziongeze columns "miaka EV+ /7" na "median N" —
+      aggregation kutoka parquet (ipo). Top-20 i-rank kwa (breadth, miaka) pamoja; rows za
+      vol_state=UNKNOWN ZISIONEKANE kwenye top tables (Q1 — ziache kwenye parquet, ni data,
+      lakini si kwenye ranking ya report).
+  S3/C4/C5 (documentation ndani ya reports/code docstrings): D1-session artifact (Q2),
+      VALID-selection-taint note (D1), server-time/DST jitter note (C5).
+
+SHERIA: ZERO statistic/golden fns. Self-test: manifest-assert (X haina outcomes), ts_entry
+  non-null + monotonic per strategy, atr_rel trap, UNKNOWN nje ya report ranking. Sweep GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-FIX".
+  (Operator kisha: `python src/research/k4_dataset.py --build` + `python src/research/rmap.py
+  --train` (zote ni dakika) -> commit+push -> "tayari M3 rebuilds" -> M3-5 GO.)
+```
+
+---
+
 ## PROMPT — SCIENTIST-D [M3-QA] (Curriculum certification — ukaguzi wa vitabu vya kufundishia)
 
 ```text
