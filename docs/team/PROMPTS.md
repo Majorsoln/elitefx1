@@ -76,6 +76,33 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [M3-5-BUILD] (K4 model v0 kwa design-of-record)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: jenga K4 model v0
+KAMA ILIVYOELEZWA kwenye design-of-record: reports/k4_model_design.md (SCIENTIST-D, Chief-approved).
+Design ndiyo SPEC — usiibadilishe; deviation yoyote inahitaji ruhusa ya Chief KWANZA.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: reports/k4_model_design.md YOTE (§1 model class per-strategy logistic+tree challenger;
+§2 blocked leave-one-year-out CV + purge 24 + grid 16 + prune-once + FREEZE; §3 metrics M1-M4
+na block-bootstrap CI; §4 H0 criterion VERBATIM; §5 threshold p* TRAIN-CV-only; §6 hygiene/
+stability; §7 deliverables + AT1-AT4) · k4_dataset.py (load_k4, FEATURES/OUTCOMES/META).
+
+JENGA: src/research/k4_model.py (CLI --cv / --freeze / --eval-valid / --self-test; artifact
+JSON — HAKUNA pickle) + reports/k4_model_report.md (kutoka --cv run). Acceptance tests AT1-AT4
+ni self-test yako (fixtures synthetic). sklearn inaruhusiwa (logistic/tree); deterministic seeds.
+SHERIA: ZERO statistic/golden fns za research (pvalue_boot n.k. haziguswi — bootstrap ya CI ya
+model ni utility MPYA ndani ya k4_model.py, isiyoshiriki jina). --cv inakataa rows za validation
+(AT3). Sweep GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M3-5 build".
+  (Operator: `python src/research/k4_model.py --cv` (TRAIN-CV, inaweza kuchukua dakika kadhaa)
+   -> Chief anasoma report + verdict ya H0 -> KAMA CV-PASS: Chief ruling -> --freeze -> commit
+   -> --eval-valid (MOJA). KAMA CV-FAIL: LESSON, hakuna filter.)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [M3-3-S2] (Swing family runner: nr7×D1×LOW pooled → VALIDATION)
 
 ```text
