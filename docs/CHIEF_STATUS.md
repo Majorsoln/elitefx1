@@ -966,3 +966,18 @@ no-LATE, H1) ✓; features za signal-bar + ctx ✓. Golden 0 lines; sweep 28/28 
   1. `python src/research/rmap.py --train` (ATLAS — kubwa; overnight ikibidi)
   2. `python src/research/k4_dataset.py` (dataset ya K4)
   kisha commit+push → SCIENTIST-D [M3-QA] certification → M3-5.
+
+---
+
+## 2026-07-16 — ATLAS run #1 + Chief fix: H4/D1 context (pengo la kitabu)
+
+**rmap --train run #1:** rows=186,512 (cells 8,640 × miaka × vol_states), dakika 5.5 tu. LAKINI
+ONYO 24: context parquet za H4/D1 hazipo (tulijenga 15m/30m/H1 tu) → rows za entries za H4/D1
+HAZINA tags za trend — kitabu hakijakamilika (GIGO: haikubaliki kabla ya certification).
+
+**Chief fix (1-line + doc):** htf_context --ltf choices += H4, D1. build() ni ltf-agnostic;
+as-of boundary (self-test [2b]) inahakikisha H4-ltf inapata features za bar iliyoTANGULIA —
+no leakage. Self-test 5/5 PASS baada ya fix.
+
+**HATUA (Operator):** [1] htf_context --ltf H4  [2] --ltf D1  [3] RE-RUN rmap --train (dakika ~6,
+sasa na trend tags kamili)  [4] k4_dataset.py  [5] commit+push → M3-QA.

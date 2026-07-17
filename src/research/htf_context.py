@@ -266,7 +266,10 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbol", default=None)
-    ap.add_argument("--ltf", default=None, choices=["15m", "30m", "H1"])   # H1: WAVE-B2 (state ipo)
+    ap.add_argument("--ltf", default=None, choices=["15m", "30m", "H1", "H4", "D1"])
+    # H1: WAVE-B2. H4/D1: M3-1 R-MAP (atlas tags za trend kwa entries za H4/D1 — chief fix
+    # 2026-07-16: build() ni ltf-agnostic; as-of inachukua HTF bar iliyoFUNGWA <= open ya ltf bar,
+    # kwa hiyo H4-ltf inapata H4-feature za bar ILIYOTANGULIA (self-test [2b] boundary) — no leakage.
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
