@@ -134,3 +134,43 @@ golden byte-identical za event_quality_report). `false_break` ni WAVE-B — HAIJ
 | XAUUSD | H1 | 60,436 |
 
 *No-lookahead: self-test ya MTEGO (htf_context [2]) inathibitisha context ya LTF bar HAIONI HTF bar inayoizunguka (future info) — inatumia bar iliyoFUNGWA kabla.*
+## B) HTF context features (H4/D1 -> 15m/30m; as-of BACKWARD, no-lookahead)
+
+*2026-07-17 09:13 | features: ema_slope/linreg_slope/trend_sign (trend), vol_state/act_state (regime), dist_res_atr/dist_sup_atr (structure, rolling S/R 20 closed bars), rsi14/roc10 (momentum) | join: close_ts=ts+duration, backward*
+
+| Pair | LTF | context bars |
+|------|-----|--------------|
+| EURUSD | H4 | 16,104 |
+| GBPUSD | H4 | 16,106 |
+| USDJPY | H4 | 16,106 |
+| EURJPY | H4 | 16,106 |
+| USDCAD | H4 | 16,103 |
+| USDCHF | H4 | 16,106 |
+| AUDUSD | H4 | 16,106 |
+| NZDUSD | H4 | 16,106 |
+| EURGBP | H4 | 16,106 |
+| GBPJPY | H4 | 16,610 |
+| EURCHF | H4 | 16,617 |
+| XAUUSD | H4 | 16,481 |
+
+*No-lookahead: self-test ya MTEGO (htf_context [2]) inathibitisha context ya LTF bar HAIONI HTF bar inayoizunguka (future info) — inatumia bar iliyoFUNGWA kabla.*
+## B) HTF context features (H4/D1 -> 15m/30m; as-of BACKWARD, no-lookahead)
+
+*2026-07-17 09:14 | features: ema_slope/linreg_slope/trend_sign (trend), vol_state/act_state (regime), dist_res_atr/dist_sup_atr (structure, rolling S/R 20 closed bars), rsi14/roc10 (momentum) | join: close_ts=ts+duration, backward*
+
+| Pair | LTF | context bars |
+|------|-----|--------------|
+| EURUSD | D1 | 2,693 |
+| GBPUSD | D1 | 2,693 |
+| USDJPY | D1 | 2,693 |
+| EURJPY | D1 | 2,693 |
+| USDCAD | D1 | 2,693 |
+| USDCHF | D1 | 2,693 |
+| AUDUSD | D1 | 2,693 |
+| NZDUSD | D1 | 2,693 |
+| EURGBP | D1 | 2,693 |
+| GBPJPY | D1 | 3,223 |
+| EURCHF | D1 | 3,225 |
+| XAUUSD | D1 | 3,196 |
+
+*No-lookahead: self-test ya MTEGO (htf_context [2]) inathibitisha context ya LTF bar HAIONI HTF bar inayoizunguka (future info) — inatumia bar iliyoFUNGWA kabla.*
