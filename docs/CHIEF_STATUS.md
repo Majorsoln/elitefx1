@@ -950,3 +950,19 @@ Error analysis ya model DAIMA inarudi kwenye curriculum kwanza.
 
 **Prompt mpya:** SCIENTIST-D [M3-QA] (inasubiri outputs za M3-1/M3-4 kwanza).
 **MPANGILIO:** M3-1 + M3-4 (agents, sambamba) → runs → **M3-QA certification** → M3-5 model.
+
+---
+
+## 2026-07-16 — M3-1 + M3-4 builds REVIEW: PASS zote (sweep 28/28)
+
+**M3-1 (rmap.py):** TRAIN-guard (PermissionError) ✓; apply_swap wrapper (nights×swap, limitation
+ya symmetry documented; config swap_pips_per_night per pair, XAUUSD 1.5) ✓; excursions MFE/MAE
+(pips + R + peak-bar) ✓; tags za signal-bar (vol/session/trend/mwaka) ✓; atlas grouping cell×mwaka×
+vol_state na mfe/mae medians + timeout_mfe ✓. **M3-4 (k4_dataset.py):** HOLDOUT hard-guard mbili
+(split whitelist + assert ts<2025) ✓; configs HASA za proven (USDCHF SL2/TP1, USDJPY SL1/TP1,
+no-LATE, H1) ✓; features za signal-bar + ctx ✓. Golden 0 lines; sweep 28/28 (nimeithibitisha hapa).
+
+**HATUA: runs 2 za Operator (PC ya data):**
+  1. `python src/research/rmap.py --train` (ATLAS — kubwa; overnight ikibidi)
+  2. `python src/research/k4_dataset.py` (dataset ya K4)
+  kisha commit+push → SCIENTIST-D [M3-QA] certification → M3-5.
