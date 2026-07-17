@@ -1016,3 +1016,30 @@ OPEN QUESTIONS / NOTES:
     ni TAG ya sensitivity tu, HAIATHIRI pnl_R wala verdict (fn imetumika kama ilivyo, ZERO stat touched).
   - Swap band (Q7): symmetric, hakuna weekend-triple/rate-diff sign — R-pooling + per-pair EVs kubwa
     zinapunguza athari; registration inakiri hili.
+
+=== M3-5 build (2026-07-17) — K4 MODEL v0 — IMEKAMILIKA ===
+LAST COMPLETED: **k4_model.py (K4 entry-quality model v0)** ✅ (BUILD ya reports/k4_model_design.md — design=SPEC):
+  Per-strategy (STRAT-001/002, hakuna pooling): PRIMARY L2-logistic, CHALLENGER shallow tree (depth<=3,
+  min_leaf>=100). BLOCKED leave-one-year-out CV (folds 7, purge 24h), grid 16, prune-once, FREEZE.
+  Decision = ΔEV_R@70% (SI accuracy/AUC). Metrics M1-M4 + block-bootstrap CI (utility MPYA, mb=3 B=10k
+  — SI pvalue_boot). H0 criterion §4 (dev>0 & p<0.05 & dev>=+0.05R & ev-ret>=0.90). p* TRAIN-CV pekee.
+  · IMPLEMENTATION NOTE (si deviation ya kimaudhui): sklearn HAIPO env -> L2-logistic (convex, optimum
+    mmoja) imetekelezwa kwa IRLS/Newton pure-numpy = coefs zilezile za lbfgs; tree = CART greedy
+    deterministic. Artifact = JSON (HAKUNA pickle) kama design inavyotaka. Sweep portable.
+  CLI: --cv (grid+prune+report) / --freeze (JSON artifact + dataset hash) / --eval-valid (one-shot,
+    inasoma p* kutoka freeze, inakagua hash) / --self-test.
+  · SHERIA: ZERO golden/statistic fns za research (load_k4 assert ya k4_dataset inatumika kama ilivyo;
+    pvalue_boot/pool_streams n.k. HAZIGUSWI). --cv inakataa rows za validation (AT3 PermissionError).
+  Self-test AT1-AT7 ZOTE PASS: leak-trap (no OUTCOMES kwenye FS), blocked-CV correctness (fold=mwaka,
+    purge clean, oof cover), no-VALID-tuning guard, metric exactness (closed-form), determinism,
+    planted-signal detect (AUC 0.67) + null sanity (MC), threshold-freeze (pstar kutoka artifact).
+    Duration ~15s. SWEEP 30/30 PASS.
+  Deliverables: k4_model.py + docs/K4_MODEL_REGISTRATION.md (criterion §4 verbatim kwa Chief). Report
+    (reports/k4_model_report.md) inazalishwa na --cv run ya Operator (data PC).
+NEXT AFTER: Operator: `python src/research/k4_model.py --cv` (dakika) -> Chief anasoma report + H0 verdict.
+  CV-PASS -> Chief ruling -> --freeze -> commit -> --eval-valid (MOJA). CV-FAIL -> LESSON, hakuna filter.
+OPEN QUESTIONS / NOTES:
+  - Matarajio (design, imefungwa): max single-feature AUC 0.532 -> lift ndogo au H0 kubaki inawezekana
+    zaidi; verdict yoyote (ikiwemo NO-LIFT) ni ujuzi wa curriculum, si kushindwa.
+  - sklearn parity: kama Operator anataka lbfgs halisi, inaweza kubadili _fit_config kutumia sklearn
+    (convex -> matokeo yanafanana); pure-numpy imechaguliwa kwa portability ya sweep + determinism.
