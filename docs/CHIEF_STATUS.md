@@ -981,3 +981,22 @@ no leakage. Self-test 5/5 PASS baada ya fix.
 
 **HATUA (Operator):** [1] htf_context --ltf H4  [2] --ltf D1  [3] RE-RUN rmap --train (dakika ~6,
 sasa na trend tags kamili)  [4] k4_dataset.py  [5] commit+push → M3-QA.
+
+---
+
+## 2026-07-17 — VITABU 3 KAMILI → M3-QA inaanza
+
+**Atlas (kitabu 3):** rows 186,512, events 21×pairs 12×TF 3, swap-adjusted, trend-tags kamili
+(baada ya Chief fix ya H4/D1 context). USOMAJI: breadth halisi iko SWING — nr7×H4×HIGH 10/12
+pairs EV+, nr7×D1×LOW 10/12, shock×H4×LOW 10/12 (intraday ilikuwa 1/5). Thesis ya PD ya swing
++ compression-continuation home-ground vinathibitika kwenye ramani (TRAIN — bado si madai).
+
+**K4 dataset (kitabu 2):** trades 4,222 (S1: 1,607+425; S2: 1,746+444). Baselines: STRAT-001
+win 71%/79% (high-win profile tayari!), STRAT-002 59%/61%. Exit-types + MFE/MAE zimo. Feature
+completeness nzuri (<1% NaN) ISIPOKUWA `atr_n` = 100% NaN (imevunjika — haifundishwi; M3-QA
+ataithibitisha/kuiondoa). HOLDOUT haijaguswa (guards zilifanya kazi).
+
+**States (kitabu 1):** traps zote PASS (5/5 htf_context; truncation-invariance engines).
+
+**HATUA: SCIENTIST-D [M3-QA]** — certification ya vitabu 3 (hati yake = ruhusa ya M3-5).
+Sambamba: Chief ataanza kuchora M3-3 (hypotheses za breadth kutoka atlas — swing families).
