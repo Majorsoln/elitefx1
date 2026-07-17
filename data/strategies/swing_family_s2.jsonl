@@ -1,0 +1,13 @@
+{"ev_R": 0.0041, "kind": "pair", "n": 16, "pair": "EURUSD", "split": "validation"}
+{"ev_R": 0.0987, "kind": "pair", "n": 12, "pair": "GBPUSD", "split": "validation"}
+{"ev_R": 0.089, "kind": "pair", "n": 19, "pair": "USDJPY", "split": "validation"}
+{"ev_R": 0.1654, "kind": "pair", "n": 19, "pair": "EURJPY", "split": "validation"}
+{"ev_R": 0.3394, "kind": "pair", "n": 11, "pair": "USDCAD", "split": "validation"}
+{"ev_R": -0.2884, "kind": "pair", "n": 10, "pair": "USDCHF", "split": "validation"}
+{"ev_R": 0.1012, "kind": "pair", "n": 12, "pair": "AUDUSD", "split": "validation"}
+{"ev_R": -0.2268, "kind": "pair", "n": 13, "pair": "NZDUSD", "split": "validation"}
+{"ev_R": -0.298, "kind": "pair", "n": 10, "pair": "EURGBP", "split": "validation"}
+{"ev_R": 0.4851, "kind": "pair", "n": 5, "pair": "GBPJPY", "split": "validation"}
+{"ev_R": 0.3523, "kind": "pair", "n": 9, "pair": "EURCHF", "split": "validation"}
+{"ev_R": 0.4911, "kind": "pair", "n": 3, "pair": "XAUUSD", "split": "validation"}
+{"ev_R": 0.0668, "kind": "pooled", "n": 139, "p_boot": 0.136177, "p_z": 0.122375, "split": "validation", "verdict": "FAIL"}
