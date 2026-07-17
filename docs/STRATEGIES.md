@@ -31,6 +31,13 @@
   (p_boot=0.0543 vs 0.05; EV_R **+0.110 chanya**, 4/4 reps chanya — imekosa significance kwa nywele;
   power ilikuwa 0.62 → 38% FAIL hata kama forecast ni sahihi). Dirisha SEALED milele.
   Njia pekee ya kuipandisha: **forward data mpya** (si re-open ya holdout). "Haujathibitika" ≠ "haifanyi kazi".
+- **SWING-WATCH — nr7_break × D1 × LOW-vol × SL2/TP1, pairs 12 pooled R (Swing Family #1).**
+  S2 VALIDATION 2026-07-17: **FAIL kwa heshima** (p_boot=0.136 vs 0.05) LAKINI EV_R pooled
+  **+0.067 CHANYA** (N=139), **pairs 9/12 chanya OOS** — power fail, si sign-flip (tofauti na
+  fails 3 za intraday). TRAIN: 10/12 pairs, 7/7 miaka. VALIDATION consumed kwa family hii;
+  HOLDOUT bikira. Njia: forward data (2025+ ni holdout — hairuhusiwi; forward halisi = 2026-05+
+  inayokusanyika). Mechanism ya compression-HTF sasa ina rekodi ya +EV OOS mara MBILI (H4, D1)
+  bila significance — ushahidi unakusanyika WATCH, si kwenye madirisha.
 
 ---
 

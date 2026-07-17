@@ -1069,3 +1069,22 @@ LESSON halali" — hakuna kulazimisha model. Prompt [M3-5-BUILD] imeandikwa (des
 **HATUA (sambamba):** (A) Operator: `swing_family.py --validate` → hukumu ya swing family
 (PASS → C2-6 HOLDOUT → STRAT-003). (B) Agent [M3-5-BUILD] → `k4_model.py --cv` → Chief
 anasoma verdict ya H0.
+
+---
+
+## 2026-07-17 — SWING FAMILY #1 S2: FAIL-kwa-heshima ya AINA MPYA (power, si sign-flip) → SWING-WATCH
+
+**Verdict:** p_boot 0.136 > 0.05 → FAIL (criterion pre-registered, m=1). LAKINI: EV_R pooled
+**+0.067 CHANYA** (N=139), **pairs 9/12 chanya OOS** — kwanza kabisa mzunguko huu kuona breadth
+ya OOS. Tofauti ya kimsingi na fails 3 za intraday (zote sign-flip hasi). Power ndio mkosaji
+(N_valid 139 — tahadhari ya registration ilitimia).
+
+**Hatua zilizochukuliwa:** SWING-WATCH imeongezwa docs/STRATEGIES.md (pamoja na C2-WATCH — 
+mechanism ya compression-HTF sasa +EV OOS mara 2: H4 na D1, zote bila significance). VALIDATION
+consumed; HOLDOUT bikira; hakuna re-test ya madirisha — njia ni forward data (2026-05+).
+
+**Msimamo wa Chief:** hii ni matokeo ya KUTIA MOYO ndani ya nidhamu — mechanism inaonekana
+halisi lakini adimu mno kuthibitika kwa miaka 2 ya VALIDATION peke yake. Uthibitisho utakuja
+kutoka forward accumulation (WATCH mbili zinakusanya pamoja), si kwa kuchoma madirisha zaidi.
+Focus sasa: (1) K4 model build (M3-5 — inaendelea); (2) pair-lessons drafting kutoka atlas
+(elimu ya models); (3) forward-watch discipline.
