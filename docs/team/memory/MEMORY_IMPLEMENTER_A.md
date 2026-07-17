@@ -993,3 +993,26 @@ NEXT AFTER: Operator: `python src/research/k4_dataset.py --build` + `python src/
 OPEN QUESTIONS / NOTES:
   - M3-5 loader itumie k4_dataset.load_k4() (manifest-asserted) + blocked-CV (ts_entry, purge bars 24, §D3).
   - atr_rel warmup (bars < 60) = NaN by design (no-lookahead); rows za mwanzo wa TRAIN zinaweza kuwa None.
+
+=== M3-3-S2 build (2026-07-17) — SWING FAMILY #1 S2 runner — IMEKAMILIKA ===
+LAST COMPLETED: **swing_family.py S2 VALIDATION runner** ✅ (docs/M3_SWING_FAMILY_REGISTRATION.md; MPYA, additive):
+  FAMILY FROZEN: nr7_break × D1 × vol=LOW (signal-bar; UNKNOWN excluded Q1) × SL2.0/TP1.0 × hold20,
+  pairs ZOTE 12 pooled kwa R (L-041, gold haitawali — R-units). run_s2(split="validation"):
+  kwa kila pair: load_window(D1) -> nr7_break -> _mask_context(vf="LOW") -> episodes -> apply_swap
+  (rmap, swing carry) -> _r_normalize (pnl_swing) -> pool_streams (ts ordering + dedup AT7) ->
+  pvalue_boot(B=50k, mean_block=3, seed=20260717 FIXED) -> criterion p<0.05 NA EV_R>0 (m=1). p_z sens.
+  GUARD: validation PEKEE (PermissionError); pair bila data -> RuntimeError (F2: pairs 12 LAZIMA,
+  hakuna silent skip). OUTPUT: data/strategies/swing_family_s2.jsonl (per-pair n/ev_R + pooled row) +
+  reports/swing_family_s2.md (VERDICT WAZI: PASS->C2-6/HOLDOUT->STRAT-003; FAIL->LESSON/forward-only).
+  · SHERIA: ZERO statistic fns (pvalue_boot/pool_streams/_r_normalize/episodes/_mask_context imports TU;
+    golden diff 0). Spec FROZEN (param 1, pairs 12, vol LOW). run_selftests += swing_family.
+  Self-test [1]-[5]: guard (train/holdout refused), F2 pair-missing->RuntimeError, vol=LOW decidability
+    (signal-bar EXACT + UNKNOWN nje), swap-drag (EV_R swap < no-swap), full-run (determinism + gold
+    R-normalized haitawali (atr×100 -> EV_R oda ile ile) + verdict + outputs). SWEEP 29/29 PASS.
+NEXT AFTER: Operator: `python src/research/swing_family.py --validate` -> swing_family_s2.md (VERDICT).
+  PASS -> C2-6 freeze + HOLDOUT one-shot (token) -> STRAT-003. FAIL -> LESSON (N_valid ~110, power wastani).
+OPEN QUESTIONS / NOTES:
+  - _r_normalize is_timeout tag inatumia hardcoded 24 (H4 design ya family_pooled) si max_hold 20 —
+    ni TAG ya sensitivity tu, HAIATHIRI pnl_R wala verdict (fn imetumika kama ilivyo, ZERO stat touched).
+  - Swap band (Q7): symmetric, hakuna weekend-triple/rate-diff sign — R-pooling + per-pair EVs kubwa
+    zinapunguza athari; registration inakiri hili.
