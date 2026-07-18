@@ -1114,3 +1114,29 @@ H0 iliheshimiwa. Portfolio HAIBADILIKI: STRAT-001 + STRAT-002.
   honest harness + bootstrap + pooled + blocked-CV, lessons 42.
 - **Negatives (sayansi halali):** reversion/fade intraday 0/6; momentum-single-pair 3/3 flips;
   K4 v0 no-lift. Machine iliamua 100% kwa usahihi; HOLDOUT bikira mzunguko mzima.
+
+---
+
+## 2026-07-17 — PD: njia A + RE-DOCTRINE + institutional turn
+
+**PD directive:** njia A (jenga juu ya STRAT-001/002); models zenye matoleo (v1→…→"Fable 5")
+kama doctrine; re-doctrine mfumo upya; archive kila jaribio+reports kwenye kumbukumbu; Django
+monitoring dashboard (reports, live actions, rule-compliance, VPS, model perf, pair×strategy);
+udhibiti wa kitaasisi kwa kukodisha models baadaye.
+
+**Chief advice (recorded):** (1) versioned-model paradigm = artifact frozen + OOS proof +
+provenance per version — nidhamu ndiyo bidhaa inayokodishika; (2) dashboard = KIOO (read-only,
+haiamui trade — compliance); (3) leasing inahitaji immutable audit + attestation + rule-compliance proof.
+
+**Vilivyoandikwa:**
+- **docs/DOCTRINE_V2.md** (SUPREME) — ukweli wa sasa, model-versioning paradigm, universal gate,
+  tabaka za live (monitoring=kioo), udhibiti wa kitaasisi/leasing, njia A.
+- **docs/EXPERIMENT_LEDGER.md** — kumbukumbu ya KILA jaribio (M2: 8→0 proven; M3: atlas/dataset
+  assets + swing/K4 watch) + verdict + report path.
+- **docs/MODEL_REGISTRY.md** — models rasmi (STRAT-001/002 PROVEN; K4-filter NO-LIFT; WATCH 3).
+- **docs/DASHBOARD_CHARTER.md** + prompt **IMPLEMENTER-A [M-DASH-1]** (Django, read-only, phased).
+- **Archive:** registrations 9 → docs/archive/registrations/; result reports 8 → reports/archive/.
+  docs active 16, reports active 8 (assets za sasa). Kumbukumbu imehifadhiwa, si kufutwa.
+
+**HATUA:** (1) Operator: agent M-DASH-1 (jenga dashboard). (2) Sambamba: live-path ya STRAT-001/002
+(paper inaendelea; compliance+sizing layer). Uwindaji = background (WATCH forward).
