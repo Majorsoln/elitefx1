@@ -1088,3 +1088,29 @@ halisi lakini adimu mno kuthibitika kwa miaka 2 ya VALIDATION peke yake. Uthibit
 kutoka forward accumulation (WATCH mbili zinakusanya pamoja), si kwa kuchoma madirisha zaidi.
 Focus sasa: (1) K4 model build (M3-5 — inaendelea); (2) pair-lessons drafting kutoka atlas
 (elimu ya models); (3) forward-watch discipline.
+
+---
+
+## 2026-07-17 — K4 MODEL v0 CV: NO-LIFT (zote) → LESSON-042; criterion imeheshimiwa
+
+**CV blocked leave-one-year-out (TRAIN, design k4_model_design.md):** STRAT-001 ΔEV_R@70% +0.0157
+(p 0.087, chini ya +0.05R floor) → FAIL-TO-REJECT; STRAT-002 +0.0037 (p 0.40) → FAIL-TO-REJECT.
+**Zote NO-LIFT.** Criterion §4 pre-registered imeheshimiwa: **hakuna freeze, VALID HAIJAGUSWI**
+(design: CV-FAIL → LESSON). Utabiri wa SCIENTIST-D (AUC 0.53 → lift ndogo/sifuri) ulitimia HASA.
+Build review: golden 0; JSON artifact; AT1-AT4. → **LESSON-042.**
+
+**Nuance (STRAT-001, K4-WATCH si deploy):** EV-retention 2.54 (filter iliondoa R-hasi) + streak
+6→4 = mwelekeo, LAKINI per-trade haitofautishwi na kelele (N=1,607). 'Not proven' ≠ 'nothing'.
+
+**MSIMAMO WA CHIEF:** K4-filter HAIENDI M3-6. STRAT-001/002 zinaendelea kutrade BILA filter (EV
+zao chanya zenyewe). Dataset ya K4 inabaki ya thamani (v1/uchambuzi). Model haikulazimishwa —
+H0 iliheshimiwa. Portfolio HAIBADILIKI: STRAT-001 + STRAT-002.
+
+### SYNTHESIS — mahali tulipo (mzunguko 2+3)
+- **PROVEN & live-path:** STRAT-001, STRAT-002 (paper inaendelea → FTMO).
+- **WATCH (forward-accumulating, +EV OOS, power-limited):** C2-WATCH (H4), SWING-WATCH (D1),
+  K4-WATCH (STRAT-001 filter). Compression-HTF +EV OOS mara 2.
+- **Assets za kudumu:** state+HTF+intraday engines (pairs 12), atlas (186k rows), K4 dataset,
+  honest harness + bootstrap + pooled + blocked-CV, lessons 42.
+- **Negatives (sayansi halali):** reversion/fade intraday 0/6; momentum-single-pair 3/3 flips;
+  K4 v0 no-lift. Machine iliamua 100% kwa usahihi; HOLDOUT bikira mzunguko mzima.
