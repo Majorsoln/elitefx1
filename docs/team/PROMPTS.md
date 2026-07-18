@@ -76,6 +76,41 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [M-DASH-1] (Django monitoring dashboard — msingi, read-only)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: M-DASH-1 — msingi wa
+dashboard ya Django (kioo cha taasisi, READ-ONLY). Doctrine V2 §4/§5 + docs/DASHBOARD_CHARTER.md.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/DASHBOARD_CHARTER.md (KANUNI + panels + phases — SPEC yako) · docs/DOCTRINE_V2.md
+(§4 kioo-si-mkono, §5 udhibiti) · docs/MODEL_REGISTRY.md · docs/EXPERIMENT_LEDGER.md ·
+src/research/paper_trader.py + decision_repository.py (muundo wa outputs za kusoma).
+
+JENGA dir MPYA `dashboard/` (tofauti kabisa na src/research — HAIGUSI research code):
+  - Django project `elitefx_dash/` + app `monitor/`. requirements.txt yake (django, chart via
+    static Chart.js self-contained — HAKUNA CDN). SQLite.
+  - DB models (mirror ya artifacts, SI trading logic): Trade, StrategyPerf, ModelVersion, Report.
+  - **Ingest** = management command `python manage.py ingest`: inasoma (a) paper_trader outputs
+    (au fixtures kama hakuna live data), (b) docs/MODEL_REGISTRY.md → ModelVersion, (c)
+    docs/EXPERIMENT_LEDGER.md + reports/*.md → Report. Artifact haipo → skip + "no data" (SI kubuni).
+  - Panels (templates + views, read-only): PORTFOLIO (equity/EV/DD/trades — Chart.js),
+    LIVE-ACTIONS (jedwali la trades za hivi karibuni), REPORTS-BROWSER (ledger + reports/*.md
+    rendered). Nav rahisi.
+  - Auth: Django admin default (roles kamili = M-DASH-3). Config ya paths kupitia settings/env.
+
+SHERIA NGUMU (V2): READ-ONLY — HAKUNA endpoint inayoweza kuanzisha/kubadilisha trade. Dashboard
+  HAIENDESHI strategy code (ingest inasoma outputs tu). HAKUNA secret/broker creds kwenye repo.
+  Tests: ingest kwa fixtures (trade sample, registry parse) + "no-data" path. `python manage.py
+  test` GREEN. src/research HAIGUSWI (diff = dashboard/ tu).
+
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M-DASH-1" + jinsi ya kuiendesha
+  (`pip install -r dashboard/requirements.txt && python dashboard/manage.py migrate && ingest &&
+  runserver`). Screenshot/description ya panels kama inawezekana.
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [M3-5-BUILD] (K4 model v0 kwa design-of-record)
 
 ```text
