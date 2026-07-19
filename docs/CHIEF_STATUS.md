@@ -1140,3 +1140,23 @@ haiamui trade — compliance); (3) leasing inahitaji immutable audit + attestati
 
 **HATUA:** (1) Operator: agent M-DASH-1 (jenga dashboard). (2) Sambamba: live-path ya STRAT-001/002
 (paper inaendelea; compliance+sizing layer). Uwindaji = background (WATCH forward).
+
+---
+
+## 2026-07-17 — Dashboard RE-DESIGN (PD feedback: build kamili + ubunifu) + prompts 2
+
+**PD feedback:** agents wenye prompts nzuri za hatua-kwa-hatua wanamaliza haraka → SI phased kama
+kizuizi; ongeza ubunifu; kisha prompts za implementer + mkaguzi.
+
+**docs/DASHBOARD_CHARTER.md imeandikwa upya — "THE GLASS BOX":** dhana kuu = uwazi unaoweza
+kukaguliwa ndiyo bidhaa ya kukodisha (si faida tu). Panels 9: Command Deck · Portfolio (equity+
+monthly heatmap) · Live Actions + **decision-trace expandable** (glass-box) · Trust/Compliance
+(score+gauges+badges) · Model Registry (cards+lifecycle+**LIVE-vs-PROMISED shrinkage band**+
+**attestation export** hashed) · Pair×Strategy heatmap · Diagnosis/Alerts · VPS Health · Ledger+
+Lessons. Leasing foundation: roles internal/attestor/lessee + AuditEvent append-only. Build KAMILI
+(PR moja, hatua zilizoorodheshwa), read-only enforced, demo fixtures.
+
+**Prompts:** IMPLEMENTER-A [M-DASH] (build kamili, hatua-kwa-hatua, tests 5) + AUDITOR [M-DASH-QA]
+(certify read-only/no-fabrication/attestation/roles/secrets KABLA ya wateja). Sequential: build → QA.
+
+**HATUA:** Operator: agent M-DASH → M-DASH-QA. Live-path STRAT-001/002 inaendelea sambamba.
