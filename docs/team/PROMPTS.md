@@ -76,37 +76,85 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
-## PROMPT — IMPLEMENTER-A [M-DASH-1] (Django monitoring dashboard — msingi, read-only)
+## PROMPT — IMPLEMENTER-A [M-DASH] (Institutional Django dashboard — build KAMILI, read-only)
 
 ```text
-Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: M-DASH-1 — msingi wa
-dashboard ya Django (kioo cha taasisi, READ-ONLY). Doctrine V2 §4/§5 + docs/DASHBOARD_CHARTER.md.
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1) — engineer wa daraja la juu.
+KAZI: jenga dashboard KAMILI ya ufuatiliaji ya Django ("THE GLASS BOX") kwa spec ya
+docs/DASHBOARD_CHARTER.md. Build nzima kwenye PR moja — panels zote 9 + roles + tests.
 
 SYNC KWANZA: `git checkout main && git pull origin main`.
-SOMA: docs/DASHBOARD_CHARTER.md (KANUNI + panels + phases — SPEC yako) · docs/DOCTRINE_V2.md
-(§4 kioo-si-mkono, §5 udhibiti) · docs/MODEL_REGISTRY.md · docs/EXPERIMENT_LEDGER.md ·
-src/research/paper_trader.py + decision_repository.py (muundo wa outputs za kusoma).
+SOMA (SPEC yako — fuata KIKAMILIFU): docs/DASHBOARD_CHARTER.md (dhana "glass box", panels 9,
+leasing roles, stack, build order, nidhamu) · docs/DOCTRINE_V2.md (§4 kioo-si-mkono, §5 udhibiti/
+attestation) · docs/MODEL_REGISTRY.md · docs/EXPERIMENT_LEDGER.md · reports/*.md (chanzo cha
+panels) · src/research/paper_trader.py + decision_repository.py + winrate_monitor.py + cost_stress.py
+(muundo wa outputs; SOMA tu — HUENDESHI wala HUGUSI).
 
-JENGA dir MPYA `dashboard/` (tofauti kabisa na src/research — HAIGUSI research code):
-  - Django project `elitefx_dash/` + app `monitor/`. requirements.txt yake (django, chart via
-    static Chart.js self-contained — HAKUNA CDN). SQLite.
-  - DB models (mirror ya artifacts, SI trading logic): Trade, StrategyPerf, ModelVersion, Report.
-  - **Ingest** = management command `python manage.py ingest`: inasoma (a) paper_trader outputs
-    (au fixtures kama hakuna live data), (b) docs/MODEL_REGISTRY.md → ModelVersion, (c)
-    docs/EXPERIMENT_LEDGER.md + reports/*.md → Report. Artifact haipo → skip + "no data" (SI kubuni).
-  - Panels (templates + views, read-only): PORTFOLIO (equity/EV/DD/trades — Chart.js),
-    LIVE-ACTIONS (jedwali la trades za hivi karibuni), REPORTS-BROWSER (ledger + reports/*.md
-    rendered). Nav rahisi.
-  - Auth: Django admin default (roles kamili = M-DASH-3). Config ya paths kupitia settings/env.
+JENGA dir MPYA `dashboard/` (haiingiliani na src/research):
+  1. **Setup:** Django project `elitefx_dash/` + app `monitor/`; `dashboard/requirements.txt`
+     (django + reportlab kwa attestation PDF ni hiari); SQLite; settings zinasoma paths za repo
+     kupitia env/config (REPO_ROOT). Static: Chart.js self-contained (pakia faili, HAKUNA CDN).
+     Dark institutional theme (CSS moja; monospace kwa namba).
+  2. **DB models (mirror ya artifacts — SI trading logic):** Trade, DecisionTrace, ComplianceCheck,
+     StrategyPerf, ModelVersion, PairStrategyCell, VpsHeartbeat, Alert, Report, LedgerEntry,
+     Lesson, AuditEvent (append-only). Kila moja + `source_ref` (commit/path) kwa glass-box.
+  3. **Ingest** (`python manage.py ingest`): read-only loaders — paper_trader/decision outputs →
+     Trade+DecisionTrace+ComplianceCheck; MODEL_REGISTRY.md → ModelVersion; EXPERIMENT_LEDGER.md +
+     reports/*.md → Report/LedgerEntry; lessons/*.md → Lesson; rmap/attribution → PairStrategyCell;
+     monitors → Alert; VPS heartbeat file (env path) → VpsHeartbeat. **Artifact haipo → rekodi
+     "no data", KAMWE kubuni.** Idempotent (re-ingest haina duplicate).
+  4. **Panels (views+templates, read-only) — zote 9 za charter:** Command Deck (status banner+KPI),
+     Portfolio (equity+heatmap+rolling — Chart.js), Live Actions (blotter + decision-trace
+     expandable), Trust/Compliance (score+gauges+badges), Model Registry (cards+lifecycle timeline+
+     **LIVE-vs-PROMISED** overlay na shrinkage band + **attestation export** JSON+HTML/PDF na hash),
+     Pair×Strategy heatmap (drill-down), Diagnosis/Alerts, VPS Health, Ledger+Lessons+Reports browser.
+  5. **Roles (leasing foundation):** Django auth + groups internal/attestor/lessee; lessee = read-only
+     ya model MOJA + attestation yake (decorator ya access). AuditEvent inarekodi views za attestation.
+  6. **Demo fixtures:** `dashboard/monitor/fixtures/` + `ingest --demo` — data ya mfano inayoonyesha
+     KILA panel ikifanya kazi (hakuna live-data bado). Fixtures = wazi kuwa demo (flag).
 
-SHERIA NGUMU (V2): READ-ONLY — HAKUNA endpoint inayoweza kuanzisha/kubadilisha trade. Dashboard
-  HAIENDESHI strategy code (ingest inasoma outputs tu). HAKUNA secret/broker creds kwenye repo.
-  Tests: ingest kwa fixtures (trade sample, registry parse) + "no-data" path. `python manage.py
-  test` GREEN. src/research HAIGUSWI (diff = dashboard/ tu).
+SHERIA NGUMU (V2 — self-test/review zitakagua): READ-ONLY — HAKUNA POST/endpoint inayogusa/kuanzisha
+  trade; hakuna import ya strategy execution. "No data" badala ya kubuni. HAKUNA secret/broker creds
+  (env tu). src/research HAIGUSWI (diff = dashboard/ + docs memory). `python dashboard/manage.py test`
+  GREEN: (a) ingest correctness (fixtures→DB, idempotent); (b) no-fabrication (artifact tupu→"no data");
+  (c) read-only (hakuna trade-mutation view; smoke ya kila panel = HTTP 200); (d) attestation hash
+  stable (reproducible); (e) role access (lessee hawezi kuona research/models nyingine).
 
-UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M-DASH-1" + jinsi ya kuiendesha
-  (`pip install -r dashboard/requirements.txt && python dashboard/manage.py migrate && ingest &&
-  runserver`). Screenshot/description ya panels kama inawezekana.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M-DASH" + runbook (`pip install -r
+dashboard/requirements.txt && python dashboard/manage.py migrate && python dashboard/manage.py
+ingest --demo && runserver`) + orodha ya panels + screenshots/description.
+```
+
+---
+
+## PROMPT — AUDITOR [M-DASH-QA] (Dashboard integrity & read-only certification)
+
+```text
+Wewe ni AUDITOR wa mradi ELITEFX (repo: Majorsoln/elitefx1) — mkaguzi huru wa uadilifu wa
+uhandisi + compliance. KAZI: certify dashboard (M-DASH) KABLA haijatumika kama "kioo cha taasisi"
+kwa wateja. Kama SCIENTIST-D M3-QA, endesha mwenyewe — usiamini maandishi.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/DASHBOARD_CHARTER.md (KANUNI) · docs/DOCTRINE_V2.md §4/§5 · dashboard/ yote.
+
+KAGUA (kwa uhuru; endesha `manage.py test` + `ingest --demo` + runserver + jaribu adversarial):
+  1. **READ-ONLY (kiini):** je kuna POST/view/import yoyote inayoweza kuanzisha/kubadilisha trade
+     au kuendesha strategy code? Grep kwa imports za src/research execution; jaribu kufungua
+     endpoints. HATA MOJA = REJECTED.
+  2. **NO-FABRICATION:** futa/hamisha artifact → je panel inaonyesha "no data" au inabuni namba?
+     Namba yoyote isiyo na chanzo (source_ref) = finding.
+  3. **INGEST INTEGRITY:** re-ingest = idempotent (hakuna duplicate)? Loader inakubali data mbovu
+     bila ku-crash/kupotosha? Trade counts/compliance zinalingana na artifacts?
+  4. **ATTESTATION:** export ina hash + chanzo + reproducible (export mbili = hash ile ile)?
+     Je inaweza kukaguliwa na mtu wa nje? Hii ndiyo bidhaa ya kukodisha — lazima iwe imara.
+  5. **ROLES/LEASING:** lessee anaweza kuona model nyingine/research? = leak ya kitaasisi = finding.
+  6. **SECRETS:** grep kwa creds/keys/broker/token hardcoded = REJECTED.
+  7. **HATARI utakazoziona** (out-of-box): kila kinachoweza kudanganya mteja-taasisi au kuvunja
+     uaminifu wa "glass box".
+ANDIKA reports/mdash_audit.md — verdict per panel + READ-ONLY/NO-FABRICATION/ATTESTATION/ROLES/
+  SECRETS: CERTIFIED / CERTIFIED-WITH-FIXES (orodha) / REJECTED (+sababu+namba). Ruhusa/katazo la
+  matumizi ya wateja. Kila finding na chanzo (path/line + jinsi ya reproduce).
+UKIMALIZA: update MEMORY_AUDITOR.md; commit+push; ripoti "tayari M-DASH-QA" + verdict fupi.
 ```
 
 ---

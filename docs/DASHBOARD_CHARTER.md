@@ -1,48 +1,91 @@
-# ELITEFX — MONITORING DASHBOARD CHARTER (Django) — "kioo cha taasisi"
+# ELITEFX — INSTITUTIONAL MONITORING DASHBOARD (Django) — "THE GLASS BOX"
 
-> Directive ya PD 2026-07-17: dashboard ya Django kuona reports, live actions, diagnosis kamili,
-> je kila trade sheria zilifuatwa, VPS iko sawa, performance ya kila model, pair×strategy analytics
-> — kwa udhibiti wa kitaasisi (baadaye: kukodisha models). Doctrine V2 §4/§5.
+> Directive ya PD 2026-07-17: dashboard ya kuona reports, live actions, diagnosis kamili, je kila
+> trade sheria zilifuatwa, VPS iko sawa, performance ya kila model, pair×strategy — kwa udhibiti wa
+> kitaasisi na **baadaye kukodisha models kwa taasisi nyingine.** Doctrine V2 §4/§5.
+> Build kamili (agent mmoja mwenye prompt ya hatua-kwa-hatua). SI phased kama kizuizi.
 
-## KANUNI KUU (zisizojadilika)
-1. **READ-ONLY / KIOO:** dashboard HAIAMUI wala HAIBADILISHI trade kamwe (V2 §4). Inasoma
-   artifacts tu (decision logs, paper/live outputs, reports, registry, ledger). Maamuzi = engine.
-2. **Chanzo cha data = artifacts zilizopo** (hakuna re-compute ya strategy): decision_repository
-   outputs, paper_trader logs, reports/*.md, docs/MODEL_REGISTRY + EXPERIMENT_LEDGER, winrate_monitor,
-   cost_stress, compliance logs. Dashboard = ingest + present.
-3. **Immutable/append-only** kwa audit (V2 §5): dashboard haifuti rekodi; inaonyesha historia.
-4. **Separation:** app ya dashboard ni tofauti na src/research (hunts). Dir mpya `dashboard/`.
+## DHANA KUU YA UBUNIFU: "GLASS BOX, NOT BLACK BOX"
+Taasisi inayokodisha model haaminishwi — **anakagua.** Kila namba kwenye dashboard ina **kiungo cha
+chanzo** (trade → decision trace → artifact → commit). Tofauti yetu na wengine si "faida" — ni
+**uwazi unaoweza kukaguliwa.** Uso wa dashboard unauza uaminifu huu: safi, mnene wa data lakini
+unaosomeka, hisia ya "terminal ya taasisi" (dark theme, monospace kwa namba, hakuna kelele).
 
-## ARCHITECTURE (phased)
-- **Backend:** Django (project `elitefx_dash/`), SQLite kuanzia (Postgres kwa production).
-  Models za DB = mirror ya artifacts (Trade, Decision, ComplianceCheck, ModelVersion, Pair,
-  StrategyPerf, VpsHeartbeat, Report). **Ingest layer** (management command `ingest`) inasoma
-  artifacts → DB; hakuna business logic ya trading ndani ya Django.
-- **Frontend:** Django templates + charts (Chart.js — self-contained). Hakuna framework nzito
-  awali.
-- **Auth:** Django auth; roles (viewer/attestor/admin) — msingi wa leasing (viewer wa nje = access
-  ya monitoring + attestation, si research).
+## KANUNI ZISIZOJADILIKA (V2)
+1. **KIOO, si mkono:** HAKUNA endpoint inayoanzisha/kubadilisha trade. Maamuzi = engine + policy.
+2. **Read-only ingest:** inasoma artifacts zilizopo (paper/live logs, reports, registry, ledger,
+   monitors). Artifact haipo → "no data", KAMWE si kubuni namba.
+3. **Immutable/append-only** kwa audit. **Hakuna secret/broker creds** kwenye repo (env config).
+4. **Separation:** `dashboard/` ni tofauti kabisa na `src/research/` (haiendeshi strategy code).
 
-## PANELS (kwa directive ya PD)
-| Panel | Kinachoonyeshwa | Chanzo |
-|---|---|---|
-| **Portfolio** | equity curve, EV, DD, trades/mwezi — STRAT-001/002 (na live/paper toggle) | paper_trader/live logs |
-| **Live actions** | trades za hivi karibuni: entry/exit, R, dir, pair, strategy, muda | decision_repository / execution logs |
-| **Rule-compliance** | kila trade: FTMO daily/max-loss, no-trade-window, max-spread — PASS/FAIL badge | compliance gate logs |
-| **VPS health** | heartbeat ya mwisho, uptime, latency, clock-drift, data-feed status | VPS heartbeat file/endpoint |
-| **Model registry** | kila model version: status, OOS proof, performance-attestation, lifecycle | docs/MODEL_REGISTRY + data/registry/*.json |
-| **Pair × Strategy grid** | matrix ya EV/win/N kwa kila (pair × strategy) — data ya kuchambua | rmap atlas + live/paper attribution |
-| **Reports browser** | reports/*.md + EXPERIMENT_LEDGER (kumbukumbu) — rendered | reports/ + docs/ledger |
-| **Diagnosis** | alerts: retention drift (winrate_monitor), cost drift, streak warning, model degradation | monitors |
+---
 
-## PHASES (kila moja = deliverable inayokaguliwa)
-- **M-DASH-1 (msingi):** Django project + DB models + `ingest` command (paper_trader + registry +
-  ledger + reports) + Portfolio + Live-actions + Reports-browser panels. Read-only. Self-contained.
-- **M-DASH-2:** Rule-compliance panel + Diagnosis/alerts (kutoka winrate_monitor/cost_stress) +
-  Pair×Strategy grid.
-- **M-DASH-3:** VPS heartbeat + Model-registry attestation view + auth/roles (leasing-ready).
+## PANELS + UBUNIFU (build kamili)
 
-## NIDHAMU YA UJENZI
-- Dashboard haiendeshi strategy code; ingest inasoma outputs tu (kama artifact haipo → panel
-  inaonyesha "no data", si kubuni). Tests za ingest (fixtures). requirements.txt tofauti.
-- HAKUNA data ya kweli ya broker/secret kwenye repo. VPS/live endpoints = config (env), si hardcode.
+### 1. COMMAND DECK (landing) — hali ya taasisi kwa jicho moja
+- Banner ya **SYSTEM STATUS**: OPERATIONAL / DEGRADED / OFFLINE (kutoka VPS heartbeat + data freshness).
+- KPI strip: Equity (paper+live), Net R mwezi huu, Open positions, **COMPLIANCE SCORE** (% trades
+  zilizofuata sheria — lengo 100%), Active models, Last heartbeat.
+- Mini equity sparkline + "today's actions" ticker.
+
+### 2. PORTFOLIO — utendaji
+- Equity curve (paper/live toggle) + rolling metrics: expectancy R, win%, PF, max/current DD,
+  Sharpe (kadirio), trades/mwezi. **Monthly returns heatmap** (mwaka × mwezi).
+- Per-strategy breakdown (STRAT-001 vs 002) + portfolio-combined.
+
+### 3. LIVE ACTIONS — blotter + **DECISION TRACE** (kiini cha glass-box)
+- Jedwali la trades za hivi karibuni (pair, strategy, dir, entry/exit, R, muda, status).
+- Kila trade INAFUNGUKA → **decision trace kamili**: signal (event+bar) → policy (select/veto) →
+  risk (size, % risk) → compliance (checks zote) → fill (price, spread, slippage). Hii ndiyo
+  "glass" — kila hatua ina chanzo.
+
+### 4. TRUST / COMPLIANCE — panel ya kitaasisi (uuzaji wa uaminifu)
+- **COMPLIANCE SCORE** kubwa + "N trades, X violations".
+- Gauges: FTMO daily-loss headroom, max-loss headroom, no-trade-window adherence, max-spread adherence.
+- Per-trade compliance badges (PASS/FAIL + sababu). Violation yoyote = nyekundu, inayoonekana.
+
+### 5. MODEL REGISTRY — "product catalog" ya kukodisha
+- Kila model = **kadi**: id, version (v1.0→…), status **lifecycle timeline** (CANDIDATE→PROVEN→
+  LIVE→RETIRED), OOS proof (HOLDOUT namba), class, dependencies.
+- **LIVE-vs-PROMISED tracker** (killer feature ya uaminifu): live/paper EV imewekwa juu ya
+  backtest/holdout expectation + **shrinkage band** — je live inafuata ahadi? Model degradation = flag.
+- **ATTESTATION EXPORT**: bonyeza → ripoti ya performance inayoweza kukaguliwa (JSON+PDF/HTML,
+  na hash + chanzo/commit) kwa mteja-taasisi. Bidhaa ya kukodisha yenyewe.
+
+### 6. PAIR × STRATEGY MATRIX — analytics ya kuboresha
+- Heatmap grid: (pair 12 × strategy/family) → EV / win% / N. Drill-down kwa cell → pair-lessons
+  + atlas rows za mazingira (vol/session/mwaka).
+
+### 7. DIAGNOSIS / ALERTS — mfumo unaojiangalia
+- Retention drift (winrate_monitor), cost drift (cost_stress), streak warning, model degradation
+  (live-vs-promised divergence), data-gap/stale-feed, VPS clock-drift. Severity + timestamp + chanzo.
+
+### 8. VPS / SYSTEM HEALTH
+- Heartbeat ya mwisho, uptime, latency, clock-drift, data-feed freshness per pair, disk/mem.
+- Status OPERATIONAL/DEGRADED (inalisha Command Deck banner).
+
+### 9. RESEARCH LEDGER + LESSONS — kumbukumbu (uaminifu wa "tunaonyesha kushindwa kwetu")
+- EXPERIMENT_LEDGER rendered (kila jaribio + verdict). Lessons 42 library. Reports browser (reports/*.md).
+
+---
+
+## LEASING FOUNDATION (roles/multi-tenancy — msingi, si full SaaS)
+- Django auth + roles: **internal** (yote), **attestor** (compliance+registry+attestation), **client/lessee**
+  (read-only monitoring ya model MOJA iliyokodishwa + attestation yake — SI research, SI models nyingine).
+- Attestation export + audit trail viewer (append-only, filterable) = kile mteja anakagua.
+
+## STACK
+- Django (`elitefx_dash/` + app `monitor/`), SQLite (Postgres-ready). DB models = mirror ya artifacts
+  (SI trading logic). `ingest` management command. Templates + Chart.js (self-contained, HAKUNA CDN).
+  Dark institutional theme (CSS moja, hakuna framework nzito). requirements.txt yake.
+
+## BUILD ORDER (hatua za agent — zote kwenye PR moja; si limitation)
+DB models → ingest (fixtures + artifacts halisi) → Command Deck → Portfolio → Live-actions+trace →
+Trust/Compliance → Model Registry + LIVE-vs-PROMISED + attestation export → Pair×Strategy →
+Diagnosis → VPS → Ledger/Lessons → roles/auth → tests. Fixtures za demo (hakuna live data bado)
+zinaonyesha kila panel ikifanya kazi.
+
+## NIDHAMU
+- Read-only enforced (hakuna POST inayogusa trading). "No data" badala ya kubuni. Hakuna secret.
+  Tests: ingest correctness (fixtures), no-fabrication (artifact tupu→no-data), read-only (hakuna
+  trade-mutation endpoint), attestation reproducibility (hash stable). src/research HAIGUSWI.
