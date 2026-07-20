@@ -1160,3 +1160,25 @@ Lessons. Leasing foundation: roles internal/attestor/lessee + AuditEvent append-
 (certify read-only/no-fabrication/attestation/roles/secrets KABLA ya wateja). Sequential: build → QA.
 
 **HATUA:** Operator: agent M-DASH → M-DASH-QA. Live-path STRAT-001/002 inaendelea sambamba.
+
+---
+
+## 2026-07-20 — M-DASH build + M-DASH-QA audit: CERTIFIED-WITH-FIXES
+
+**Build (main `446ba6a`):** dashboard/ (52 files) — Django "Glass Box", panels 10/10 → 200,
+tests 9/9. Grep clean: HAKUNA import ya src/research (separation V2 §4). Read-only halisi.
+
+**AUDITOR M-DASH-QA (reports/mdash_audit.md — endeshwa mwenyewe):** VERDICT **CERTIFIED-WITH-FIXES.**
+- **Kiini kimesimama:** READ-ONLY CERTIFIED (POST/PUT/DELETE → 405 zote; Trade.count hazibadiliki;
+  hakuna trade-mutation endpoint); NO-FABRICATION CERTIFIED (artifact tupu → "no data").
+  Attestation reproducible, roles/lessee-isolation, ingest idempotency zote PASS adversarial.
+- **Findings 7:** F1 audit-immutability (bulk-ops bypass), F2 unit-mix currency↔R, F3 fabricated
+  now() ts (VPS OPERATIONAL ya uongo), F4 WATCH rows (5-col) hazi-ingest, F5 bad-JSON crash, F6
+  attestation bila commit-hash, F7 dev-insecure fail-open. Hakuna REJECTED.
+- **Ruhusa:** matumizi ya NDANI = SASA. Matumizi ya WATEJA/LEASING = baada ya F1+F2+F3.
+
+**MAAMUZI YA CHIEF:** fixes ZOTE zimeidhinishwa → prompt IMPLEMENTER-A [M-DASH-FIX]. Baada ya fixes
++ re-test, matumizi ya wateja yataruhusiwa (Chief update registry/doctrine). Dashboard tayari
+kwa monitoring ya ndani sasa hivi.
+
+**HATUA:** agent M-DASH-FIX → re-verify → leasing-ready. Live-path STRAT-001/002 inaendelea.
