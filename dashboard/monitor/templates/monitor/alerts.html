@@ -1,0 +1,12 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>DIAGNOSIS / ALERTS</h1>
+{% if alerts %}
+<table class="data"><tr><th>ts</th><th>severity</th><th>kind</th><th>message</th><th>chanzo</th></tr>
+{% for a in alerts %}
+<tr><td class="num">{{ a.ts|date:"Y-m-d H:i" }}</td>
+<td class="sev-{{ a.severity }}">{{ a.severity }}</td><td>{{ a.kind }}</td>
+<td>{{ a.message }}</td><td class="src">{{ a.source_ref }}</td></tr>
+{% endfor %}</table>
+{% else %}<div class="nodata">no data: hakuna alerts (monitors bado hazijaandika alerts.jsonl)</div>{% endif %}
+{% endblock %}

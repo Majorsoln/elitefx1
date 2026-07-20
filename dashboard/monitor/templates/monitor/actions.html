@@ -1,0 +1,31 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>LIVE ACTIONS — blotter + decision trace</h1>
+{% if trades %}
+<table class="data">
+<tr><th></th><th>id</th><th>pair</th><th>strategy</th><th>dir</th><th>entry</th><th>exit</th>
+<th>pnl</th><th>status</th><th>opened</th></tr>
+{% for t in trades %}
+<tr><td>
+  <details><summary>trace</summary>
+    <div class="card">
+      {% for tr in t.traces.all %}
+      <p><span class="badge dim">{{ tr.seq }}·{{ tr.stage|upper }}</span>
+        <span class="src">{{ tr.record_id }} · {{ tr.source_ref }}</span></p>
+      <pre>{{ tr.payload }}</pre>
+      {% empty %}<div class="nodata">no data: hakuna trace records za trade hii</div>{% endfor %}
+      <h2>Compliance</h2>
+      {% for c in t.checks.all %}
+        <span class="badge {% if c.passed %}pass{% else %}fail{% endif %}">{{ c.rule }}</span>
+      {% empty %}<span class="nodata">no data: hakuna checks</span>{% endfor %}
+    </div>
+  </details></td>
+  <td>{{ t.trade_id }}</td><td>{{ t.pair }}</td><td>{{ t.strategy }}</td><td>{{ t.side }}</td>
+  <td class="num">{{ t.entry|default:"—" }}</td><td class="num">{{ t.exit|default:"—" }}</td>
+  <td class="num {% if t.pnl and t.pnl > 0 %}pos{% elif t.pnl and t.pnl < 0 %}neg{% endif %}">{{ t.pnl|default:"—" }}</td>
+  <td><span class="badge {% if t.status == 'CLOSED' %}dim{% else %}pass{% endif %}">{{ t.status }}</span></td>
+  <td class="num">{{ t.opened_at|date:"Y-m-d H:i"|default:"—" }}</td></tr>
+{% endfor %}
+</table>
+{% else %}<div class="nodata">no data: paper/live log haina trades (data/paper/paper_log.jsonl)</div>{% endif %}
+{% endblock %}

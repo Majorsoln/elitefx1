@@ -1,0 +1,18 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>MODEL REGISTRY — product catalog</h1>
+{% if models %}
+<div class="grid g3">
+{% for m in models %}
+<div class="card">
+  <h2>{{ m.model_id }} <span class="src">{{ m.version }}</span></h2>
+  <p><span class="badge {% if 'PROVEN' in m.status or 'LIVE' in m.status %}pass{% elif 'DEAD' in m.status %}fail{% else %}warn{% endif %}">{{ m.status }}</span>
+     <span class="badge dim">{{ m.model_class }}</span></p>
+  <p class="num">OOS: {{ m.oos_proof|default:"—" }}</p>
+  <p class="src">{{ m.provenance }}</p>
+  <p><a href="/registry/{{ m.model_id }}/">card + LIVE-vs-PROMISED →</a></p>
+</div>
+{% endfor %}
+</div>
+{% else %}<div class="nodata">no data: registry mirror tupu (ingest docs/MODEL_REGISTRY.md kwanza)</div>{% endif %}
+{% endblock %}

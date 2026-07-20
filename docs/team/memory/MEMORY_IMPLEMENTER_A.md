@@ -1043,3 +1043,44 @@ OPEN QUESTIONS / NOTES:
     zaidi; verdict yoyote (ikiwemo NO-LIFT) ni ujuzi wa curriculum, si kushindwa.
   - sklearn parity: kama Operator anataka lbfgs halisi, inaweza kubadili _fit_config kutumia sklearn
     (convex -> matokeo yanafanana); pure-numpy imechaguliwa kwa portability ya sweep + determinism.
+
+=== M-DASH build (2026-07-20) — THE GLASS BOX dashboard — IMEKAMILIKA ===
+LAST COMPLETED: **Django monitoring dashboard KAMILI** ✅ (docs/DASHBOARD_CHARTER.md; dir MPYA `dashboard/`
+  — src/research HAIJAGUSWA, diff = dashboard/ tu):
+  · Setup: project elitefx_dash + app monitor; SQLite (Postgres-ready); REPO_ROOT/paths/secret kupitia env
+    (HAKUNA secret repo). Dark institutional theme (style.css moja, monospace kwa namba).
+  · DB models 12 + Lease (mirror ya artifacts, SI logic): Trade, DecisionTrace, ComplianceCheck,
+    StrategyPerf, ModelVersion, PairStrategyCell, VpsHeartbeat, Alert, Report, LedgerEntry, Lesson,
+    AuditEvent (append-only — save/delete update inakataa). KILA moja + source_ref + is_demo (glass-box).
+  · Ingest (manage.py ingest [--demo]): read-only loaders — paper_log.jsonl (decision/execution/settlement
+    -> Trade+trace+checks), MODEL_REGISTRY.md (+promised EV regex), EXPERIMENT_LEDGER.md, reports/*.md
+    (+archive), lessons 42, rmap parquet (polars, aggregation event×pair) AU pair_strategy.jsonl,
+    alerts.jsonl (env), heartbeat.json (env), StrategyPerf derived. Artifact haipo -> "no data" (KAMWE
+    kubuni). IDEMPOTENT (natural keys). REAL ingest imethibitishwa: registry 3, ledger 13, reports 98,
+    lessons 42, cells 252 (rmap halisi); paper/alerts/hb = "no data" waaminifu.
+  · Panels 9 ZOTE (read-only, @require_GET): Command Deck (status banner OPERATIONAL/DEGRADED/NO-DATA +
+    KPI + sparkline + ticker), Portfolio (equity + per-strategy + monthly heatmap mwaka×mwezi + toggle),
+    Live Actions (blotter + decision-trace expandable + per-trade compliance badges), Trust/Compliance
+    (score kubwa + gauges per rule + violations nyekundu), Model Registry (cards + lifecycle timeline +
+    LIVE-vs-PROMISED overlay na shrinkage band 0.35-0.5x + degradation flag + ATTESTATION export
+    JSON/HTML/PDF na SHA-256 hash reproducible), Pair×Strategy heatmap (drill-down + lessons),
+    Diagnosis/Alerts, VPS Health (freshness per pair), Ledger+Lessons+Reports browser (md viewer salama).
+  · Roles (leasing foundation V2 §5.4): groups internal/attestor/lessee + Lease model; decorators
+    panel_access/model_access; lessee = model MOJA aliyokodishwa + attestation yake TU; AuditEvent
+    inarekodi attestation views (append-only). bootstrap_roles --demo-users.
+  · Demo fixtures (monitor/fixtures/, format ILEILE ya artifacts halisi -> loaders zilezile zinajaribiwa):
+    paper_log 10 trades (1 violation ya demo), registry/ledger/reports/lessons, pair_strategy 24,
+    alerts 3, heartbeat. is_demo=True + demo banner WAZI kwenye UI.
+  · TESTS 9/9 GREEN (`python dashboard/manage.py test`): (a) ingest correctness + idempotent;
+    (b) no-fabrication (artifact tupu -> 0 + panels "no data" 200); (c) read-only (POST->405 kila panel,
+    hakuna trade-mutation, smoke 200 panels zote + drill-downs); (d) attestation hash stable +
+    sensitivity + audit append-only; (e) role access (lessee-scoped 403s, attestor scope, anon->login).
+  · DEVIATION-with-reason (documented kwenye glasschart.js): Chart.js file haikuweza ku-vendor (proxy
+    403 kwa CDN kwenye env ya build) -> glasschart.js (canvas lib ndogo self-contained, HAKUNA CDN —
+    line+band+sparkline). Operator anaweza ku-vendor chart.umd.min.js baadaye; templates zinatumia gc.*.
+  · Research sweep 30/30 PASS (src/research byte-untouched).
+RUNBOOK: pip install -r dashboard/requirements.txt && cd dashboard && python manage.py migrate &&
+  python manage.py ingest --demo && python manage.py bootstrap_roles --demo-users &&
+  python manage.py runserver  -> login internal-demo/internal-demo. Real data: python manage.py ingest.
+NEXT AFTER: M-DASH-QA (audit ya Chief/SCIENTIST-D); VPS agent kuandika heartbeat.json; monitors
+  kuandika alerts.jsonl; paper_trader run halisi -> paper_log.jsonl -> panels zote live.

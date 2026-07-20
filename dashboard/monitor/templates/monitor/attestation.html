@@ -1,0 +1,10 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>ATTESTATION — {{ model_id }}</h1>
+{% if pdf_missing %}<p class="badge warn">reportlab haipo — PDF haiwezekani; HTML/JSON hii ndiyo export</p>{% endif %}
+<p class="num">hash (SHA-256, canonical payload — reproducible): <b>{{ data.attestation_hash }}</b></p>
+<p class="src">generated_at (NJE ya hash): {{ data.generated_at }} · doctrine: {{ data.doctrine }}</p>
+<pre>{{ pretty }}</pre>
+<p class="src">Ukaguzi: payload hii inazalishwa upya kutoka artifacts (source_ref kila sehemu);
+hash ile ile = data ile ile. AuditEvent imerekodiwa kwa view hii (append-only).</p>
+{% endblock %}

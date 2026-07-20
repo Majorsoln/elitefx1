@@ -1,0 +1,36 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>COMMAND DECK</h1>
+<p><span class="banner status-{{ status }}">SYSTEM: {{ status }}</span>
+  {% if hb %}<span class="src"> heartbeat {{ hb.ts|date:"Y-m-d H:i:s" }} UTC · {{ hb.source_ref }}</span>
+  {% else %}<span class="nodata">no data: heartbeat haipo (ELITEFX_HEARTBEAT_PATH)</span>{% endif %}</p>
+
+<div class="grid g4">
+  <div class="card kpi"><span class="label">Equity (net R, all)</span>
+    <b class="{% if perf_all and perf_all.net_r >= 0 %}pos{% else %}neg{% endif %}">
+      {% if perf_all %}{{ perf_all.net_r }}{% else %}no data{% endif %}</b></div>
+  <div class="card kpi"><span class="label">Net R mwezi huu</span>
+    <b>{% if perf_month %}{{ perf_month.net_r }}{% else %}no data{% endif %}</b></div>
+  <div class="card kpi"><span class="label">Open positions</span><b>{{ open_positions }}</b></div>
+  <div class="card kpi"><span class="label">Compliance score</span>
+    <b class="{% if score == 100 %}pos{% elif score %}neg{% endif %}">
+      {% if score is not None %}{{ score }}%{% else %}no data{% endif %}</b>
+    <span class="src">{{ n_checks }} checks · {{ n_fails }} violations</span></div>
+</div>
+<div class="grid g2" style="margin-top:12px">
+  <div class="card"><h2>Equity sparkline (R, cumulative)</h2>
+    <canvas id="eq" style="height:130px"></canvas></div>
+  <div class="card"><h2>Today's actions</h2>
+    {% if today_actions %}
+    <table class="data">{% for t in today_actions %}
+      <tr><td>{{ t.trade_id }}</td><td>{{ t.pair }}</td><td>{{ t.side }}</td>
+      <td>{{ t.strategy }}</td><td class="num">{{ t.pnl|default:"—" }}</td>
+      <td><span class="badge {% if t.status == 'CLOSED' %}dim{% else %}pass{% endif %}">{{ t.status }}</span></td></tr>
+    {% endfor %}</table>
+    {% else %}<div class="nodata">no data: hakuna trades kwenye log</div>{% endif %}</div>
+</div>
+<p class="src">Active models (PROVEN/LIVE): {{ active_models }} · chanzo: docs/MODEL_REGISTRY.md</p>
+{{ equity_json|json_script:"eqdata" }}
+<script>const d=JSON.parse(document.getElementById('eqdata').textContent);
+gc.spark(document.getElementById('eq'), d.values);</script>
+{% endblock %}

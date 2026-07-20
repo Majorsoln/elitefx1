@@ -1,0 +1,35 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>PORTFOLIO</h1>
+<p><a href="?mode=paper">paper</a> · <a href="?mode=live">live</a> · <a href="?">all</a>
+  <span class="src">(mode: {{ mode }})</span></p>
+<div class="card"><h2>Equity curve (cumulative R)</h2><canvas id="eq" style="height:230px"></canvas></div>
+
+<h2>Per-strategy (ALL period)</h2>
+<table class="data"><tr><th>strategy</th><th>N</th><th>net R</th><th>win%</th><th>expectancy R</th>
+<th>PF</th><th>max DD (R)</th><th>chanzo</th></tr>
+{% for s, p in strat_all.items %}{% if p %}
+<tr><td>{{ s }}</td><td class="num">{{ p.n_trades }}</td>
+  <td class="num {% if p.net_r >= 0 %}pos{% else %}neg{% endif %}">{{ p.net_r }}</td>
+  <td class="num">{{ p.win_rate }}</td><td class="num">{{ p.expectancy_r }}</td>
+  <td class="num">{{ p.profit_factor|default:"—" }}</td><td class="num">{{ p.max_dd_r }}</td>
+  <td class="src">{{ p.source_ref }}</td></tr>
+{% endif %}{% empty %}<tr><td colspan="8" class="nodata">no data: hakuna performance rows</td></tr>{% endfor %}
+</table>
+
+<h2>Monthly returns heatmap (PORTFOLIO net R — mwaka × mwezi)</h2>
+{% if heat_rows %}
+<table class="data heat"><tr><th>mwaka</th>{% for m in months %}<th>{{ m }}</th>{% endfor %}</tr>
+{% for y, row in heat_rows %}
+<tr><td>{{ y }}</td>
+{% for v in row %}
+  <td class="num {% if v is not None %}{% if v > 1 %}hp2{% elif v > 0 %}hp{% elif v < -1 %}hn2{% elif v < 0 %}hn{% endif %}{% endif %}">
+    {% if v is not None %}{{ v|floatformat:1 }}{% else %}·{% endif %}</td>
+{% endfor %}</tr>
+{% endfor %}</table>
+{% else %}<div class="nodata">no data: hakuna monthly rows (ingest kwanza)</div>{% endif %}
+
+{{ equity_json|json_script:"eqdata" }}
+<script>const d=JSON.parse(document.getElementById('eqdata').textContent);
+gc.line(document.getElementById('eq'), d);</script>
+{% endblock %}

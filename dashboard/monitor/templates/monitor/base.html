@@ -1,0 +1,31 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><title>ELITEFX — GLASS BOX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'monitor/style.css' %}">
+<script src="{% static 'monitor/glasschart.js' %}"></script>
+</head><body>
+<header>
+  <div class="brand">ELITEFX <span class="glass">GLASS BOX</span></div>
+  <nav>
+    {% if user.is_authenticated %}
+    <a href="/deck/" {% if panel == 'deck' %}class="on"{% endif %}>DECK</a>
+    <a href="/portfolio/" {% if panel == 'portfolio' %}class="on"{% endif %}>PORTFOLIO</a>
+    <a href="/actions/" {% if panel == 'actions' %}class="on"{% endif %}>ACTIONS</a>
+    <a href="/compliance/" {% if panel == 'compliance' %}class="on"{% endif %}>COMPLIANCE</a>
+    <a href="/registry/" {% if panel == 'registry' %}class="on"{% endif %}>REGISTRY</a>
+    <a href="/matrix/" {% if panel == 'matrix' %}class="on"{% endif %}>MATRIX</a>
+    <a href="/alerts/" {% if panel == 'alerts' %}class="on"{% endif %}>ALERTS</a>
+    <a href="/vps/" {% if panel == 'vps' %}class="on"{% endif %}>VPS</a>
+    <a href="/ledger/" {% if panel == 'ledger' %}class="on"{% endif %}>LEDGER</a>
+    <a href="/audit/" {% if panel == 'audit' %}class="on"{% endif %}>AUDIT</a>
+    {% endif %}
+  </nav>
+  <div class="who">{% if user.is_authenticated %}{{ user.username }} ·
+    <form method="post" action="/logout/" class="inline">{% csrf_token %}<button class="linklike">logout</button></form>
+  {% endif %}</div>
+</header>
+{% if demo %}<div class="demo-banner">DEMO DATA — fixtures za mfano, SI trading halisi</div>{% endif %}
+<main>{% block content %}{% endblock %}</main>
+<footer>read-only monitoring · Doctrine V2 §4 "kioo, si mkono" · kila namba ina chanzo (source_ref)</footer>
+</body></html>

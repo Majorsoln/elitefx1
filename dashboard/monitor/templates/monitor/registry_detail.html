@@ -1,0 +1,48 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>{{ mv.model_id }} <span class="src">{{ mv.version }} · {{ mv.model_class }}</span></h1>
+<div class="lifecycle">
+  {% for st in lifecycle %}<span {% if st in mv.status %}class="here"{% endif %}>{{ st }}</span>{% endfor %}
+  {% if 'WATCH' in mv.status %}<span class="here">WATCH</span>{% endif %}
+</div>
+<p><span class="badge dim">status: {{ mv.status }}</span>
+   {% if degraded %}<span class="badge fail">MODEL DEGRADATION FLAG</span>{% endif %}</p>
+<p class="num">OOS proof: {{ mv.oos_proof|default:"no data" }}</p>
+<p class="src">provenance: {{ mv.provenance }} · chanzo: {{ mv.source_ref }}</p>
+
+<div class="card"><h2>LIVE vs PROMISED (expectancy R kwa mwezi + shrinkage band 0.35–0.5×)</h2>
+  <canvas id="ovl" style="height:230px"></canvas>
+  {% if not monthly %}<div class="nodata">no data: hakuna live/paper performance bado — promised line pekee</div>{% endif %}
+</div>
+
+<h2>Performance (mirror; chanzo = trade log)</h2>
+{% if perf %}
+<table class="data"><tr><th>period</th><th>N</th><th>net R</th><th>win%</th><th>expectancy R</th><th>PF</th></tr>
+<tr><td>ALL</td><td class="num">{{ perf.n_trades }}</td><td class="num">{{ perf.net_r }}</td>
+<td class="num">{{ perf.win_rate }}</td><td class="num">{{ perf.expectancy_r }}</td>
+<td class="num">{{ perf.profit_factor|default:"—" }}</td></tr>
+{% for p in monthly %}
+<tr><td>{{ p.period }}</td><td class="num">{{ p.n_trades }}</td><td class="num">{{ p.net_r }}</td>
+<td class="num">{{ p.win_rate }}</td><td class="num">{{ p.expectancy_r }}</td>
+<td class="num">{{ p.profit_factor|default:"—" }}</td></tr>
+{% endfor %}</table>
+{% else %}<div class="nodata">no data: hakuna trades za model hii bado</div>{% endif %}
+
+<h2>Versions (audit trail — toleo jipya halifuti la zamani)</h2>
+<table class="data"><tr><th>version</th><th>status</th><th>OOS</th><th>chanzo</th></tr>
+{% for v in versions %}<tr><td>{{ v.version }}</td><td>{{ v.status }}</td>
+<td class="num">{{ v.oos_proof }}</td><td class="src">{{ v.source_ref }}</td></tr>{% endfor %}</table>
+
+<h2>Attestation export (bidhaa ya ukaguzi — hash + chanzo)</h2>
+<p><a href="/registry/{{ mv.model_id }}/attest.json">JSON</a> ·
+   <a href="/registry/{{ mv.model_id }}/attest.html">HTML</a> ·
+   <a href="/registry/{{ mv.model_id }}/attest.pdf">PDF</a></p>
+
+{{ overlay_json|json_script:"ovldata" }}
+<script>
+const o = JSON.parse(document.getElementById('ovldata').textContent);
+gc.line(document.getElementById('ovl'),
+  { labels: o.live.map(p => p.period), values: o.live.map(p => p.ev) },
+  { promised: o.promised, bandLo: o.band_lo, bandHi: o.band_hi });
+</script>
+{% endblock %}

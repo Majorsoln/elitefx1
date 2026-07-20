@@ -1,0 +1,17 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>{{ cell.pair }} × {{ cell.strategy }}</h1>
+<div class="grid g3">
+  <div class="card kpi"><span class="label">EV</span>
+    <b class="{% if cell.ev and cell.ev > 0 %}pos{% elif cell.ev and cell.ev < 0 %}neg{% endif %}">{{ cell.ev|default:"no data" }}</b></div>
+  <div class="card kpi"><span class="label">win rate</span><b>{{ cell.win_rate|default:"no data" }}</b></div>
+  <div class="card kpi"><span class="label">N</span><b>{{ cell.n }}</b></div>
+</div>
+<h2>Context (atlas / mazingira)</h2>
+{% if cell.context %}<pre>{{ cell.context }}</pre>
+{% else %}<div class="nodata">no data: hakuna context ya cell hii</div>{% endif %}
+<p class="src">chanzo: {{ cell.source_ref }}</p>
+<h2>Pair lessons (library)</h2>
+{% for l in lessons %}<details><summary>{{ l.lesson_id }} — {{ l.title }}</summary><pre>{{ l.body_md|truncatechars:2000 }}</pre></details>
+{% empty %}<div class="nodata">no data: hakuna lessons</div>{% endfor %}
+{% endblock %}

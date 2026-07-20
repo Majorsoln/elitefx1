@@ -1,0 +1,27 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>VPS / SYSTEM HEALTH</h1>
+<p><span class="banner status-{{ status }}">{{ status }}</span></p>
+{% if hb %}
+<div class="grid g4">
+  <div class="card kpi"><span class="label">last heartbeat</span><b class="num" style="font-size:15px">{{ hb.ts|date:"Y-m-d H:i:s" }}</b></div>
+  <div class="card kpi"><span class="label">uptime (s)</span><b>{{ hb.uptime_s|default:"no data" }}</b></div>
+  <div class="card kpi"><span class="label">latency (ms)</span><b>{{ hb.latency_ms|default:"no data" }}</b></div>
+  <div class="card kpi"><span class="label">clock drift (ms)</span><b>{{ hb.clock_drift_ms|default:"no data" }}</b></div>
+</div>
+<div class="grid g2" style="margin-top:12px">
+  <div class="card"><h2>Disk / Mem free %</h2>
+    <div>disk</div><div class="gauge"><div style="width:{{ hb.disk_free_pct|default:0 }}%"></div></div>
+    <div>mem</div><div class="gauge"><div style="width:{{ hb.mem_free_pct|default:0 }}%"></div></div></div>
+  <div class="card"><h2>Data-feed freshness (s tangu tick ya mwisho, per pair)</h2>
+    {% if hb.feed_freshness %}
+    <table class="data">{% for pair, s in hb.feed_freshness.items %}
+      <tr><td>{{ pair }}</td><td class="num {% if s > 300 %}neg{% endif %}">{{ s }}</td></tr>{% endfor %}</table>
+    {% else %}<div class="nodata">no data</div>{% endif %}</div>
+</div>
+<p class="src">chanzo: {{ hb.source_ref }}</p>
+<h2>History</h2>
+<table class="data">{% for h in history %}<tr><td class="num">{{ h.ts|date:"Y-m-d H:i:s" }}</td>
+<td class="num">{{ h.latency_ms }}</td><td class="num">{{ h.clock_drift_ms }}</td></tr>{% endfor %}</table>
+{% else %}<div class="nodata">no data: heartbeat file haipo (weka ELITEFX_HEARTBEAT_PATH; VPS agent inaiandika)</div>{% endif %}
+{% endblock %}

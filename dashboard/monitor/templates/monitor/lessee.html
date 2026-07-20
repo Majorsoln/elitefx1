@@ -1,0 +1,21 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>LESSEE MONITORING — models ulizokodisha</h1>
+{% if models %}
+<div class="grid g3">
+{% for m in models %}
+<div class="card">
+  <h2>{{ m.model_id }} <span class="src">{{ m.version }}</span></h2>
+  <p><span class="badge pass">{{ m.status }}</span></p>
+  <p class="num">OOS: {{ m.oos_proof }}</p>
+  <p><a href="/registry/{{ m.model_id }}/">monitoring →</a> ·
+     <a href="/registry/{{ m.model_id }}/attest.html">attestation →</a></p>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="nodata">no data: hakuna lease ya akaunti hii{% if leases %} kwenye registry mirror{% endif %}
+— wasiliana na ELITEFX kwa access.</div>
+{% endif %}
+<p class="src">Access yako: read-only monitoring + attestation ya models ulizokodisha PEKEE (V2 §5.4).</p>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>RESEARCH LEDGER + LESSONS + REPORTS</h1>
+<h2>Experiment ledger (kila jaribio + verdict — negatives ni sayansi)</h2>
+{% for cycle, entries in cycles %}
+<h2>{{ cycle }}</h2>
+<table class="data"><tr><th>ID</th><th>jaribio</th><th>verdict</th><th>report</th></tr>
+{% for e in entries %}
+<tr><td>{{ e.exp_id }}</td><td>{{ e.title }}</td><td>{{ e.verdict }}</td>
+<td>{% if e.report_path %}<a href="/reports/{{ e.report_path }}">{{ e.report_path }}</a>{% else %}—{% endif %}</td></tr>
+{% endfor %}</table>
+{% empty %}<div class="nodata">no data: ledger mirror tupu</div>{% endfor %}
+
+<h2>Lessons library</h2>
+{% for l in lessons %}
+<details><summary>{{ l.lesson_id }} — {{ l.title }}</summary><pre>{{ l.body_md|truncatechars:4000 }}</pre>
+<span class="src">{{ l.source_ref }}</span></details>
+{% empty %}<div class="nodata">no data: hakuna lessons</div>{% endfor %}
+
+<h2>Reports browser</h2>
+{% for r in reports %}
+<div><a href="/reports/{{ r.path }}">{{ r.path }}</a> — {{ r.title }} <span class="badge dim">{{ r.section }}</span></div>
+{% empty %}<div class="nodata">no data: hakuna reports</div>{% endfor %}
+{% endblock %}

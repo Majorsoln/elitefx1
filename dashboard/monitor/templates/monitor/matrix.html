@@ -1,0 +1,16 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>PAIR × STRATEGY MATRIX</h1>
+{% if rows %}
+<table class="data heat"><tr><th>pair</th>{% for s in strats %}<th>{{ s }}</th>{% endfor %}</tr>
+{% for pair, cells in rows %}
+<tr><td>{{ pair }}</td>
+{% for c in cells %}
+  <td class="num {% if c and c.ev is not None %}{% if c.ev > 1 %}hp2{% elif c.ev > 0 %}hp{% elif c.ev < -1 %}hn2{% elif c.ev < 0 %}hn{% endif %}{% endif %}">
+  {% if c %}<a href="/matrix/{{ c.pair }}/{{ c.strategy }}/">{{ c.ev|floatformat:2|default:"·" }}</a>
+  <br><span class="src">n={{ c.n }}</span>{% else %}·{% endif %}</td>
+{% endfor %}</tr>
+{% endfor %}</table>
+<p class="src">values = EV (net, swap-adjusted kama chanzo ni atlas); drill-down kwa cell.</p>
+{% else %}<div class="nodata">no data: hakuna pair×strategy cells (ingest rmap/pair_strategy kwanza)</div>{% endif %}
+{% endblock %}

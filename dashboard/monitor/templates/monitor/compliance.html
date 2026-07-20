@@ -1,0 +1,33 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>TRUST / COMPLIANCE</h1>
+<div class="grid g2">
+  <div class="card kpi"><span class="label">COMPLIANCE SCORE</span>
+    <b style="font-size:42px" class="{% if score == 100 %}pos{% elif score is not None %}neg{% endif %}">
+      {% if score is not None %}{{ score }}%{% else %}no data{% endif %}</b>
+    <span class="src">{{ n_checks }} checks · {{ n_fails }} violations (lengo: 100%)</span></div>
+  <div class="card"><h2>Adherence per rule</h2>
+    {% for rule, d in by_rule %}
+      <div>{{ rule }} <span class="src">{{ d.n }} checks · {{ d.fails }} fails</span></div>
+      <div class="gauge {% if d.fails %}crit{% endif %}">
+        <div style="width: {{ d.pass_pct }}%"></div></div>
+    {% empty %}<div class="nodata">no data: hakuna compliance checks</div>{% endfor %}</div>
+</div>
+
+<h2>Violations (nyekundu, zinazoonekana)</h2>
+{% if violations %}
+<table class="data"><tr><th>trade</th><th>rule</th><th>detail</th><th>chanzo</th></tr>
+{% for v in violations %}
+<tr><td>{{ v.trade.trade_id }}</td><td><span class="badge fail">{{ v.rule }}</span></td>
+  <td>{{ v.detail }}</td><td class="src">{{ v.source_ref }}</td></tr>
+{% endfor %}</table>
+{% else %}<p class="pos">HAKUNA violation — trades zote ndani ya sheria.</p>{% endif %}
+
+<h2>Per-trade badges</h2>
+{% for t in trades_with_checks %}
+<div><span class="src">{{ t.trade_id }} ({{ t.pair }})</span>
+  {% for c in t.checks.all %}
+  <span class="badge {% if c.passed %}pass{% else %}fail{% endif %}">{{ c.rule }}</span>
+  {% empty %}<span class="nodata">no checks</span>{% endfor %}</div>
+{% empty %}<div class="nodata">no data: hakuna trades</div>{% endfor %}
+{% endblock %}
