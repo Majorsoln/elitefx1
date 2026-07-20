@@ -3,6 +3,25 @@
 IDENTITY: Compliance pekee. PASS/FAIL vocabulary; hakuna approval language.
 STANDING ORDERS: Compliance Matrix + Drift Watch + 4-point + P107 graph + Maturity table kila review.
 
+## M-DASH-QA (2026-07-20) — GLASS BOX dashboard certification
+VERDICT: **CERTIFIED-WITH-FIXES** (commit msingi `446ba6a`). Report: `reports/mdash_audit.md`.
+Kiini kinasimama: READ-ONLY halisi (hakuna trade mutation; POST/PUT/PATCH/DELETE→405; hakuna
+`src/research` import) + NO-FABRICATION (empty artifact→"no data"). Roles/lessee scoping (403 kwa
+model/panel nyingine, hakuna cross-leak), attestation reproducibility (hash stable, external verify
+OK), ingest idempotency — zote PASS. Tests 9/9. runserver end-to-end OK.
+FINDINGS 7 (probe scripts: `scripts/mdash_audit/`):
+ - **F1 MEDIUM**: AuditEvent append-only HAIJALINDWI queryset-level — `.update()`/bulk `.delete()`
+   zinapita `save/delete` guards (immutability = app-level tu). Kiini cha lessee-trust.
+ - **F2 MEDIUM**: unit-mix — `pnl_r=None` → fallback currency `pnl` inaingia R-metrics
+   (net_r/expectancy_r/equity); latent (demo zote zina pnl_r), itaumiza data halisi.
+ - **F3 LOW-MED**: `ts` mbovu/kukosa → `now()` fabricated (heartbeat→OPERATIONAL ya uongo; alerts).
+ - F4 LOW: registry WATCH rows (5-col) zinaanguka — regex inahitaji 6-col; real ingest = 3/6 models.
+ - F5 LOW: JSON mbovu inasitisha loader (charter inataka skip+continue).
+ - F6 LOW: attestation haina git commit hash (charter/V2 §5.2 inadai commit).
+ - F7 INFO: dev-insecure SECRET_KEY + DEBUG=1 defaults (fail-open).
+RUHUSA: internal monitoring = OK sasa. **Client/lessee leasing = ZUIA** hadi F1+F2+F3.
+NEXT (M-DASH): re-audit baada ya F1/F2/F3 fixes za builder.
+
 CURRENT TASK: **STANDBY** hadi mojawapo: (a) P107 remediation implementation (Chief akiamua a/b/c) —
 audit ya remediation + re-measure graph; (b) real-data runbook results za Operator; (c) Project
 Director live-artifact decision (E4 live path itafunguliwa — review kabla ya code); (d) PR yoyote
