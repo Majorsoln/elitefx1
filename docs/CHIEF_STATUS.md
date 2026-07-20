@@ -1182,3 +1182,26 @@ tests 9/9. Grep clean: HAKUNA import ya src/research (separation V2 §4). Read-o
 kwa monitoring ya ndani sasa hivi.
 
 **HATUA:** agent M-DASH-FIX → re-verify → leasing-ready. Live-path STRAT-001/002 inaendelea.
+
+---
+
+## 2026-07-20 — M-DASH-FIX: F1-F7 done → dashboard LEASING-READY (Chief verified)
+
+**IMPLEMENTER-A [M-DASH-FIX] (main `760cfae`): review PASS — nimethibitisha hapa.**
+- Tests 15/15 PASS (kutoka 9 — repro za F1-F6 sasa zinathibitishwa). src/research HAIJAGUSWA.
+- F1: `AppendOnlyQuerySet` inazuia bulk update()/delete() (audit trail immutable kweli). F2: R-metrics
+  kutoka pnl_r TU (hakuna unit-mix). F3: ts batili → None + tag, KAMWE now() (no-fabrication imeimarishwa).
+  F4: WATCH rows (5-col) zinaingest. F5: bad-JSON skip+log. F6: `git rev-parse HEAD` ndani ya attestation
+  iliyo-hash (auditable/reproducible). F7: fail-closed (SECRET_KEY inahitajika DEBUG=0).
+
+**RUHUSA YA CHIEF:** dashboard sasa CERTIFIED kwa matumizi ya NDANI **NA WATEJA/LEASING** (F1+F2+F3
+zilizokuwa gate zimekamilika). "Glass Box" tayari: monitoring + attestation + rule-compliance +
+lessee-isolation. Bidhaa ya kukodisha ina msingi wa kiufundi.
+
+### HALI YA TAASISI (milestone)
+- **Research:** mizunguko 2+3 kamili; portfolio STRAT-001/002 PROVEN; WATCH 3 (forward).
+- **Production path:** paper-trading → FTMO (inaendelea).
+- **Institutional layer:** Doctrine V2 + Model Registry + Experiment Ledger + **Glass Box dashboard
+  (CERTIFIED, leasing-ready)** + curriculum/audit discipline. Lessons 42.
+- **HATUA zinazofuata (background):** live-path compliance+sizing; WATCH forward accumulation;
+  dashboard ingest ya live-data itakapopatikana (VPS).
