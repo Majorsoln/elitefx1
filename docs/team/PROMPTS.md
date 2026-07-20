@@ -127,6 +127,43 @@ ingest --demo && runserver`) + orodha ya panels + screenshots/description.
 
 ---
 
+## PROMPT — IMPLEMENTER-A [M-DASH-FIX] (Fixes za audit F1–F7 — leasing certification)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: rekebisha findings za
+AUDITOR (reports/mdash_audit.md §FINDINGS F1-F7) ili dashboard ipate CERTIFIED kwa matumizi ya
+WATEJA/LEASING (si ndani tu). Chief ameidhinisha ZOTE. Read-only + no-fabrication zibaki intact.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: reports/mdash_audit.md §FINDINGS (F1-F7 + chanzo + fix pendekezo + repro scripts
+scripts/mdash_audit/) · dashboard/ husika.
+
+FIXES (kwa mpangilio wa uzito; zote na test mpya inayothibitisha repro imekwisha):
+  F1 (MEDIUM — immutability): AuditEvent — zuia QuerySet.update()/bulk-delete pia (override manager/
+     queryset au raise). Audit trail LAZIMA iwe append-only kweli (leasing trust).
+  F2 (MEDIUM — unit-mix): loaders.rebuild_strategy_perf + views._equity_series — pnl_r ikiwa None,
+     USITUMIE currency pnl kwenye metrics za R. Tenga: R-metrics kutoka pnl_r TU; trade zisizo na
+     pnl_r zisichangie net_r/expectancy_r/equity-R (au onyesha "R n/a"). Currency-equity ni curve
+     tofauti kama inahitajika. Hakuna kuchanganya units.
+  F3 (LOW-MED — fabricated ts): load_alerts/load_heartbeat — ts mbovu/kukosekana -> USIWEKE now().
+     Weka null + rekodi "stale/invalid ts"; VPS status isionyeshe OPERATIONAL kwa heartbeat yenye
+     ts batili (no-fabrication kiini). 
+  F4 (LOW): _ROW registry parser ikubali WATCH table ya columns 5 (id|class|status|signal|njia) —
+     WATCH rows (C2/SWING/K4-WATCH) ziingest.
+  F5 (LOW): _read_jsonl/load_heartbeat — mstari mbovu wa JSON = skip + log, si crash (charter §NIDHAMU).
+  F6 (LOW): attestation build_payload — ongeza `git rev-parse HEAD` (commit hash) kwenye payload
+     iliyo-hash (reproducible; charter panel 5 / V2 §5.2).
+  F7 (INFO): settings — fail-closed: DEBUG default 0; kama SECRET_KEY haijawekwa na DEBUG=0 -> raise.
+
+SHERIA: read-only + no-fabrication zibaki (F3 inaziimarisha). src/research HAIGUSWI. `manage.py test`
+  GREEN + tests mpya kwa F1-F6 (repro za audit sasa zinashindwa kuvunja). Endesha scripts/mdash_audit/
+  adversarial.py + http_probe.py — zithibitishe fixes.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M-DASH-FIX" (F1-F7 done, tests GREEN).
+  (Baada ya hapo: matumizi ya wateja/leasing yameruhusiwa — Chief update MODEL_REGISTRY/DOCTRINE.)
+```
+
+---
+
 ## PROMPT — AUDITOR [M-DASH-QA] (Dashboard integrity & read-only certification)
 
 ```text
