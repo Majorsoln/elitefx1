@@ -2,7 +2,7 @@
 {% block content %}
 <h1>COMMAND DECK</h1>
 <p><span class="banner status-{{ status }}">SYSTEM: {{ status }}</span>
-  {% if hb %}<span class="src"> heartbeat {{ hb.ts|date:"Y-m-d H:i:s" }} UTC · {{ hb.source_ref }}</span>
+  {% if hb %}<span class="src"> heartbeat {% if hb.ts %}{{ hb.ts|date:"Y-m-d H:i:s" }} UTC{% else %}[ts batili]{% endif %} · {{ hb.source_ref }}</span>
   {% else %}<span class="nodata">no data: heartbeat haipo (ELITEFX_HEARTBEAT_PATH)</span>{% endif %}</p>
 
 <div class="grid g4">

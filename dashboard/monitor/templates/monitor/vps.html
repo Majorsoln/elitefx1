@@ -1,7 +1,7 @@
 {% extends "monitor/base.html" %}
 {% block content %}
 <h1>VPS / SYSTEM HEALTH</h1>
-<p><span class="banner status-{{ status }}">{{ status }}</span></p>
+<p><span class="banner status-{{ status }}">{{ status }}</span>{% if hb and hb.ts is None %} <span class="badge warn">heartbeat ts batili/haipo — freshness haithibitiki (no-fabrication)</span>{% endif %}</p>
 {% if hb %}
 <div class="grid g4">
   <div class="card kpi"><span class="label">last heartbeat</span><b class="num" style="font-size:15px">{{ hb.ts|date:"Y-m-d H:i:s" }}</b></div>

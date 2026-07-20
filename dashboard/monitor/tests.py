@@ -189,3 +189,115 @@ class RoleAccessTests(TestCase):
             r = self.client.get(url)
             self.assertEqual(r.status_code, 302, url)
             self.assertIn("/login/", r["Location"])
+
+
+class AuditFixTests(TestCase):
+    """M-DASH-FIX: repro za auditor (F1-F6) sasa ZINASHINDWA kuvunja mfumo."""
+
+    def test_f1_queryset_immutability(self):
+        # repro P6/P6b: bulk update()/delete() zilipita save() — sasa zinakataliwa
+        AuditEvent.objects.create(user="qa", action="probe", subject="x")
+        with self.assertRaises(ValueError):
+            AuditEvent.objects.filter(action="probe").update(detail="TAMPERED")
+        with self.assertRaises(ValueError):
+            AuditEvent.objects.filter(action="probe").delete()
+        with self.assertRaises(ValueError):
+            AuditEvent.objects.all().delete()
+        ev = AuditEvent.objects.get(action="probe")
+        self.assertEqual(ev.detail, "")                      # haikubadilika
+        self.assertEqual(AuditEvent.objects.count(), 1)      # haikufutwa
+
+    def test_f2_no_unit_mixing(self):
+        # repro P4: settlement currency-only (hakuna pnl_r) + moja yenye pnl_r=1.0
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "log.jsonl"
+            recs = [
+                {"kind": "execution", "obj": {"id": "exec:qa:1", "order_id": "qa:1", "pair": "EURUSD",
+                 "side": "BUY", "status": "FILLED", "as_of": 1767862800, "mode": "paper"}},
+                {"kind": "settlement", "obj": {"id": "qa:1", "realized_pnl": 250.0, "as_of": 1767884400}},
+                {"kind": "execution", "obj": {"id": "exec:qa:2", "order_id": "qa:2", "pair": "EURUSD",
+                 "side": "BUY", "status": "FILLED", "as_of": 1767862900, "mode": "paper"}},
+                {"kind": "settlement", "obj": {"id": "qa:2", "pnl_r": 1.0, "realized_pnl": 12.0,
+                 "as_of": 1767884500}},
+            ]
+            p.write_text("\n".join(json.dumps(r) for r in recs))
+            loaders.load_paper_log(p)
+        n, note = loaders.rebuild_strategy_perf()
+        sp = StrategyPerf.objects.get(strategy="UNKNOWN", period="ALL", mode="paper")
+        # R-metrics kutoka pnl_r PEKEE: n=1, net_r=1.0, expectancy=1.0 (SI 251/125.5 ya unit-mix)
+        self.assertEqual(sp.n_trades, 1)
+        self.assertAlmostEqual(sp.net_r, 1.0)
+        self.assertAlmostEqual(sp.expectancy_r, 1.0)
+        self.assertIn("bila pnl_r", note)                    # excluded inaripotiwa wazi
+        # equity series (R) haina trade ya currency-only
+        from .views import _equity_series
+        labels, series = _equity_series()
+        self.assertEqual(len(series), 1)
+        self.assertAlmostEqual(series[-1], 1.0)
+
+    def test_f3_no_fabricated_ts(self):
+        # repro P2: heartbeat ts batili -> ts=None + status SI OPERATIONAL
+        with tempfile.TemporaryDirectory() as tmp:
+            hb = Path(tmp) / "hb.json"
+            hb.write_text('{"ts": "not-a-date", "uptime_s": 1}')
+            n, note = loaders.load_heartbeat(hb)
+            self.assertEqual(n, 1)
+            self.assertIn("invalid ts", note)
+            self.assertIsNone(VpsHeartbeat.objects.first().ts)
+            from .views import _system_status
+            status, _hb = _system_status()
+            self.assertNotEqual(status, "OPERATIONAL")
+            # repro P3: alert bila ts -> ts=None + tagged (SI now())
+            al = Path(tmp) / "a.jsonl"
+            al.write_text('{"kind":"drift","severity":"WARN","message":"x","dedupe_key":"qa-alert"}\n')
+            loaders.load_alerts(al)
+            a = Alert.objects.get(dedupe_key="qa-alert")
+            self.assertIsNone(a.ts)
+            self.assertIn("[invalid/missing ts]", a.message)
+
+    def test_f4_watch_table_ingested(self):
+        # WATCH table ya columns 5 ina-parse (C2/SWING/K4-WATCH)
+        with tempfile.TemporaryDirectory() as tmp:
+            md = Path(tmp) / "reg.md"
+            md.write_text(
+                "| id | version | class | status | OOS proof | provenance |\n"
+                "|----|---------|-------|--------|-----------|------------|\n"
+                "| STRAT-001 | v1.0 | strategy | PROVEN | HOLDOUT N=303 EV+1.92 | nr7 |\n\n"
+                "| id | class | status | signal | njia |\n"
+                "|----|-------|--------|--------|------|\n"
+                "| C2-WATCH | strategy | WATCH | compression×H4 pooled | forward data |\n"
+                "| SWING-WATCH | strategy | WATCH | nr7×D1×LOW pooled | forward 2026-05+ |\n")
+            n, _ = loaders.load_model_registry(md)
+        self.assertEqual(n, 3)
+        self.assertTrue(ModelVersion.objects.filter(model_id="C2-WATCH", version="watch").exists())
+        self.assertTrue(ModelVersion.objects.filter(model_id="SWING-WATCH").exists())
+        self.assertEqual(ModelVersion.objects.get(model_id="C2-WATCH").oos_proof,
+                         "compression×H4 pooled")
+
+    def test_f5_malformed_json_skipped(self):
+        # repro P1: mstari mbovu -> skip + note (hakuna crash); mizuri inaendelea ku-ingest
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "bad.jsonl"
+            p.write_text('{"kind": "execution", "obj": {broken json\nnot json at all\n'
+                         + json.dumps({"kind": "execution", "obj": {"id": "exec:ok:1",
+                            "order_id": "ok:1", "pair": "EURUSD", "side": "BUY",
+                            "status": "FILLED", "as_of": 1767862800}}) + "\n")
+            n, note = loaders.load_paper_log(p)
+            self.assertEqual(n, 1)                           # record nzuri ime-ingest
+            self.assertIn("skipped 2 bad json", note)
+            # heartbeat json mbovu -> (0, note), si crash
+            hb = Path(tmp) / "hb.json"
+            hb.write_text("not json{{{")
+            n2, note2 = loaders.load_heartbeat(hb)
+            self.assertEqual(n2, 0)
+            self.assertIn("invalid json", note2)
+
+    def test_f6_attestation_has_commit(self):
+        call_command("ingest", "--demo", verbosity=0)
+        data, canonical = attest.attestation("STRAT-001")
+        self.assertIn("repo_commit", data)
+        self.assertTrue(len(data["repo_commit"]) >= 7 or data["repo_commit"] == "unknown")
+        self.assertIn("repo_commit", canonical)              # NDANI ya hashed payload
+        # reproducibility inabaki (commit ile ile ndani ya run)
+        data2, _ = attest.attestation("STRAT-001")
+        self.assertEqual(data["attestation_hash"], data2["attestation_hash"])

@@ -21,20 +21,34 @@ STAGES = {"decision": "policy", "execution": "fill", "settlement": "settle"}
 
 
 def _dt(ts):
-    """epoch/ISO → aware datetime (UTC). None-safe."""
+    """epoch/ISO → aware datetime (UTC). Batili/garbage → None (F3: KAMWE si now())."""
     if ts is None:
         return None
-    if isinstance(ts, (int, float)):
-        return datetime.fromtimestamp(float(ts), tz=timezone.utc)
     try:
+        if isinstance(ts, (int, float)):
+            return datetime.fromtimestamp(float(ts), tz=timezone.utc)
         return datetime.fromisoformat(str(ts).replace("Z", "+00:00")).astimezone(timezone.utc)
-    except ValueError:
+    except (ValueError, OSError, OverflowError):
         return None
 
 
 def _read_jsonl(path):
+    """F5: mstari mbovu wa JSON = SKIP (+hesabu) — loader haicrash (charter §NIDHAMU).
+    Rudisha (rows, n_bad)."""
+    rows, bad = [], 0
     with open(path, encoding="utf-8") as f:
-        return [json.loads(ln) for ln in f if ln.strip()]
+        for ln in f:
+            if not ln.strip():
+                continue
+            try:
+                rows.append(json.loads(ln))
+            except json.JSONDecodeError:
+                bad += 1
+    return rows, bad
+
+
+def _bad_note(bad, path):
+    return f"skipped {bad} bad json line(s): {path}" if bad else None
 
 
 # ---------- 1) paper/live log → Trade + DecisionTrace + ComplianceCheck ----------
@@ -43,7 +57,7 @@ def load_paper_log(path, demo=False):
     path = Path(path)
     if not path.exists():
         return 0, f"no data: {path}"
-    recs = _read_jsonl(path)
+    recs, bad = _read_jsonl(path)
     src = str(path)
     trades = {}
     pending_traces = []        # (order_id_or_None, seq, stage, record_id, payload)
@@ -104,32 +118,39 @@ def load_paper_log(path, demo=False):
         DecisionTrace.objects.update_or_create(
             record_id=rid, stage=stage, seq=seq,
             defaults=dict(trade=tr, payload=obj, source_ref=src, is_demo=demo))
-    return n, None
+    return n, _bad_note(bad, path)
 
 
 # ---------- 2) MODEL_REGISTRY.md → ModelVersion ----------
 
-_ROW = re.compile(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|"
-                  r"\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|\s*$")
+_ROW6 = re.compile(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|"
+                   r"\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|\s*$")
+_ROW5 = re.compile(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|"
+                   r"\s*([^|]*?)\s*\|\s*$")
 _EV = re.compile(r"EV\s*([+\-]?\d+(?:\.\d+)?)")
 _N = re.compile(r"N\s*=\s*(\d+)")
+_HEADERS = {"id", "----"}
 
 
 def load_model_registry(path, demo=False):
+    """F4: jedwali la kawaida (6 col: id|version|class|status|OOS|provenance) NA jedwali la WATCH
+    (5 col: id|class|status|signal|njia) yote yana-parse. Header/separator rows zinarukwa."""
     path = Path(path)
     if not path.exists():
         return 0, f"no data: {path}"
     n = 0
     for ln in path.read_text(encoding="utf-8").splitlines():
-        m = _ROW.match(ln)
-        if not m:
+        m6 = _ROW6.match(ln)
+        if m6:
+            mid, ver, klass, status, oos, prov = (x.strip().strip("*") for x in m6.groups())
+        else:
+            m5 = _ROW5.match(ln)
+            if not m5:
+                continue
+            mid, klass, status, oos, prov = (x.strip().strip("*") for x in m5.groups())
+            ver = "watch"                                  # WATCH table haina version column
+        if mid.lower() in _HEADERS or set(mid) <= {"-"}:
             continue
-        mid, ver, klass, status, oos, prov = (x.strip().strip("*") for x in m.groups())
-        if mid.lower() in ("id", "----") or set(mid) <= {"-"}:
-            continue
-        # jedwali la WATCH lina columns tofauti (id|class|status|signal|njia) — tambua kwa heuristics
-        if ver.lower() in ("strategy", "filter"):        # WATCH table: col2=class
-            mid, klass, status, oos, prov, ver = mid, ver, klass, status, oos, "watch"
         ev = _EV.search(oos); nn = _N.search(oos)
         ModelVersion.objects.update_or_create(
             model_id=mid, version=ver,
@@ -208,13 +229,14 @@ def load_pair_strategy(parquet_path, jsonl_path, demo=False):
     jp = Path(jsonl_path)
     if jp.exists():
         n = 0
-        for r in _read_jsonl(jp):
+        rows, bad = _read_jsonl(jp)
+        for r in rows:
             PairStrategyCell.objects.update_or_create(
                 pair=r["pair"], strategy=r["strategy"],
                 defaults=dict(n=r.get("n", 0), ev=r.get("ev"), win_rate=r.get("win_rate"),
                               context=r.get("context", {}), source_ref=str(jp), is_demo=demo))
             n += 1
-        return n, None
+        return n, _bad_note(bad, jp)
     pp = Path(parquet_path)
     if not pp.exists():
         return 0, f"no data: {pp} / {jp}"
@@ -244,46 +266,64 @@ def load_pair_strategy(parquet_path, jsonl_path, demo=False):
 # ---------- 7) alerts.jsonl → Alert ; 8) heartbeat.json → VpsHeartbeat ----------
 
 def load_alerts(path, demo=False):
+    """F3: ts batili/inakosekana -> ts=None + message tagged '[invalid/missing ts]' — HAKUNA now()."""
     path = Path(path)
     if not path.exists():
         return 0, f"no data: {path}"
-    n = 0
-    for r in _read_jsonl(path):
+    n = 0; invalid_ts = 0
+    rows, bad = _read_jsonl(path)
+    for r in rows:
         key = r.get("dedupe_key") or f"{r.get('kind','?')}:{r.get('ts','?')}"
+        ts = _dt(r.get("ts"))
+        msg = r.get("message", "")
+        if ts is None:
+            invalid_ts += 1
+            msg = "[invalid/missing ts] " + msg           # stale/invalid — inaonekana WAZI
         Alert.objects.update_or_create(
             dedupe_key=key,
-            defaults=dict(ts=_dt(r.get("ts")) or datetime.now(timezone.utc),
-                          severity=r.get("severity", "INFO"), kind=r.get("kind", "?"),
-                          message=r.get("message", "")[:390], source_ref=str(path), is_demo=demo))
+            defaults=dict(ts=ts, severity=r.get("severity", "INFO"), kind=r.get("kind", "?"),
+                          message=msg[:390], source_ref=str(path), is_demo=demo))
         n += 1
-    return n, None
+    notes = [x for x in (_bad_note(bad, path),
+                         (f"{invalid_ts} alert(s) zenye ts batili (null, si now())" if invalid_ts else None)) if x]
+    return n, ("; ".join(notes) or None)
 
 
 def load_heartbeat(path, demo=False):
+    """F3: ts batili -> ts=None (status HAITAKUWA OPERATIONAL). F5: JSON mbovu -> (0, note), si crash."""
     path = Path(path)
     if not path.exists():
         return 0, f"no data: {path}"
-    r = json.loads(path.read_text(encoding="utf-8"))
-    ts = _dt(r.get("ts")) or datetime.now(timezone.utc)
-    obj, created = VpsHeartbeat.objects.update_or_create(
+    try:
+        r = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return 0, f"invalid json (skipped, no crash): {path}"
+    ts = _dt(r.get("ts"))                                  # None kama batili — HAKUNA now()
+    VpsHeartbeat.objects.update_or_create(
         ts=ts,
         defaults=dict(uptime_s=r.get("uptime_s"), latency_ms=r.get("latency_ms"),
                       clock_drift_ms=r.get("clock_drift_ms"), disk_free_pct=r.get("disk_free_pct"),
                       mem_free_pct=r.get("mem_free_pct"), feed_freshness=r.get("feed_freshness", {}),
                       source_ref=str(path), is_demo=demo))
-    return 1, None
+    return 1, ("stale/invalid ts (null — status si OPERATIONAL)" if ts is None else None)
 
 
 # ---------- 9) StrategyPerf — derived kutoka Trades zilizo-ingest (artifact-based) ----------
 
 def rebuild_strategy_perf(demo=False):
+    """F2: R-metrics kutoka `pnl_r` PEKEE — trade isiyo na pnl_r HAICHANGII net_r/expectancy_r
+    (HAKUNA kuchanganya currency na R; unit-mix = namba yenye semantiki batili). Trades za currency-
+    only zinahesabiwa kando (note) — curve ya currency ni tofauti, si sehemu ya R-perf."""
     from collections import defaultdict
-    trades = list(Trade.objects.filter(status="CLOSED").exclude(pnl__isnull=True))
+    all_closed = list(Trade.objects.filter(status="CLOSED").exclude(pnl__isnull=True))
+    trades = [t for t in all_closed if t.pnl_r is not None]
+    n_no_r = len(all_closed) - len(trades)
     if not trades:
-        return 0, "no data: hakuna closed trades"
+        return 0, ("no data: hakuna closed trades" if not all_closed
+                   else f"no data: closed {len(all_closed)} zote hazina pnl_r (R n/a — hakuna unit-mix)")
     buckets = defaultdict(list)
     for t in trades:
-        r = t.pnl_r if t.pnl_r is not None else t.pnl
+        r = t.pnl_r
         period = t.closed_at.strftime("%Y-%m") if t.closed_at else "?"
         buckets[(t.strategy, period, t.mode)].append(r)
         buckets[(t.strategy, "ALL", t.mode)].append(r)
@@ -303,6 +343,6 @@ def rebuild_strategy_perf(demo=False):
                           expectancy_r=round(sum(rs) / len(rs), 4),
                           profit_factor=(round(pf, 3) if pf is not None else None),
                           max_dd_r=round(dd, 4),
-                          source_ref="derived: Trade mirror (ingest)", is_demo=demo))
+                          source_ref="derived: Trade mirror (ingest; pnl_r only — F2)", is_demo=demo))
         n += 1
-    return n, None
+    return n, (f"{n_no_r} closed trade(s) bila pnl_r zimeachwa nje ya R-metrics (F2)" if n_no_r else None)

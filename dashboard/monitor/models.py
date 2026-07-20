@@ -112,8 +112,10 @@ class PairStrategyCell(SourcedModel):
 
 
 class VpsHeartbeat(SourcedModel):
-    """Heartbeat ya VPS (faili la env path): uptime, latency, clock drift, feed freshness."""
-    ts = models.DateTimeField()
+    """Heartbeat ya VPS (faili la env path): uptime, latency, clock drift, feed freshness.
+    F3: ts=None kama artifact ina ts batili/inakosekana (HAKUNA now() ya kubuni) — status
+    haiwezi kuwa OPERATIONAL bila ts halali."""
+    ts = models.DateTimeField(null=True)
     uptime_s = models.BigIntegerField(null=True)
     latency_ms = models.FloatField(null=True)
     clock_drift_ms = models.FloatField(null=True)
@@ -126,8 +128,9 @@ class VpsHeartbeat(SourcedModel):
 
 
 class Alert(SourcedModel):
-    """Diagnosis alerts (monitors: retention drift, cost drift, streak, degradation, data-gap...)."""
-    ts = models.DateTimeField()
+    """Diagnosis alerts (monitors: retention drift, cost drift, streak, degradation, data-gap...).
+    F3: ts=None kama chanzo hakina ts halali (no-fabrication — hakuna now())."""
+    ts = models.DateTimeField(null=True)
     severity = models.CharField(max_length=10)                     # INFO/WARN/CRIT
     kind = models.CharField(max_length=60)
     message = models.CharField(max_length=400)
@@ -173,13 +176,31 @@ class Lease(models.Model):
         unique_together = [("user", "model_id")]
 
 
+class AppendOnlyQuerySet(models.QuerySet):
+    """F1: immutability kwenye QUERYSET level pia — bulk update()/delete() hazipiti Model.save(),
+    hivyo zinazuiwa hapa moja kwa moja. (DB-level: prod itumie grant-revoke UPDATE/DELETE kwa
+    DB-user ya app — documented; hii ni app-level enforcement kamili ndani ya ORM.)"""
+
+    def update(self, **kwargs):
+        raise ValueError("AuditEvent ni append-only — QuerySet.update() ni marufuku (V2 §5)")
+
+    def delete(self):
+        raise ValueError("AuditEvent ni append-only — QuerySet.delete() ni marufuku (V2 §5)")
+
+    def bulk_update(self, objs, fields, **kwargs):
+        raise ValueError("AuditEvent ni append-only — bulk_update() ni marufuku (V2 §5)")
+
+
 class AuditEvent(models.Model):
-    """APPEND-ONLY audit trail (V2 §5.1): kila attestation view/export inarekodiwa. Update = marufuku."""
+    """APPEND-ONLY audit trail (V2 §5.1): kila attestation view/export inarekodiwa. Update = marufuku
+    (instance-level NA queryset-level — F1)."""
     ts = models.DateTimeField(auto_now_add=True)
     user = models.CharField(max_length=120)
     action = models.CharField(max_length=60)                       # view_attestation/export_attestation/...
     subject = models.CharField(max_length=200)
     detail = models.CharField(max_length=400, blank=True, default="")
+
+    objects = AppendOnlyQuerySet.as_manager()
 
     class Meta:
         ordering = ["-ts"]

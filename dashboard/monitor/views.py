@@ -29,20 +29,26 @@ def _compliance_score():
 
 
 def _system_status():
+    """F3: heartbeat yenye ts=None (batili kwenye artifact) HAIWEZI kuwa OPERATIONAL — freshness
+    haithibitiki. Ordering -ts (sqlite: nulls mwisho) -> heartbeat halali ya karibuni inatangulia."""
     hb = VpsHeartbeat.objects.first()
     if hb is None:
         return "NO DATA", None
+    if hb.ts is None:
+        return "DEGRADED", hb                    # invalid ts — si OPERATIONAL (no-fabrication)
     age = (djtz.now() - hb.ts).total_seconds()
     return ("OPERATIONAL" if age < STALE_S else "DEGRADED"), hb
 
 
 def _equity_series(mode=None):
-    qs = Trade.objects.filter(status="CLOSED").exclude(pnl__isnull=True).order_by("closed_at")
+    """F2: R-equity kutoka `pnl_r` PEKEE — trade za currency-only HAZIINGII curve ya R
+    (hakuna unit-mix). Curve inabaki na label 'R'."""
+    qs = Trade.objects.filter(status="CLOSED", pnl_r__isnull=False).order_by("closed_at")
     if mode:
         qs = qs.filter(mode=mode)
     eq, series, labels = 0.0, [], []
     for t in qs:
-        eq += (t.pnl_r if t.pnl_r is not None else t.pnl) or 0
+        eq += t.pnl_r or 0
         series.append(round(eq, 4))
         labels.append(t.closed_at.strftime("%Y-%m-%d") if t.closed_at else "?")
     return labels, series

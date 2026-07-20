@@ -10,9 +10,23 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from datetime import datetime, timezone
 
+from django.conf import settings
+
 from .models import ComplianceCheck, ModelVersion, StrategyPerf, Trade
+
+
+def _repo_commit():
+    """F6: commit hash ya repo ya artifacts (git rev-parse HEAD kwenye REPO_ROOT) — auditor wa nje
+    ana-pin repo state halisi. Git isipopatikana -> 'unknown' (wazi, si kubuni)."""
+    try:
+        out = subprocess.run(["git", "rev-parse", "HEAD"], cwd=settings.REPO_ROOT,
+                             capture_output=True, text=True, timeout=5)
+        return out.stdout.strip() or "unknown"
+    except (OSError, subprocess.SubprocessError):
+        return "unknown"
 
 
 def build_payload(model_id):
@@ -27,6 +41,7 @@ def build_payload(model_id):
     n_fail = checks.filter(passed=False).count()
     payload = {
         "model_id": model_id,
+        "repo_commit": _repo_commit(),                 # F6: NDANI ya hashed payload (commit-pinned)
         "versions": [dict(version=v.version, model_class=v.model_class, status=v.status,
                           oos_proof=v.oos_proof, provenance=v.provenance,
                           promised_ev=v.promised_ev, promised_n=v.promised_n,

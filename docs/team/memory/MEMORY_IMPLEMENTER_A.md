@@ -1084,3 +1084,30 @@ RUNBOOK: pip install -r dashboard/requirements.txt && cd dashboard && python man
   python manage.py runserver  -> login internal-demo/internal-demo. Real data: python manage.py ingest.
 NEXT AFTER: M-DASH-QA (audit ya Chief/SCIENTIST-D); VPS agent kuandika heartbeat.json; monitors
   kuandika alerts.jsonl; paper_trader run halisi -> paper_log.jsonl -> panels zote live.
+
+=== M-DASH-FIX (2026-07-20) — audit findings F1-F7 — IMEKAMILIKA ===
+LAST COMPLETED: **M-DASH-FIX** ✅ (reports/mdash_audit.md §FINDINGS; Chief ameidhinisha; diff = dashboard/ tu):
+  F1 (MEDIUM): AuditEvent += AppendOnlyQuerySet — QuerySet.update()/delete()/bulk_update() zinaraise
+    ValueError (bulk ops hazipiti Model.save()); immutability sasa instance+queryset level. (DB-level
+    grant-revoke = prod deployment note, documented kwenye docstring.)
+  F2 (MEDIUM): unit-mix imeondolewa — rebuild_strategy_perf + views._equity_series zinatumia `pnl_r`
+    PEKEE kwa R-metrics; closed trades bila pnl_r zime-exclude + kuripotiwa kwenye ingest note
+    ("N bila pnl_r zimeachwa nje"). Hakuna currency ndani ya R kamwe.
+  F3 (LOW-MED): _dt hardened (garbage->None); load_alerts/load_heartbeat HAZIWEKI now() — ts=None +
+    "[invalid/missing ts]" tag / ingest note; Alert.ts+VpsHeartbeat.ts sasa nullable (migration 0002);
+    _system_status: hb.ts None -> DEGRADED (SI OPERATIONAL); templates deck/vps zinaonyesha "ts batili".
+  F4 (LOW): registry parser _ROW6 + _ROW5 — WATCH table (5 col: id|class|status|signal|njia) ina-parse;
+    real ingest sasa models 6 (STRAT-001/002, K4-filter + C2/SWING/K4-WATCH version='watch').
+  F5 (LOW): _read_jsonl -> (rows, n_bad) skip+note kwa JSON mbovu (paper_log/pair_strategy/alerts);
+    load_heartbeat JSON mbovu -> (0, "invalid json...") — hakuna crash.
+  F6 (LOW): attest.build_payload += repo_commit (git rev-parse HEAD ya REPO_ROOT; fallback 'unknown')
+    NDANI ya hashed payload — auditor wa nje ana-pin repo state.
+  F7 (INFO): settings fail-closed — DEBUG default 0; DEBUG=0 bila ELITEFX_SECRET_KEY -> ImproperlyConfigured.
+    RUNBOOK UPDATE: dev/demo sasa inahitaji `export ELITEFX_DEBUG=1` (au weka ELITEFX_SECRET_KEY).
+  · TESTS 15/15 GREEN (9 za awali + AuditFixTests F1-F6 — repro za auditor kama tests). Repro scripts
+    za auditor zimeendeshwa: adversarial.py — P1 skip-note, P2 fabricated-now?=False, P3 probe EXC
+    (ts=None halali — fix inafanya kazi), P4 net_r=1.0 (no mix), P6/P6b blocked, P7 hash match,
+    P8 repo_commit present; http_probe.py — 405/404/403 zote sahihi, hakuna cross-leak.
+  · READ-ONLY + NO-FABRICATION intact (F3 inaziimarisha). src/research HAIJAGUSWA.
+NEXT AFTER: Chief update MODEL_REGISTRY/DOCTRINE -> matumizi ya wateja/leasing yameruhusiwa (audit §RUHUSA:
+  F1+F2+F3 done = lessee-access unblocked; F6+F7 done = prod-deploy note cleared).

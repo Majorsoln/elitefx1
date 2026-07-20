@@ -11,9 +11,18 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent            # dashboard/
 REPO_ROOT = Path(os.environ.get("ELITEFX_REPO_ROOT", BASE_DIR.parent))  # root ya repo
 
-# Dev default (monitoring ya ndani); production: weka ELITEFX_SECRET_KEY kwenye env
-SECRET_KEY = os.environ.get("ELITEFX_SECRET_KEY", "dev-insecure-glassbox-key-change-me")
-DEBUG = os.environ.get("ELITEFX_DEBUG", "1") == "1"
+# F7 FAIL-CLOSED: DEBUG default 0; DEBUG=0 bila ELITEFX_SECRET_KEY -> raise (hakuna prod-deploy
+# yenye key ya dev/tracebacks). Dev/demo: export ELITEFX_DEBUG=1 (runbook).
+DEBUG = os.environ.get("ELITEFX_DEBUG", "0") == "1"
+SECRET_KEY = os.environ.get("ELITEFX_SECRET_KEY")
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = "dev-insecure-glassbox-key-change-me"   # dev PEKEE (DEBUG=1 explicit)
+    else:
+        from django.core.exceptions import ImproperlyConfigured
+        raise ImproperlyConfigured(
+            "ELITEFX_SECRET_KEY inahitajika (DEBUG=0 fail-closed — F7). "
+            "Dev/demo: export ELITEFX_DEBUG=1")
 ALLOWED_HOSTS = os.environ.get("ELITEFX_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 INSTALLED_APPS = [
