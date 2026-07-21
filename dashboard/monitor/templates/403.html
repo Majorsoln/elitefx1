@@ -1,0 +1,12 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>ELITEFX — access</title>
+<link rel="stylesheet" href="{% static 'monitor/style.css' %}"></head><body>
+<header><div class="brand">ELITEFX <span class="glass">GLASS BOX</span></div></header>
+<main>
+  <h1>Access haipatikani kwa role yako</h1>
+  <p class="mono">Doctrine V2 §5.4 — separation: kila role anaona sehemu yake TU. Panel hii si
+  ya role yako (mf. lessee anaona models alizokodisha PEKEE).</p>
+  <p><a href="/">&larr; rudi kwenye ukurasa wako</a> · <form method="post" action="/logout/" class="inline">{% csrf_token %}<button class="linklike">logout</button></form></p>
+</main>
+<footer>read-only monitoring · Doctrine V2 §4 "kioo, si mkono"</footer>
+</body></html>
