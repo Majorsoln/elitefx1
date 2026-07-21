@@ -1224,3 +1224,26 @@ aliyokodisha PEKEE), lakini nav ilionyesha tabs zote bila kujali role → 403 mb
 
 **Note ya PD:** "sioni models za kuchagua" ni BY DESIGN — lessee anaona alizokodisha TU (V2 §5.4).
 Kuongeza models kwa lessee = admin anaunda Lease mpya (si self-service).
+
+---
+
+## 2026-07-21 — PD: anza A + evergreen loop + Model Steward + MT5. Doctrine V2 §8 + Live Engine
+
+**PD directives 3:** (1) evergreen — kila mara fundisha models + maarifa, mfumo uboreke daima;
+(2) MODEL STEWARD — model inayofuatilia models zote, udhaifu wao (practical vs learned) → agenda
+ya kuboresha next models (zoezi endelevu); (3) MT5 — jinsi inavyofungamana.
+
+**Chief responses:**
+- **MT5 iliyoelezwa:** engine=ubongo (broker-agnostic, adapter pattern); MT5=live adapter (feed +
+  account + execution). Env-var pattern: code ile ile, mode=paper→MT5 kwa config. Live-gating = PD
+  signature (broker_adapter Q1). broker_adapter tayari swappable (paper sasa; live=refuse-stub).
+- **DOCTRINE V2 §8 imeongezwa:** §8.1 evergreen loop (JENGA→gate→deploy→pima→linganisha→jifunze→
+  v-next); §8.2 MODEL STEWARD (meta-evaluator read-only: practical-vs-learned, weakness-map,
+  improvement-agenda; steward yenyewe ina version+inakaguliwa); §8.3 MT5 integration architecture.
+- **OPTION A FROZEN:** docs/LIVE_ENGINE_CHARTER.md — live_engine.py: forward loop bar-by-bar
+  (STRAT-001/002) → decision→sizer→compliance→paper→log ambayo Glass Box inaisoma. Vipande vyote
+  vipo; kazi = WIRING + forward loop + honest log schema (= dashboard ingest). Steward-hook:
+  learned_ev tag per trade. Prompt IMPLEMENTER-A [LIVE-ENGINE].
+
+**HATUA:** agent LIVE-ENGINE → run paper/forward → dashboard Live Actions HALISI. Steward = mzunguko
+ujao (§8.2). B (pair-lessons) inabaki foleni.
