@@ -9,16 +9,13 @@
   <div class="brand">ELITEFX <span class="glass">GLASS BOX</span></div>
   <nav>
     {% if user.is_authenticated %}
-    <a href="/deck/" {% if panel == 'deck' %}class="on"{% endif %}>DECK</a>
-    <a href="/portfolio/" {% if panel == 'portfolio' %}class="on"{% endif %}>PORTFOLIO</a>
-    <a href="/actions/" {% if panel == 'actions' %}class="on"{% endif %}>ACTIONS</a>
-    <a href="/compliance/" {% if panel == 'compliance' %}class="on"{% endif %}>COMPLIANCE</a>
-    <a href="/registry/" {% if panel == 'registry' %}class="on"{% endif %}>REGISTRY</a>
-    <a href="/matrix/" {% if panel == 'matrix' %}class="on"{% endif %}>MATRIX</a>
-    <a href="/alerts/" {% if panel == 'alerts' %}class="on"{% endif %}>ALERTS</a>
-    <a href="/vps/" {% if panel == 'vps' %}class="on"{% endif %}>VPS</a>
-    <a href="/ledger/" {% if panel == 'ledger' %}class="on"{% endif %}>LEDGER</a>
-    <a href="/audit/" {% if panel == 'audit' %}class="on"{% endif %}>AUDIT</a>
+      {% if is_lessee %}
+      <a href="/" {% if panel == 'lessee' %}class="on"{% endif %}>MY MODELS</a>
+      {% else %}
+        {% for p in nav_panels %}
+        <a href="{{ p.url }}" {% if panel == p.name %}class="on"{% endif %}>{{ p.label }}</a>
+        {% endfor %}
+      {% endif %}
     {% endif %}
   </nav>
   <div class="who">{% if user.is_authenticated %}{{ user.username }} ·

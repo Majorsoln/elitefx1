@@ -1205,3 +1205,22 @@ lessee-isolation. Bidhaa ya kukodisha ina msingi wa kiufundi.
   (CERTIFIED, leasing-ready)** + curriculum/audit discipline. Lessons 42.
 - **HATUA zinazofuata (background):** live-path compliance+sizing; WATCH forward accumulation;
   dashboard ingest ya live-data itakapopatikana (VPS).
+
+---
+
+## 2026-07-21 — Dashboard UX fix (PD feedback): role-aware nav + friendly 403
+
+**PD alionyesha:** lessee alipata "403 Forbidden" akibofya nav tabs za ndani (DECK/PORTFOLIO...) +
+"sioni models za kuchagua". Uchunguzi: isolation ya usalama ILIFANYA KAZI (lessee anaona STRAT-001
+aliyokodisha PEKEE), lakini nav ilionyesha tabs zote bila kujali role → 403 mbichi = UX mbaya.
+
+**Chief fix (dashboard/ tu; access-control HAIJABADILIKA — UX layer):**
+- `monitor/context.py` (context processor MPYA): nav_panels kwa role (PANEL_ROLES) + is_lessee flag.
+- `base.html`: nav sasa role-aware — internal=tabs zote, attestor=compliance/registry/audit,
+  lessee="MY MODELS" pekee (hakuna 403 kwa kubofya).
+- `templates/403.html`: ukurasa wa kirafiki (production) badala ya 403 mbichi.
+- Verified: tests 15/15 PASS; smoke — INTERNAL nav=DECK+PORTFOLIO; ATTESTOR=COMPLIANCE (si
+  PORTFOLIO); LESSEE nav=["MY MODELS"] pekee + /deck/→403 (isolation intact). STRAT-001 card OK.
+
+**Note ya PD:** "sioni models za kuchagua" ni BY DESIGN — lessee anaona alizokodisha TU (V2 §5.4).
+Kuongeza models kwa lessee = admin anaunda Lease mpya (si self-service).
