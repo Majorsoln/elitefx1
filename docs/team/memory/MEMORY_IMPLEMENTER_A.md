@@ -1111,3 +1111,31 @@ LAST COMPLETED: **M-DASH-FIX** ✅ (reports/mdash_audit.md §FINDINGS; Chief ame
   · READ-ONLY + NO-FABRICATION intact (F3 inaziimarisha). src/research HAIJAGUSWA.
 NEXT AFTER: Chief update MODEL_REGISTRY/DOCTRINE -> matumizi ya wateja/leasing yameruhusiwa (audit §RUHUSA:
   F1+F2+F3 done = lessee-access unblocked; F6+F7 done = prod-deploy note cleared).
+
+=== LIVE-ENGINE build (2026-07-21) — LIVE PAPER ENGINE — IMEKAMILIKA ===
+LAST COMPLETED: **live_engine.py (AI inayoendesha forward, paper)** ✅ (docs/LIVE_ENGINE_CHARTER.md; WIRING ya modules):
+  Forward loop (replay validation; HOLDOUT HAIGUSWI) kwa STRAT-001 (USDCHF SL2/TP1) + STRAT-002
+  (USDJPY SL1/TP1) no-LATE H1: STATE -> nr7_break SIGNAL -> DECISION (decision_engine.decide +
+  STRAT_POLICY SELECT) -> SIZE (broker_adapter.size DailyRiskBudgetSizer, ftmo_config.yaml +
+  data_config max_spread) -> COMPLIANCE (integrity_gate.gate + build_constraints 5) -> EXECUTE
+  (mode=paper, execution_object.record) -> LOG (decision_repository.append paper_log.jsonl).
+  · WIRING PEKEE — ZERO golden/statistic/fill fns mpya: honest fills/costs = episodes (byte-identical;
+    forward loop = replay ya episodes-candidates kwa ts order — episodes yenyewe no-look-ahead).
+    no-LATE = _mask_context (proven). entry_px/exit_px derived kutoka episodes pnl (hakuna fill mpya).
+  · LOG schema inalingana HASA na dashboard/monitor/loaders.py: records decision(signal: aggregate)/
+    decision(gate: eligibility.passed+failed)/execution(order_id,pair,side,qty,entry,sl,tp,status,
+    as_of,mode=paper,+learned_ev/spread/slippage)/settlement(id=order_id,realized_pnl,pnl_r,exit_price).
+    REJECTED trades zime-log (execution status=REJECTED + reject_reason) -> zinaonekana Live Actions.
+  · mode=paper PEKEE (broker_adapter Q1 live=refuse-stub HAIBADILISHWI). STRAT configs HAZIBADILIKI.
+    Append-only. learned_ev tag (STRAT-001 +1.92, STRAT-002 +2.65) kwa STEWARD divergence (§8.2, baadaye).
+  Self-test [a]-[f]: no-look-ahead (nr7 level truncation-inv), forward determinism (bit-identical),
+    log schema round-trip (kinds+keys+linked closed==filled), compliance-veto (max_daily_loss ndogo ->
+    REJECTED + logged reason, hakuna settlement), sizer budget=0 -> qty=0 (hakuna trade), mode=paper.
+    SWEEP 31/31 PASS. ROUND-TRIP HALISI (Django loader): engine log -> 44 Trades (5 CLOSED/39 REJECTED),
+    137 DecisionTrace, 220 ComplianceCheck, strategies mapped, pnl_r+mode=paper. (Synthetic random ->
+    total_dd $1000 inasimamisha trading = capital protection SAHIHI; data halisi ya proven-EV = fill juu.)
+RUNBOOK: python src/research/live_engine.py --run [--split validation]  -> data/paper/paper_log.jsonl
+  (append-only). Kisha dashboard: cd dashboard && ELITEFX_DEBUG=1 python manage.py ingest (BILA --demo)
+  -> Live Actions + Compliance + Portfolio panels zinaonyesha trades HALISI za AI.
+NEXT AFTER: Operator: --run kwenye forward/validation data -> ingest -> dashboard live. MODEL STEWARD
+  (§8.2) = mzunguko ujao (learned_ev tag tayari ipo kwa divergence). MT5 adapter (§8.3) = baadaye.
