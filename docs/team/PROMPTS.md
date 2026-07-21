@@ -76,6 +76,48 @@ UKIMALIZA: append review kwenye docs/ARCHITECTURE_AUDIT.md + update MEMORY_AUDIT
 
 ---
 
+## PROMPT — IMPLEMENTER-A [LIVE-ENGINE] (Option A — end-to-end paper engine, forward)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: jenga LIVE PAPER ENGINE —
+unganisha vipande vilivyopo kuwa AI MOJA inayoendesha forward (paper), ikiandika log ambayo Glass
+Box dashboard inaisoma. Doctrine V2 §4/§8 + docs/LIVE_ENGINE_CHARTER.md (SPEC yako).
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/LIVE_ENGINE_CHARTER.md (mtiririko 1-8, nidhamu, log schema) · docs/DOCTRINE_V2.md §4/§8 ·
+docs/STRATEGIES.md (configs HASA za STRAT-001/002) · src/research/: decision_engine, decision_policy,
+decision_object, integrity_gate, broker_adapter (DailyRiskBudgetSizer + constraints + mode=paper),
+execution_object, paper_trader, strat_signal, event_library_v2 (nr7_break), event_quality_report
+(fills/costs) · dashboard/monitor/loaders.py (schema ya paper_log ambayo ingest inatarajia — LOG
+YAKO LAZIMA ILINGANE NAYO).
+
+JENGA src/research/live_engine.py (additive — REUSE modules; usiandike statistic/fill mpya):
+  - Forward loop bar-by-bar (paper/forward window; au replay ya validation kama forward haipo bado)
+    kwa STRAT-001 (USDCHF SL2/TP1 no-LATE H1) + STRAT-002 (USDJPY SL1/TP1 no-LATE H1):
+    STATE -> nr7_break signal -> decision_engine/policy (SELECT/VETO) -> DailyRiskBudgetSizer
+    (FTMO config) -> integrity_gate constraints (daily_loss/slots/no-trade-window/max_spread) ->
+    broker_adapter mode=paper -> execution_object/paper_trader -> APPEND paper_log.jsonl.
+  - HAKUNA look-ahead: decision kwa bar iliyoFUNGWA i; fill next-bar (open i+1 / stop touch), costs
+    + slippage halisi (event_quality_report semantics). STRAT configs HAZIBADILIKI.
+  - LOG schema = ILE ILE dashboard ingest inatarajia (angalia loaders.py): per-trade
+    {strategy,pair,dir,ts_entry,ts_exit,entry_px,exit_px,pnl_r,pnl_pips,sl,tp,size,spread,slippage,
+    decision_trace:[signal,policy,size,compliance,fill], compliance:[{check,verdict,reason}],
+    learned_ev (backtest EV ya strategy — kwa STEWARD divergence baadaye)}. Append-only.
+  - FTMO config (deterministic, kutoka data_config au config mpya): max_daily_loss, max_total_dd,
+    max_slots, max_correlated_slots, risk_per_trade, no_trade_window, max_spread per pair.
+
+SHERIA: mode=paper PEKEE (broker_adapter Q1 refuse-stub kwa live — usibadilishe). ZERO golden/
+  statistic fns kuguswa. Engine = WIRING ya modules zilizopo. Self-test: (a) forward determinism;
+  (b) compliance-veto -> trade inakataliwa NA ime-log kwa sababu; (c) sizer budget=0 -> qty=0
+  (hakuna trade); (d) log schema inalingana na dashboard ingest (round-trip: engine -> log ->
+  ingest -> Trade record); (e) no-look-ahead trap (decision haitumii bar i+1). Ongeza run_selftests. GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari LIVE-ENGINE" + jinsi ya kuendesha + sample log.
+  (Operator kisha: endesha engine kwenye paper/forward window -> paper_log.jsonl -> dashboard ingest
+   (bila --demo) -> Live Actions panel inaonyesha trades HALISI za AI.)
+```
+
+---
+
 ## PROMPT — IMPLEMENTER-A [M-DASH] (Institutional Django dashboard — build KAMILI, read-only)
 
 ```text

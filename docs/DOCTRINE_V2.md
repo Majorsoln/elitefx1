@@ -105,3 +105,39 @@ Kipaumbele kigeuke kutoka "kuwinda" kwenda "kufikisha + kudhibiti":
 (1) LIVE-PATH ya STRAT-001/002 (sizing + compliance + monitoring dashboard);
 (2) MODEL REGISTRY + attestation (msingi wa kukodisha);
 (3) uwindaji unaendelea kama background (WATCH forward + swing occasional), si kipaumbele.
+
+---
+
+## 8. CONTINUOUS IMPROVEMENT LOOP + MODEL STEWARD (directive ya PD 2026-07-21)
+
+**Kanuni ya PD:** "kila mara tutakuwa tunafundisha models zingine + maarifa kuifanya iwe bora kila
+wakati; pia tutakuwa na model inayofuatilia models zote — udhaifu wao kulingana na mafunzo yao
+(kupima practical vs lessons walizojifunza) ili kujua eneo la kuboresha kwenye next models. Zoezi
+endelevu."
+
+### 8.1 EVERGREEN LOOP (mfumo hauishii — unaboreka)
+Kila model version inapita mzunguko: **JENGA → THIBITISHA (gate) → DEPLOY (paper→live) →
+PIMA (practical) → LINGANISHA (vs mafunzo/ahadi) → JIFUNZE (LESSON) → JENGA v-next.**
+Portfolio + lessons + atlas vinakua kila mzunguko. Hakuna "mwisho" — kuna matoleo bora zaidi.
+
+### 8.2 MODEL STEWARD (meta-evaluator — "model inayofuatilia models zote")
+Model/process MPYA ya daraja la juu ambayo kazi yake PEKEE ni **kutathmini models zote** (si
+kutrade). Kwa kila model version:
+- **PRACTICAL vs LEARNED:** performance ya live/paper (practical) dhidi ya matarajio ya
+  backtest/holdout + lessons (learned). Divergence = udhaifu unaoweza kupimwa (mtindo wa
+  LIVE-vs-PROMISED shrinkage band ya dashboard).
+- **WEAKNESS MAP:** kwa kila model — inashindwa wapi? (pair/regime/session/mazingira gani;
+  streak-behaviour; cost-sensitivity; degradation ya muda). Namba + chanzo.
+- **IMPROVEMENT AGENDA:** orodha iliyopangwa (ranked) ya "eneo la kuboresha kwenye v-next" —
+  input rasmi ya JENGA ya mzunguko unaofuata (§8.1). Inaunganisha na EXPERIMENT_LEDGER + lessons.
+- **NIDHAMU:** Steward inasoma artifacts + attestation TU (read-only, kama dashboard). Haitrade,
+  haibadilishi model. Hukumu zake zinapita Chief kama design-inputs. Steward yenyewe ina version
+  + inakaguliwa (nani anamkagua mkaguzi = Chief/SCIENTIST-D spot-check).
+
+### 8.3 MT5 INTEGRATION (live adapter — architecture)
+Ubongo (engine) haujui broker; unaita `broker_adapter` (adapter pattern). MT5 = utekelezaji wa
+LIVE wa adapter (mode=MT5), inayotoa: (a) live feed → state engine; (b) account_state (balance/
+daily-loss/positions) → sizer+compliance; (c) order execution ← decisions. Njia: MetaTrader5
+Python package (rahisi) au EA-MQL5 bridge. **Env-var pattern:** code ile ile, mode=paper (sasa) →
+mode=MT5 (baadaye) kwa config — hakuna kubadilisha ubongo. Live-gating: PD signature + artifact
+(broker_adapter Q1) — hakuna live bila ruhusa ya PD.
