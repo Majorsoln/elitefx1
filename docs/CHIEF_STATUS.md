@@ -1247,3 +1247,23 @@ ya kuboresha next models (zoezi endelevu); (3) MT5 — jinsi inavyofungamana.
 
 **HATUA:** agent LIVE-ENGINE → run paper/forward → dashboard Live Actions HALISI. Steward = mzunguko
 ujao (§8.2). B (pair-lessons) inabaki foleni.
+
+---
+
+## 2026-07-21 — LIVE-ENGINE build REVIEW: PASS → AI inaendesha (paper) → dashboard halisi
+
+**live_engine.py (main `411bbf7`): review PASS — nimethibitisha hapa (sweep 31/31).**
+- WIRING ya modules zilizopo: STATE → nr7 signal → decision → DailyRiskBudgetSizer → integrity_gate
+  compliance → broker_adapter mode=paper → decision_repository log. Fills/costs = episodes
+  (BYTE-IDENTICAL, no-look-ahead). Golden/statistic 0 lines.
+- mode=paper PEKEE (broker_adapter Q1 live=refuse-stub, haijaguswa). STRAT configs HASA (SL2/TP1,
+  SL1/TP1). **learned_ev tags (1.92/2.65)** per trade — hook ya MODEL STEWARD (§8.2).
+- **Log-schema round-trip THIBITISHA:** paper_log.jsonl (kind/obj + fields) inalingana HASA na
+  dashboard loaders.load_paper_log — engine → log → ingest → Trade record. AI → dashboard halisi.
+
+**MILESTONE:** AI MOJA sasa inaendesha end-to-end (paper). Tabaka zote (§4) zimeunganishwa +
+zinalisha Glass Box. Njia ya forward-track → FTMO. MT5 = live adapter (baadaye, PD signature).
+
+**HATUA (Operator):** `python src/research/live_engine.py --run` → paper_log.jsonl → dashboard
+`ingest` (BILA --demo) → Live Actions panel inaonyesha trades HALISI za AI. Kisha: MODEL STEWARD
+(§8.2 — mzunguko ujao) + forward accumulation.
