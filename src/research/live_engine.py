@@ -155,7 +155,8 @@ def _settle_due(st, cfg, until_ts, log_path, sink):
             st["correlation_exposure"][g] = max(0, st["correlation_exposure"].get(g, 0) - 1)
         st["spread_by_pair"].pop(p["pair"], None)
         obj = {"id": p["order_id"], "exec_id": p["order_id"], "parent_execution_id": p["exec_id"],
-               "realized_pnl": round(realized, 2), "pnl_r": p["pnl_r"],
+               "pnl": round(realized, 2),                          # decision_repository REQUIRED (settlement)
+               "realized_pnl": round(realized, 2), "pnl_r": p["pnl_r"],   # dashboard loader reads realized_pnl
                "exit_price": p["exit_px"], "as_of": _as_of(p["exit_ts"])}
         _append(log_path, "settlement", obj, sink)
 
@@ -333,16 +334,19 @@ def self_test():
     exec_keys = all({"order_id", "pair", "side", "qty", "entry", "sl", "tp", "status", "as_of",
                      "mode"} <= set(e) for e in execs)
     sett_keys = all({"id", "realized_pnl", "pnl_r", "exit_price", "as_of"} <= set(s) for s in setts)
+    # REPO REQUIRED (kingekamata 'pnl' iliyokosekana — self-test ilitumia sink, si repo.append):
+    from decision_repository import REQUIRED as _REQ
+    repo_req = all(set(_REQ[r["kind"]]) <= set(r["obj"]) for r in s1)
     gate_keys = any(isinstance(dd.get("eligibility"), dict)
                     and {"passed", "failed"} <= set(dd["eligibility"]) for dd in decs)
     sig_keys = any("aggregate" in dd for dd in decs)
     linked = _index(s1)
     closed = [t for t in linked.values() if t["_closed"]]
     round_trip = (kinds == {"decision", "execution", "settlement"} and exec_keys and sett_keys
-                  and gate_keys and sig_keys and len(closed) == r1["filled"]
+                  and repo_req and gate_keys and sig_keys and len(closed) == r1["filled"]
                   and all(t["mode"] == "paper" for t in linked.values()))
     print(f"  [d] log schema round-trip: kinds={sorted(kinds)} exec/sett/gate/sig keys ok; "
-          f"filled trades linked+closed={len(closed)}=={r1['filled']} -> {round_trip}")
+          f"repo-REQUIRED ok={repo_req}; filled trades linked+closed={len(closed)}=={r1['filled']} -> {round_trip}")
     ok = ok and round_trip
 
     # (b) COMPLIANCE-VETO: max_daily_loss ndogo -> gate REJECTED + ime-log kwa sababu (execution REJECTED)
