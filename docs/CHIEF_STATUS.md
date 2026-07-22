@@ -1267,3 +1267,31 @@ zinalisha Glass Box. Njia ya forward-track → FTMO. MT5 = live adapter (baadaye
 **HATUA (Operator):** `python src/research/live_engine.py --run` → paper_log.jsonl → dashboard
 `ingest` (BILA --demo) → Live Actions panel inaonyesha trades HALISI za AI. Kisha: MODEL STEWARD
 (§8.2 — mzunguko ujao) + forward accumulation.
+
+---
+
+## 2026-07-22 — DOCTRINE §9 + MODEL STEWARD charter + Dashboard-V2 roadmap (directive tatu za PD)
+
+**PD aliagiza matatu; nimeandaa msingi (docs + prompt) — build inafuata kwa agent:**
+
+1. **MODEL STEWARD (kipaumbele — tunaanza sasa).** `docs/MODEL_STEWARD_CHARTER.md` +
+   prompt IMPLEMENTER-A [MODEL-STEWARD]. Meta-model READ-ONLY: PRACTICAL (realized R) vs LEARNED
+   (learned_ev tag / registry EV) per model → weakness map (regime/session/vol/streak/cost, kila
+   cell N+CI+verdict, N<min_n=INSUFFICIENT anti-noise) → improvement agenda ranked (mapendekezo tu,
+   SI auto-apply; LESSON-041 diagnostics-not-discovery). Output reports/model_steward.{md,json}.
+   HONESTY: sasa "practical"=validation replay, SI forward — power inakua na forward data.
+   Zoezi endelevu (§8.2). Steward HAITRADE/HAIBADILISHI model/HAIGUSI golden.
+
+2. **Dashboard-V2 roadmap (mahitaji tu — design MPYA imeahirishwa).** `docs/DASHBOARD_V2_ROADMAP.md`
+   inanasa R1-R7: taarifa zote pamoja · rahisi ku-interpret · lugha trade+English · hali ya model
+   maamuzi ya SASA na YA NYUMA (decision history) · filtering rahisi · roles (V2 discussion) ·
+   MODEL HEALTH panel (kutoka steward json). Design mpya + majadiliano ya features/roles = baada ya
+   Steward (kama PD alivyoagiza "lete design mpya tujadili").
+
+3. **MT5 token + self-registration → Doctrine V2 §9.** mteja anajisajili → auto-token →
+   token=identity ya EA → anonymized (token→lease→model siri, monitoring operator haoni user=model) →
+   model ndiyo inayotrade, EA=conduit tu (haina strategy logic, inalinda IP) → per-token isolation →
+   PD-gated live. §9.3 = roadmap (baada ya MT5 adapter + PD signature). SASA=paper+steward.
+
+**HATUA:** merge → kisha nakupa prompt MODEL-STEWARD ya kuendesha (Operator kwenye PC → "tayari
+MODEL-STEWARD"). Dashboard-V2 design tutajadili baada ya Steward.

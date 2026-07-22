@@ -1015,3 +1015,49 @@ A=tathmini huru yenye ushahidi wa namba; B=mapendekezo ranked na designs zinazot
 C=mbinu za kisasa zenye thamani HALISI kwa mfumo huu — si buzzwords).
 UKIMALIZA: update MEMORY_SCIENTIST_D.md + andika reports/data_science_review.md + ripoti fupi.
 ```
+
+## PROMPT — IMPLEMENTER-A [MODEL-STEWARD] (Meta-model: practical vs learned → weakness map + agenda)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: jenga MODEL STEWARD —
+meta-model (READ-ONLY) inayopima kila model dhidi ya alichofundishwa (PRACTICAL vs LEARNED), inatoa
+ramani ya udhaifu + ajenda ya kuboresha iliyopangwa. Doctrine V2 §8.2 + docs/MODEL_STEWARD_CHARTER.md
+(SPEC yako). Steward HAITRADE, HAIBADILISHI model, HAIGUSI strategy configs — inasoma tu na kuripoti.
+
+SYNC KWANZA: `git checkout main && git pull origin main`.
+SOMA: docs/MODEL_STEWARD_CHARTER.md (kanuni 1-6, weakness map, agenda, self-test) · docs/DOCTRINE_V2.md
+§8.2 · docs/MODEL_REGISTRY.md (learned/holdout EV per model) · docs/STRATEGIES.md (STRAT-001/002 proof) ·
+data/paper/paper_log.jsonl (matokeo halisi + tag learned_ev — INPUT kuu) · src/research/live_engine.py
+(jinsi log inaandikwa: fields realized_pnl/pnl_r/learned_ev/as_of/pair/strategy + decision_trace/state
+tags) · src/research/event_quality_report.py au module ya bootstrap/CI iliyopo (REUSE — usiandike
+statistics mpya) · src/research/swing_family.py (vol bucket atr_rel — mfano wa bucketing).
+
+JENGA src/research/model_steward.py (additive — READ-ONLY; REUSE bootstrap/CI zilizopo):
+  - Soma paper_log.jsonl → per model (STRAT-001, STRAT-002) kusanya realized R + learned_ev tag.
+  - PRACTICAL vs LEARNED: realized-R distribution (mean + CI ya bootstrap iliyopo) dhidi ya learned_ev.
+    divergence = practical_mean − learned_ev. Verdict per model: HOLDS/SHRINKS/LIFTS.
+  - WEAKNESS MAP per model: vunja realized-R kwa nyanja: regime (state tag), session (as_of),
+    vol bucket (atr_rel LOW/MID/HIGH), streak state (baada ya W/L mfululizo), cost drag
+    (spread+slippage kama % ya gross). Kila cell = {N, mean_R, CI, divergence, verdict}. Cell yenye
+    N < min_n (config, default 30) → verdict INSUFFICIENT (SI weak/strong) — anti-noise.
+  - IMPROVEMENT AGENDA: orodha ranked kwa (athari × uhakika), kila kipengele: weakness + hypothesis
+    (lugha ya trade) + proposed experiment (design inayotekelezeka kupitia registration — SI auto-apply)
+    + expected lift/risk. HAKUNA kipengele kinatekelezwa na Steward — mapendekezo tu.
+
+OUTPUT: reports/model_steward.md [(A) per-model practical-vs-learned; (B) weakness map jedwali kila cell
+  N+CI+verdict; (C) agenda ranked; (D) SAMPLE-HONESTY note ("SAMPLE: replay/validation, si forward")
+  + provenance: commit + line-count za log + tarehe] · reports/model_steward.json (summary ya kimashine
+  kwa Dashboard-V2 panel MODEL HEALTH baadaye). Lugha: trade + English rahisi.
+
+SHERIA: READ-ONLY KWELI — Steward HAIANDIKI paper_log/registry/strategies (reports/ PEKEE). ZERO golden/
+  statistic fns kuguswa (import tu). HAKUNA "best cell = strategy mpya" (LESSON-041 — ni diagnostics si
+  discovery; cell nzuri = hypothesis ya registration, si mabadiliko). Self-test (run_selftests, GREEN):
+  (a) read-only: run mbili → hash ya paper_log/registry HAIBADILIKI; (b) anti-noise: cell N<min_n →
+  INSUFFICIENT; (c) provenance: ripoti ina commit + line-count, ikikosekana → fail; (d) honesty tag:
+  ripoti ina "SAMPLE: replay/validation", ikikosekana → fail; (e) determinism: input ile ile → ripoti
+  ile ile (bootstrap seeded); (f) no-golden-touch: hakuna def mpya ya episodes/pvalue.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari MODEL-STEWARD" + jinsi ya kuendesha + muhtasari
+  wa weakness map + honesty-note ya sample. (Baadaye: Dashboard-V2 panel MODEL HEALTH inasoma json hii.)
+```
+
+---

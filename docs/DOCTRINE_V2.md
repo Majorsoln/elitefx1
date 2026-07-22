@@ -141,3 +141,37 @@ daily-loss/positions) → sizer+compliance; (c) order execution ← decisions. N
 Python package (rahisi) au EA-MQL5 bridge. **Env-var pattern:** code ile ile, mode=paper (sasa) →
 mode=MT5 (baadaye) kwa config — hakuna kubadilisha ubongo. Live-gating: PD signature + artifact
 (broker_adapter Q1) — hakuna live bila ruhusa ya PD.
+
+---
+
+## 9. LEASING DELIVERY — MT5 TOKEN + SELF-REGISTRATION (directive ya PD 2026-07-21)
+
+**Kanuni ya PD:** mteja anajisajili → anapokea **token ya kiotomatiki** → token inaunganisha EA
+yake ya MT5 → token = ID yake. Mteja **hajulikani kwa model gani alilipia** (privacy); **model(s)
+ndizo zenye uwezo wa kutrade** (EA ni mkono wa model kwenye account ya mteja).
+
+### 9.1 Mtiririko
+```
+Mteja -> SELF-REGISTER (dashboard/portal) -> AUTO-TOKEN (nasibu, siri, per-lease)
+      -> anaweka token kwenye EA-MT5 yake
+EA (MT5 ya mteja) --token--> ELITEFX gateway -> thibitisha token -> ramani token->lease->model(s)
+      -> model signals (decision+size+compliance) -> EA inatekeleza kwenye MT5 ya mteja
+      -> log + attestation (kwa token, si jina) -> dashboard (mtazamo wa lessee)
+```
+
+### 9.2 Kanuni za usalama/privacy (za lazima)
+- **Token = identity ya EA:** kila lease ina token yake ya kipekee (rotatable, revocable). Token
+  ikivuja → revoke bila kugusa wengine. HAKUNA token kwenye git/logs za wazi (hash tu).
+- **Anonymization:** ramani token→lease→model iko upande wa server (siri). Mtu wa nje (hata
+  operator wa monitoring) haoni "user X kalipia model Y" bila ruhusa — separation ya §5.4.
+- **Model ndiyo inayotrade:** EA HAINA logic ya strategy — ni conduit tu (inatuma bei/account,
+  inatekeleza orders zinazotoka kwa model iliyokodishwa). Ubongo (IP yetu) haubaki kwa mteja.
+  Hii inalinda IP + inahakikisha compliance/gate zetu ndizo zinazoamua (si mteja).
+- **Per-token isolation:** account-state (balance/daily-loss/positions) ni per-token; sizing +
+  FTMO compliance zinahesabiwa per lessee-account. Token moja haiathiri nyingine.
+- **Gate ya PD:** live trading (token yoyote) inahitaji saini ya PD + model iwe LIVE kwenye
+  registry (§2/§3). Hakuna auto-live bila hilo.
+
+### 9.3 Vipande vya kujenga (baadaye — baada ya MT5 adapter + PD signature)
+Registration/token service · gateway ya EA (token-auth) · per-token account-state + routing ·
+EA ya MQL5 (conduit, si strategy) · billing hook. NI ROADMAP — si sasa (sasa=paper+steward).
