@@ -1139,3 +1139,31 @@ RUNBOOK: python src/research/live_engine.py --run [--split validation]  -> data/
   -> Live Actions + Compliance + Portfolio panels zinaonyesha trades HALISI za AI.
 NEXT AFTER: Operator: --run kwenye forward/validation data -> ingest -> dashboard live. MODEL STEWARD
   (§8.2) = mzunguko ujao (learned_ev tag tayari ipo kwa divergence). MT5 adapter (§8.3) = baadaye.
+
+=== MODEL-STEWARD build (2026-07-22) — meta-model READ-ONLY — IMEKAMILIKA ===
+LAST COMPLETED: **model_steward.py (MODEL STEWARD — mwalimu wa models)** ✅ (docs/MODEL_STEWARD_CHARTER.md; V2 §8.2):
+  META-MODEL READ-ONLY: inasoma data/paper/paper_log.jsonl (link exec+settle kwa order_id) -> per
+  model (STRAT-001/002) realized R + learned_ev tag. PRACTICAL vs LEARNED (pips — unit sawa na
+  learned_ev): practical mean + bootstrap CI (REUSE family_pooled._boot_ci, seeded) dhidi ya
+  learned_ev -> verdict HOLDS/SHRINKS/LIFTS/INSUFFICIENT.
+  WEAKNESS MAP (per model × dim): session (_sess kutoka as_of) / vol (atr_rel proxy = |entry-sl|/
+  sl_atr, terciles) / streak (FRESH/AFTER_WIN/AFTER_LOSS/AFTER_2L+) / cost-drag ((spread+slip)/gross,
+  median-split). Kila cell {N, mean, CI, divergence, verdict}; N<min_n(30) -> INSUFFICIENT (anti-noise).
+  AGENDA ranked (|divergence|×N): weakness + hypothesis (lugha ya trade) + proposed experiment
+  (registration ya kawaida — SI auto-apply) + risk. + regime DATA-GAP item (regime haijalog na engine).
+  OUTPUT: reports/model_steward.md [(A) practical-vs-learned; (B) weakness map; (C) agenda; (D)
+  SAMPLE-HONESTY + provenance commit+lines+sha+tarehe] + .json (malighafi ya panel MODEL HEALTH V2).
+  · SHERIA: READ-ONLY KWELI (reports/ PEKEE — log/registry/configs HAZIGUSWI). ZERO golden fns
+    (import _boot_ci/_sess tu; regex-check haina def episodes/pvalue/_boot_ci). HAKUNA "best cell=
+    strategy" (L-041 — diagnostics si discovery). SAMPLE-HONESTY: practical=replay/validation, SI forward.
+  Self-test [a]-[f]+: read-only (log hash 2-run sawa), determinism (bootstrap seeded), anti-noise
+    (N<30->INSUFFICIENT), verdict-logic (learned high/mid/low -> SHRINKS/HOLDS/LIFTS), provenance
+    (commit+lines au fail), honesty-tag (au fail), no-data (log haipo->models={}), no-golden-touch.
+    SWEEP 32/32 PASS. Sampuli (synthetic N=20-24<min_n): zote INSUFFICIENT (anti-noise SAHIHI).
+RUNBOOK: live_engine --run -> paper_log.jsonl; kisha `python src/research/model_steward.py`
+  -> reports/model_steward.{md,json}. Zoezi endelevu: kila forward data mpya -> update ramani+ajenda.
+NEXT AFTER: Dashboard-V2 panel MODEL HEALTH inasoma model_steward.json (§8.2). Chief/PD wanachagua
+  majaribio kutoka agenda kupitia registration. Regime weakness-map inahitaji engine i-log regime tag.
+OPEN QUESTIONS / NOTES:
+  - practical-vs-learned kwa PIPS (learned_ev native unit); mean_R (unit-free) ni secondary kwa cross-model.
+  - Power ndogo bado (validation replay, N<min_n per cell) -> verdicts INSUFFICIENT hadi forward data ikue.
