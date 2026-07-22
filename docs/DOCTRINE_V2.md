@@ -50,6 +50,15 @@ Kila uwezo mpya = **MODEL VERSION** iliyogandishwa, si patch ya moja kwa moja. M
 Kila strategy/model/filter kabla ya LIVE:
 1. **Splits takatifu:** TRAIN 2016-2022 → VALIDATION 2023-2024 → HOLDOUT 2025-01→2026-04
    (one-shot, pre-registered, SEALED-per-use).
+   - **1b. COMPLETE-EA ACCEPTANCE WINDOW = 2026-05 → mwisho wa data ya historia (SEALED, one-shot;
+     directive ya PD 2026-07-22).** Dirisha hili ni data pekee ya historia BIKIRA (imekuja BAADA ya
+     HOLDOUT). **HALITAGUSWI na diagnostics** (Steward, tuning, replay, EDA) — likiguswa, limekwisha.
+     Litumike **MARA MOJA** kama mtihani wa mwisho wa **MFUMO MZIMA** (EA → gateway → token → model →
+     execution → compliance) pale EA kamili itakapokuwa tayari — "dress rehearsal" ya unseen data
+     kabla ya live/leasing. Rasilimali ya kweli ya forward-power = **forward-LIVE kuanzia sasa**
+     (real-time paper/MT5 demo — bikira NA inajizalisha kila siku, HAIadimu). Onyo: dirisha la
+     historia = integration+sanity gate (N ndogo mwanzoni, inakua); live-conditions halisi (fills/
+     latency/spread) = MT5 demo forward pekee.
 2. **Pre-registration FROZEN by commit** KABLA ya kufungua dirisha lolote.
 3. **Honest harness:** next-bar fills, stop=touch gap-honest, costs = spread(halisi per bar) +
    slippage (0.1 mkt/0.3 stop) + swap (swing). Episode non-overlap.
