@@ -1061,3 +1061,36 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari MODEL-STEWARD" + jinsi ya 
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [STEWARD-FIX] (v0.2 — ex-ante cost dimension; ondoa outcome-conditioning)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: STEWARD-FIX v0.2 — rekebisha
+dimension MOJA yenye kasoro kwenye src/research/model_steward.py. Chief review + LESSON-043 zimebaini:
+dimension ya `cost` inagawa cells kwa `drag=(spread+slippage)/(|pnl_pips|+cost)` — `pnl_pips` ni
+MATOKEO, kwa hiyo ni outcome-conditioning → cells za uongo (STRAT-001 cost=HIGH-DRAG CI ultra-tight
+[8.164,8.566], LOW-DRAG "SHRINKS" −2.211 = artifact, SI udhaifu). SOMA docs/lessons/LESSON-043.md.
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/lessons/LESSON-043.md · src/research/model_steward.py (_cost_bucket, weakness_map, _HYP).
+
+BADILISHA (surgical — dimension MOJA tu; nyingine session/vol/streak ni ex-ante, ZIBAKI):
+  - `_cost_bucket`: ondoa pnl kwenye denominator. Bucket kwa **cost ya ABSOLUTE ex-ante**:
+    cost_pips = spread + slippage (inajulikana wakati wa entry, HAKUNA pnl). Tercile NDANI ya model →
+    LOW-COST / MID-COST / HIGH-COST (sawa na _vol_bucket muundo). Rudisha map{id->label} (+dict ya
+    thamani kama sasa kwa provenance, kwa hiari). HAKUNA |pnl_pips| popote kwenye ufafanuzi wa cell.
+  - `weakness_map`: dim "cost" sasa inatumia labels mpya (HIGH-COST n.k.). _HYP["cost"] hypothesis
+    ibaki ile ile (cost inakula edge) LAKINI cell sasa ex-ante (actionable: unaweza epuka HIGH-COST
+    entries kabla ya trade).
+  - Hakuna kitu kingine kinabadilika (practical-vs-learned, session/vol/streak, agenda ranking,
+    outputs). ZERO golden fns kuguswa.
+
+SELF-TEST: ongeza case kwenye self_test() — cost dimension HAINA pnl kwenye denominator: thibitisha
+  kwamba kubadilisha pnl_pips ya trade (kuweka outcome tofauti) HAKUBADILISHI cost-bucket assignment
+  (ex-ante invariance). Buckets zote za awali (a/b/b2/c/d/e/f/g) LAZIMA zibaki GREEN. Ongeza pia:
+  cost labels ni {LOW-COST,MID-COST,HIGH-COST} (si LOW-DRAG/HIGH-DRAG).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari STEWARD-FIX" + weakness-map mpya ya cost
+  (kabla vs baada) ili Chief athibitishe artifact imeondoka. (Endesha: python model_steward.py.)
+```
+
+---
