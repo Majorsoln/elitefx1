@@ -1321,3 +1321,26 @@ ni artifact, si udhaifu; HAKUNA action. Dimensions session/vol/streak ni ex-ante
 **HATUA:** STEWARD-FIX v0.2 (prompt tayari) — badilisha _cost_bucket → ex-ante absolute-cost tercile
 (hakuna pnl kwenye denominator). Kanuni: mwalimu naye curriculum yake i-certify (GIGO). Operator
 aendeshe → "tayari STEWARD-FIX" → Chief athibitishe artifact imeondoka.
+
+---
+
+## 2026-07-22 — STEWARD-FIX v0.2 CERTIFIED: artifact imeondoka (data halisi) → Steward v0.2 GREEN
+
+**Steward v0.2 (main `6f7ce59`): CERTIFIED — nimethibitisha code (sweep 32/32 + self-test [h]) NA
+data halisi (Operator N=864).** Cost dimension sasa ex-ante (spread+slippage tercile, hakuna pnl).
+
+**Uthibitisho wa artifact kuondoka (STRAT-001 cost, kabla→baada):**
+- Kabla (chafu): HIGH-DRAG +8.368 CI **[8.164,8.566]** (ultra-tight=artifact); LOW-DRAG **−2.211 SHRINKS** (uongo).
+- Baada (ex-ante): HIGH-COST +1.604 [−1.20,4.21] HOLDS; LOW-COST +4.118 [2.5,5.67] LIFTS; MID +2.79 HOLDS.
+- CI ultra-tight IMETOWEKA; "SHRINKS" ya uongo IMETOWEKA. **Agenda 2→1** (imebaki regime DATA-GAP tu).
+
+**Hitimisho la diagnostics (REPLAY — si forward):** baada ya kuondoa artifact, HAKUNA udhaifu halisi
+kwenye replay. Uchunguzi wa ex-ante wa kuangalia forward (SI action, L-040/041):
+- STRAT-001: cost inakula edge kama inavyotarajiwa (LOW-COST bora +4.12 → HIGH-COST +1.60); NY session
+  imara (+5.68); **AFTER_LOSS edge→~0** (−0.18, path-dependence, hofu ya FTMO daily-loss, N=64).
+- STRAT-002: robust kila dimension; HIGH-COST LIFTS (+9.96, big-move sessions). Hakuna weakness.
+
+**HATUA KUBWA INAYOFUATA — FORWARD ACCUMULATION.** Yote hadi sasa (864 fills, Steward) ni VALIDATION
+REPLAY, si forward halisi. Forward ya kweli = 2026-05→sasa (baada ya HOLDOUT 2025-01→2026-04 iliyotumika)
+— data ambayo hakuna model aliyeiona. Engine iendeshe forward window → Steward ipime practical-vs-learned
+kwenye forward halisi (N ndogo sasa, inakua kila wiki — zoezi endelevu §8.2). Ndipo "mwalimu" anapata nguvu.
