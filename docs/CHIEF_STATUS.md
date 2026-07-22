@@ -1295,3 +1295,29 @@ zinalisha Glass Box. Njia ya forward-track → FTMO. MT5 = live adapter (baadaye
 
 **HATUA:** merge → kisha nakupa prompt MODEL-STEWARD ya kuendesha (Operator kwenye PC → "tayari
 MODEL-STEWARD"). Dashboard-V2 design tutajadili baada ya Steward.
+
+---
+
+## 2026-07-22 — MODEL STEWARD v0 REVIEW: PASS (code) + kasoro 1 ya dimension → LESSON-043 + STEWARD-FIX
+
+**Steward v0 (main `45267bd`): review PASS kwa code + logic; nimethibitisha (sweep 32/32).**
+- READ-ONLY kweli (run x2 → hash log haibadiliki) · golden REUSE (_boot_ci/_sess import tu) ·
+  anti-noise (N<30→INSUFFICIENT) · verdict-logic (HOLDS/SHRINKS/LIFTS via CI) · honesty-note ·
+  **unit-consistent** (learned_ev = pips/trade STRATEGIES.md vs practical pnl_pips). Zote self-tested.
+
+**Matokeo (PC ya Operator, N=864 closed, log sha256=e84a3912):**
+- STRAT-001: N=423 practical=3.066 vs learned=1.92 → **HOLDS** (CI [1.837,4.257], mean R=0.135).
+- STRAT-002: N=441 practical=3.987 vs learned=2.65 → **HOLDS** (CI [1.916,6.032], mean R=0.161).
+- Headline SAHIHI: model zote zinatoa pips walioahidi (au zaidi) kwenye replay; CI inagusa learned.
+
+**KASORO NILIYOKAMATA (muhimu) → LESSON-043:** dimension ya `cost` = `(spread+slippage)/(|pnl_pips|
++cost)` — **pnl_pips ni MATOKEO** → outcome-conditioning. Cells za uongo: HIGH-DRAG CI ultra-tight
+[8.164,8.566] (tell ya artifact), LOW-DRAG "SHRINKS" −2.211. **Agenda #1 ya Steward IMEKATALIWA** —
+ni artifact, si udhaifu; HAKUNA action. Dimensions session/vol/streak ni ex-ante — safi, zinabaki.
+- Uchunguzi halali (ex-ante, kama hypothesis ZA KUANGALIA forward — SI action juu ya replay, L-040/041):
+  STRAT-001 NY session LIFTS (+5.68 N=80); AFTER_LOSS edge→~0 (path-dependence, FTMO risk, N=64);
+  STRAT-002 HOLDS kila dimension (robust). Hakuna model change.
+
+**HATUA:** STEWARD-FIX v0.2 (prompt tayari) — badilisha _cost_bucket → ex-ante absolute-cost tercile
+(hakuna pnl kwenye denominator). Kanuni: mwalimu naye curriculum yake i-certify (GIGO). Operator
+aendeshe → "tayari STEWARD-FIX" → Chief athibitishe artifact imeondoka.
