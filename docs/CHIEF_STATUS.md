@@ -1344,3 +1344,22 @@ kwenye replay. Uchunguzi wa ex-ante wa kuangalia forward (SI action, L-040/041):
 REPLAY, si forward halisi. Forward ya kweli = 2026-05→sasa (baada ya HOLDOUT 2025-01→2026-04 iliyotumika)
 — data ambayo hakuna model aliyeiona. Engine iendeshe forward window → Steward ipime practical-vs-learned
 kwenye forward halisi (N ndogo sasa, inakua kila wiki — zoezi endelevu §8.2). Ndipo "mwalimu" anapata nguvu.
+
+---
+
+## 2026-07-22 — UAMUZI WA PD: SEAL dirisha 2026-05+ kama COMPLETE-EA ACCEPTANCE (Doctrine §3.1b)
+
+**PD aliuliza:** kwa nini tusitunze data ya 2026-05→sasa kuja kutest EA kamili baadaye?
+**Chief:** wazo bora kuliko nililopendekeza (kuendesha Steward juu yake sasa). Aina 2 za data bikira:
+- **Historia 2026-05→sasa = ADIMU (one-shot).** Ikiguswa na diagnostics → imechafuka. → **SEAL.**
+- **Forward-LIVE kuanzia sasa = INAYOJIZALISHA.** Bikira NA inakua kila siku → ndiyo inalisha Steward.
+
+**Uamuzi (Doctrine §3.1b):** dirisha 2026-05→mwisho wa historia limesealwa kama **COMPLETE-EA
+ACCEPTANCE WINDOW** — litumike MARA MOJA kwa mtihani wa mfumo MZIMA (EA→gateway→token→model→
+execution→compliance) pale EA itakapokuwa tayari. HALITAGUSWI na Steward/tuning/replay/EDA sasa.
+Onyo la uaminifu: dirisha la historia = integration+sanity gate (N ndogo, inakua); live-conditions
+halisi = MT5 demo forward pekee. Forward-power ya Steward inatoka forward-LIVE, si dirisha sealed.
+
+**Mpangilio uliorekebishwa:** (1) forward accumulation = live-paper real-time kuanzia sasa (si
+kuchoma dirisha la historia); (2) dirisha 2026-05+ linabaki sealed hadi EA kamili tayari; (3)
+ushahidi wa mwisho = MT5 demo forward (hali halisi). Steward inaendelea kwenye forward-live data.
