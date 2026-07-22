@@ -5,8 +5,9 @@ META-MODEL READ-ONLY: inasoma `data/paper/paper_log.jsonl` (matokeo halisi + lea
 kupima KILA model (STRAT-001/002) PRACTICAL (halisi) vs LEARNED (ahadi ya backtest):
   - practical = realized distribution (pips, sawa na unit ya learned_ev) + bootstrap CI (REUSE
     family_pooled._boot_ci — HAKUNA statistic mpya). verdict HOLDS/SHRINKS/LIFTS/INSUFFICIENT.
-  - WEAKNESS MAP: vunja kwa session / vol-bucket (atr_rel proxy) / streak-state / cost-drag; kila
-    cell {N, mean, CI, divergence, verdict}; N<min_n -> INSUFFICIENT (anti-noise).
+  - WEAKNESS MAP: vunja kwa session / vol-bucket (atr_rel proxy) / streak-state / cost (EX-ANTE
+    absolute spread+slippage tercile — LESSON-043, HAKUNA pnl); kila cell {N, mean, CI, divergence,
+    verdict}; N<min_n -> INSUFFICIENT (anti-noise). Dimensions ZOTE ni ex-ante (si outcome-conditioned).
   - AGENDA ranked (athari × uhakika): weakness + hypothesis (lugha ya trade) + proposed experiment
     (registration ya kawaida — SI auto-apply) + expected lift/risk.
 
@@ -155,22 +156,22 @@ def _streak_state(trades):
 
 
 def _cost_bucket(trades):
-    """cost drag = (spread+slippage) / |gross_pips|; median-split -> LOW-DRAG/HIGH-DRAG."""
-    drag = {}
-    for t in trades:
-        cost = t["spread"] + t["slippage"]
-        gross = abs(t["pnl_pips"]) + cost
-        drag[id(t)] = (cost / gross) if gross > 0 else 0.0
-    if len(drag) < 2:
-        return {k: "LOW-DRAG" for k in drag}, {}
-    med = float(np.median(list(drag.values())))
-    return {k: ("HIGH-DRAG" if v > med else "LOW-DRAG") for k, v in drag.items()}, \
-           {k: round(v, 4) for k, v in drag.items()}
+    """EX-ANTE absolute cost (LESSON-043): cost_pips = spread + slippage (inajulikana WAKATI WA ENTRY,
+    HAKUNA pnl). Tercile NDANI ya model -> LOW-COST/MID-COST/HIGH-COST (muundo wa _vol_bucket). Bucket
+    HAITEGEMEI matokeo -> actionable (unaweza epuka HIGH-COST entries kabla ya trade)."""
+    cost = np.array([t["spread"] + t["slippage"] for t in trades])
+    if len(cost) < 3:
+        return {id(t): "MID-COST" for t in trades}
+    q1, q2 = np.quantile(cost, [1 / 3, 2 / 3])
+    out = {}
+    for t, cc in zip(trades, cost):
+        out[id(t)] = "LOW-COST" if cc <= q1 else ("HIGH-COST" if cc > q2 else "MID-COST")
+    return out
 
 
 def weakness_map(trades, learned, min_n=MIN_N):
     """Cells kwa dimension: session / vol / streak / cost. Kila cell = cell_verdict."""
-    vol = _vol_bucket(trades); streak = _streak_state(trades); cost, _ = _cost_bucket(trades)
+    vol = _vol_bucket(trades); streak = _streak_state(trades); cost = _cost_bucket(trades)
     dims = {"session": lambda t: t["session"], "vol": lambda t: vol[id(t)],
             "streak": lambda t: streak[id(t)], "cost": lambda t: cost[id(t)]}
     out = {}
@@ -393,6 +394,23 @@ def self_test():
                                                              for a in r1["agenda"]))
         print(f"  [g] structure: weakness dims {sorted(m0['weakness_map'])} + agenda (regime data-gap) -> {struct}")
         ok = ok and struct
+
+        # (h) LESSON-043 — cost dimension ni EX-ANTE: kubadilisha pnl HAKUBADILISHI cost-bucket;
+        #     labels = {LOW-COST,MID-COST,HIGH-COST}; HAKUNA -DRAG (outcome-conditioned) tena.
+        base = [dict(strategy="X", spread=s, slippage=0.3, pnl_pips=p, pnl_r=p)
+                for s, p in zip(np.linspace(0.2, 3.0, 30), np.linspace(-5, 5, 30))]
+        b1 = _cost_bucket(base)
+        base2 = [dict(t, pnl_pips=-t["pnl_pips"] * 7.3, pnl_r=-t["pnl_r"] * 7.3) for t in base]
+        # id() lazima ilingane: linganisha kwa mpangilio (bucket per index)
+        lab1 = [_cost_bucket(base)[id(t)] for t in base]
+        lab2 = [_cost_bucket(base2)[id(t)] for t in base2]     # pnl imebadilishwa kabisa
+        ex_ante = (lab1 == lab2 and set(lab1) <= {"LOW-COST", "MID-COST", "HIGH-COST"}
+                   and "cost" in m0["weakness_map"]
+                   and set(m0["weakness_map"]["cost"]) <= {"LOW-COST", "MID-COST", "HIGH-COST"}
+                   and not any("DRAG" in k for k in m0["weakness_map"]["cost"]))
+        print(f"  [h] LESSON-043 cost ex-ante: pnl-flip haibadilishi bucket={lab1 == lab2} "
+              f"labels={sorted(set(lab1))} no-DRAG -> {ex_ante}")
+        ok = ok and ex_ante
 
     # (c-fail) log haipo -> load_trades error + hakuna models
     r_empty = run(log_path=Path(tmp) / "gone.jsonl", write=False)

@@ -1167,3 +1167,20 @@ NEXT AFTER: Dashboard-V2 panel MODEL HEALTH inasoma model_steward.json (§8.2). 
 OPEN QUESTIONS / NOTES:
   - practical-vs-learned kwa PIPS (learned_ev native unit); mean_R (unit-free) ni secondary kwa cross-model.
   - Power ndogo bado (validation replay, N<min_n per cell) -> verdicts INSUFFICIENT hadi forward data ikue.
+
+=== STEWARD-FIX v0.2 (2026-07-22) — cost dimension outcome-conditioning — IMEKAMILIKA ===
+LAST COMPLETED: **STEWARD-FIX** ✅ (docs/lessons/LESSON-043; surgical — dimension MOJA):
+  KASORO (v0): _cost_bucket ilitumia `drag=(spread+slippage)/(|pnl_pips|+cost)` median-split ->
+  pnl_pips ni MATOKEO -> OUTCOME-CONDITIONING -> cells za uongo (STRAT-001 HIGH-DRAG CI ultra-tight
+  [8.164,8.566], LOW-DRAG "SHRINKS" -2.211 = artifact ya magnitude-split, si udhaifu).
+  FIX (v0.2): _cost_bucket sasa EX-ANTE absolute cost: `cost_pips = spread + slippage` (inajulikana
+  wakati wa entry, HAKUNA pnl) -> tercile NDANI ya model -> LOW-COST/MID-COST/HIGH-COST (muundo wa
+  _vol_bucket). weakness_map "cost" inatumia labels mpya; _HYP["cost"] ibaki (actionable: epuka
+  HIGH-COST entries kabla ya trade). Dimensions nyingine (session/vol/streak) = ex-ante -> ZIBAKI.
+  · Self-test [h] MPYA: pnl-flip (×-7.3) HAKUBADILISHI cost-bucket (ex-ante invariance); labels =
+    {LOW/MID/HIGH-COST}, hakuna -DRAG. [a]-[g] za awali GREEN. SWEEP 32/32. ZERO golden fns (surgical).
+  DEMO kabla-vs-baada: KABLA drag-split HIGH=+0.4 SHRINKS / LOW=+5.4 LIFTS (magnitude artifact);
+  BAADA cost-tercile cells zote ~2.4-3.3 (mean ya jumla), CI kawaida, hakuna SHRINKS ya uongo.
+  · Agenda #1 ya v0 (cost=LOW-DRAG SHRINKS) IMEKATALIWA (artifact). STRAT-001/002 = HOLDS (headline sahihi).
+NEXT AFTER: Chief athibitishe artifact imeondoka (weakness-map ya cost sasa ex-ante). Kanuni L-043:
+  kila dimension ya diagnostics LAZIMA iwe ex-ante (mwalimu naye curriculum yake i-certify — GIGO).
