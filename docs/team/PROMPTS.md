@@ -1143,3 +1143,39 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A1" + jinsi ya kuo
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [DASH-V2-A2] (Dashboard-V2 Awamu 2 — OVERVIEW / fleet status-lights)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: Dashboard-V2 AWAMU 2 —
+boresha COMMAND DECK iliyopo kuwa OVERVIEW ya kweli: "taasisi kwa jicho moja" na FLEET ya models kwa
+status-lights (§4 ya design). REUSE helpers za Awamu 1 — SI kujenga overview mpya. READ-ONLY mirror (§4).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/DASHBOARD_V2_DESIGN.md §4 (OVERVIEW: models 🟢/🟡/🔴 · equity · compliance · VPS · alerts,
+bofya→scorecard) · dashboard/monitor/views.py (command_deck + helpers _steward_models, _status_light,
+_scorecard_summary, _system_status, _compliance_score — REUSE ZOTE) · templates/monitor/deck.html ·
+callsigns.py · models.py (Alert) · tests.py.
+
+JENGA (additive — REUSE; GET-only; ZERO trade logic; deck ni internal kama ilivyo):
+  1. command_deck view: ongeza FLEET rollup — kwa kila model (CALLSIGNS ∪ steward ∪ Trade.strategy)
+     tumia _scorecard_summary(i, smodels) kupata {call_sign, color, display, sentensi, n_closed}.
+     Hesabu muhtasari: models ngapi green/yellow/red (fleet health). Ongeza pia alerts count
+     (Alert.objects za hivi karibuni, kama /alerts panel inavyofanya) kwa muhtasari.
+  2. deck.html: ongeza sehemu "FLEET — MODELS KWA JICHO MOJA" JUU (kabla ya equity/actions): strip ya
+     cards, kila model = call-sign + status light (🟢/🟡/🔴) + sentensi fupi, NA link -> /scorecards/
+     <call_sign>/ (bofya→scorecard). Muhtasari: "🟢 X · 🟡 Y · 🔴 Z" + alerts count. Rithi base.html/
+     style zilizopo (status-{{color}} classes za scorecard reuse). Panels zingine za deck ZIBAKI.
+  3. Usibadilishe role/access ya deck (internal). Usiongeze chart library mpya (tumia sparkline iliyopo).
+
+SHERIA: READ-ONLY (GET). REUSE _scorecard_summary/_status_light (usirudie logic ya status-light).
+  Fail-soft steward/paper_log haipo (fleet inaonyesha yellow/no-data, si crash). F7+append-only+
+  attestation HAZIGUSWI. tests.py (ongeza): (a) deck ina fleet cards zenye call-sign (KAIROS-1/2) NA
+  link /scorecards/<call_sign>/; (b) fleet health tally (green/yellow/red counts) ni sahihi kwa
+  steward stub; (c) deck bado internal-only (anon→302/403); (d) fleet fail-soft bila steward.json.
+  Run: python manage.py test monitor. GREEN (+ zote za awali).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A2" + note ya deck mpya (fleet strip +
+  tally) + jinsi ya kuona (login internal -> /deck/). (Awamu 3 LESSEE anonymized inafuata.)
+```
+
+---

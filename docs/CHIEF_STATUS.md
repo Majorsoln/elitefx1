@@ -1394,3 +1394,12 @@ tests (callsign round-trip, steward fail-soft, status-light, role-gate, language
 - E2E: KAIROS-1 green/HOLDS. Read-only mirror (§4) — HAIENDESHI trade.
 
 **HATUA:** Awamu 2 (OVERVIEW roll-up) → Awamu 3 (LESSEE anonymized reuse) → Awamu 4 (lugha+filter).
+
+---
+
+## 2026-07-22 — Awamu 2 (OVERVIEW / fleet status-lights) prompt tayari
+
+Baada ya Awamu 1 (Scorecard) kuthibitika, PD: "endelea." Awamu 2 = boresha COMMAND DECK iliyopo →
+FLEET ya models kwa status-lights (§4): kila model call-sign + 🟢/🟡/🔴 + sentensi + link→scorecard;
+tally (green/yellow/red) + alerts. REUSE _scorecard_summary/_status_light (Awamu 1). Read-only,
+internal. Prompt: IMPLEMENTER-A [DASH-V2-A2]. HATUA: Operator → "tayari DASH-V2-A2" → Chief review.
