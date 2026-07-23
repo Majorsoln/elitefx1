@@ -7,6 +7,8 @@ from . import views
 urlpatterns = [
     path("", views.lessee_home, name="home"),                       # role-aware landing
     path("deck/", views.command_deck, name="deck"),
+    path("scorecards/", views.scorecards_list, name="scorecards"),  # DASHBOARD-V2 Awamu 1
+    path("scorecards/<str:call_sign>/", views.scorecard_detail, name="scorecard_detail"),
     path("portfolio/", views.portfolio, name="portfolio"),
     path("actions/", views.live_actions, name="actions"),
     path("compliance/", views.compliance, name="compliance"),

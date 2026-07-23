@@ -1,0 +1,90 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+
+<!-- A) STATUS BAND -->
+<div class="sc-band {{ color }}">
+  <h1><span class="light {{ color }}"></span><span class="callsign">{{ call }}</span>
+    <span class="src">{{ meta.version }} · {{ meta.status }} · internal={{ internal }} (INTERNAL view)</span></h1>
+  <p class="sc-say">{{ say_status }}</p>
+</div>
+
+<!-- B) AHADI vs UHALISIA -->
+<div class="section"><h2>B · AHADI vs UHALISIA (learned EV vs practical)</h2>
+  {% if practical is not None and learned is not None %}
+  <p class="sc-say">{{ say_promise }}</p>
+  <div class="shrinkbar"><div class="learned" style="left:50%"></div>
+    <div class="actual" style="width:{% if practical >= learned %}70{% else %}40{% endif %}%"></div></div>
+  <p class="src">learned {{ learned }} · practical {{ practical }} · 90% CI [{{ ci_lo }}, {{ ci_hi }}] ·
+     divergence {{ divergence }} · mean R {{ mean_r }} · verdict {{ display }}</p>
+  {% else %}<div class="nodata">no data: Steward practical-vs-learned haipatikani bado.</div>{% endif %}
+</div>
+
+<!-- C) MAAMUZI YA SASA (open + trace) -->
+<div class="section"><h2>C · MAAMUZI YA SASA (trades hai + kwa nini)</h2>
+  {% if open_trades %}
+  <table class="data"><tr><th></th><th>pair</th><th>dir</th><th>entry</th><th>opened</th></tr>
+  {% for t in open_trades %}
+  <tr><td><details><summary>trace</summary>{% for tr in t.traces.all %}
+      <div class="src">{{ tr.seq }}·{{ tr.stage|upper }} — {{ tr.record_id }}</div>{% endfor %}</details></td>
+    <td>{{ t.pair }}</td><td>{{ t.side }}</td><td class="num">{{ t.entry|default:"—" }}</td>
+    <td class="num">{{ t.opened_at|date:"Y-m-d H:i"|default:"—" }}</td></tr>
+  {% endfor %}</table>
+  {% else %}<div class="nodata">Hakuna trade hai sasa hivi ({{ n_open }} open).</div>{% endif %}
+</div>
+
+<!-- D) MAAMUZI YA NYUMA (closed history + kwanini + sheria) -->
+<div class="section"><h2>D · MAAMUZI YA NYUMA (kila trade: tarehe/pair/dir/R + kwa nini + sheria)</h2>
+  {% if closed_trades %}
+  <table class="data"><tr><th></th><th>tarehe</th><th>pair</th><th>dir</th><th>R</th><th>matokeo</th><th>sheria</th></tr>
+  {% for t in closed_trades %}
+  <tr><td><details><summary>kwa nini</summary>
+      {% for tr in t.traces.all %}<div class="src">{{ tr.stage|upper }}: {{ tr.record_id }}</div>{% endfor %}</details></td>
+    <td class="num">{{ t.closed_at|date:"Y-m-d"|default:"—" }}</td><td>{{ t.pair }}</td><td>{{ t.side }}</td>
+    <td class="num {% if t.pnl_r and t.pnl_r > 0 %}pos{% elif t.pnl_r and t.pnl_r < 0 %}neg{% endif %}">{{ t.pnl_r|default:"—" }}</td>
+    <td>{% if t.pnl_r and t.pnl_r > 0 %}<span class="badge pass">WIN</span>{% else %}<span class="badge fail">LOSS</span>{% endif %}</td>
+    <td>{% for c in t.checks.all %}<span class="badge {% if c.passed %}pass{% else %}fail{% endif %}">{{ c.rule }}</span>{% empty %}—{% endfor %}</td></tr>
+  {% endfor %}</table>
+  <p class="src">closed {{ n_closed }} (za mwisho 100 zinaonyeshwa).</p>
+  {% else %}<div class="nodata">no data: hakuna trades zilizofungwa bado.</div>{% endif %}
+</div>
+
+<!-- E) RAMANI YA UDHAIFU (weakness map kwa rangi) -->
+<div class="section"><h2>E · RAMANI YA UDHAIFU (Steward weakness map)</h2>
+  <p class="sc-say">{{ say_weakness }}</p>
+  {% if weakness_map %}
+  {% for dim, cells in weakness_map.items %}
+  <div><span class="src">{{ dim }}:</span>
+    {% for cell, cv in cells.items %}
+    <span class="wcell {% if cv.verdict == 'HOLDS' or cv.verdict == 'LIFTS' %}green{% elif cv.verdict == 'SHRINKS' %}red{% elif cv.verdict == 'INSUFFICIENT' %}gray{% else %}yellow{% endif %}">{{ cell }} (N={{ cv.n }}, {{ cv.verdict }})</span>
+    {% endfor %}</div>
+  {% endfor %}
+  {% else %}<div class="nodata">no data: Steward weakness map haipatikani (endesha model_steward.py).</div>{% endif %}
+</div>
+
+<!-- F) UFUATAJI WA SHERIA (compliance rejected + sababu) -->
+<div class="section"><h2>F · UFUATAJI WA SHERIA (FTMO compliance)</h2>
+  <p class="sc-say">{{ say_compliance }}</p>
+  <p class="src">ukaguzi {{ n_checks }} · ukiukaji {{ n_fails }} · rejected {{ n_rejected }}</p>
+  {% if rejected %}
+  <table class="data"><tr><th>trade</th><th>pair</th><th>dir</th><th>sababu (rules failed)</th></tr>
+  {% for t in rejected %}
+  <tr><td>{{ t.trade_id }}</td><td>{{ t.pair }}</td><td>{{ t.side }}</td>
+    <td>{% for c in t.checks.all %}{% if not c.passed %}<span class="badge fail">{{ c.rule }}</span>{% endif %}{% endfor %}</td></tr>
+  {% endfor %}</table>
+  {% else %}<p class="pos">Hakuna trade iliyokataliwa (au bado hakuna data).</p>{% endif %}
+</div>
+
+<!-- G) MWENENDO WA MUDA (equity curve) -->
+<div class="section"><h2>G · MWENENDO WA MUDA (equity ya model — R cumulative)</h2>
+  {% if n_closed %}<canvas id="eq" style="height:180px"></canvas>
+  {% else %}<div class="nodata">no data: hakuna closed trades kwa equity curve.</div>{% endif %}
+</div>
+
+<p class="src">Chanzo: model_steward.json (A/B/E) + paper_log mirror (C/D/F/G).
+  {% if provenance %} steward commit {{ provenance.commit|default:"?"|truncatechars:12 }} ·
+  {{ provenance.sample_note }}{% endif %}</p>
+
+{{ equity_json|json_script:"eqdata" }}
+<script>const d=JSON.parse(document.getElementById('eqdata').textContent);
+if(d.values && d.values.length){ gc.line(document.getElementById('eq'), d); }</script>
+{% endblock %}

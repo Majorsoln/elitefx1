@@ -186,6 +186,19 @@ def load_ledger(path, demo=False):
 
 # ---------- 4) reports/*.md → Report ; 5) lessons → Lesson ----------
 
+def load_steward(reports_dir):
+    """DASHBOARD-V2: soma reports/model_steward.json (READ-ONLY; SI DB ingest — view inasoma live).
+    Rudisha (data, note). Haipo/mbovu -> ({}, note) — FAIL-SOFT (scorecard inaonyesha 'no data')."""
+    p = Path(reports_dir) / "model_steward.json"
+    if not p.exists():
+        return {}, f"no data: {p} (endesha src/research/model_steward.py kwanza)"
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as e:
+        return {}, f"invalid: {p} ({type(e).__name__})"
+    return data, None
+
+
 def load_reports(reports_dir, repo_root, demo=False):
     rd = Path(reports_dir)
     if not rd.exists():

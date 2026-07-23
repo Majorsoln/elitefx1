@@ -24,6 +24,7 @@ PANEL_ROLES = {
     "vps": {"internal"},
     "ledger": {"internal"},
     "audit": {"internal", "attestor"},
+    "scorecards": {"internal"},                     # DASHBOARD-V2 Awamu 1: INTERNAL tu (lessee=Awamu 3)
 }
 
 

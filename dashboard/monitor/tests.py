@@ -301,3 +301,147 @@ class AuditFixTests(TestCase):
         # reproducibility inabaki (commit ile ile ndani ya run)
         data2, _ = attest.attestation("STRAT-001")
         self.assertEqual(data["attestation_hash"], data2["attestation_hash"])
+
+
+# ==================== DASHBOARD-V2 Awamu 1 — MODEL SCORECARD tests ====================
+import tempfile
+from django.test import override_settings
+from monitor import callsigns, language, loaders as _loaders
+
+_STEWARD_DEMO = {
+    "provenance": {"commit": "abc1234def", "sample_note": "SAMPLE: replay/validation, si forward",
+                   "log_lines": 100},
+    "models": {
+        "STRAT-001": {"learned_ev": 1.92, "mean_R": 0.15,
+                      "overall": {"n": 40, "mean": 3.07, "ci_lo": 1.2, "ci_hi": 4.9,
+                                  "divergence": 1.15, "verdict": "HOLDS"},
+                      "weakness_map": {"session": {"NY": {"n": 35, "mean": 4.1, "verdict": "LIFTS"},
+                                                   "ASIA": {"n": 10, "mean": -1.0, "verdict": "INSUFFICIENT"}},
+                                       "cost": {"HIGH-COST": {"n": 33, "mean": 2.0, "verdict": "HOLDS"}}}},
+        "STRAT-002": {"learned_ev": 2.65, "mean_R": -0.3,
+                      "overall": {"n": 44, "mean": -1.5, "ci_lo": -3.0, "ci_hi": -0.2,
+                                  "divergence": -4.15, "verdict": "SHRINKS"},
+                      "weakness_map": {}}},
+    "agenda": [],
+}
+
+
+def _write_steward(tmp):
+    (Path(tmp) / "model_steward.json").write_text(json.dumps(_STEWARD_DEMO), encoding="utf-8")
+    return tmp
+
+
+class CallsignTests(TestCase):
+    def test_a_callsign_round_trip_and_public_meta_no_pair(self):
+        self.assertEqual(callsigns.to_public("STRAT-001"), "KAIROS-1")
+        self.assertEqual(callsigns.to_internal("KAIROS-1"), "STRAT-001")
+        self.assertEqual(callsigns.to_internal("KAIROS-2"), "STRAT-002")
+        # round-trip
+        for internal in ("STRAT-001", "STRAT-002"):
+            self.assertEqual(callsigns.to_internal(callsigns.to_public(internal)), internal)
+        # unknown -> None (internal), label passthrough (public)
+        self.assertIsNone(callsigns.to_internal("KAIROS-99"))
+        # PUBLIC_META has NO pair / logic / params / internal id
+        for cs, meta in callsigns.PUBLIC_META.items():
+            blob = json.dumps(meta).lower()
+            for leak in ("usdchf", "usdjpy", "pair", "strat-", "nr7", "sl_atr", "logic"):
+                self.assertNotIn(leak, blob, f"{cs} PUBLIC_META inavuja '{leak}'")
+            self.assertEqual(set(meta), {"version", "status"})
+
+
+class StewardLoaderTests(TestCase):
+    def test_b_load_steward_fail_soft(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # haipo -> ({}, note)
+            data, note = _loaders.load_steward(tmp)
+            self.assertEqual(data, {})
+            self.assertIn("no data", note)
+            # mbovu -> ({}, note) si crash
+            (Path(tmp) / "model_steward.json").write_text("not json{{{")
+            data2, note2 = _loaders.load_steward(tmp)
+            self.assertEqual(data2, {})
+            self.assertIn("invalid", note2)
+            # halali -> data + no note
+            _write_steward(tmp)
+            data3, note3 = _loaders.load_steward(tmp)
+            self.assertIsNone(note3)
+            self.assertIn("STRAT-001", data3["models"])
+
+
+class ScorecardViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        call_command("ingest", "--demo", verbosity=0)
+
+    def _paths_with_steward(self, tmp):
+        _write_steward(tmp)
+        from django.conf import settings
+        return dict(settings.ELITEFX_PATHS, reports_dir=Path(tmp))
+
+    def test_c_status_light_mapping(self):
+        from monitor.views import _status_light
+        self.assertEqual(_status_light("HOLDS", 40)[0], "green")
+        self.assertEqual(_status_light("LIFTS", 40)[0], "green")
+        self.assertEqual(_status_light("SHRINKS", 40)[0], "red")
+        self.assertEqual(_status_light("INSUFFICIENT", 40)[0], "yellow")
+        self.assertEqual(_status_light("HOLDS", 0), ("yellow", "NO-DATA"))     # no closed trades
+        self.assertEqual(_status_light(None, 0)[0], "yellow")
+
+    def test_d_scorecard_access_internal_vs_anon_vs_lessee(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with override_settings(ELITEFX_PATHS=self._paths_with_steward(tmp)):
+                # internal -> 200 (list + detail)
+                self.client.force_login(_mk_user("pd", "internal"))
+                self.assertEqual(self.client.get("/scorecards/").status_code, 200)
+                r = self.client.get("/scorecards/KAIROS-1/")
+                self.assertEqual(r.status_code, 200)
+                self.assertIn(b"KAIROS-1", r.content)
+                self.assertNotIn(b"KAIROS-2", r.content.split(b"internal=")[0])  # detail ni ya moja
+                # bad call-sign -> 404
+                self.assertEqual(self.client.get("/scorecards/KAIROS-99/").status_code, 404)
+                # SHRINKS -> red light kwenye KAIROS-2
+                r2 = self.client.get("/scorecards/KAIROS-2/")
+                self.assertIn(b"light red", r2.content)
+                # POST -> 405 (read-only)
+                self.assertEqual(self.client.post("/scorecards/").status_code, 405)
+                self.assertEqual(self.client.post("/scorecards/KAIROS-1/").status_code, 405)
+        # lessee/attestor -> 403 (Awamu 1 = internal tu)
+        self.client.force_login(_mk_user("cli", "lessee", lease="STRAT-001"))
+        self.assertEqual(self.client.get("/scorecards/").status_code, 403)
+        self.assertEqual(self.client.get("/scorecards/KAIROS-1/").status_code, 403)
+        self.client.force_login(_mk_user("att", "attestor"))
+        self.assertEqual(self.client.get("/scorecards/").status_code, 403)
+        # anon -> 302 login
+        self.client.logout()
+        r3 = self.client.get("/scorecards/")
+        self.assertEqual(r3.status_code, 302)
+        self.assertIn("/login/", r3["Location"])
+
+    def test_d2_scorecard_fail_soft_no_steward(self):
+        # steward haipo -> list 200 + note; lights NO-DATA (yellow)
+        with tempfile.TemporaryDirectory() as tmp:
+            with override_settings(ELITEFX_PATHS=dict(__import__("django.conf").conf.settings.ELITEFX_PATHS,
+                                                      reports_dir=Path(tmp))):
+                self.client.force_login(_mk_user("pd2", "internal"))
+                r = self.client.get("/scorecards/")
+                self.assertEqual(r.status_code, 200)
+                self.assertIn(b"no data", r.content.lower())
+
+
+class LanguageTests(TestCase):
+    def test_e_language_say_deterministic(self):
+        s1 = language.say("status", call="KAIROS-1", verdict="HOLDS")
+        s2 = language.say("status", call="KAIROS-1", verdict="HOLDS")
+        self.assertEqual(s1, s2)
+        self.assertIn("KAIROS-1", s1)
+        self.assertNotEqual(language.say("status", call="KAIROS-1", verdict="SHRINKS"), s1)
+        # promise
+        pr = language.say("promise", learned=1.92, practical=3.07, verdict="HOLDS")
+        self.assertIn("1.92", pr); self.assertIn("juu ya ahadi", pr)
+        self.assertEqual(pr, language.say("promise", learned=1.92, practical=3.07, verdict="HOLDS"))
+        # no-data safe
+        self.assertTrue(language.say("promise", learned=None, practical=None))
+        # weakness deterministic
+        w = language.say("weakness", best="session=NY", worst="streak=AFTER_LOSS")
+        self.assertEqual(w, language.say("weakness", best="session=NY", worst="streak=AFTER_LOSS"))
+        self.assertIn("NY", w)

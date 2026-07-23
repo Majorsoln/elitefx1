@@ -280,3 +280,107 @@ def lessee_home(request):
     leases = user_leases(request.user)
     models = ModelVersion.objects.filter(model_id__in=leases)
     return render(request, "monitor/lessee.html", dict(panel="lessee", models=models, leases=leases))
+
+
+# ==================== DASHBOARD-V2 AWAMU 1 — MODEL SCORECARD (INTERNAL) ====================
+from . import loaders, language
+from .callsigns import CALLSIGNS, to_internal, to_public, public_meta
+
+
+def _steward_models():
+    """(models_dict, note) kutoka reports/model_steward.json (fail-soft)."""
+    data, note = loaders.load_steward(settings.ELITEFX_PATHS["reports_dir"])
+    return (data.get("models", {}) if data else {}), (data.get("provenance", {}) if data else {}), note
+
+
+def _status_light(verdict, n_closed):
+    """HOLDS/LIFTS -> green; SHRINKS -> red; INSUFFICIENT/no-data -> yellow."""
+    if not verdict or n_closed == 0:
+        return "yellow", "NO-DATA"
+    if verdict in ("HOLDS", "LIFTS"):
+        return "green", verdict
+    if verdict == "SHRINKS":
+        return "red", verdict
+    return "yellow", verdict          # INSUFFICIENT / UNKNOWN-LEARNED
+
+
+def _scorecard_summary(internal_id, smodels):
+    """Muhtasari mfupi (kwa list) — call-sign, light, sentensi. Chanzo: steward + Trade mirror."""
+    call = to_public(internal_id)
+    sm = smodels.get(internal_id, {})
+    overall = sm.get("overall", {}) if sm else {}
+    n_closed = Trade.objects.filter(strategy=internal_id, status="CLOSED").count()
+    color, disp = _status_light(overall.get("verdict"), n_closed)
+    return dict(call=call, internal=internal_id, meta=public_meta(call), color=color, display=disp,
+                verdict=overall.get("verdict"), practical=overall.get("mean"),
+                learned=sm.get("learned_ev"), n_closed=n_closed,
+                sentence=language.say("status", call=call, verdict=(disp if disp != "NO-DATA" else "NO-DATA")))
+
+
+@require_GET
+@panel_access("scorecards")
+def scorecards_list(request):
+    smodels, provenance, note = _steward_models()
+    # models zote za registry/callsigns (union) — hata bila steward data (light=yellow)
+    ids = sorted(set(CALLSIGNS) | set(smodels)
+                 | set(Trade.objects.values_list("strategy", flat=True)))
+    cards = [_scorecard_summary(i, smodels) for i in ids if i in CALLSIGNS or i in smodels]
+    return render(request, "monitor/scorecards_list.html", dict(
+        panel="scorecards", cards=cards, steward_note=note, provenance=provenance))
+
+
+@require_GET
+@panel_access("scorecards")
+def scorecard_detail(request, call_sign):
+    internal = to_internal(call_sign)
+    if internal is None:
+        raise Http404(f"call-sign '{call_sign}' haipo")
+    smodels, provenance, note = _steward_models()
+    sm = smodels.get(internal, {})
+    overall = sm.get("overall", {}) if sm else {}
+    trades = Trade.objects.filter(strategy=internal)
+    closed = list(trades.filter(status="CLOSED").prefetch_related("checks", "traces").order_by("-closed_at"))
+    open_t = list(trades.filter(status="OPEN").prefetch_related("checks", "traces"))
+    rejected = list(trades.filter(status="REJECTED").prefetch_related("checks"))
+    n_closed = len(closed)
+    color, disp = _status_light(overall.get("verdict"), n_closed)
+
+    # G) equity curve (R, cumulative — kwa mpangilio wa muda)
+    eq, series, labels = 0.0, [], []
+    for t in sorted(closed, key=lambda x: (x.closed_at or djtz.now())):
+        eq += (t.pnl_r or 0); series.append(round(eq, 4))
+        labels.append(t.closed_at.strftime("%Y-%m-%d") if t.closed_at else "?")
+
+    # F) compliance rollup
+    checks = ComplianceCheck.objects.filter(trade__strategy=internal)
+    n_checks, n_fails = checks.count(), checks.filter(passed=False).count()
+
+    # E) weakness map (kwa rangi) + sentensi (best/worst kwa mean, cells zenye N>=min_n)
+    wmap = sm.get("weakness_map", {}) if sm else {}
+    best = worst = None; best_v = worst_v = None
+    for dim, cells in wmap.items():
+        for cell, cv in cells.items():
+            if cv.get("verdict") == "INSUFFICIENT" or cv.get("mean") is None:
+                continue
+            m = cv["mean"]
+            if best_v is None or m > best_v:
+                best_v, best = m, f"{dim}={cell}"
+            if worst_v is None or m < worst_v:
+                worst_v, worst = m, f"{dim}={cell}"
+
+    ctx = dict(
+        panel="scorecards", call=call_sign, internal=internal, meta=public_meta(call_sign),
+        color=color, display=disp, sm=sm, overall=overall,
+        learned=sm.get("learned_ev"), practical=overall.get("mean"), mean_r=sm.get("mean_R"),
+        ci_lo=overall.get("ci_lo"), ci_hi=overall.get("ci_hi"), divergence=overall.get("divergence"),
+        say_status=language.say("status", call=call_sign, verdict=(disp if disp != "NO-DATA" else "NO-DATA")),
+        say_promise=language.say("promise", learned=sm.get("learned_ev"), practical=overall.get("mean"),
+                                 verdict=overall.get("verdict")),
+        say_weakness=language.say("weakness", best=best, worst=worst),
+        say_compliance=language.say("compliance", n=n_checks, fails=n_fails),
+        open_trades=open_t, closed_trades=closed[:100], rejected=rejected,
+        n_closed=n_closed, n_open=len(open_t), n_rejected=len(rejected),
+        n_checks=n_checks, n_fails=n_fails, weakness_map=wmap,
+        equity_json=json.dumps(dict(labels=labels, values=series)),
+        steward_note=note, provenance=provenance)
+    return render(request, "monitor/scorecard_detail.html", ctx)

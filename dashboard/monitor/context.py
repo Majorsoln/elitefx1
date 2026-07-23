@@ -8,6 +8,7 @@ from .access import PANEL_ROLES, _groups, user_leases
 # panel-name -> (url, label) kwa mpangilio wa nav
 _NAV = [
     ("deck", "/deck/", "DECK"),
+    ("scorecards", "/scorecards/", "SCORECARDS"),
     ("portfolio", "/portfolio/", "PORTFOLIO"),
     ("actions", "/actions/", "ACTIONS"),
     ("compliance", "/compliance/", "COMPLIANCE"),

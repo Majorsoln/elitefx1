@@ -1184,3 +1184,33 @@ LAST COMPLETED: **STEWARD-FIX** ✅ (docs/lessons/LESSON-043; surgical — dimen
   · Agenda #1 ya v0 (cost=LOW-DRAG SHRINKS) IMEKATALIWA (artifact). STRAT-001/002 = HOLDS (headline sahihi).
 NEXT AFTER: Chief athibitishe artifact imeondoka (weakness-map ya cost sasa ex-ante). Kanuni L-043:
   kila dimension ya diagnostics LAZIMA iwe ex-ante (mwalimu naye curriculum yake i-certify — GIGO).
+
+=== DASH-V2-A1 build (2026-07-23) — MODEL SCORECARD (Awamu 1, INTERNAL) — IMEKAMILIKA ===
+LAST COMPLETED: **Dashboard-V2 Awamu 1: MODEL SCORECARD** ✅ (docs/DASHBOARD_V2_DESIGN.md §3 A-G; additive, dashboard/ tu):
+  1. monitor/callsigns.py: CALLSIGNS {STRAT-001:KAIROS-1, STRAT-002:KAIROS-2} + to_public/to_internal/
+     public_meta. PUBLIC_META (call-sign->{version,status}) BILA pair/logic/params (anonymization §9, msingi wa Awamu 3).
+  2. loaders.load_steward(reports_dir): soma reports/model_steward.json (READ-ONLY, si DB ingest — view
+     inasoma live). Fail-soft: haipo/mbovu -> ({}, note).
+  3. monitor/language.py: say(topic,...) -> sentensi fupi (trade+English) kwa status/promise/weakness/
+     compliance. DETERMINISTIC (input sawa -> output sawa).
+  4. Views (INTERNAL tu, PANEL_ROLES["scorecards"]={"internal"}): /scorecards/ (list: call-sign +
+     status-light HOLDS/LIFTS=green, SHRINKS=red, INSUFFICIENT/no-data=yellow + sentensi);
+     /scorecards/<call_sign>/ (detail A-G: A STATUS BAND, B AHADI vs UHALISIA + shrinkage bar, C MAAMUZI
+     YA SASA open+trace, D MAAMUZI YA NYUMA closed history + kwanini + sheria, E RAMANI YA UDHAIFU
+     weakness_map kwa rangi, F SHERIA rejected+sababu, G MWENENDO equity curve gc.line). call_sign kwenye
+     URL -> to_internal server-side; bad call-sign -> 404.
+  5. context.py nav += SCORECARDS; access PANEL_ROLES += scorecards; templates scorecards_list.html +
+     scorecard_detail.html (rithi base.html); style.css += status-lights + weakness cells + shrinkbar.
+  · SHERIA: READ-ONLY (GET pekee, POST->405). REUSE loaders (load_paper_log/registry mirror + load_steward
+    mpya). Fail-soft steward/paper_log haipo -> "no data". INTERNAL tu (lessee/attestor->403; Awamu 3=lessee).
+    F7/append-only/attestation HAZIJAGUSWA. src/research byte-untouched (sweep 32/32 PASS).
+  Tests (21/21 GREEN; 6 mpya): callsign round-trip + PUBLIC_META haina pair-leak; load_steward fail-soft;
+    status-light mapping; scorecard detail 200 internal / 404 bad-callsign / 403 lessee+attestor / 302 anon /
+    405 POST; language.say deterministic. End-to-end: KAIROS-1 green/HOLDS, KAIROS-2 red/SHRINKS, A-G zote.
+RUNBOOK: live_engine --run -> paper_log; ingest (bila --demo); model_steward.py -> model_steward.json;
+  kisha login internal -> /scorecards/ -> bofya KAIROS-1/2 kwa scorecard kamili A-G.
+NEXT AFTER: Awamu 2 (OVERVIEW roll-up ya scorecards); Awamu 3 (LESSEE view — reuse scorecard + anonymize
+  call-sign + hide pair/IP + token). callsigns.py = msingi tayari.
+OPEN QUESTIONS / NOTES:
+  - Scorecard inasoma steward.json LIVE (si DB) — inasasishwa kila model_steward.py inavyoendeshwa. Demo
+    scorecards zinahitaji reports_dir yenye model_steward.json (Operator aendeshe steward kwanza).

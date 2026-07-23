@@ -1,0 +1,21 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>MODEL SCORECARDS</h1>
+{% if steward_note %}<p class="nodata">Steward: {{ steward_note }} — status lights zitakuwa NO-DATA (yellow) hadi model_steward.json ipatikane.</p>{% endif %}
+{% if cards %}
+<div class="scorecard">
+{% for c in cards %}
+<div class="card sc-band {{ c.color }}">
+  <div><span class="light {{ c.color }}"></span><a class="callsign" href="/scorecards/{{ c.call }}/">{{ c.call }}</a>
+    <span class="src">{{ c.meta.version }} · {{ c.meta.status }}</span></div>
+  <p class="sc-say">{{ c.sentence }}</p>
+  <p class="src">practical {{ c.practical|default:"—" }} vs learned {{ c.learned|default:"—" }} pips ·
+     verdict {{ c.display }} · closed {{ c.n_closed }}</p>
+</div>
+{% endfor %}
+</div>
+<p class="src">INTERNAL view (PD): call-sign + internal id server-side. Lessee-anonymized view = Awamu 3.</p>
+{% else %}
+<div class="nodata">no data: hakuna models (endesha live_engine --run + ingest + model_steward.py)</div>
+{% endif %}
+{% endblock %}
