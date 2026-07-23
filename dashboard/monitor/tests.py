@@ -445,3 +445,60 @@ class LanguageTests(TestCase):
         w = language.say("weakness", best="session=NY", worst="streak=AFTER_LOSS")
         self.assertEqual(w, language.say("weakness", best="session=NY", worst="streak=AFTER_LOSS"))
         self.assertIn("NY", w)
+
+
+class DeckFleetTests(TestCase):
+    """DASHBOARD-V2 Awamu 2 — OVERVIEW fleet rollup kwenye Command Deck."""
+    @classmethod
+    def setUpTestData(cls):
+        call_command("ingest", "--demo", verbosity=0)
+
+    def _paths_with_steward(self, tmp):
+        _write_steward(tmp)
+        from django.conf import settings
+        return dict(settings.ELITEFX_PATHS, reports_dir=Path(tmp))
+
+    def test_a_deck_fleet_cards_link_to_scorecards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with override_settings(ELITEFX_PATHS=self._paths_with_steward(tmp)):
+                self.client.force_login(_mk_user("pd", "internal"))
+                r = self.client.get("/deck/")
+                self.assertEqual(r.status_code, 200)
+                self.assertIn(b"FLEET", r.content)
+                for cs in ("KAIROS-1", "KAIROS-2"):
+                    self.assertIn(cs.encode(), r.content)
+                    self.assertIn(f"/scorecards/{cs}/".encode(), r.content)
+                self.assertIn(b"COMMAND DECK", r.content)
+                self.assertIn(b"Equity", r.content)          # panels zingine za deck ZIBAKI
+
+    def test_b_fleet_tally_correct(self):
+        # steward demo: STRAT-001 HOLDS (green), STRAT-002 SHRINKS (red) -> 1 green / 1 red / 0 yellow
+        with tempfile.TemporaryDirectory() as tmp:
+            with override_settings(ELITEFX_PATHS=self._paths_with_steward(tmp)):
+                self.client.force_login(_mk_user("pd3", "internal"))
+                r = self.client.get("/deck/")
+                self.assertIn("\U0001F7E2 1".encode(), r.content)      # green 1
+                self.assertIn("\U0001F534 1".encode(), r.content)      # red 1
+                self.assertIn("\U0001F7E1 0".encode(), r.content)      # yellow 0
+
+    def test_c_deck_internal_only(self):
+        r = self.client.get("/deck/")
+        self.assertEqual(r.status_code, 302)
+        self.assertIn("/login/", r["Location"])
+        self.client.force_login(_mk_user("cli", "lessee", lease="STRAT-001"))
+        self.assertEqual(self.client.get("/deck/").status_code, 403)
+        self.client.force_login(_mk_user("att", "attestor"))
+        self.assertEqual(self.client.get("/deck/").status_code, 403)
+
+    def test_d_fleet_fail_soft_no_steward(self):
+        # bila model_steward.json -> deck 200, fleet ina call-signs LAKINI lights NO-DATA (yellow)
+        from django.conf import settings
+        with tempfile.TemporaryDirectory() as tmp:
+            with override_settings(ELITEFX_PATHS=dict(settings.ELITEFX_PATHS, reports_dir=Path(tmp))):
+                self.client.force_login(_mk_user("pd4", "internal"))
+                r = self.client.get("/deck/")
+                self.assertEqual(r.status_code, 200)
+                self.assertIn(b"KAIROS-1", r.content)          # fleet bado ina call-signs
+                self.assertIn(b"Steward:", r.content)          # fail-soft note
+                self.assertIn("\U0001F7E2 0".encode(), r.content)      # green 0 (zote NO-DATA)
+                self.assertIn("\U0001F534 0".encode(), r.content)      # red 0

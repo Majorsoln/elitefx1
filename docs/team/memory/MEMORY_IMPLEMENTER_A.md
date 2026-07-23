@@ -1214,3 +1214,25 @@ NEXT AFTER: Awamu 2 (OVERVIEW roll-up ya scorecards); Awamu 3 (LESSEE view — r
 OPEN QUESTIONS / NOTES:
   - Scorecard inasoma steward.json LIVE (si DB) — inasasishwa kila model_steward.py inavyoendeshwa. Demo
     scorecards zinahitaji reports_dir yenye model_steward.json (Operator aendeshe steward kwanza).
+
+=== DASH-V2-A2 build (2026-07-23) — OVERVIEW: FLEET status-lights kwenye COMMAND DECK — IMEKAMILIKA ===
+LAST COMPLETED: **Dashboard-V2 Awamu 2: OVERVIEW / FLEET** ✅ (docs/DASHBOARD_V2_DESIGN.md §4; additive, dashboard/ tu):
+  · COMMAND DECK iliyopo (/deck/, INTERNAL) imekuzwa kuwa "taasisi kwa jicho moja": FLEET ya models kwa
+    status-lights juu ya equity/actions. Panels zote za zamani (equity KPIs, sparkline, today's actions,
+    active models) ZIMEBAKI kama zilivyo.
+  1. views.command_deck: REUSE helpers za Awamu 1 (_steward_models/_scorecard_summary/_status_light — SI
+     overview mpya). ids = CALLSIGNS ∪ steward-models ∪ Trade.strategy; fleet = _scorecard_summary(i) kwa
+     kila i ndani ya CALLSIGNS au smodels; tally {green/yellow/red}; steward_note fail-soft;
+     alerts_count/alerts_recent; demo flag. Context mpya: fleet, fleet_tally, steward_note, alerts_count.
+  2. deck.html: section "FLEET — MODELS KWA JICHO MOJA" juu ya grid g4 — cards (light + call-sign +
+     meta.version/status + sentensi + verdict/closed), link -> /scorecards/<call_sign>/; summary
+     "🟢 X · 🟡 Y · 🔴 Z · alerts N"; steward-note banner ikiwa model_steward.json haipo; else "no data".
+  · SHERIA: READ-ONLY mirror (GET pekee). Deck role/access HAIJABADILIKA (INTERNAL tu). Hakuna chart-lib
+     mpya. F7/append-only/attestation HAZIJAGUSWA. src/research byte-untouched (sweep 32/32 PASS; golden fns
+     episodes/pvalue_boot/_mask_context/pool_streams/_r_normalize/nr7_break = 0 lines diff).
+  Tests (25/25 GREEN; 4 mpya DeckFleetTests): (a) deck ina fleet cards zenye call-sign + link /scorecards/<cs>/;
+    (b) fleet tally sahihi (🟢1 KAIROS-1 HOLDS · 🔴1 KAIROS-2 SHRINKS · 🟡0); (c) deck INTERNAL tu
+    (anon->302, lessee->403, attestor->403); (d) fail-soft bila steward.json (deck 200, KAIROS-1 present,
+    "Steward:" note, green 0 / red 0 — lights = NO-DATA yellow).
+RUNBOOK: login internal -> /deck/ -> ona FLEET rollup juu; bofya card -> /scorecards/<call_sign>/ (Awamu 1).
+NEXT AFTER: Awamu 3 (LESSEE view — reuse scorecard + anonymize call-sign + hide pair/IP + token).

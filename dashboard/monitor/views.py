@@ -63,6 +63,14 @@ def command_deck(request):
     perf_all = StrategyPerf.objects.filter(strategy="PORTFOLIO", period="ALL").first()
     month = djtz.now().strftime("%Y-%m")
     perf_month = StrategyPerf.objects.filter(strategy="PORTFOLIO", period=month).first()
+    # DASHBOARD-V2 Awamu 2: FLEET rollup — REUSE _scorecard_summary (Awamu 1). Fail-soft steward.
+    from .callsigns import CALLSIGNS
+    smodels, _prov, steward_note = _steward_models()
+    ids = sorted(set(CALLSIGNS) | set(smodels) | set(Trade.objects.values_list("strategy", flat=True)))
+    fleet = [_scorecard_summary(i, smodels) for i in ids if i in CALLSIGNS or i in smodels]
+    tally = {"green": 0, "yellow": 0, "red": 0}
+    for c in fleet:
+        tally[c["color"]] = tally.get(c["color"], 0) + 1
     return render(request, "monitor/deck.html", dict(
         panel="deck", status=status, hb=hb,
         score=score, n_checks=n_checks, n_fails=n_fails,
@@ -72,6 +80,8 @@ def command_deck(request):
         perf_all=perf_all, perf_month=perf_month,
         equity_json=json.dumps(dict(labels=labels[-120:], values=eq[-120:])),
         today_actions=Trade.objects.all()[:8],
+        fleet=fleet, fleet_tally=tally, steward_note=steward_note,
+        alerts_count=Alert.objects.count(), alerts_recent=Alert.objects.all()[:5],
         demo=Trade.objects.filter(is_demo=True).exists()))
 
 

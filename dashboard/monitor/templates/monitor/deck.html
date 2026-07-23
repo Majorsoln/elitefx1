@@ -5,6 +5,27 @@
   {% if hb %}<span class="src"> heartbeat {% if hb.ts %}{{ hb.ts|date:"Y-m-d H:i:s" }} UTC{% else %}[ts batili]{% endif %} · {{ hb.source_ref }}</span>
   {% else %}<span class="nodata">no data: heartbeat haipo (ELITEFX_HEARTBEAT_PATH)</span>{% endif %}</p>
 
+<!-- DASHBOARD-V2 Awamu 2: FLEET — MODELS KWA JICHO MOJA -->
+<div class="section">
+  <h2>FLEET — MODELS KWA JICHO MOJA
+    <span class="src" style="text-transform:none">
+      🟢 {{ fleet_tally.green }} · 🟡 {{ fleet_tally.yellow }} · 🔴 {{ fleet_tally.red }}
+      · alerts {{ alerts_count }}</span></h2>
+  {% if steward_note %}<p class="src">Steward: {{ steward_note }} — status lights = NO-DATA (🟡) hadi model_steward.json ipatikane.</p>{% endif %}
+  {% if fleet %}
+  <div class="scorecard">
+  {% for c in fleet %}
+    <a class="card sc-band {{ c.color }}" href="/scorecards/{{ c.call }}/" style="text-decoration:none;display:block">
+      <div><span class="light {{ c.color }}"></span><span class="callsign">{{ c.call }}</span>
+        <span class="src">{{ c.meta.version }} · {{ c.meta.status }}</span></div>
+      <p class="sc-say">{{ c.sentence }}</p>
+      <p class="src">verdict {{ c.display }} · closed {{ c.n_closed }}</p>
+    </a>
+  {% endfor %}
+  </div>
+  {% else %}<div class="nodata">no data: hakuna models (endesha live_engine --run + ingest + model_steward.py)</div>{% endif %}
+</div>
+
 <div class="grid g4">
   <div class="card kpi"><span class="label">Equity (net R, all)</span>
     <b class="{% if perf_all and perf_all.net_r >= 0 %}pos{% else %}neg{% endif %}">
