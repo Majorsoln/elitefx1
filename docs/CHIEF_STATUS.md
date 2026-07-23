@@ -1380,3 +1380,17 @@ ushahidi wa mwisho = MT5 demo forward (hali halisi). Steward inaendelea kwenye f
 tests (callsign round-trip, steward fail-soft, status-light, role-gate, language determinism).
 
 **HATUA:** Operator aendeshe DASH-V2-A1 → "tayari DASH-V2-A1" → Chief review (tests + role-smoke).
+
+---
+
+## 2026-07-22 — DASH-V2-A1 (MODEL SCORECARD internal) REVIEW: PASS → Awamu 1 imekamilika
+
+**Scorecard internal (main `4655ffa`): review PASS — nimethibitisha (manage.py test monitor 21/21).**
+- READ-ONLY (@require_GET pande zote) · role-gate @panel_access("scorecards")={internal} (anon→302/403).
+- **Anonymization msingi:** callsigns.py to_public/to_internal server-side; PUBLIC_META = version/status
+  TU (HAKUNA pair/logic — test no-pair-leak). Detail inaramanisha call_sign→internal server-side.
+- Sehemu A-G zote (status band·ahadi-vs-uhalisia·maamuzi sasa/nyuma glass-box·weakness map·sheria·
+  equity). language.say (trade+English). REUSE loaders (Trade/ComplianceCheck + load_steward fail-soft).
+- E2E: KAIROS-1 green/HOLDS. Read-only mirror (§4) — HAIENDESHI trade.
+
+**HATUA:** Awamu 2 (OVERVIEW roll-up) → Awamu 3 (LESSEE anonymized reuse) → Awamu 4 (lugha+filter).
