@@ -1363,3 +1363,20 @@ halisi = MT5 demo forward pekee. Forward-power ya Steward inatoka forward-LIVE, 
 **Mpangilio uliorekebishwa:** (1) forward accumulation = live-paper real-time kuanzia sasa (si
 kuchoma dirisha la historia); (2) dirisha 2026-05+ linabaki sealed hadi EA kamili tayari; (3)
 ushahidi wa mwisho = MT5 demo forward (hali halisi). Steward inaendelea kwenye forward-live data.
+
+---
+
+## 2026-07-22 — DASHBOARD-V2 design imekubaliwa (KAIROS + SCORECARD) → Awamu 1 prompt tayari
+
+**PD amekabidhi Chief: metaphor, vipaumbele, majina.** Maamuzi:
+- Metaphor: **MODEL SCORECARD** (status lights 🟢🟡🔴; PD alikataa "mgonjwa").
+- Call-signs: STRAT-001→**KAIROS-1**, STRAT-002→**KAIROS-2** (zijazo KAIROS-3…). Internal id+pair =
+  siri ya server (anonymization §9; lessee haoni STRAT-xxx/pair/logic).
+- Design rasmi: docs/DASHBOARD_V2_DESIGN.md (roles, scorecard A-G, awamu 1-4). Read-only mirror (§4).
+
+**Awamu (Chief):** 1 SCORECARD(internal) → 2 OVERVIEW → 3 LESSEE(anonymized reuse) → 4 lugha+filter.
+**Awamu 1 prompt tayari:** IMPLEMENTER-A [DASH-V2-A1] — callsigns.py + load_steward + language.py +
+/scorecards/ (list+detail A-G) + nav, kwa data iliyopo (model_steward.json + paper_log), REUSE loaders,
+tests (callsign round-trip, steward fail-soft, status-light, role-gate, language determinism).
+
+**HATUA:** Operator aendeshe DASH-V2-A1 → "tayari DASH-V2-A1" → Chief review (tests + role-smoke).

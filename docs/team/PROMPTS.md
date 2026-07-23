@@ -1094,3 +1094,52 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari STEWARD-FIX" + weakness-ma
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [DASH-V2-A1] (Dashboard-V2 Awamu 1 — MODEL SCORECARD, internal)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: Dashboard-V2 AWAMU 1 —
+jenga "MODEL SCORECARD" (per-model, INTERNAL role kwanza) ndani ya Django app iliyopo (dashboard/).
+SPEC: docs/DASHBOARD_V2_DESIGN.md (§3 sehemu A-G ndio moyo). Inabaki READ-ONLY mirror (Doctrine §4).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/DASHBOARD_V2_DESIGN.md (§0 maamuzi, §3 scorecard A-G, §7 awamu) · docs/MODEL_STEWARD_CHARTER.md
+(model_steward.json schema: models{name:{overall,weakness_map,mean_R,learned_ev}}, agenda, provenance) ·
+dashboard/monitor/: loaders.py (load_paper_log, load_model_registry, load_reports — REUSE), views.py
+(mfano wa views zilizopo), urls.py, access.py (PANEL_ROLES + model_access decorator), context.py (nav),
+templates/monitor/base.html + deck.html (mfano), tests.py, management/commands/ingest.py.
+
+JENGA (additive — REUSE loaders zilizopo; GET-only; ZERO trade logic):
+  1. Call-sign registry monitor/callsigns.py: CALLSIGNS = {"STRAT-001":"KAIROS-1","STRAT-002":"KAIROS-2"};
+     to_public(internal)->call-sign, to_internal(call-sign)->internal, PUBLIC_META (call-sign->{version,
+     status}) BILA pair/logic. Hii ndiyo msingi wa anonymization (§9) — pair/internal-id ni server-side.
+  2. Steward loader loaders.load_steward(reports_dir): soma reports/model_steward.json (kama ipo) ->
+     per-model {practical, learned_ev, verdict, ci, weakness_map, mean_R} + provenance + sample_note.
+     Ikikosekana -> rudisha {} + note "endesha model_steward.py" (fail-soft, si crash).
+  3. Plain-language helper monitor/language.py: say(metric, value, ...) -> sentensi FUPI (trade +
+     English) kwa verdict/shrinkage/weakness. Mfano: HOLDS -> "Inatoa faida kama ilivyoahidi. Iko salama."
+     / SHRINKS -> "Iko chini ya ahadi — angalizo." Deterministic, hakuna namba za kubuni.
+  4. Views + urls (INTERNAL role tu awamu hii — PANEL_ROLES["scorecards"]={"internal"}):
+     - /scorecards/ (list): kila model call-sign + status light (HOLDS/LIFTS=green, SHRINKS=red,
+       INSUFFICIENT/no-data=yellow) + sentensi.
+     - /scorecards/<call_sign>/ (detail): sehemu A-G za §3:
+       A STATUS BAND (call-sign+version+status light+sentensi) · B AHADI vs UHALISIA (learned vs practical
+       + shrinkage) · C MAAMUZI YA SASA (open trades + trace kutoka paper_log) · D MAAMUZI YA NYUMA
+       (closed trades: tarehe/pair/dir/R/matokeo + kwa nini+sheria; internal anaona pair) · E RAMANI YA
+       UDHAIFU (weakness_map session/vol/streak/cost kwa rangi) · F SHERIA (rejected count+sababu kutoka
+       compliance) · G MWENENDO (equity curve ya model — data za paper_log, si chart library mpya; SVG/
+       inline au jedwali la cumulative). Tumia call_sign kwenye URL; ramanisha ->internal kwa server.
+  5. Nav context.py: ongeza ("scorecards","/scorecards/","SCORECARDS") kwenye _NAV; PANEL_ROLES
+     iongezwe "scorecards". Templates: scorecards_list.html + scorecard_detail.html (rithi base.html).
+
+SHERIA: READ-ONLY (GET pekee; hakuna model write). REUSE loaders — usiandike parser mpya ya paper_log.
+  Fail-soft kama steward.json/paper_log haipo. Internal role tu (lessee = Awamu 3). F7 fail-closed +
+  append-only + attestation (V1) HAZIGUSWI. tests.py: (a) callsigns round-trip (to_public/to_internal +
+  PUBLIC_META haina pair); (b) load_steward fail-soft (json haipo -> {} + note); (c) status-light mapping
+  (HOLDS->green, SHRINKS->red, no-data->yellow); (d) scorecard detail view 200 kwa internal, 302/403 kwa
+  anon; (e) language.say deterministic. Run: python manage.py test monitor. GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A1" + jinsi ya kuona (login internal ->
+  /scorecards/) + screenshot-note ya scorecard ya KAIROS-1. (Awamu 2 OVERVIEW + Awamu 3 LESSEE zinafuata.)
+```
+
+---
