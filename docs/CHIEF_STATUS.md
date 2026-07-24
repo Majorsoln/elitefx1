@@ -1463,3 +1463,12 @@ ANONYMIZED (call-sign) baadaye (Awamu 4+). Usalama > feature. Prompt: IMPLEMENTE
 
 **Dashboard-V2 hali:** Awamu 1 (Scorecard) ✓ · 2 (Overview/Fleet) ✓ · 3 (Lessee anonymized) ✓ +FIX.
 **Imebaki:** Awamu 4 (lugha trade+English hardening + filter chips) — awamu ya mwisho.
+
+---
+
+## 2026-07-22 — Awamu 4 (lugha SW+EN + filter chips) prompt tayari — awamu ya mwisho ya Dashboard-V2
+
+Awamu 1-3 (+A3-FIX) certified. Awamu 4 = ya mwisho: (1) LUGHA — ongeza English kando ya Kiswahili kila
+sentensi (say_both, deterministic); (2) FILTER CHIPS — section D (maamuzi ya nyuma) filtering GET
+(result W/L · session · date-range; internal PIA pair; lessee HANA pair chip §9). Read-only. No-leak
+inabaki hata na filters. Prompt: IMPLEMENTER-A [DASH-V2-A4]. HATUA: Operator → "tayari DASH-V2-A4".
