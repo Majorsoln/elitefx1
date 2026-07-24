@@ -1427,3 +1427,23 @@ anaona scorecard za models ZAKE ALIZOKODI TU, kwa call-sign (KAIROS), ANONYMIZED
 HAONI pair/internal-id/logic/models za wengine. Reuse hesabu za A-G lakini context anonymized (dict,
 si Trade mbichi). Lease-scoped (user_leases). NO-LEAK tests ni lazima: assertNotContains "USDCHF"/
 "STRAT-001" kwa lessee. Prompt: IMPLEMENTER-A [DASH-V2-A3]. HATUA: Operator → "tayari DASH-V2-A3".
+
+---
+
+## 2026-07-22 — DASH-V2-A3 (LESSEE VIEW) REVIEW: PASS + back-door imegunduliwa → LESSON-044 + A3-FIX
+
+**Lessee view (main `fc46b87`): review PASS kwa view yenyewe (test monitor 30/30).**
+- /my/ anonymized: lessee anaona call-sign zake TU; _lessee_scorecard = dict (si Trade mbichi);
+  no-leak tests (assertNotContains USDCHF/STRAT-001) PASS; lease-scoped 403; nav=["MY MODELS"].
+  research byte-untouched; sweep 32/32.
+
+**BACK-DOOR NILIYOKAMATA (agent aliuliza — nimethibitisha ni leak halisi) → LESSON-044:** routes za
+zamani `/registry/<id>/` + `/attest.{json,html,pdf}` zinatumia @model_access inayompa lessee grant ya
+leased model. attest.build_payload inarudisha "model_id":"STRAT-001" + Trade pair. Lessee-demo (lease
+STRAT-001) angeweza kufungua /registry/STRAT-001/attest.json → kuona internal-id + pair → **anonymization
+imevunjika kupitia mlango wa nyuma.** Somo: anonymization ni per-SURFACE si per-view; funga KILA route +
+jaribu 403 (negative).
+
+**Uamuzi (Chief):** §9 (KAIROS anonymization) inashinda §5.4 (lessee raw attestation). A3-FIX:
+model_access → internal/attestor TU; lessee→registry/attest = 403. Attestation ya lessee itarudi
+ANONYMIZED (call-sign) baadaye (Awamu 4+). Usalama > feature. Prompt: IMPLEMENTER-A [DASH-V2-A3-FIX].
