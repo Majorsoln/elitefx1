@@ -1403,3 +1403,17 @@ Baada ya Awamu 1 (Scorecard) kuthibitika, PD: "endelea." Awamu 2 = boresha COMMA
 FLEET ya models kwa status-lights (§4): kila model call-sign + 🟢/🟡/🔴 + sentensi + link→scorecard;
 tally (green/yellow/red) + alerts. REUSE _scorecard_summary/_status_light (Awamu 1). Read-only,
 internal. Prompt: IMPLEMENTER-A [DASH-V2-A2]. HATUA: Operator → "tayari DASH-V2-A2" → Chief review.
+
+---
+
+## 2026-07-22 — DASH-V2-A2 (OVERVIEW / FLEET) REVIEW: PASS → Awamu 2 imekamilika
+
+**Command Deck OVERVIEW (main `d132261`): review PASS — nimethibitisha (test monitor 25/25).**
+- FLEET rollup juu ya deck: kila model call-sign + status light (🟢/🟡/🔴) + sentensi + link→scorecard;
+  tally green/yellow/red + alerts. REUSE _scorecard_summary/_status_light (Awamu 1) — si logic mpya.
+- READ-ONLY (GET) · deck internal-only (anon→302, lessee/attestor→403) · fail-soft bila steward.json
+  (models→🟡 NO-DATA). Panels za zamani zimebaki. Chart-lib mpya HAKUNA.
+- **research byte-untouched** (git diff numstat src/research = 0); golden fns 0 diff; sweep 32/32.
+
+**HATUA:** Awamu 3 — LESSEE VIEW (anonymization kamili: mteja anaona KAIROS zake TU, pair/IP hidden,
+per-token). callsigns.py = msingi tayari. FLEET/scorecard zita-reuse-iwa restricted. Prompt inafuata.
