@@ -596,3 +596,71 @@ class LesseeViewTests(TestCase):
         self.client.force_login(_mk_user("pd6", "internal"))
         for url in RAW:
             self.assertEqual(self.client.get(url).status_code, 200, url)
+
+
+class Awamu4LangFilterTests(TestCase):
+    """DASHBOARD-V2 Awamu 4 — LUGHA (R3: SW+EN) + FILTER CHIPS (R5: section D)."""
+    @classmethod
+    def setUpTestData(cls):
+        call_command("ingest", "--demo", verbosity=0)
+
+    def test_a_say_both_sw_and_en_all_topics(self):
+        cases = [
+            ("status", dict(call="KAIROS-1", verdict="HOLDS")),
+            ("status", dict(call="KAIROS-2", verdict="NO-DATA")),
+            ("promise", dict(learned=1.92, practical=3.07, verdict="HOLDS")),
+            ("weakness", dict(best="session=NY", worst="cost=HIGH-COST")),
+            ("compliance", dict(n=40, fails=1)),
+        ]
+        for topic, kw in cases:
+            b = language.say_both(topic, **kw)
+            self.assertTrue(b["sw"].strip(), topic)          # Kiswahili haipo tupu
+            self.assertTrue(b["en"].strip(), topic)          # English haipo tupu
+            self.assertNotEqual(b["sw"], b["en"], topic)     # lugha mbili tofauti
+            self.assertEqual(b, language.say_both(topic, **kw))   # DETERMINISTIC
+
+    def _shown(self, url):
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200, url)
+        return r.context["d_shown"], r.context["d_total"]
+
+    def test_b_internal_section_d_filters(self):
+        # KAIROS-2 demo: 5 closed (3 W / 2 L; 3 LONDON / 2 NY; Jan-Jun 2026)
+        self.client.force_login(_mk_user("pd", "internal"))
+        self.assertEqual(self._shown("/scorecards/KAIROS-2/"), (5, 5))
+        self.assertEqual(self._shown("/scorecards/KAIROS-2/?result=W"), (3, 5))   # wins TU
+        self.assertEqual(self._shown("/scorecards/KAIROS-2/?result=L"), (2, 5))
+        self.assertEqual(self._shown("/scorecards/KAIROS-2/?session=NY"), (2, 5)) # NY tu
+        self.assertEqual(self._shown("/scorecards/KAIROS-2/?session=LONDON"), (3, 5))
+        self.assertEqual(self._shown("/scorecards/KAIROS-2/?from=2026-03-01&to=2026-05-01"), (2, 5))
+
+    def test_c_lessee_filter_no_pair_chip_no_leak(self):
+        # lessee section-D: chips = session/result TU (HAKUNA pair, §9) + no-leak hata kwa ?pair smuggled
+        self.client.force_login(_mk_user("cli", "lessee", lease="STRAT-001"))
+        r = self.client.get("/my/KAIROS-1/")
+        names = [g["name"] for g in r.context["filter_chips"]["groups"]]
+        self.assertNotIn("pair", names)                      # HAKUNA pair chip
+        self.assertEqual(set(names), {"result", "session"})
+        # result/session filter bado zinafanya kazi (STRAT-001: 4 W / 1 L; zote LONDON)
+        self.assertEqual(self.client.get("/my/KAIROS-1/?result=W").context["d_shown"], 4)
+        self.assertEqual(self.client.get("/my/KAIROS-1/?result=L").context["d_shown"], 1)
+        self.assertEqual(self.client.get("/my/KAIROS-1/?session=LONDON").context["d_shown"], 5)
+        # ?pair=... smuggled -> INAPUUZWA (allow_pair=False) NA no-leak (hakuna USDCHF/STRAT-001)
+        r3 = self.client.get("/my/KAIROS-1/?pair=USDCHF&result=W")
+        self.assertEqual(r3.status_code, 200)
+        self.assertNotContains(r3, "USDCHF")
+        self.assertNotContains(r3, "STRAT-001")
+        self.assertEqual(r3.context["d_shown"], 4)           # pair imepuuzwa; result=W bado inatumika
+
+    def test_d_internal_pair_chip_works(self):
+        # INTERNAL ina pair chip; ?pair=<pair> inachuja
+        self.client.force_login(_mk_user("pd2", "internal"))
+        r = self.client.get("/scorecards/KAIROS-2/?pair=USDJPY")
+        self.assertEqual(r.status_code, 200)
+        names = [g["name"] for g in r.context["filter_chips"]["groups"]]
+        self.assertIn("pair", names)                         # pair chip IPO (internal)
+        self.assertEqual(r.context["d_shown"], 5)            # zote USDJPY
+        self.assertEqual(self.client.get("/scorecards/KAIROS-2/?pair=NOPE").context["d_shown"], 0)
+        # anon -> 302
+        self.client.logout()
+        self.assertEqual(self.client.get("/scorecards/KAIROS-2/").status_code, 302)

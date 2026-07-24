@@ -1,0 +1,20 @@
+{# DASHBOARD-V2 Awamu 4 (R5): filter chips ya section D — server-side GET, READ-ONLY.
+   Lessee HANA pair chip (§9) — view inaipitisha allow_pair=False. #}
+<div class="chips">
+  {% for g in filter_chips.groups %}
+  <span class="chipgroup"><span class="src">{{ g.label }}:</span>
+    {% for c in g.chips %}<a class="chip{% if c.active %} on{% endif %}" href="{{ c.qs }}">{{ c.label }}</a>{% endfor %}
+  </span>
+  {% endfor %}
+  {% if filter_chips.any_active %}<a class="chip clear" href="{{ request.path }}">✕ clear</a>{% endif %}
+  <form method="get" class="daterange">
+    {% if filters.result %}<input type="hidden" name="result" value="{{ filters.result }}">{% endif %}
+    {% if filters.session %}<input type="hidden" name="session" value="{{ filters.session }}">{% endif %}
+    {% if filters.pair %}<input type="hidden" name="pair" value="{{ filters.pair }}">{% endif %}
+    <label class="src">from <input type="date" name="from" value="{{ filters.from|default:'' }}"></label>
+    <label class="src">to <input type="date" name="to" value="{{ filters.to|default:'' }}"></label>
+    <button class="linklike">chuja tarehe / dates</button>
+  </form>
+</div>
+<p class="src">{{ d_shown }} trade{{ d_shown|pluralize }} (zimechujwa kutoka {{ d_total }} / filtered from {{ d_total }})
+  · za mwisho 100 zinaonyeshwa.</p>

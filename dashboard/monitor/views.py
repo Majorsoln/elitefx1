@@ -326,6 +326,73 @@ def _scorecard_summary(internal_id, smodels):
                 sentence=language.say("status", call=call, verdict=(disp if disp != "NO-DATA" else "NO-DATA")))
 
 
+# ---------- DASHBOARD-V2 Awamu 4 (R5): FILTER CHIPS ya section D (server-side, GET-only) ----------
+_SESSIONS = ("ASIA", "LONDON", "NY")
+
+
+def _session_of(dt):
+    """UTC hour -> FX session label (ASIA/LONDON/NY/OFF). Mipaka inaakisi research session_of."""
+    if dt is None:
+        return None
+    h = dt.hour
+    return "ASIA" if 0 <= h < 7 else "LONDON" if 7 <= h < 13 else "NY" if 13 <= h < 20 else "OFF"
+
+
+def _filter_closed(closed, request, allow_pair):
+    """Chuja closed-trade list kwa GET params (READ-ONLY): result=W|L · session=ASIA|LONDON|NY ·
+    from/to=YYYY-MM-DD · pair=<pair> (INTERNAL TU — lessee HANA, §9). Rudi (filtered, total, active)."""
+    total = len(closed)
+    result = request.GET.get("result")
+    session = request.GET.get("session")
+    dfrom = (request.GET.get("from") or "").strip()
+    dto = (request.GET.get("to") or "").strip()
+    pair = (request.GET.get("pair") or "").strip() if allow_pair else ""
+    out = closed
+    if result in ("W", "L"):
+        out = [t for t in out if ("W" if (t.pnl_r or 0) > 0 else "L") == result]
+    if session in _SESSIONS:
+        out = [t for t in out if _session_of(t.opened_at) == session]
+    if dfrom:
+        out = [t for t in out if t.closed_at and t.closed_at.strftime("%Y-%m-%d") >= dfrom]
+    if dto:
+        out = [t for t in out if t.closed_at and t.closed_at.strftime("%Y-%m-%d") <= dto]
+    if pair:
+        out = [t for t in out if t.pair == pair]
+    active = {"result": result if result in ("W", "L") else None,
+              "session": session if session in _SESSIONS else None,
+              "from": dfrom or None, "to": dto or None, "pair": pair or None}
+    return out, total, active
+
+
+def _chip_qs(active, key, value):
+    """Toggle chip -> querystring ikihifadhi filters zingine (drop None/'')."""
+    from urllib.parse import urlencode
+    params = {k: v for k, v in active.items() if v}
+    if params.get(key) == value:
+        params.pop(key, None)                    # bofya tena -> zima
+    else:
+        params[key] = value
+    return ("?" + urlencode(params)) if params else "?"
+
+
+def _filter_chips(active, allow_pair, pairs):
+    """Muundo wa chips kwa template (result/session[/pair]) + active-state + any_active (clear)."""
+    groups = [
+        dict(name="result", label="matokeo / result", chips=[
+            dict(label=lbl, active=(active.get("result") == v), qs=_chip_qs(active, "result", v))
+            for v, lbl in (("W", "Wins"), ("L", "Losses"))]),
+        dict(name="session", label="session", chips=[
+            dict(label=s, active=(active.get("session") == s), qs=_chip_qs(active, "session", s))
+            for s in _SESSIONS]),
+    ]
+    if allow_pair and pairs:
+        groups.append(dict(name="pair", label="pair (internal)", chips=[
+            dict(label=p, active=(active.get("pair") == p), qs=_chip_qs(active, "pair", p))
+            for p in pairs]))
+    any_active = any(active.get(k) for k in ("result", "session", "from", "to", "pair"))
+    return dict(groups=groups, any_active=any_active)
+
+
 @require_GET
 @panel_access("scorecards")
 def scorecards_list(request):
@@ -377,17 +444,22 @@ def scorecard_detail(request, call_sign):
             if worst_v is None or m < worst_v:
                 worst_v, worst = m, f"{dim}={cell}"
 
+    # D) filter chips (R5) — INTERNAL ina pair chip pia. Chuja closed list KABLA ya render.
+    d_filtered, d_total, active = _filter_closed(closed, request, allow_pair=True)
+    pairs = sorted({t.pair for t in closed})
     ctx = dict(
         panel="scorecards", call=call_sign, internal=internal, meta=public_meta(call_sign),
         color=color, display=disp, sm=sm, overall=overall,
         learned=sm.get("learned_ev"), practical=overall.get("mean"), mean_r=sm.get("mean_R"),
         ci_lo=overall.get("ci_lo"), ci_hi=overall.get("ci_hi"), divergence=overall.get("divergence"),
-        say_status=language.say("status", call=call_sign, verdict=(disp if disp != "NO-DATA" else "NO-DATA")),
-        say_promise=language.say("promise", learned=sm.get("learned_ev"), practical=overall.get("mean"),
-                                 verdict=overall.get("verdict")),
-        say_weakness=language.say("weakness", best=best, worst=worst),
-        say_compliance=language.say("compliance", n=n_checks, fails=n_fails),
-        open_trades=open_t, closed_trades=closed[:100], rejected=rejected,
+        say_status=language.say_both("status", call=call_sign, verdict=(disp if disp != "NO-DATA" else "NO-DATA")),
+        say_promise=language.say_both("promise", learned=sm.get("learned_ev"), practical=overall.get("mean"),
+                                      verdict=overall.get("verdict")),
+        say_weakness=language.say_both("weakness", best=best, worst=worst),
+        say_compliance=language.say_both("compliance", n=n_checks, fails=n_fails),
+        open_trades=open_t, closed_trades=d_filtered[:100], rejected=rejected,
+        d_total=d_total, d_shown=len(d_filtered), filters=active,
+        filter_chips=_filter_chips(active, allow_pair=True, pairs=pairs),
         n_closed=n_closed, n_open=len(open_t), n_rejected=len(rejected),
         n_checks=n_checks, n_fails=n_fails, weakness_map=wmap,
         equity_json=json.dumps(dict(labels=labels, values=series)),
@@ -418,7 +490,7 @@ def _lessee_card(call_sign, smodels):
                                       verdict=(disp if disp != "NO-DATA" else "NO-DATA")))
 
 
-def _lessee_scorecard(call_sign):
+def _lessee_scorecard(request, call_sign):
     """Context ANONYMIZED ya scorecard (A-G rahisi) — REUSE hesabu za internal, LAKINI rudisha
     fields zisizovuja: HAKUNA pair, HAKUNA internal id, HAKUNA record_id/logic/params."""
     internal = to_internal(call_sign)                      # server-side pekee
@@ -457,8 +529,10 @@ def _lessee_scorecard(call_sign):
 
     # D) maamuzi ya nyuma — dicts ANONYMIZED {date, dir, R, result, reason, rules}.
     # reason = hatua zilizopita (signal/gate/fill) — HAKUNA record_id (record_id huvuja pair).
+    # Filter chips (R5): session/result/date TU — HAKUNA pair chip (§9 — lessee HANA pair).
+    d_filtered, d_total, active = _filter_closed(closed, request, allow_pair=False)
     history = []
-    for t in closed[:100]:
+    for t in d_filtered[:100]:
         stages = list(dict.fromkeys(t.traces.values_list("stage", flat=True)))
         win = (t.pnl_r or 0) > 0
         history.append(dict(
@@ -471,13 +545,15 @@ def _lessee_scorecard(call_sign):
         call=call_sign, meta=public_meta(call_sign), color=color, display=disp,
         learned=sm.get("learned_ev"), practical=overall.get("mean"), mean_r=sm.get("mean_R"),
         ci_lo=overall.get("ci_lo"), ci_hi=overall.get("ci_hi"), divergence=overall.get("divergence"),
-        say_status=language.say("status", call=call_sign,
-                                verdict=(disp if disp != "NO-DATA" else "NO-DATA")),
-        say_promise=language.say("promise", learned=sm.get("learned_ev"),
-                                 practical=overall.get("mean"), verdict=overall.get("verdict")),
-        say_weakness=language.say("weakness", best=best, worst=worst),
-        say_compliance=language.say("compliance", n=n_checks, fails=n_fails),
+        say_status=language.say_both("status", call=call_sign,
+                                     verdict=(disp if disp != "NO-DATA" else "NO-DATA")),
+        say_promise=language.say_both("promise", learned=sm.get("learned_ev"),
+                                      practical=overall.get("mean"), verdict=overall.get("verdict")),
+        say_weakness=language.say_both("weakness", best=best, worst=worst),
+        say_compliance=language.say_both("compliance", n=n_checks, fails=n_fails),
         weakness_map=wmap, history=history, n_open=n_open, n_closed=n_closed,
+        d_total=d_total, d_shown=len(d_filtered), filters=active,
+        filter_chips=_filter_chips(active, allow_pair=False, pairs=None),
         n_checks=n_checks, n_fails=n_fails,
         equity_json=json.dumps(dict(labels=labels, values=series)),
         steward_note=note, provenance=provenance)
@@ -507,6 +583,6 @@ def lessee_detail(request, call_sign):
     if to_internal(call_sign) is None:
         raise Http404(f"call-sign '{call_sign}' haipo")
     lessee_can_see(request.user, call_sign)                # 403 kama si lease yake (wala internal/attestor)
-    ctx = _lessee_scorecard(call_sign)
+    ctx = _lessee_scorecard(request, call_sign)
     audit(request, "view_my_scorecard", call_sign)
     return render(request, "monitor/scorecard_lessee.html", dict(panel="my", **ctx))

@@ -5,13 +5,13 @@
 <div class="sc-band {{ color }}">
   <h1><span class="light {{ color }}"></span><span class="callsign">{{ call }}</span>
     <span class="src">{{ meta.version }} · {{ meta.status }} · internal={{ internal }} (INTERNAL view)</span></h1>
-  <p class="sc-say">{{ say_status }}</p>
+  <p class="sc-say">{{ say_status.sw }}<br><span class="src">{{ say_status.en }}</span></p>
 </div>
 
 <!-- B) AHADI vs UHALISIA -->
 <div class="section"><h2>B · AHADI vs UHALISIA (learned EV vs practical)</h2>
   {% if practical is not None and learned is not None %}
-  <p class="sc-say">{{ say_promise }}</p>
+  <p class="sc-say">{{ say_promise.sw }}<br><span class="src">{{ say_promise.en }}</span></p>
   <div class="shrinkbar"><div class="learned" style="left:50%"></div>
     <div class="actual" style="width:{% if practical >= learned %}70{% else %}40{% endif %}%"></div></div>
   <p class="src">learned {{ learned }} · practical {{ practical }} · 90% CI [{{ ci_lo }}, {{ ci_hi }}] ·
@@ -34,6 +34,8 @@
 
 <!-- D) MAAMUZI YA NYUMA (closed history + kwanini + sheria) -->
 <div class="section"><h2>D · MAAMUZI YA NYUMA (kila trade: tarehe/pair/dir/R + kwa nini + sheria)</h2>
+  {% if d_total %}
+  {% include "monitor/_filters.html" %}
   {% if closed_trades %}
   <table class="data"><tr><th></th><th>tarehe</th><th>pair</th><th>dir</th><th>R</th><th>matokeo</th><th>sheria</th></tr>
   {% for t in closed_trades %}
@@ -44,13 +46,13 @@
     <td>{% if t.pnl_r and t.pnl_r > 0 %}<span class="badge pass">WIN</span>{% else %}<span class="badge fail">LOSS</span>{% endif %}</td>
     <td>{% for c in t.checks.all %}<span class="badge {% if c.passed %}pass{% else %}fail{% endif %}">{{ c.rule }}</span>{% empty %}—{% endfor %}</td></tr>
   {% endfor %}</table>
-  <p class="src">closed {{ n_closed }} (za mwisho 100 zinaonyeshwa).</p>
+  {% else %}<div class="nodata">no data: hakuna trade inayolingana na kichujio — bofya "clear".</div>{% endif %}
   {% else %}<div class="nodata">no data: hakuna trades zilizofungwa bado.</div>{% endif %}
 </div>
 
 <!-- E) RAMANI YA UDHAIFU (weakness map kwa rangi) -->
 <div class="section"><h2>E · RAMANI YA UDHAIFU (Steward weakness map)</h2>
-  <p class="sc-say">{{ say_weakness }}</p>
+  <p class="sc-say">{{ say_weakness.sw }}<br><span class="src">{{ say_weakness.en }}</span></p>
   {% if weakness_map %}
   {% for dim, cells in weakness_map.items %}
   <div><span class="src">{{ dim }}:</span>
@@ -63,7 +65,7 @@
 
 <!-- F) UFUATAJI WA SHERIA (compliance rejected + sababu) -->
 <div class="section"><h2>F · UFUATAJI WA SHERIA (FTMO compliance)</h2>
-  <p class="sc-say">{{ say_compliance }}</p>
+  <p class="sc-say">{{ say_compliance.sw }}<br><span class="src">{{ say_compliance.en }}</span></p>
   <p class="src">ukaguzi {{ n_checks }} · ukiukaji {{ n_fails }} · rejected {{ n_rejected }}</p>
   {% if rejected %}
   <table class="data"><tr><th>trade</th><th>pair</th><th>dir</th><th>sababu (rules failed)</th></tr>

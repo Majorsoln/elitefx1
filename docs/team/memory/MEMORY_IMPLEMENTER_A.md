@@ -1293,3 +1293,32 @@ LAST COMPLETED: **Security fix — LESSON-044 (complete mediation)** ✅ (docs/l
 KANUNI (LESSON-044): anonymization ni per-SURFACE (route), si per-VIEW. Funga KILA njia ya data ya role
   (si nav tu). Jaribu NEGATIVE (403) kwa kila anonymized-role, si happy-path pekee.
 NEXT AFTER: Awamu 4 (lugha + filter kwenye lessee view; anonymized attestation-by-call-sign).
+
+=== DASH-V2-A4 build (2026-07-24) — LUGHA (SW+EN) + FILTER CHIPS — DASHBOARD-V2 KAMILI ===
+LAST COMPLETED: **Dashboard-V2 Awamu 4 (ya mwisho): R3 lugha + R5 filtering** ✅ (design §0/§5; additive,
+  dashboard/ tu). Dashboard-V2 sasa KAMILI (Awamu 1-4).
+  1. LUGHA (R3): language.py += say_en(topic) + say_both(topic)->{"sw","en"} (English rahisi, si jargon;
+     DETERMINISTIC). say() ya Kiswahili HAIJAGUSWA (backward-compat). Views (scorecard_detail +
+     _lessee_scorecard) say_* zote -> say_both. Templates (scorecard_detail.html + scorecard_lessee.html):
+     kila sentensi = mistari MIWILI (SW juu <br> EN chini kwa .src). Sections A/B/E/F zote bilingual.
+  2. FILTER CHIPS (R5): section D server-side kwa GET params (READ-ONLY, si POST):
+     ?result=W|L · ?session=ASIA|LONDON|NY · ?from&to=YYYY-MM-DD. INTERNAL PIA ?pair=<pair>. Helpers mpya
+     views.py: _session_of(dt) (UTC hour->ASIA/LONDON/NY, mipaka=research session_of), _filter_closed(
+     closed, request, allow_pair) -> (filtered, total, active), _chip_qs (toggle+preserve), _filter_chips
+     (groups+any_active). Chuja closed list KABLA ya render; n_closed/light/equity/compliance zinabaki FULL
+     (filter=section-D pekee). Partial mpya _filters.html (chips + date form + tally "X (zimechujwa kutoka
+     Y)"). style.css += .chip/.chips/.daterange. Tally kwenye template.
+  3. LESSEE section D: chips zile zile ISIPOKUWA pair — _filter_chips(allow_pair=False), _filter_closed
+     inapuuza ?pair kwa lessee (§9). Hata ?pair=USDCHF smuggled -> INAPUUZWA + no-leak (hakuna pair/id).
+  · SHERIA: READ-ONLY (filter=query param). REUSE say()/closed data. Lessee HANA pair (§9). Sentensi
+     DETERMINISTIC. F7/append-only/attestation/anonymization (A3-FIX) HAZIJAGUSWA. src/research byte-untouched
+     (sweep 32/32; golden fns 0 diff).
+  Tests (35/35 GREEN; 4 mpya Awamu4LangFilterTests): (a) say_both sw+en zisizo tupu + tofauti + determ,
+    topics zote; (b) internal KAIROS-2 filters: result=W->3, result=L->2, session=NY->2, session=LONDON->3,
+    date-range 03-01..05-01 ->2 (d_shown/d_total via r.context); (c) lessee chips = {result,session} TU
+    (HAKUNA pair), result/session filter zinafanya kazi, ?pair smuggled inapuuzwa + assertNotContains
+    USDCHF/STRAT-001 (no-leak); (d) internal pair chip ipo + ?pair=USDJPY->5, NOPE->0; anon->302.
+RUNBOOK: /scorecards/KAIROS-x/ au /my/KAIROS-x/ -> chips (Wins/Losses · ASIA/LONDON/NY [· pair internal])
+  + date form; sentensi zote SW+EN. Clear = request.path.
+DASHBOARD-V2 = KAMILI (Awamu 1 SCORECARD · 2 OVERVIEW/FLEET · 3 LESSEE anonymized · A3-FIX back-door · 4
+  lugha+filter). NEXT: subiri directive mpya ya PD/Chief.
