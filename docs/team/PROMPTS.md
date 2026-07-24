@@ -1232,3 +1232,33 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A3" + jinsi ya kuo
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [DASH-V2-A3-FIX] (Funga lessee raw-attestation back-door — LESSON-044)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: fix ya usalama — funga
+mlango wa nyuma unaomruhusu lessee kuona internal-id + pair kupitia routes za zamani (registry/
+attestation), ingawa Awamu 3 view (/my/) ni anonymized. SOMA docs/lessons/LESSON-044.md.
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/lessons/LESSON-044.md · docs/DOCTRINE_V2.md §9 (anonymization) + §5.4 · dashboard/monitor/
+access.py (model_access — inampa lessee grant ya leased model_id) · views.py (registry_detail +
+attestation_json/html/pdf zote @model_access) · attest.py (build_payload -> model_id + Trade pair) ·
+tests.py.
+
+BADILISHA (surgical):
+  1. access.model_access: ONDOA lessee-lease grant. Sasa = internal/attestor TU (kama panel_access ya
+     "registry"). Lessee akifika registry_detail/attestation -> PermissionDenied (403). (Comment: §9
+     KAIROS anonymization inashinda §5.4; lessee attestation itarudi ANONYMIZED baadaye — Awamu 4+.)
+  2. HAKUNA kitu kingine kinabadilika: /my/ (Awamu 3) inabaki; attestation kwa internal/attestor
+     inabaki kama ilivyo; F7/append-only/attestation-payload HAZIGUSWI.
+  3. tests.py (ongeza NEGATIVE — za lazima): lessee-demo (lease STRAT-001):
+     (a) /registry/STRAT-001/ = 403; (b) /registry/STRAT-001/attest.json = 403; (c) attest.html = 403;
+     (d) attest.pdf = 403. NA thibitisha internal bado = 200 kwa hizo (regression). Lessee /my/KAIROS-1/
+     bado = 200 (Awamu 3 haijavunjika).
+  Run: python manage.py test monitor. GREEN (+ zote za awali). run_selftests 32/32 (research usiiguse).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A3-FIX" + uthibitisho lessee→registry/
+  attest = 403 (mlango umefungwa) NA internal bado = 200.
+```
+
+---
