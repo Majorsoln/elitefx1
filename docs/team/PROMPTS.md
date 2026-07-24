@@ -1262,3 +1262,41 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A3-FIX" + uthibiti
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [DASH-V2-A4] (Dashboard-V2 Awamu 4 — lugha trade+English + filter chips)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: Dashboard-V2 AWAMU 4 (ya
+mwisho) — (1) LUGHA: ongeza English rahisi kando ya Kiswahili kwenye sentensi za scorecard; (2) FILTER
+CHIPS: filtering rahisi ya maamuzi ya nyuma (section D). READ-ONLY mirror (§4). SPEC: DASHBOARD_V2_DESIGN.md
+(R3 lugha trade+English · R5 filtering rahisi).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/DASHBOARD_V2_DESIGN.md (§0 lugha, §5 R3+R5) · dashboard/monitor/language.py (say() — sasa
+Kiswahili TU; DETERMINISTIC) · views.py (scorecard_detail + _lessee_scorecard — section D closed_trades/
+list, say_* context) · templates/monitor/scorecard_detail.html + scorecard_lessee.html · tests.py.
+
+JENGA (additive — REUSE; GET-only; ZERO trade logic):
+  1. LUGHA (R3): panua language.py — kila topic (status/promise/weakness/compliance) irudishe SW + EN.
+     Ongeza say_both(topic, **kw) -> {"sw":..., "en":...} (au say(topic, lang="en")). English rahisi,
+     si jargon. DETERMINISTIC. Templates: onyesha mistari MIWILI (SW juu, EN "src"/toggle chini) kila
+     sentensi. Views: badilisha say_* context kutumia say_both (au ongeza say_*_en). Hakuna namba kubuni.
+  2. FILTER CHIPS (R5): section D (maamuzi ya nyuma) — filtering server-side kwa GET params:
+     ?result=W|L · ?session=ASIA|LONDON|NY · ?from=YYYY-MM-DD&to=YYYY-MM-DD. Internal scorecard PIA:
+     ?pair=<pair> (INTERNAL TU — lessee HANA pair chip, §9). Chips UI (links/buttons zinazoweka param;
+     active-state highlight; "clear" chip). Filter inatumika kwa closed list KABLA ya render. Result
+     tally inaonyesha "X trades (zimechujwa kutoka Y)".
+  3. Lessee section D: chips zile zile ISIPOKUWA pair (session/result/date TU — hakuna pair leak).
+
+SHERIA: READ-ONLY (GET pekee — filter = query param, si POST). REUSE say()/closed data. Lessee HANA
+  pair filter (§9 — no-leak inabaki). Sentensi zote DETERMINISTIC. F7/append-only/attestation/anonymization
+  (A3-FIX) HAZIGUSWI. tests.py (ongeza): (a) say_both irudishe sw+en zisizo tupu kwa topics zote;
+  (b) filter ?result=W inarudisha wins TU; ?session=NY NY tu; date-range inachuja; (c) lessee section-D
+  filter HAINA pair chip NA response bado no-leak (assertNotContains USDCHF/STRAT-001 hata na filters);
+  (d) internal pair chip inafanya kazi; anon→302. Run: python manage.py test monitor. GREEN (+ zote).
+  run_selftests 32/32 (research usiiguse).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A4" + note ya lugha (SW+EN) + filter chips
+  (list ya chips) + uthibitisho lessee filter bado no-leak. (Dashboard-V2 = KAMILI baada ya hii.)
+```
+
+---
