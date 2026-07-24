@@ -1447,3 +1447,19 @@ jaribu 403 (negative).
 **Uamuzi (Chief):** §9 (KAIROS anonymization) inashinda §5.4 (lessee raw attestation). A3-FIX:
 model_access → internal/attestor TU; lessee→registry/attest = 403. Attestation ya lessee itarudi
 ANONYMIZED (call-sign) baadaye (Awamu 4+). Usalama > feature. Prompt: IMPLEMENTER-A [DASH-V2-A3-FIX].
+
+---
+
+## 2026-07-22 — DASH-V2-A3-FIX CERTIFIED: back-door imefungwa → Awamu 3 imekamilika KWELI
+
+**Fix (main `20a5b60`): CERTIFIED — nimethibitisha mwenyewe (mechanism + tests 31/31).**
+- model_access sasa = internal/attestor TU (hakuna user_leases ndani yake — grant ya lessee imeondolewa
+  kabisa). user_leases iliyobaki iko ndani ya lessee_can_see (njia ya /my/ anonymized) — sahihi.
+- Negative verified: lessee→/registry/STRAT-001/ + /attest.{json,html,pdf} = 403; internal bado 200;
+  lessee /my/KAIROS-1/ bado 200. research byte-untouched; sweep 32/32.
+
+**AWAMU 3 IMEKAMILIKA KWELI:** lessee anaona models zake kwa call-sign (KAIROS), ANONYMIZED, kupitia
+/my/ PEKEE — hakuna mlango wa raw internal-id/pair. IP + privacy (§9) zimehakikishwa per-surface.
+
+**Dashboard-V2 hali:** Awamu 1 (Scorecard) ✓ · 2 (Overview/Fleet) ✓ · 3 (Lessee anonymized) ✓ +FIX.
+**Imebaki:** Awamu 4 (lugha trade+English hardening + filter chips) — awamu ya mwisho.
