@@ -1472,3 +1472,23 @@ Awamu 1-3 (+A3-FIX) certified. Awamu 4 = ya mwisho: (1) LUGHA — ongeza English
 sentensi (say_both, deterministic); (2) FILTER CHIPS — section D (maamuzi ya nyuma) filtering GET
 (result W/L · session · date-range; internal PIA pair; lessee HANA pair chip §9). Read-only. No-leak
 inabaki hata na filters. Prompt: IMPLEMENTER-A [DASH-V2-A4]. HATUA: Operator → "tayari DASH-V2-A4".
+
+---
+
+## 2026-07-22 — DASH-V2-A4 REVIEW: PASS → DASHBOARD-V2 KAMILI (awamu zote 4)
+
+**Awamu 4 (main `f549aa8`): review PASS — nimethibitisha (test monitor 35/35).**
+- LUGHA (R3): say_both -> {sw,en} kila sentensi (deterministic; say() ya Kiswahili intact). Sections
+  A/B/E/F bilingual kwenye detail.
+- FILTER CHIPS (R5): section D server-side GET (result W/L · session ASIA/LONDON/NY · date-range;
+  pair INTERNAL TU). _filter_closed/_filter_chips/_session_of. Filter = section-D pekee (light/equity full).
+- **§9 NO-LEAK chini ya filters:** lessee allow_pair=False → ?pair inapuuzwa; test_c assertNotContains
+  USDCHF/STRAT-001 hata na filters smuggled. READ-ONLY (query, si POST). research byte-untouched; sweep 32/32.
+
+**DASHBOARD-V2 IMEKAMILIKA:** Awamu 1 SCORECARD ✓ · 2 OVERVIEW/FLEET ✓ · 3 LESSEE anonymized ✓ (+A3-FIX
+back-door) · 4 lugha SW+EN + filter chips ✓. Glass Box → "user aelewe hali ya model" (directive ya PD).
+Read-only mirror (§4) · IP/anonymization (§9) per-surface · leasing-ready.
+
+**HATUA (picha kubwa):** rudi kwenye (1) FORWARD accumulation (live-paper kuanzia sasa → Steward forward);
+(2) MT5 adapter + token/self-registration (§9.3, inahitaji PD signature + VPS); (3) sealed 2026-05+
+acceptance itasubiri EA kamili (§3.1b). PD achague kipaumbele.
