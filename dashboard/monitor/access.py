@@ -65,14 +65,18 @@ def lessee_can_see(user, call_sign):
 
 
 def model_access(view):
-    """Decorator ya model-scoped views (registry detail + attestation): internal/attestor = zote;
-    lessee = model aliyokodishwa TU (Lease). Attestation views zinarekodiwa AuditEvent (append-only)."""
+    """Decorator ya model-scoped views (registry detail + attestation): internal/attestor TU.
+
+    LESSON-044 (complete mediation): routes hizi za zamani zinarudisha RAW internal-id + pair
+    (attest.build_payload -> model_id + Trade.pair). §9 (KAIROS anonymization) inashinda §5.4
+    (lessee=leased-attestation raw): lessee ANAFIKIA models zake KUPITIA /my/ (anonymized) PEKEE.
+    Grant ya lessee-lease imeondolewa hapa — lessee -> 403 (funga mlango wa nyuma wa URL-guessing).
+    Lessee attestation itarudi ANONYMIZED (call-sign) baadaye — Awamu 4+."""
     @wraps(view)
     @login_required
     def wrapped(request, model_id, *args, **kwargs):
-        g = _groups(request.user)
-        if not (g & {"internal", "attestor"}) and model_id not in user_leases(request.user):
-            raise PermissionDenied("lessee: access ni ya model uliyokodisha PEKEE")
+        if not (_groups(request.user) & {"internal", "attestor"}):
+            raise PermissionDenied("registry/attestation: internal/attestor PEKEE (lessee -> /my/, §9)")
         return view(request, model_id, *args, **kwargs)
     return wrapped
 

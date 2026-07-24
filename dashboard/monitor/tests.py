@@ -160,10 +160,11 @@ class RoleAccessTests(TestCase):
     def test_e_lessee_scoped_access(self):
         lessee = _mk_user("client1", "lessee", lease="STRAT-001")
         self.client.force_login(lessee)
-        # model wake: registry detail + attestation = 200
-        self.assertEqual(self.client.get("/registry/STRAT-001/").status_code, 200)
-        self.assertEqual(self.client.get("/registry/STRAT-001/attest.html").status_code, 200)
-        # model MWINGINE → 403
+        # LESSON-044: registry + attestation za RAW (internal-id + pair) = 403 KWA LESSEE — hata
+        # model aliyoikodi (§9 anonymization inashinda §5.4; lessee anahudumiwa na /my/ pekee).
+        self.assertEqual(self.client.get("/registry/STRAT-001/").status_code, 403)
+        self.assertEqual(self.client.get("/registry/STRAT-001/attest.html").status_code, 403)
+        # model MWINGINE → 403 pia
         self.assertEqual(self.client.get("/registry/STRAT-002/").status_code, 403)
         self.assertEqual(self.client.get("/registry/STRAT-002/attest.json").status_code, 403)
         # research/panels za ndani → 403 (SI research, SI models nyingine)
@@ -580,3 +581,18 @@ class LesseeViewTests(TestCase):
         # context processor: is_lessee=True, nav_panels moja
         self.assertTrue(r.context["is_lessee"])
         self.assertEqual([p["label"] for p in r.context["nav_panels"]], ["MY MODELS"])
+
+    def test_f_registry_attest_backdoor_closed(self):
+        # LESSON-044 / DASH-V2-A3-FIX: mlango wa nyuma (registry/attestation RAW) umefungwa kwa lessee.
+        RAW = ["/registry/STRAT-001/", "/registry/STRAT-001/attest.json",
+               "/registry/STRAT-001/attest.html", "/registry/STRAT-001/attest.pdf"]
+        # lessee-demo (lease STRAT-001): route ZOTE za RAW -> 403 (hata model aliyoikodi)
+        self.client.force_login(_mk_user("cli6", "lessee", lease="STRAT-001"))
+        for url in RAW:
+            self.assertEqual(self.client.get(url).status_code, 403, url)
+        # lessee bado anahudumiwa KIKAMILIFU na /my/ (anonymized) -> 200
+        self.assertEqual(self.client.get("/my/KAIROS-1/").status_code, 200)
+        # REGRESSION: internal bado = 200 kwa route zilezile
+        self.client.force_login(_mk_user("pd6", "internal"))
+        for url in RAW:
+            self.assertEqual(self.client.get(url).status_code, 200, url)

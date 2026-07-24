@@ -1271,3 +1271,25 @@ OPEN QUESTIONS:
   - /registry/<leased-model>/ (model_access ya zamani) bado inaruhusu lessee kuona pair/internal MOJA KWA
     MOJA (URL). Awamu 3 iliongeza /my/ anonymized LAKINI HAIKUONDOA njia ya /registry/ (nje ya scope).
     Je, tuzuie /registry/<model>/ + attest kwa lessee sasa (IP §9) au ibaki kwa "leased attestation"? — Chief.
+
+=== DASH-V2-A3-FIX (2026-07-24) — funga back-door ya lessee (registry/attestation RAW) — IMEKAMILIKA ===
+LAST COMPLETED: **Security fix — LESSON-044 (complete mediation)** ✅ (docs/lessons/LESSON-044.md;
+  DOCTRINE_V2 §9 inashinda §5.4; surgical, access.py+tests.py TU).
+  TUKIO: Awamu 3 /my/ ilikuwa anonymized, LAKINI routes za zamani /registry/<model_id>/ +
+  /registry/<model_id>/attest.{json,html,pdf} (@model_access) zilimpa lessee grant ya leased model_id.
+  attest.build_payload inarudisha model_id (STRAT-001) + Trade.pair -> lessee-demo angeweza kufungua
+  /registry/STRAT-001/attest.json na kuona internal-id + pair (URL-guessing, id rahisi). Anonymization
+  imevunjika kupitia mlango wa nyuma.
+  FIX: access.model_access -> ONDOA lessee-lease grant; sasa internal/attestor PEKEE (kama panel_access
+  "registry"). Lessee -> PermissionDenied (403) kwa registry_detail + attestation zote. §9 KAIROS
+  anonymization inashinda §5.4 (leased raw attestation) — lessee anahudumiwa na /my/ (anonymized) PEKEE;
+  anonymized attestation-by-call-sign = Awamu 4+.
+  HAKUNA kingine kimeguswa: /my/ inabaki; attestation kwa internal/attestor inabaki; attest.build_payload/
+  F7/append-only HAZIJAGUSWA. src/research byte-untouched (sweep 32/32).
+  Tests (31/31 GREEN): test_e ya zamani imegeuzwa (lessee registry/attest = 403 SASA, si 200). MPYA
+  test_f_registry_attest_backdoor_closed: lessee-demo (lease STRAT-001) -> /registry/STRAT-001/ +
+  attest.{json,html,pdf} ZOTE = 403 (NEGATIVE, LESSON-044 kanuni 3); lessee /my/KAIROS-1/ bado = 200;
+  REGRESSION internal bado = 200 kwa route zilezile.
+KANUNI (LESSON-044): anonymization ni per-SURFACE (route), si per-VIEW. Funga KILA njia ya data ya role
+  (si nav tu). Jaribu NEGATIVE (403) kwa kila anonymized-role, si happy-path pekee.
+NEXT AFTER: Awamu 4 (lugha + filter kwenye lessee view; anonymized attestation-by-call-sign).
