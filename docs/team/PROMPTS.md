@@ -1179,3 +1179,56 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A2" + note ya deck
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [DASH-V2-A3] (Dashboard-V2 Awamu 3 — LESSEE VIEW, anonymized "MY MODELS")
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: Dashboard-V2 AWAMU 3 —
+LESSEE VIEW: mteja anaona scorecard za MODELS zake ALIZOKODI TU, kwa CALL-SIGN (KAIROS-x), zikiwa
+ANONYMIZED KIKAMILIFU. Hii ndiyo hatua ya IP-protection + privacy (§9). READ-ONLY mirror (§4).
+
+KANUNI KUU (IP): lessee HAONI KAMWE — pair (USDCHF/USDJPY), internal id (STRAT-001/002), logic/
+params/features, wala models za wengine. Anaona call-sign + matokeo + hali + sheria TU. Ukiukaji =
+kufeli kwa kazi. Anonymization mapping (callsigns.py) = server-side; HAIPITI kwa client.
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/DASHBOARD_V2_DESIGN.md (§1 lessee row ANAONA/HAONI · §3 lessee note · §7 Awamu 3) ·
+docs/DOCTRINE_V2.md §9 (anonymization, per-token isolation) · dashboard/monitor/access.py
+(user_leases, model_access, _groups, Lease) · views.py (scorecard_detail A-G, _scorecard_summary,
+lessee_home — REUSE computation, SI internal context) · callsigns.py (to_internal/to_public/
+public_meta) · context.py (is_lessee, nav) · templates/monitor/lessee.html + scorecard_detail.html ·
+management/commands/bootstrap_roles.py (--demo-users + Lease) · tests.py.
+
+JENGA (additive — REUSE A-G computation; GET-only; ZERO trade logic):
+  1. Lessee access helper lessee_can_see(user, call_sign): internal/attestor = zote; lessee =
+     to_internal(call_sign) IPO ndani ya user_leases(user) TU; vinginevyo PermissionDenied (403).
+  2. Anonymized context _lessee_scorecard(call_sign): REUSE hesabu za A-G, LAKINI rudisha fields
+     ANONYMIZED PEKEE — call_sign, public_meta (version/status), status light+sentensi, learned vs
+     practical, weakness_map (session/vol/streak/cost — HAKUNA pair), compliance rollup, equity series.
+     Section D (maamuzi ya nyuma): list ya dict {date, dir, R, result, reason, rules} — BILA pair, BILA
+     internal id. HAKUNA Trade.pair wala "STRAT-xxx" popote kwenye context ya lessee.
+  3. Views + urls:
+     - /my/ (lessee list): call-signs za leases ZAKE TU (user_leases->to_public); status light +
+       sentensi + link -> /my/<call_sign>/. Internal akifika → zote (QA) au redirect /scorecards/.
+     - /my/<call_sign>/ (lessee detail): lessee_can_see gate → _lessee_scorecard → template mpya
+       scorecard_lessee.html (ANONYMIZED — HAKUNA pair/internal column; call-sign + A-G rahisi).
+     - lessee_home: lessee-branch → render /my/ (scorecard list), si lessee.html ya zamani.
+       Internal→deck, attestor→registry (kama ilivyo).
+  4. Nav (context.py): is_lessee → nav_panels = [("my","/my/","MY MODELS")] tu. AuditEvent append kwa
+     lessee view (kama model_access) kwa ukaguzi.
+
+SHERIA: READ-ONLY (GET). Lessee-isolation NGUMU (lease-scoped). Context ya lessee HAINA pair/internal/
+  logic (defence-in-depth: usimtumie Trade object mbichi — tumia dict anonymized). F7+append-only+
+  attestation HAZIGUSWI. bootstrap_roles: lessee-demo ana Lease(model_id="STRAT-001") -> anaona KAIROS-1.
+  tests.py (ongeza — NO-LEAK ni lazima):
+    (a) lessee-demo /my/ ina KAIROS-1 TU (si KAIROS-2 asiyokodi);
+    (b) lessee /my/KAIROS-1/ = 200 NA response HAINA "USDCHF" wala "STRAT-001" (assertNotContains) —
+        NO-LEAK ya pair/internal;
+    (c) lessee /my/KAIROS-2/ (asiyokodi) = 403; lessee wa model mwingine = 403;
+    (d) internal /my/ = zote; anon → 302; (e) nav ya lessee = ["MY MODELS"] tu.
+  Run: python manage.py test monitor. GREEN (+ zote za awali). run_selftests 32/32 (research usiiguse).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A3" + jinsi ya kuona (login lessee-demo
+  -> /my/ -> KAIROS-1) + uthibitisho wa NO-LEAK (pair/internal hazionekani). (Awamu 4 lugha+filter inafuata.)
+```
+
+---
