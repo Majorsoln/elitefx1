@@ -9,13 +9,9 @@
   <div class="brand">ELITEFX <span class="glass">GLASS BOX</span></div>
   <nav>
     {% if user.is_authenticated %}
-      {% if is_lessee %}
-      <a href="/" {% if panel == 'lessee' %}class="on"{% endif %}>MY MODELS</a>
-      {% else %}
-        {% for p in nav_panels %}
-        <a href="{{ p.url }}" {% if panel == p.name %}class="on"{% endif %}>{{ p.label }}</a>
-        {% endfor %}
-      {% endif %}
+      {% for p in nav_panels %}
+      <a href="{{ p.url }}" {% if panel == p.name %}class="on"{% endif %}>{{ p.label }}</a>
+      {% endfor %}
     {% endif %}
   </nav>
   <div class="who">{% if user.is_authenticated %}{{ user.username }} ·

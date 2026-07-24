@@ -1,0 +1,73 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+
+<!-- A) STATUS BAND (call-sign pekee — HAKUNA internal id, HAKUNA pair) -->
+<div class="sc-band {{ color }}">
+  <h1><span class="light {{ color }}"></span><span class="callsign">{{ call }}</span>
+    <span class="src">{{ meta.version }} · {{ meta.status }}</span></h1>
+  <p class="sc-say">{{ say_status }}</p>
+</div>
+
+<!-- B) AHADI vs UHALISIA (learned EV vs practical) -->
+<div class="section"><h2>B · AHADI vs UHALISIA</h2>
+  {% if practical is not None and learned is not None %}
+  <p class="sc-say">{{ say_promise }}</p>
+  <div class="shrinkbar"><div class="learned" style="left:50%"></div>
+    <div class="actual" style="width:{% if practical >= learned %}70{% else %}40{% endif %}%"></div></div>
+  <p class="src">learned {{ learned }} · practical {{ practical }} · 90% CI [{{ ci_lo }}, {{ ci_hi }}] ·
+     divergence {{ divergence }} · verdict {{ display }}</p>
+  {% else %}<div class="nodata">no data: ahadi-vs-uhalisia haipatikani bado.</div>{% endif %}
+</div>
+
+<!-- C) SHUGHULI YA SASA (idadi tu — HAKUNA pair/entry) -->
+<div class="section"><h2>C · SHUGHULI YA SASA</h2>
+  <p class="src">trades hai sasa: {{ n_open }} · zilizofungwa: {{ n_closed }}</p>
+</div>
+
+<!-- D) MAAMUZI YA NYUMA (tarehe/dir/R + matokeo + sababu + sheria — HAKUNA pair/id) -->
+<div class="section"><h2>D · MAAMUZI YA NYUMA</h2>
+  {% if history %}
+  <table class="data"><tr><th>tarehe</th><th>dir</th><th>R</th><th>matokeo</th><th>sababu</th><th>sheria</th></tr>
+  {% for h in history %}
+  <tr><td class="num">{{ h.date }}</td><td>{{ h.dir }}</td>
+    <td class="num {% if h.R and h.R > 0 %}pos{% elif h.R and h.R < 0 %}neg{% endif %}">{{ h.R|default:"—" }}</td>
+    <td>{% if h.result == 'WIN' %}<span class="badge pass">WIN</span>{% else %}<span class="badge fail">LOSS</span>{% endif %}</td>
+    <td class="src">{{ h.reason }}</td>
+    <td>{% for c in h.rules %}<span class="badge {% if c.passed %}pass{% else %}fail{% endif %}">{{ c.rule }}</span>{% empty %}—{% endfor %}</td></tr>
+  {% endfor %}</table>
+  <p class="src">closed {{ n_closed }} (za mwisho 100 zinaonyeshwa).</p>
+  {% else %}<div class="nodata">no data: hakuna trades zilizofungwa bado.</div>{% endif %}
+</div>
+
+<!-- E) RAMANI YA UDHAIFU (weakness map — dims salama tu: session/vol/streak/cost) -->
+<div class="section"><h2>E · RAMANI YA UDHAIFU</h2>
+  <p class="sc-say">{{ say_weakness }}</p>
+  {% if weakness_map %}
+  {% for dim, cells in weakness_map.items %}
+  <div><span class="src">{{ dim }}:</span>
+    {% for cell, cv in cells.items %}
+    <span class="wcell {% if cv.verdict == 'HOLDS' or cv.verdict == 'LIFTS' %}green{% elif cv.verdict == 'SHRINKS' %}red{% elif cv.verdict == 'INSUFFICIENT' %}gray{% else %}yellow{% endif %}">{{ cell }} (N={{ cv.n }}, {{ cv.verdict }})</span>
+    {% endfor %}</div>
+  {% endfor %}
+  {% else %}<div class="nodata">no data: ramani ya udhaifu haipatikani bado.</div>{% endif %}
+</div>
+
+<!-- F) UFUATAJI WA SHERIA (compliance rollup) -->
+<div class="section"><h2>F · UFUATAJI WA SHERIA (FTMO)</h2>
+  <p class="sc-say">{{ say_compliance }}</p>
+  <p class="src">ukaguzi {{ n_checks }} · ukiukaji {{ n_fails }}</p>
+</div>
+
+<!-- G) MWENENDO WA MUDA (equity curve — R cumulative) -->
+<div class="section"><h2>G · MWENENDO WA MUDA (R cumulative)</h2>
+  {% if n_closed %}<canvas id="eq" style="height:180px"></canvas>
+  {% else %}<div class="nodata">no data: hakuna closed trades kwa equity curve.</div>{% endif %}
+</div>
+
+<p class="src">Unaona matokeo + hali + sheria PEKEE. Ndani (pair/logic/params/internal id) = siri ya ELITEFX (§9).
+  {% if steward_note %} · Steward: {{ steward_note }}{% endif %}</p>
+
+{{ equity_json|json_script:"eqdata" }}
+<script>const d=JSON.parse(document.getElementById('eqdata').textContent);
+if(d.values && d.values.length){ gc.line(document.getElementById('eq'), d); }</script>
+{% endblock %}

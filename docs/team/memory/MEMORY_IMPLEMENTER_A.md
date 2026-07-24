@@ -1236,3 +1236,38 @@ LAST COMPLETED: **Dashboard-V2 Awamu 2: OVERVIEW / FLEET** ✅ (docs/DASHBOARD_V
     "Steward:" note, green 0 / red 0 — lights = NO-DATA yellow).
 RUNBOOK: login internal -> /deck/ -> ona FLEET rollup juu; bofya card -> /scorecards/<call_sign>/ (Awamu 1).
 NEXT AFTER: Awamu 3 (LESSEE view — reuse scorecard + anonymize call-sign + hide pair/IP + token).
+
+=== DASH-V2-A3 build (2026-07-24) — LESSEE VIEW (anonymized MY MODELS, IP-protection) — IMEKAMILIKA ===
+LAST COMPLETED: **Dashboard-V2 Awamu 3: LESSEE VIEW** ✅ (docs/DASHBOARD_V2_DESIGN.md §1/§3/§7 + DOCTRINE_V2 §9;
+  additive, dashboard/ tu). Mteja anaona scorecard za models ALIZOKODI TU, kwa CALL-SIGN (KAIROS-x),
+  ANONYMIZED KIKAMILIFU. KANUNI KUU (IP §9): lessee HAONI KAMWE pair (USDCHF/USDJPY), internal id
+  (STRAT-001/002), logic/params/features, wala models za wengine.
+  1. access.lessee_can_see(user, call_sign): internal/attestor = call-signs zote; lessee = to_internal
+     (call_sign) IKIWA ndani ya user_leases zake TU; vinginevyo PermissionDenied (403). Mapping ni
+     server-side (haipiti kwa client).
+  2. views._lessee_scorecard(call_sign): REUSE hesabu za A-G (steward + Trade mirror) LAKINI rudisha
+     fields ANONYMIZED PEKEE — call-sign, public_meta(version/status), light+sentensi, learned vs
+     practical, weakness_map (dims salama: session/vol/streak/cost — pair-dim ikitokea INAONDOLEWA),
+     compliance rollup, equity series (R). Section D = list ya dict {date, dir, R, result, reason, rules}
+     BILA pair/internal id/record_id. reason = hatua (signal→gate→fill) — SI record_id (record_id huvuja
+     pair). _lessee_card(): muhtasari wa list bila internal id. DEFENCE-IN-DEPTH: context HAINA Trade mbichi.
+  3. Views+urls: /my/ (lessee_list — leases zake->to_public; internal/attestor=zote QA) + /my/<call_sign>/
+     (lessee_detail — to_internal->404 kama haipo; lessee_can_see->403; _lessee_scorecard; AuditEvent append).
+     lessee_home: lessee-branch -> lessee_list (SI lessee.html ya zamani iliyokuwa inavuja STRAT-xxx).
+     Templates MPYA: scorecard_lessee_list.html + scorecard_lessee.html (A-G rahisi, HAKUNA pair/id column).
+  4. context.nav: is_lessee -> nav_panels = [("my","/my/","MY MODELS")] TU. base.html nav = loop ya
+     nav_panels kwa roles zote (highlight panel="my" sahihi).
+  · SHERIA: READ-ONLY (GET; POST->405). Lessee-isolation NGUMU (lease-scoped). F7/append-only/attestation
+     HAZIJAGUSWA. src/research byte-untouched (sweep 32/32 PASS; golden fns 0 lines diff).
+  Tests (30/30 GREEN; 5 mpya LesseeViewTests + test_e ya zamani imesasishwa kuakisi anonymized landing):
+    (a) lessee /my/ ina KAIROS-1 TU + link, HAKUNA KAIROS-2/STRAT-001; (b) /my/KAIROS-1/ 200 NA
+    assertNotContains USDCHF/USDJPY/STRAT-001/STRAT-002 (NO-LEAK) + AuditEvent + POST->405; (c) isolation
+    KAIROS-2 asiyekodi->403, lessee wa STRAT-002 -> KAIROS-1 403, call-sign batili->404; (d) internal=zote,
+    anon->302; (e) nav lessee = ["MY MODELS"] tu (is_lessee True, nav_panels moja).
+RUNBOOK: login lessee-demo (nywila=lessee-demo; ana Lease STRAT-001) -> / au /my/ -> KAIROS-1 -> scorecard
+  anonymized. Internal QA: /my/ -> KAIROS-1 + KAIROS-2.
+NEXT AFTER: Awamu 4 (lugha + filter kwenye lessee view).
+OPEN QUESTIONS:
+  - /registry/<leased-model>/ (model_access ya zamani) bado inaruhusu lessee kuona pair/internal MOJA KWA
+    MOJA (URL). Awamu 3 iliongeza /my/ anonymized LAKINI HAIKUONDOA njia ya /registry/ (nje ya scope).
+    Je, tuzuie /registry/<model>/ + attest kwa lessee sasa (IP §9) au ibaki kwa "leased attestation"? — Chief.

@@ -26,7 +26,10 @@ def nav(request):
     if not u or not u.is_authenticated:
         return {"nav_panels": [], "is_lessee": False}
     g = _groups(u)
+    is_lessee = not (g & {"internal", "attestor"}) and bool(user_leases(u))
+    if is_lessee:
+        # DASHBOARD-V2 Awamu 3: lessee anaona tab MOJA — MY MODELS (scorecard anonymized) TU.
+        return {"nav_panels": [dict(name="my", url="/my/", label="MY MODELS")], "is_lessee": True}
     panels = [dict(name=n, url=url, label=lbl) for (n, url, lbl) in _NAV
               if g & PANEL_ROLES.get(n, {"internal"})]
-    is_lessee = not (g & {"internal", "attestor"}) and bool(user_leases(u))
     return {"nav_panels": panels, "is_lessee": is_lessee}

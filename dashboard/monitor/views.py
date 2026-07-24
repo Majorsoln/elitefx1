@@ -13,7 +13,8 @@ from django.utils import timezone as djtz
 from django.views.decorators.http import require_GET
 
 from . import attest
-from .access import audit, model_access, panel_access, user_leases, _groups
+from django.contrib.auth.decorators import login_required
+from .access import audit, lessee_can_see, model_access, panel_access, user_leases, _groups
 from .models import (Alert, AuditEvent, ComplianceCheck, DecisionTrace, LedgerEntry, Lesson,
                      ModelVersion, PairStrategyCell, Report, StrategyPerf, Trade, VpsHeartbeat)
 
@@ -287,9 +288,7 @@ def lessee_home(request):
         return command_deck(request)
     if _groups(request.user) & {"attestor"}:
         return registry(request)
-    leases = user_leases(request.user)
-    models = ModelVersion.objects.filter(model_id__in=leases)
-    return render(request, "monitor/lessee.html", dict(panel="lessee", models=models, leases=leases))
+    return lessee_list(request)          # DASHBOARD-V2 Awamu 3: anonymized /my/ (SI lessee.html ya zamani)
 
 
 # ==================== DASHBOARD-V2 AWAMU 1 — MODEL SCORECARD (INTERNAL) ====================
@@ -394,3 +393,120 @@ def scorecard_detail(request, call_sign):
         equity_json=json.dumps(dict(labels=labels, values=series)),
         steward_note=note, provenance=provenance)
     return render(request, "monitor/scorecard_detail.html", ctx)
+
+
+# ==================== DASHBOARD-V2 AWAMU 3 — LESSEE VIEW (ANONYMIZED) ====================
+# IP-protection (§9): lessee HAONI KAMWE pair (USDCHF/USDJPY), internal id (STRAT-xxx),
+# logic/params/features, wala models za wengine. Anaona call-sign + matokeo + hali + sheria TU.
+# Defence-in-depth: context ya lessee HAINA Trade object mbichi — dict ANONYMIZED pekee
+# (hakuna .pair, hakuna internal id, hakuna record_id ambayo huvuja pair).
+
+# weakness dims salama kwa lessee (ex-ante context — HAKUNA pair kamwe)
+_LESSEE_WMAP_DIMS = ("session", "vol", "volatility", "streak", "cost")
+
+
+def _lessee_card(call_sign, smodels):
+    """Muhtasari ANONYMIZED kwa list ya /my/ — call-sign + light + sentensi (HAKUNA internal id)."""
+    internal = to_internal(call_sign)                      # server-side pekee (haipiti kwa client)
+    sm = smodels.get(internal, {}) if internal else {}
+    overall = sm.get("overall", {}) if sm else {}
+    n_closed = Trade.objects.filter(strategy=internal, status="CLOSED").count() if internal else 0
+    color, disp = _status_light(overall.get("verdict"), n_closed)
+    return dict(call=call_sign, meta=public_meta(call_sign), color=color, display=disp,
+                n_closed=n_closed,
+                sentence=language.say("status", call=call_sign,
+                                      verdict=(disp if disp != "NO-DATA" else "NO-DATA")))
+
+
+def _lessee_scorecard(call_sign):
+    """Context ANONYMIZED ya scorecard (A-G rahisi) — REUSE hesabu za internal, LAKINI rudisha
+    fields zisizovuja: HAKUNA pair, HAKUNA internal id, HAKUNA record_id/logic/params."""
+    internal = to_internal(call_sign)                      # server-side pekee
+    smodels, provenance, note = _steward_models()
+    sm = smodels.get(internal, {}) if internal else {}
+    overall = sm.get("overall", {}) if sm else {}
+    closed = list(Trade.objects.filter(strategy=internal, status="CLOSED")
+                  .prefetch_related("checks", "traces").order_by("-closed_at"))
+    n_open = Trade.objects.filter(strategy=internal, status="OPEN").count()
+    n_closed = len(closed)
+    color, disp = _status_light(overall.get("verdict"), n_closed)
+
+    # G) equity curve (R cumulative) — namba pekee (hakuna pair kwenye labels)
+    eq, series, labels = 0.0, [], []
+    for t in sorted(closed, key=lambda x: (x.closed_at or djtz.now())):
+        eq += (t.pnl_r or 0); series.append(round(eq, 4))
+        labels.append(t.closed_at.strftime("%Y-%m-%d") if t.closed_at else "?")
+
+    # F) compliance rollup
+    checks = ComplianceCheck.objects.filter(trade__strategy=internal)
+    n_checks, n_fails = checks.count(), checks.filter(passed=False).count()
+
+    # E) weakness map — dims salama TU (session/vol/streak/cost); pair-dim (ikitokea) inaondolewa
+    wmap = {d: c for d, c in (sm.get("weakness_map", {}) if sm else {}).items()
+            if d in _LESSEE_WMAP_DIMS}
+    best = worst = None; best_v = worst_v = None
+    for dim, cells in wmap.items():
+        for cell, cv in cells.items():
+            if cv.get("verdict") == "INSUFFICIENT" or cv.get("mean") is None:
+                continue
+            m = cv["mean"]
+            if best_v is None or m > best_v:
+                best_v, best = m, f"{dim}={cell}"
+            if worst_v is None or m < worst_v:
+                worst_v, worst = m, f"{dim}={cell}"
+
+    # D) maamuzi ya nyuma — dicts ANONYMIZED {date, dir, R, result, reason, rules}.
+    # reason = hatua zilizopita (signal/gate/fill) — HAKUNA record_id (record_id huvuja pair).
+    history = []
+    for t in closed[:100]:
+        stages = list(dict.fromkeys(t.traces.values_list("stage", flat=True)))
+        win = (t.pnl_r or 0) > 0
+        history.append(dict(
+            date=(t.closed_at.strftime("%Y-%m-%d") if t.closed_at else "—"),
+            dir=t.side, R=t.pnl_r, result=("WIN" if win else "LOSS"),
+            reason=(" → ".join(stages) if stages else "—"),
+            rules=[dict(rule=c.rule, passed=c.passed) for c in t.checks.all()]))
+
+    return dict(
+        call=call_sign, meta=public_meta(call_sign), color=color, display=disp,
+        learned=sm.get("learned_ev"), practical=overall.get("mean"), mean_r=sm.get("mean_R"),
+        ci_lo=overall.get("ci_lo"), ci_hi=overall.get("ci_hi"), divergence=overall.get("divergence"),
+        say_status=language.say("status", call=call_sign,
+                                verdict=(disp if disp != "NO-DATA" else "NO-DATA")),
+        say_promise=language.say("promise", learned=sm.get("learned_ev"),
+                                 practical=overall.get("mean"), verdict=overall.get("verdict")),
+        say_weakness=language.say("weakness", best=best, worst=worst),
+        say_compliance=language.say("compliance", n=n_checks, fails=n_fails),
+        weakness_map=wmap, history=history, n_open=n_open, n_closed=n_closed,
+        n_checks=n_checks, n_fails=n_fails,
+        equity_json=json.dumps(dict(labels=labels, values=series)),
+        steward_note=note, provenance=provenance)
+
+
+@require_GET
+@login_required
+def lessee_list(request):
+    """/my/ — orodha ya call-signs za MTEJA (leases zake) TU, kwa status light + sentensi.
+    Internal/attestor = call-signs ZOTE (QA). READ-ONLY."""
+    g = _groups(request.user)
+    if g & {"internal", "attestor"}:
+        calls = sorted(CALLSIGNS.values())                 # QA: zote
+    else:
+        calls = sorted(to_public(m) for m in user_leases(request.user) if m in CALLSIGNS)
+    smodels, _prov, note = _steward_models()
+    cards = [_lessee_card(c, smodels) for c in calls]
+    audit(request, "view_my_models", ",".join(calls) or "-")
+    return render(request, "monitor/scorecard_lessee_list.html", dict(
+        panel="my", cards=cards, steward_note=note))
+
+
+@require_GET
+@login_required
+def lessee_detail(request, call_sign):
+    """/my/<call_sign>/ — scorecard ANONYMIZED ya model MMOJA (lease-gated). READ-ONLY."""
+    if to_internal(call_sign) is None:
+        raise Http404(f"call-sign '{call_sign}' haipo")
+    lessee_can_see(request.user, call_sign)                # 403 kama si lease yake (wala internal/attestor)
+    ctx = _lessee_scorecard(call_sign)
+    audit(request, "view_my_scorecard", call_sign)
+    return render(request, "monitor/scorecard_lessee.html", dict(panel="my", **ctx))

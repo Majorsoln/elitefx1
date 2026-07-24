@@ -1,0 +1,20 @@
+{% extends "monitor/base.html" %}
+{% block content %}
+<h1>MY MODELS <span class="src">scorecard za models ulizokodisha (read-only)</span></h1>
+{% if steward_note %}<p class="src">Steward: {{ steward_note }} — status lights = NO-DATA (🟡) hadi tathmini ipatikane.</p>{% endif %}
+{% if cards %}
+<div class="scorecard">
+{% for c in cards %}
+  <a class="card sc-band {{ c.color }}" href="/my/{{ c.call }}/" style="text-decoration:none;display:block">
+    <div><span class="light {{ c.color }}"></span><span class="callsign">{{ c.call }}</span>
+      <span class="src">{{ c.meta.version }} · {{ c.meta.status }}</span></div>
+    <p class="sc-say">{{ c.sentence }}</p>
+    <p class="src">verdict {{ c.display }} · closed {{ c.n_closed }}</p>
+  </a>
+{% endfor %}
+</div>
+{% else %}
+<div class="nodata">no data: hakuna model uliyokodisha kwa akaunti hii — wasiliana na ELITEFX kwa access.</div>
+{% endif %}
+<p class="src">Unaona call-sign + matokeo + hali + sheria PEKEE. Ndani (pair/logic/params) = siri ya ELITEFX (§9).</p>
+{% endblock %}

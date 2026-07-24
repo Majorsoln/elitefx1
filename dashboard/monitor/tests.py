@@ -170,10 +170,12 @@ class RoleAccessTests(TestCase):
         for url in ["/deck/", "/portfolio/", "/actions/", "/ledger/", "/matrix/",
                     "/alerts/", "/vps/", "/compliance/", "/registry/", "/audit/"]:
             self.assertEqual(self.client.get(url).status_code, 403, url)
-        # landing yake inaonyesha lease yake tu
+        # landing yake (Awamu 3): ANONYMIZED /my/ — call-sign ya lease yake TU, HAKUNA internal id
         r = self.client.get("/")
         self.assertEqual(r.status_code, 200)
-        self.assertIn(b"STRAT-001", r.content)
+        self.assertIn(b"KAIROS-1", r.content)              # call-sign ya lease yake
+        self.assertNotIn(b"KAIROS-2", r.content)           # si model asiyokodi
+        self.assertNotIn(b"STRAT-001", r.content)          # internal id HAIVUJI (§9)
         self.assertNotIn(b"STRAT-002", r.content)
 
     def test_e2_attestor_scope(self):
@@ -502,3 +504,79 @@ class DeckFleetTests(TestCase):
                 self.assertIn(b"Steward:", r.content)          # fail-soft note
                 self.assertIn("\U0001F7E2 0".encode(), r.content)      # green 0 (zote NO-DATA)
                 self.assertIn("\U0001F534 0".encode(), r.content)      # red 0
+
+
+class LesseeViewTests(TestCase):
+    """DASHBOARD-V2 Awamu 3 — LESSEE VIEW (anonymized /my/): NO-LEAK ya pair/internal + isolation."""
+    @classmethod
+    def setUpTestData(cls):
+        call_command("ingest", "--demo", verbosity=0)
+
+    def _paths_with_steward(self, tmp):
+        _write_steward(tmp)
+        from django.conf import settings
+        return dict(settings.ELITEFX_PATHS, reports_dir=Path(tmp))
+
+    def test_a_lessee_my_shows_leased_callsign_only(self):
+        # lessee wa STRAT-001 anaona KAIROS-1 TU (si KAIROS-2 asiyokodi; si internal id)
+        self.client.force_login(_mk_user("cli1", "lessee", lease="STRAT-001"))
+        r = self.client.get("/my/")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "KAIROS-1")
+        self.assertNotContains(r, "KAIROS-2")
+        self.assertNotContains(r, "STRAT-001")             # HAKUNA internal id kwenye list
+        self.assertContains(r, "/my/KAIROS-1/")            # link -> detail
+
+    def test_b_lessee_detail_no_leak_pair_or_internal(self):
+        # /my/KAIROS-1/ = 200 NA HAKUNA "USDCHF" wala "STRAT-001" (NO-LEAK ngumu)
+        with tempfile.TemporaryDirectory() as tmp:
+            with override_settings(ELITEFX_PATHS=self._paths_with_steward(tmp)):
+                self.client.force_login(_mk_user("cli2", "lessee", lease="STRAT-001"))
+                r = self.client.get("/my/KAIROS-1/")
+                self.assertEqual(r.status_code, 200)
+                self.assertContains(r, "KAIROS-1")
+                self.assertNotContains(r, "USDCHF")        # pair HAIVUJI
+                self.assertNotContains(r, "USDJPY")
+                self.assertNotContains(r, "STRAT-001")      # internal id HAIVUJI
+                self.assertNotContains(r, "STRAT-002")
+                # AuditEvent append (kama model_access)
+                self.assertTrue(AuditEvent.objects.filter(action="view_my_scorecard",
+                                                          subject="KAIROS-1").exists())
+                # READ-ONLY: POST -> 405
+                self.assertEqual(self.client.post("/my/").status_code, 405)
+                self.assertEqual(self.client.post("/my/KAIROS-1/").status_code, 405)
+
+    def test_c_lessee_isolation_other_model_403(self):
+        # lessee wa STRAT-001: KAIROS-2 (asiyokodi) -> 403
+        self.client.force_login(_mk_user("cli3", "lessee", lease="STRAT-001"))
+        self.assertEqual(self.client.get("/my/KAIROS-2/").status_code, 403)
+        # lessee wa STRAT-002: KAIROS-1 -> 403
+        self.client.force_login(_mk_user("cli4", "lessee", lease="STRAT-002"))
+        self.assertEqual(self.client.get("/my/KAIROS-1/").status_code, 403)
+        # call-sign isiyopo -> 404
+        self.assertEqual(self.client.get("/my/KAIROS-99/").status_code, 404)
+
+    def test_d_internal_sees_all_and_anon_redirect(self):
+        # internal (QA) -> zote
+        self.client.force_login(_mk_user("pd", "internal"))
+        r = self.client.get("/my/")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "KAIROS-1")
+        self.assertContains(r, "KAIROS-2")
+        self.assertEqual(self.client.get("/my/KAIROS-1/").status_code, 200)
+        # anon -> 302 login
+        self.client.logout()
+        r2 = self.client.get("/my/")
+        self.assertEqual(r2.status_code, 302)
+        self.assertIn("/login/", r2["Location"])
+
+    def test_e_lessee_nav_my_models_only(self):
+        # nav ya lessee = ["MY MODELS"] TU (hakuna DECK/SCORECARDS/REGISTRY...)
+        self.client.force_login(_mk_user("cli5", "lessee", lease="STRAT-001"))
+        r = self.client.get("/my/")
+        self.assertContains(r, "MY MODELS")
+        for tab in ("DECK", "SCORECARDS", "PORTFOLIO", "REGISTRY", "COMPLIANCE", "AUDIT"):
+            self.assertNotContains(r, ">{}<".format(tab))
+        # context processor: is_lessee=True, nav_panels moja
+        self.assertTrue(r.context["is_lessee"])
+        self.assertEqual([p["label"] for p in r.context["nav_panels"]], ["MY MODELS"])

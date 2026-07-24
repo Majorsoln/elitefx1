@@ -49,6 +49,21 @@ def panel_access(panel):
     return deco
 
 
+def lessee_can_see(user, call_sign):
+    """DASHBOARD-V2 Awamu 3 — lessee-isolation ya scorecard kwa CALL-SIGN:
+    internal/attestor = call-signs ZOTE; lessee = to_internal(call_sign) IKIWA ndani ya
+    leases zake TU. Vinginevyo PermissionDenied (403). Mapping call-sign->internal ni
+    server-side (haipiti kwa client). READ-ONLY gatekeeping (hakuna mutation)."""
+    from .callsigns import to_internal
+    g = _groups(user)
+    if g & {"internal", "attestor"}:
+        return True
+    internal = to_internal(call_sign)
+    if internal is not None and internal in user_leases(user):
+        return True
+    raise PermissionDenied("lessee: unaona scorecard za models ulizokodisha PEKEE")
+
+
 def model_access(view):
     """Decorator ya model-scoped views (registry detail + attestation): internal/attestor = zote;
     lessee = model aliyokodishwa TU (Lease). Attestation views zinarekodiwa AuditEvent (append-only)."""
