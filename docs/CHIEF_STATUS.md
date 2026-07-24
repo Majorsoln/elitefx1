@@ -1492,3 +1492,19 @@ Read-only mirror (§4) · IP/anonymization (§9) per-surface · leasing-ready.
 **HATUA (picha kubwa):** rudi kwenye (1) FORWARD accumulation (live-paper kuanzia sasa → Steward forward);
 (2) MT5 adapter + token/self-registration (§9.3, inahitaji PD signature + VPS); (3) sealed 2026-05+
 acceptance itasubiri EA kamili (§3.1b). PD achague kipaumbele.
+
+---
+
+## 2026-07-22 — FORWARD TRACK ianzishwa (F1 prompt) — kugeuza Steward: replay → forward halisi
+
+PD: "tuendele" (baada ya kufafanua PD-signature). Tunaanza forward accumulation (ushauri wangu #1).
+UKWELI: live_engine --run = replay ya validation (fills 864 = replay, si forward). Forward halisi =
+bars mpya (2026-07-24+) — chanzo = MT5 (nusu salama: data ya kusoma tu, HAKUNA saini ya PD).
+
+**Charter:** docs/FORWARD_TRACK_CHARTER.md. Awamu: F1 engine forward-append (inajengeka sasa, fixture-
+testable) + F2 mt5_data.py read-only feed (inahitaji MT5 PC). MPAKA: FORWARD-START=2026-07-24; dirisha
+2026-05→leo SEALED (§3.1b) — forward mode HAITASHUGHULIKIA KAMWE; HOLDOUT red-line inabaki.
+
+**F1 prompt:** IMPLEMENTER-A [FWD-F1] — --forward incremental (watermark + FORWARD-START guard +
+idempotent + sealed-guard), append paper_log, STRAT configs HAZIBADILIKI, golden 0, self-tests (sealed-
+guard, idempotence, forward-append, HOLDOUT reject, repo-valid). HATUA: Operator → "tayari FWD-F1".
