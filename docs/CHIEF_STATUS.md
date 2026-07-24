@@ -1417,3 +1417,13 @@ internal. Prompt: IMPLEMENTER-A [DASH-V2-A2]. HATUA: Operator → "tayari DASH-V
 
 **HATUA:** Awamu 3 — LESSEE VIEW (anonymization kamili: mteja anaona KAIROS zake TU, pair/IP hidden,
 per-token). callsigns.py = msingi tayari. FLEET/scorecard zita-reuse-iwa restricted. Prompt inafuata.
+
+---
+
+## 2026-07-22 — Awamu 3 (LESSEE VIEW anonymized) prompt tayari — hatua ya IP-protection
+
+Baada ya Awamu 2 (Overview) certified, tunaenda Awamu 3 (nyeti zaidi kibiashara). LESSEE VIEW: mteja
+anaona scorecard za models ZAKE ALIZOKODI TU, kwa call-sign (KAIROS), ANONYMIZED kikamilifu —
+HAONI pair/internal-id/logic/models za wengine. Reuse hesabu za A-G lakini context anonymized (dict,
+si Trade mbichi). Lease-scoped (user_leases). NO-LEAK tests ni lazima: assertNotContains "USDCHF"/
+"STRAT-001" kwa lessee. Prompt: IMPLEMENTER-A [DASH-V2-A3]. HATUA: Operator → "tayari DASH-V2-A3".
