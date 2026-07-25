@@ -1338,3 +1338,54 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F1" + jinsi ya kuendes
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [FWD-F2] (Forward Track F2 — mt5_data.py READ-ONLY feed → forward store)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: FORWARD TRACK F2 — jenga
+src/research/mt5_data.py: chota H1 bars za hivi karibuni (USDCHF/USDJPY) kutoka MT5 kwa KUSOMA TU,
+zibadilishe kuwa features (REUSE market_state_engine), andika forward store <dir>/<SYMBOL>.npz
+ambayo live_engine --forward (F1) inaisoma. Paper — HAKUNA order, HAKUNA trade. SPEC: FORWARD_TRACK_CHARTER (F2).
+
+KANUNI KUU: READ-ONLY KABISA. Tumia MT5 market-data pekee (mt5.copy_rates_*); HAKUNA mt5.order_*/
+positions modify/account write. Uamuzi wa Chief (2026-07-24): H1-level approximation (spr kutoka rate
+spread points->pips; tc kutoka tick_volume) — SI tick-exact. Features (atr/regime) = REUSE math ya
+market_state_engine (usivumbue — GIGO: forward lazima ilingane na training).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/FORWARD_TRACK_CHARTER.md (F2) · docs/DOCTRINE_V2.md §3.1b/§9 · src/research/live_engine.py
+(_forward_loader + load_window — SCHEMA ya npz inayotarajiwa: arrays o,h,l,c,atr,spr,hour,vol,ts,tc;
+prices PIP-SPACE) · src/research/market_state_engine.py (pip(), _atr (ATR14 Wilder), _deseason, _reg3,
+h1_from_ticks/rollup — REUSE _atr/_deseason/_reg3/pip; NA jinsi load_pair inavyojenga arrays: o/h/l/c/
+atr = /pip, spr = pips, hour = ts server-hour, vol = volatility_state labels, tc float) · event_quality_
+report.load_pair (schema HALISI ya arrays — npz LAZIMA ilingane NAYO).
+
+JENGA src/research/mt5_data.py (additive):
+  1. Seam ya MT5 inayoweza-mock: _fetch_rates(symbol, n) -> structured rows (time, open, high, low,
+     close, tick_volume, spread) kupitia mt5.copy_rates_from_pos(symbol, H1, 0, n). Import ya
+     MetaTrader5 iwe LAZY (ndani ya _fetch_rates) ili module i-import bila MT5 (self-test bila MT5).
+     Symbol-resolution: ramanisha "USDCHF"/"USDJPY" -> symbol halisi ya broker (mt5.symbols_get —
+     handle suffix .m/.raw n.k.); config-override inaruhusiwa.
+  2. rates_to_arrays(rows, sym): geuza -> arrays za npz kwa schema ya load_pair: o,h,l,c = price/pip(sym);
+     spr = spread_points * point / pip -> PIPS (au spread field->pips); hour = server-hour (int) ya kila
+     bar; vol = volatility_state kwa REUSE _atr+_deseason+_reg3 (math ile ile); atr = _atr()/pip; tc =
+     tick_volume (float); ts = epoch seconds. Zote urefu sawa, dtype sahihi (vol=labels).
+  3. write_store(dir): kwa kila sym -> _fetch_rates -> rates_to_arrays -> np.savez(<dir>/<SYMBOL>.npz).
+     GUARD: andika bars zenye ts >= FORWARD_START pekee (defence; F1 pia inaguard). Provenance JSON
+     kando (<dir>/_mt5_meta.json): broker, server-time offset, symbols resolved, fetch ts, bar counts,
+     "H1-approx" note.
+  4. CLI: python mt5_data.py --out <dir> [--bars N] [--symbols USDCHF USDJPY]. READ-ONLY messaging.
+
+SHERIA: READ-ONLY (mt5 market-data pekee — hakuna order/write; andika assert/comment). REUSE _atr/
+  _deseason/_reg3/pip (usiandike ATR/regime mpya). npz LAZIMA i-load na live_engine._forward_loader bila
+  error. ZERO golden/statistic kuguswa; live_engine/market_state_engine HAZIBADILIKI (import tu). Self-test
+  (run bila MT5 — mock rows): (a) rates_to_arrays -> schema kamili (keys zote, urefu sawa, prices pip-space);
+  (b) FORWARD_START guard (bar < START haiandikwi); (c) round-trip: npz iandikwe -> live_engine._forward_
+  loader i-load -> load_window itoe episodes bila error (integration); (d) READ-ONLY: module haitumii
+  mt5.order_/position (grep-assert kwenye chanzo); (e) determinism (rows zile zile -> npz ile ile).
+  Run: python src/research/mt5_data.py --self-test. GREEN. run_selftests 32/32 (research nyingine intact).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F2" + jinsi ya kuendesha (mt5_data --out ->
+  live_engine --forward --data -> model_steward -> dashboard ingest) + note ya H1-approx + provenance.
+```
+
+---

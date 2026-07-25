@@ -1524,3 +1524,20 @@ guard, idempotence, forward-append, HOLDOUT reject, repo-valid). HATUA: Operator
 
 **HATUA:** F2 — mt5_data.py READ-ONLY feed (inaandika forward store <dir>/<SYMBOL>.npz ambayo --forward
 inaisoma). INAHITAJI MT5 + MetaTrader5 python kwenye PC ya Operator — nithibitishe upatikanaji kabla ya build.
+
+---
+
+## 2026-07-24 — FWD-F2 (mt5_data READ-ONLY feed) prompt tayari; Chief decisions
+
+PD: MT5 terminal wazi + demo account kwenye PC. PD: "amua wewe." Uamuzi wa Chief kwa F2:
+- **H1-level approximation** (spr kutoka rate spread points→pips; tc kutoka tick_volume) — SI tick-exact.
+  Sababu: forward = stream yake inayolingana; Steward = directional; nzito ya tick si lazima sasa.
+- **REUSE feature-math** ya market_state_engine (_atr ATR14 + _deseason + _reg3 + pip) — usivumbue
+  (GIGO: forward features lazima zilingane na training).
+- **READ-ONLY KABISA** (mt5.copy_rates_* pekee; hakuna order/write). MT5 nyuma ya seam _fetch_rates
+  inayoweza-mock → self-test bila MT5.
+- **npz LAZIMA ilingane** na live_engine._forward_loader/load_pair schema (o/h/l/c/atr = pip-space,
+  spr pips, hour server, vol=volatility_state, tc float, ts epoch). FORWARD_START guard + provenance.
+
+**F2 prompt:** IMPLEMENTER-A [FWD-F2]. HATUA: Operator (PC yenye MT5) → "tayari FWD-F2" → Chief review.
+Baada ya F2: cadence kamili (mt5_data → --forward → steward → dashboard) inaanza kukusanya forward.
