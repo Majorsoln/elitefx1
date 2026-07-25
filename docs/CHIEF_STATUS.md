@@ -1541,3 +1541,22 @@ PD: MT5 terminal wazi + demo account kwenye PC. PD: "amua wewe." Uamuzi wa Chief
 
 **F2 prompt:** IMPLEMENTER-A [FWD-F2]. HATUA: Operator (PC yenye MT5) → "tayari FWD-F2" → Chief review.
 Baada ya F2: cadence kamili (mt5_data → --forward → steward → dashboard) inaanza kukusanya forward.
+
+---
+
+## 2026-07-24 — FWD-F2 (mt5_data READ-ONLY feed) REVIEW: PASS → Forward Track engine-side KAMILI
+
+**mt5_data.py (main `ba6ee0a`): review PASS — self-test 5/5.**
+- (a) schema kamili (pip-space, dtype); (b) FORWARD_START guard (sealed-era → store tupu); (c) round-trip
+  npz→live_engine._forward_loader→run(forward) candidates=9 bila error; (d) READ-ONLY grep-assert hits=[]
+  (nimethibitisha mwenyewe: hakuna order/position calls); (e) determinism.
+- REUSE state_df/_atr/_deseason/_reg3/pip (features SAWA na training — GIGO). H1-approx (spr points→pips,
+  tc=tick_volume). MT5 import LAZY + seam mock-able (self-test bila MT5). Provenance _mt5_meta.json.
+- Diff = mt5_data.py TU (246 lines); live_engine/market_state_engine/golden HAZIJAGUSWA; sweep 32/32.
+
+**FORWARD TRACK ENGINE-SIDE KAMILI:** F1 (--forward append) + F2 (mt5_data feed). Cadence tayari:
+mt5_data → --forward → model_steward → dashboard ingest. Forward accumulation inaweza kuanza kwenye PC
+yenye MT5 (demo). N inakua kila wiki → Steward forward power. Sealed 2026-05→start haiguswi (§3.1b).
+
+**HATUA:** Operator aendeshe cadence kamili (PC yenye MT5) → forward data inaanza kukusanyika. §9.3
+(order-execution + token + PD-signature) = live path, baadaye.
