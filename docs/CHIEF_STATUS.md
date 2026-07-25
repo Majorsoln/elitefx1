@@ -1569,3 +1569,12 @@ Operator aliendesha mt5_data --out: hitilafu -10003 "MetaTrader 5 x64 not found"
 iliitwa BILA path. Terminal iko C:\Program Files\MetaTrader 5\terminal64.exe. Fix: --mt5-path + env
 ELITEFX_MT5_PATH -> mt5.initialize(path=...); ujumbe bora wa hitilafu. READ-ONLY inabaki. Prompt:
 IMPLEMENTER-A [FWD-F2-FIX]. HATUA: Operator aendeshe na --mt5-path -> "tayari FWD-F2-FIX".
+
+---
+
+## 2026-07-24 — FWD-F2-CONN: full MT5 connect (path + login/password/server via ENV, salama)
+
+Operator: initialize(path) -> -6 "Authorization failed" (terminal found, haijalogini). Suluhu: pitisha
+demo credentials kupitia ENV (ELITEFX_MT5_PATH/LOGIN/PASSWORD/SERVER) kwa mt5.initialize(**kwargs).
+USALAMA: password KAMWE kwenye git/print/provenance. READ-ONLY inabaki. FWD-F2-CONN inachukua nafasi ya
+F2-FIX (path pekee). Prompt: IMPLEMENTER-A [FWD-F2-CONN]. HATUA: Operator aweke ENV -> "tayari FWD-F2-CONN".

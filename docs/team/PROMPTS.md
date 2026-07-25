@@ -1419,3 +1419,38 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F2-FIX" + jinsi ya kue
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [FWD-F2-CONN] (mt5_data: full connect — path + login/password/server via ENV)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: kamilisha connection ya
+src/research/mt5_data.py. Operator: mt5.initialize(path) -> -6 "Authorization failed" (terminal
+imepatikana lakini haijalogini). Ongeza login/password/server kupitia ENV (SALAMA). Inachukua nafasi
+ya FWD-F2-FIX (path pekee). Bado READ-ONLY KABISA.
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: src/research/mt5_data.py (_fetch_rates, write_store, main/argparse; kama --mt5-path ilishaongezwa
+na F2-FIX, jenga juu yake; kama bado, ongeza sasa).
+
+BADILISHA (surgical):
+  1. _fetch_rates(..., mt5_path=None, login=None, password=None, server=None): jenga kwargs kwa
+     mt5.initialize: daima path=mt5_path (kama ipo); kama login/password/server ZOTE zipo -> ongeza
+     login=int(login), password=password, server=server. Ita mt5.initialize(**kwargs).
+  2. Resolution kutoka ENV (main): mt5_path=ELITEFX_MT5_PATH (au --mt5-path), login=ELITEFX_MT5_LOGIN,
+     password=ELITEFX_MT5_PASSWORD, server=ELITEFX_MT5_SERVER. Pitisha kupitia write_store -> fetch ->
+     _fetch_rates.
+  3. USALAMA: password KAMWE isiandikwe kwenye print/log/provenance/_mt5_meta.json (mask au acha
+     kabisa). _mt5_meta.json inaweza kuwa na server + login (si password). Ujumbe wa hitilafu -6 useme:
+     "weka ELITEFX_MT5_LOGIN/PASSWORD/SERVER (demo credentials)".
+  4. HAKUNA kingine: READ-ONLY (copy_rates pekee; hakuna order/position); schema/rates_to_arrays/
+     FORWARD_START guard HAZIGUSWI.
+
+SHERIA: READ-ONLY. password si kwenye output yoyote. Self-test (bila MT5 — mock): (a) za awali GREEN;
+  (b) mpya: initialize inapokea path+login+password+server zilizotolewa (capture kwargs kwa mock) NA
+  password HAIPO kwenye _mt5_meta.json/provenance (grep-assert). Run: python src/research/mt5_data.py
+  --self-test. GREEN. run_selftests 32/32.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F2-CONN" + jinsi ya kuendesha (ENV vars +
+  mt5_data --out data\forward) + uthibitisho password si kwenye meta.
+```
+
+---
