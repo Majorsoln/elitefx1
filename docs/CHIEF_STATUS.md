@@ -1560,3 +1560,12 @@ yenye MT5 (demo). N inakua kila wiki → Steward forward power. Sealed 2026-05�
 
 **HATUA:** Operator aendeshe cadence kamili (PC yenye MT5) → forward data inaanza kukusanyika. §9.3
 (order-execution + token + PD-signature) = live path, baadaye.
+
+---
+
+## 2026-07-24 — FWD-F2-FIX prompt: mt5.initialize(path=...) (-10003 kwenye PC ya Operator)
+
+Operator aliendesha mt5_data --out: hitilafu -10003 "MetaTrader 5 x64 not found" — mt5.initialize()
+iliitwa BILA path. Terminal iko C:\Program Files\MetaTrader 5\terminal64.exe. Fix: --mt5-path + env
+ELITEFX_MT5_PATH -> mt5.initialize(path=...); ujumbe bora wa hitilafu. READ-ONLY inabaki. Prompt:
+IMPLEMENTER-A [FWD-F2-FIX]. HATUA: Operator aendeshe na --mt5-path -> "tayari FWD-F2-FIX".

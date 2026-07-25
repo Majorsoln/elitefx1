@@ -1389,3 +1389,33 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F2" + jinsi ya kuendes
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [FWD-F2-FIX] (mt5_data: mt5.initialize(path=...) — -10003 fix)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: fix ndogo ya src/research/
+mt5_data.py — mt5.initialize() inaitwa BILA path -> hitilafu -10003 "MetaTrader 5 x64 not found" kwenye
+PC ya Operator. Ongeza uwezo wa kupitisha njia ya terminal64.exe. Bado READ-ONLY.
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: src/research/mt5_data.py (_fetch_rates, write_store, main/argparse; jinsi mt5.initialize inaitwa).
+
+BADILISHA (surgical):
+  1. _fetch_rates(symbol, n, override=None, mt5_path=None): kama mt5_path ipo -> mt5.initialize(path=
+     mt5_path); vinginevyo mt5.initialize() (kama sasa). Kama initialize inashindwa NA mt5_path haikutolewa,
+     ujumbe wa hitilafu useme wazi: "toa --mt5-path C:\\...\\terminal64.exe (au env ELITEFX_MT5_PATH)".
+  2. Resolution ya path (kipaumbele): --mt5-path CLI > env ELITEFX_MT5_PATH > None (auto). Pitisha
+     mt5_path kupitia write_store -> fetch lambda -> _fetch_rates.
+  3. CLI: ongeza --mt5-path (default kutoka os.environ.get("ELITEFX_MT5_PATH")).
+  4. HAKUNA kingine kinabadilika: READ-ONLY (copy_rates pekee, hakuna order/position); schema ya npz,
+     rates_to_arrays, FORWARD_START guard, provenance HAZIGUSWI.
+
+SHERIA: READ-ONLY (assert/comment inabaki). Self-test (bila MT5 — mock): (a) zote za awali (a-e) bado
+  GREEN; (b) mpya: _fetch_rates ikipewa mt5_path, seam/mock inathibitisha path ime-pass kwa initialize
+  (au kwa njia inayoweza-kupimwa bila MT5 halisi — mfano capture arg). Run: python src/research/
+  mt5_data.py --self-test. GREEN. run_selftests 32/32.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F2-FIX" + jinsi ya kuendesha:
+  python src/research/mt5_data.py --out data\forward --mt5-path "C:\Program Files\MetaTrader 5\terminal64.exe"
+```
+
+---
