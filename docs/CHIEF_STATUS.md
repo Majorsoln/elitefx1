@@ -1592,3 +1592,15 @@ F2-FIX (path pekee). Prompt: IMPLEMENTER-A [FWD-F2-CONN]. HATUA: Operator aweke 
 **FORWARD TRACK TAYARI KIKAMILIFU (engine + feed + connection).** HATUA: Operator aendeshe mt5_data --out
 (path kupitia ENV/--mt5-path; ongeza login/password/server kama -6 irudi) -> --forward -> steward ->
 dashboard. Forward accumulation inaanza. Sealed 2026-05→start haiguswi (§3.1b). §9.3 live = baadaye.
+
+---
+
+## 2026-07-25 — FWD-CYCLE (automation) prompt + ROLLOUT plan (demo→VPS→live)
+
+Cadence nzima ilifanya kazi end-to-end kwenye MT5 halisi (mt5_data forward=24 bars/sym; --forward
+candidates_new=0 = SAWA, nr7 teule, siku ~1 tu; steward/dashboard OK). PD: mpango wa faza — soak demo
+siku 2–3 → extend → VPS mwezi (demo) → live (§9.3 + saini). Charter ROLLOUT imeongezwa.
+
+forward_cycle = orchestrator (amri moja: mt5_data→--forward→steward→ingest) + cycle_log.jsonl, fail-
+soft, Task-Scheduler/cron-ready. Paper/read-only (REUSE CLIs). Prompt: IMPLEMENTER-A [FWD-CYCLE].
+HATUA: Operator → "tayari FWD-CYCLE" → Chief review → Faza 1 soak inaanza.
