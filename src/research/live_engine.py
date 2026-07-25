@@ -17,7 +17,8 @@ WIRING PEKEE ya modules zilizopo — ZERO golden/statistic/fill fns mpya:
 NIDHAMU: mode=paper PEKEE (broker_adapter Q1 live=refuse-stub — HAIBADILISHWI). STRAT configs
 HAZIBADILIKI. Append-only log. Forward/replay: split='validation' (holdout HAIGUSWI).
 
-Endesha (PC ya data): python live_engine.py --run            (replay validation -> paper_log.jsonl)
+Endesha (PC ya data): python live_engine.py --run                 (replay validation -> paper_log.jsonl)
+Forward-append (F1):   python live_engine.py --forward --data <dir>  (bars mpya TU >= FORWARD_START, idempotent)
 Self-test (bila data):  python live_engine.py --self-test
 """
 from __future__ import annotations
@@ -45,6 +46,11 @@ VERSIONS = {"schema_version": "live_engine@v1", "doctrine_version": "V2"}
 EVENT = "nr7_break"
 TF = "H1"
 SESSION_FILTER = "no-LATE"
+
+# FORWARD TRACK F1 (docs/FORWARD_TRACK_CHARTER.md §3.1b) — mpaka MTAKATIFU wa forward mode.
+# Forward = bars za tarehe HII na kuendelea TU. Dirisha 2026-05 -> FORWARD_START = SEALED (as_of <
+# FORWARD_START inakataliwa). HOLDOUT (2025-01..2026-04) iko chini ya mpaka huu pia -> haiingii forward.
+FORWARD_START = "2026-07-24"
 
 # STRAT configs HASA (docs/STRATEGIES.md) + learned EV (backtest — STEWARD divergence tag, §8.2)
 STRATS = {
@@ -83,6 +89,41 @@ def _day(ts_scalar):
 def _as_of(ts_scalar):
     """datetime64 -> epoch seconds (int) kwa log (dashboard _dt inasoma epoch/ISO)."""
     return int(np.datetime64(ts_scalar, "s").astype("int64"))
+
+
+# ---------- FORWARD TRACK F1 — helpers (watermark + sealed guard + forward store) ----------
+
+def _forward_start_epoch(forward_start=FORWARD_START):
+    """FORWARD_START (YYYY-MM-DD au epoch) -> epoch seconds (int). Mpaka mtakatifu (§3.1b)."""
+    if isinstance(forward_start, (int, float)):
+        return int(forward_start)
+    return _as_of(np.datetime64(str(forward_start)))
+
+
+def _watermark(records):
+    """as_of ya juu kabisa ya rekodi za decision/execution kwenye log (progress marker ya forward).
+    Settlement (as_of = exit ya baadaye) HAIHESABIWI — watermark = entry ya mwisho iliyoshughulikiwa.
+    records = list ya {kind, obj}. Rudisha int au None (log tupu)."""
+    mx = None
+    for r in records:
+        if r.get("kind") in ("decision", "execution"):
+            a = r["obj"].get("as_of")
+            if isinstance(a, (int, float)) and (mx is None or a > mx):
+                mx = int(a)
+    return mx
+
+
+def _forward_loader(data_dir):
+    """Loader ya forward data store: <data_dir>/<SYMBOL>.npz zenye arrays o,h,l,c,atr,spr,hour,vol,ts
+    (schema ya load_window). F2/MT5 itaandika store hii; kwa sasa fixture/CSV->npz inakubalika.
+    Sym isiyopo -> None (run() inairuka kama load_window)."""
+    def _lw(sym, tf, split, token=None):
+        p = Path(data_dir) / f"{sym}.npz"
+        if not p.exists():
+            return None
+        z = np.load(p, allow_pickle=True)
+        return {k: z[k] for k in z.files}
+    return _lw
 
 
 def candidates(name, strat, data):
@@ -171,9 +212,13 @@ def _append(log_path, kind, obj, sink):
 
 
 def run(split="validation", log_path=LOG_F, cfg=None, sink=None, pairs=None, policy=STRAT_POLICY,
-        _loader=None):
+        _loader=None, forward=False, forward_start=FORWARD_START, watermark=None):
     """Forward paper loop (replay ya split — validation kwa default; HOLDOUT HAIGUSWI). Rudisha summary.
-    sink != None -> log kwenye list (self-test), si faili. _loader -> monkeypatch ya load_window."""
+    sink != None -> log kwenye list (self-test), si faili. _loader -> monkeypatch ya load_window.
+
+    FWD-F1: forward=True -> incremental FORWARD-APPEND. Candidate inapita TU ikiwa entry as_of >=
+    FORWARD_START (sealed/holdout guard §3.1b) NA > watermark (idempotent — hairudii zilizopo).
+    skipped_sealed/skipped_watermark zinahesabiwa; run mbili bila data mpya -> candidates=0."""
     cfg = cfg or _ftmo_config()
     lw = _loader or load_window
     constraints = build_constraints(cfg)
@@ -188,6 +233,21 @@ def run(split="validation", log_path=LOG_F, cfg=None, sink=None, pairs=None, pol
             continue
         cands += candidates(name, strat, data)
     cands.sort(key=lambda x: (x["entry_ts"], x["strategy"]))
+
+    # FWD-F1: forward-append filter — sealed guard (§3.1b) + watermark (idempotence). Replay: hakuna.
+    skipped_sealed = skipped_watermark = 0
+    fs_epoch = _forward_start_epoch(forward_start)
+    if forward:
+        kept = []
+        for cd in cands:
+            a = _as_of(cd["entry_ts"])
+            if a < fs_epoch:
+                skipped_sealed += 1                       # sealed/holdout — KAMWE isiingie forward log
+            elif watermark is not None and a <= watermark:
+                skipped_watermark += 1                    # tayari imeshughulikiwa (resumable/idempotent)
+            else:
+                kept.append(cd)
+        cands = kept
 
     n_filled = n_rejected = 0; sig_n = 0
     if sink is None:
@@ -263,7 +323,20 @@ def run(split="validation", log_path=LOG_F, cfg=None, sink=None, pairs=None, pol
         _settle_due(st, cfg, cands[-1]["exit_ts"] if False else np.datetime64("2999-01-01"),
                     log_path, sink)
     return dict(candidates=len(cands), filled=n_filled, rejected=n_rejected,
-                cum_pnl=round(st["cum_pnl"], 2), log=log_path)
+                cum_pnl=round(st["cum_pnl"], 2), log=log_path,
+                forward=forward, watermark=watermark, forward_start=fs_epoch,
+                skipped_sealed=skipped_sealed, skipped_watermark=skipped_watermark)
+
+
+def run_forward(data_dir=None, log_path=LOG_F, forward_start=FORWARD_START, cfg=None,
+                sink=None, _loader=None):
+    """FWD-F1 CLI helper: soma watermark kutoka paper_log iliyopo -> run(forward=True) kwa bars mpya TU.
+    Chanzo cha bars = forward store (<data_dir>/<SYMBOL>.npz) au _loader (fixture). Append-only + resumable."""
+    lw = _loader or (_forward_loader(data_dir) if data_dir else load_window)
+    existing = sink if sink is not None else repo.load(log_path)
+    wm = _watermark(existing)
+    return run(log_path=log_path, cfg=cfg, sink=sink, _loader=lw,
+               forward=True, forward_start=forward_start, watermark=wm)
 
 
 # ---------- self-test (synthetic — bila data ya nje) ----------
@@ -377,6 +450,68 @@ def self_test():
     print(f"  [f] mode=paper pekee (kila execution) -> {mode_ok}")
     ok = ok and mode_ok
 
+    # ==================== FWD-F1: FORWARD-APPEND MODE ====================
+    fs_epoch = _forward_start_epoch()
+    fwd_fx = {"USDCHF": _fixture(1, split_start="2026-07-24"),          # forward era (>= FORWARD_START)
+              "USDJPY": _fixture(2, split_start="2026-07-24")}
+    sealed_fx = {"USDCHF": _fixture(1, split_start="2025-06-01"),       # HOLDOUT/sealed era (< FORWARD_START)
+                 "USDJPY": _fixture(2, split_start="2025-06-01")}
+
+    # (g) SEALED-GUARD (§3.1b + HOLDOUT): bars < FORWARD_START -> zote skipped_sealed, HAKUNA rekodi
+    sg = []
+    rg = run(cfg=cfg, sink=sg, _loader=_mk_loader(sealed_fx), forward=True, watermark=None)
+    all_entries_sealed = all(_as_of(cd) < fs_epoch for cd in
+                             [c["entry_ts"] for name, s in STRATS.items()
+                              for c in candidates(name, s, sealed_fx[s["pair"]])])
+    sealed_ok = (rg["skipped_sealed"] > 0 and rg["candidates"] == 0 and len(sg) == 0
+                 and rg["filled"] == 0 and all_entries_sealed)
+    print(f"  [g] sealed-guard: skipped_sealed={rg['skipped_sealed']} candidates=0 records=0 "
+          f"(holdout+sealed KAMWE forward) -> {sealed_ok}")
+    ok = ok and sealed_ok
+
+    # (h) FORWARD-APPEND: bars >= FORWARD_START -> rekodi zinaongezwa; hakuna skipped_sealed
+    sf = []
+    rf = run(cfg=cfg, sink=sf, _loader=_mk_loader(fwd_fx), forward=True, watermark=None)
+    fwd_ok = (rf["candidates"] > 0 and len(sf) > 0 and rf["skipped_sealed"] == 0)
+    print(f"  [h] forward-append: candidates_new={rf['candidates']} records={len(sf)} "
+          f"skipped_sealed=0 -> {fwd_ok}")
+    ok = ok and fwd_ok
+
+    # (i) WATERMARK IDEMPOTENCE: run tena na watermark = max(decision/execution as_of) -> +0 rekodi
+    wm = _watermark(sf)
+    sf2 = []
+    rf2 = run(cfg=cfg, sink=sf2, _loader=_mk_loader(fwd_fx), forward=True, watermark=wm)
+    idem_ok = (rf2["candidates"] == 0 and len(sf2) == 0 and rf2["skipped_watermark"] > 0
+               and rf2["filled"] == 0)
+    print(f"  [i] watermark idempotence: watermark={wm} rerun candidates=0 records=0 "
+          f"skipped_watermark={rf2['skipped_watermark']} -> {idem_ok}")
+    ok = ok and idem_ok
+
+    # (j) INCREMENTAL: watermark ya kizamani (chini ya zote) -> candidates zote mpya zinaongezwa tena
+    sf3 = []
+    rf3 = run(cfg=cfg, sink=sf3, _loader=_mk_loader(fwd_fx), forward=True, watermark=(fs_epoch - 1))
+    incr_ok = (rf3["candidates"] == rf["candidates"] and len(sf3) == len(sf)
+               and rf3["skipped_watermark"] == 0)
+    print(f"  [j] incremental append: watermark<all -> candidates_new={rf3['candidates']} "
+          f"(sawa na forward-append) -> {incr_ok}")
+    ok = ok and incr_ok
+
+    # (k) FORWARD records valid dhidi ya decision_repository.REQUIRED (+ mode=paper + as_of >= FORWARD_START)
+    from decision_repository import REQUIRED as _REQ2
+    fwd_valid = (all(set(_REQ2[r["kind"]]) <= set(r["obj"]) for r in sf)
+                 and all(r["obj"]["as_of"] >= fs_epoch for r in sf
+                         if r["kind"] in ("decision", "execution"))
+                 and all(r["obj"].get("mode") == "paper" for r in sf if r["kind"] == "execution"))
+    print(f"  [k] forward records valid vs REQUIRED + as_of>=FORWARD_START + paper -> {fwd_valid}")
+    ok = ok and fwd_valid
+
+    # (l) run_forward wrapper: watermark auto kutoka existing sink -> idempotent kwa data ile ile
+    seed_log = list(sf)                                    # "paper_log iliyopo" = forward records za (h)
+    rfw = run_forward(sink=seed_log, _loader=_mk_loader(fwd_fx))
+    wrap_ok = (rfw["forward"] and rfw["candidates"] == 0 and rfw["watermark"] == wm)
+    print(f"  [l] run_forward auto-watermark: candidates=0 (idempotent) watermark={rfw['watermark']} -> {wrap_ok}")
+    ok = ok and wrap_ok
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -387,12 +522,27 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", action="store_true", help="endesha forward paper loop (replay validation)")
     ap.add_argument("--split", default="validation", help="validation (default) | train (replay)")
+    ap.add_argument("--forward", action="store_true",
+                    help="FORWARD-APPEND incremental (bars mpya TU: as_of > watermark & >= FORWARD_START)")
+    ap.add_argument("--data", default=None, help="forward data store dir (<SYMBOL>.npz) kwa --forward")
+    ap.add_argument("--forward-start", default=FORWARD_START, help="mpaka mtakatifu wa forward (§3.1b)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
+    if a.forward:
+        if not a.data:
+            print("--forward inahitaji --data <dir> (forward store yenye <SYMBOL>.npz).", file=sys.stderr)
+            return 2
+        res = run_forward(a.data, forward_start=a.forward_start)
+        print(f"FORWARD-APPEND (start={a.forward_start}): candidates_new={res['candidates']} "
+              f"FILLED={res['filled']} REJECTED={res['rejected']} cum_pnl=${res['cum_pnl']}")
+        print(f"  watermark={res['watermark']} skipped_sealed={res['skipped_sealed']} "
+              f"skipped_watermark={res['skipped_watermark']}")
+        print(f"  log: {res['log']} (append-only) -> model_steward.py -> dashboard ingest (bila --demo)")
+        return 0
     if not a.run:
-        print("Tumia --run (forward paper) | --self-test.", file=sys.stderr)
+        print("Tumia --run (replay) | --forward --data <dir> (forward-append) | --self-test.", file=sys.stderr)
         return 2
     if a.split == "holdout":
         print("RED LINE: HOLDOUT HAIGUSWI na live_engine (paper forward/replay pekee).", file=sys.stderr)

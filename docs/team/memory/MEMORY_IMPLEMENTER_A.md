@@ -1322,3 +1322,33 @@ RUNBOOK: /scorecards/KAIROS-x/ au /my/KAIROS-x/ -> chips (Wins/Losses · ASIA/LO
   + date form; sentensi zote SW+EN. Clear = request.path.
 DASHBOARD-V2 = KAMILI (Awamu 1 SCORECARD · 2 OVERVIEW/FLEET · 3 LESSEE anonymized · A3-FIX back-door · 4
   lugha+filter). NEXT: subiri directive mpya ya PD/Chief.
+
+=== FWD-F1 build (2026-07-25) — FORWARD TRACK F1: engine forward-append incremental — IMEKAMILIKA ===
+LAST COMPLETED: **Forward Track F1 — live_engine --forward (FORWARD-APPEND)** ✅ (docs/FORWARD_TRACK_CHARTER.md
+  F1; additive, src/research/live_engine.py TU; ZERO golden/statistic; STRAT configs HASA).
+  Lengo: geuza Steward REPLAY -> FORWARD halisi (bars mpya baada ya FORWARD-START, decision KABLA ya matokeo).
+  1. FORWARD_START = "2026-07-24" (§3.1b mpaka mtakatifu; override --forward-start). _forward_start_epoch().
+     GUARD: candidate yenye entry as_of < FORWARD_START -> skipped_sealed (KAMWE haiingii forward log).
+     Dirisha 2026-05->start + HOLDOUT (2025..2026-04) zote ziko chini ya mpaka -> hazichukuliwi forward.
+  2. _watermark(records): as_of ya juu kabisa ya decision/execution (SI settlement — settlement=exit ya
+     baadaye). Forward inashughulikia candidates zenye entry as_of > watermark TU (idempotent/resumable).
+  3. run() += params forward/forward_start/watermark: baada ya cands.sort, filter (sealed guard + watermark);
+     summary += forward/watermark/forward_start/skipped_sealed/skipped_watermark. --run (replay) HAIJABADILIKA.
+     run_forward(data_dir, log_path): soma watermark kutoka paper_log iliyopo -> run(forward=True). _forward_loader
+     (<data_dir>/<SYMBOL>.npz, schema ya load_window — F2/MT5 itaandika store; kwa sasa fixture/npz).
+  4. CLI: --forward --data <dir> [--forward-start]. Idempotent: run mbili bila data mpya -> candidates_new=0.
+  · SHERIA: append-only (repo.append); no-look-ahead (episodes; nr7 level truncation-invariant); costs halisi
+    (spread+slip); mode=paper. Golden 0 (event_quality_report/strategy_lab/event_library HAZIJAGUSWA).
+    Sealed window + HOLDOUT red-line HAZIGUSWI. src/research diff = live_engine.py TU.
+  Self-test (live_engine, +6 mpya; sweep 32/32 PASS): (g) sealed-guard bars<START -> skipped_sealed, 0 rekodi
+    (holdout+sealed); (h) forward-append bars>=START -> rekodi zinaongezwa; (i) watermark idempotence rerun
+    -> +0; (j) incremental watermark<all -> candidates zote mpya; (k) forward records valid vs
+    decision_repository.REQUIRED + as_of>=START + paper; (l) run_forward auto-watermark idempotent.
+  E2E (npz store): RUN1 44 cand/5 filled/137 rekodi; RUN2 (data ile ile) +0 (idempotent); SEALED store
+    (2025) -> 0 cand, 44 skipped_sealed, 0 rekodi (mlango umefungwa).
+RUNBOOK: (F2 baadaye) mt5_data.py vuta bars -> live_engine.py --forward --data <store> -> model_steward.py
+  -> dashboard ingest -> scorecard FORWARD inasasishwa. Chini: siku 20+/trades 30+ kabla hitimisho.
+KNOWN LIMITATION: forward run kila batch = account state fresh (_acct_state) — cum_pnl/daily-budget
+  HAZIBEBWI kati ya runs (per-trade pnl_r honest imehifadhiwa; gating ni per-batch). Cross-run open-position
+  carry si lazima F1 (kila candidate = trade kamili entry+exit kutoka episodes).
+NEXT: F2 — mt5_data.py READ-ONLY data feed (inahitaji MT5 kwenye PC ya Operator).
