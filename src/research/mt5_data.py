@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -52,15 +53,29 @@ def _resolve_symbol(symbol, mt5, override=None):
     return symbol                                    # fallback — copy_rates itatoa error kama batili
 
 
-def _fetch_rates(symbol, n, _mt5=None, override=None):
-    """READ-ONLY: H1 bars n za mwisho kupitia mt5.copy_rates_from_pos. Rudisha (rows, point).
+def _fetch_rates(symbol, n, _mt5=None, override=None,
+                 mt5_path=None, login=None, password=None, server=None):
+    """READ-ONLY: H1 bars n za mwisho kupitia mt5.copy_rates_from_pos. Rudisha (rows, point, resolved).
     rows = list ya dict {time, open, high, low, close, tick_volume, spread}. Import ya MetaTrader5 = LAZY
-    (module i-import bila MT5). _mt5 = injection ya mock kwa self-test."""
+    (module i-import bila MT5). _mt5 = injection ya mock kwa self-test.
+
+    initialize kwargs: path=mt5_path (kama ipo); login/password/server ZOTE zikiwepo -> login=int(login),
+    password, server (SALAMA — password KAMWE kwenye print/log/provenance). -6 'Authorization failed'
+    kawaida = terminal ipo lakini haijalogini -> weka ELITEFX_MT5_LOGIN/PASSWORD/SERVER."""
     mt5 = _mt5
     if mt5 is None:
         import MetaTrader5 as mt5                     # LAZY — hutegemewa PC ya Operator pekee
-        if not mt5.initialize():
-            raise RuntimeError(f"mt5.initialize() imeshindwa: {mt5.last_error()}")
+    kwargs = {}
+    if mt5_path:
+        kwargs["path"] = mt5_path
+    if login and password and server:                # creds ZOTE -> logini (SALAMA, si default terminal)
+        kwargs["login"] = int(login); kwargs["password"] = password; kwargs["server"] = server
+    if not mt5.initialize(**kwargs):
+        err = mt5.last_error()                        # HAKUNA password hapa (err = code+ujumbe wa MT5)
+        raise RuntimeError(
+            f"mt5.initialize() imeshindwa: {err}. Kama -6 (Authorization failed): terminal imepatikana "
+            f"lakini haijalogini — weka ENV ELITEFX_MT5_LOGIN / ELITEFX_MT5_PASSWORD / ELITEFX_MT5_SERVER "
+            f"(na ELITEFX_MT5_PATH kwa njia ya terminal64.exe kama inahitajika).")
     resolved = _resolve_symbol(symbol, mt5, override)
     info = mt5.symbol_info(resolved)
     point = float(getattr(info, "point", pip(symbol) / 10.0)) if info else pip(symbol) / 10.0
@@ -109,13 +124,16 @@ def rates_to_arrays(rows, sym, point=None):
 # ---------- write forward store ----------
 
 def write_store(out_dir, symbols=CANON, bars=1500, forward_start=FORWARD_START,
-                _fetch=None, overrides=None):
+                _fetch=None, overrides=None, _mt5=None,
+                mt5_path=None, login=None, password=None, server=None):
     """Kila sym -> fetch (read-only) -> rates_to_arrays -> np.savez(<dir>/<SYMBOL>.npz).
     GUARD: bars zenye ts >= FORWARD_START PEKEE zinahifadhiwa (features zilihesabiwa na warmup wa
     bars ZOTE zilizochotwa -> trailing windows sahihi; zilizopublishiwa = forward tu §3.1b).
     Provenance -> <dir>/_mt5_meta.json. _fetch(sym, n) -> (rows, point, resolved) [mock kwa self-test]."""
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
-    fetch = _fetch or (lambda s, n: _fetch_rates(s, n, override=(overrides or {}).get(s)))
+    fetch = _fetch or (lambda s, n: _fetch_rates(
+        s, n, _mt5=_mt5, override=(overrides or {}).get(s),
+        mt5_path=mt5_path, login=login, password=password, server=server))
     fs_epoch = _forward_start_epoch(forward_start)
     meta = dict(source="MetaTrader5 (read-only copy_rates_from_pos)", tf=TF, approx="H1-approx "
                 "(spr=points->pips, tc=tick_volume; SI tick-exact)", forward_start=str(forward_start),
@@ -214,6 +232,31 @@ def self_test():
     print(f"  [e] determinism (rates_to_arrays bit-identical) -> {det}")
     ok = ok and det
 
+    # (f) CONNECTION: initialize inapokea path+login+password+server (SALAMA); password HAIPO kwenye meta
+    class _FakeMT5:
+        TIMEFRAME_H1 = 16385
+        def __init__(self): self.init_kwargs = None
+        def initialize(self, **kw): self.init_kwargs = dict(kw); return True
+        def last_error(self): return (0, "ok")
+        def symbols_get(self): return []
+        def symbol_info(self, s): return type("I", (), {"point": pip(s) / 10.0})()
+        def copy_rates_from_pos(self, sym, tf, start, n): return _mock_rows(sym, n=int(n))
+    fake = _FakeMT5()
+    SECRET = "PW-SECRET-9137"
+    with tempfile.TemporaryDirectory() as tmp:
+        write_store(tmp, symbols=("USDCHF",), bars=120, _mt5=fake,
+                    mt5_path="C:/mt5/terminal64.exe", login="12345678",
+                    password=SECRET, server="Broker-Demo")
+        meta_txt = (Path(tmp) / _META).read_text(encoding="utf-8")
+    kw = fake.init_kwargs or {}
+    init_ok = (kw.get("path") == "C:/mt5/terminal64.exe" and kw.get("login") == 12345678
+               and kw.get("password") == SECRET and kw.get("server") == "Broker-Demo")
+    pw_safe = (SECRET not in meta_txt and "password" not in meta_txt.lower())
+    conn_ok = init_ok and pw_safe
+    print(f"  [f] connection: initialize(path/login/password/server) ok={init_ok}; "
+          f"password si kwenye {_META}={pw_safe} -> {conn_ok}")
+    ok = ok and conn_ok
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -226,6 +269,7 @@ def main():
     ap.add_argument("--bars", type=int, default=1500, help="H1 bars za mwisho kuchota (warmup + forward)")
     ap.add_argument("--symbols", nargs="+", default=list(CANON))
     ap.add_argument("--forward-start", default=FORWARD_START)
+    ap.add_argument("--mt5-path", default=None, help="njia ya terminal64.exe (au ELITEFX_MT5_PATH)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -233,7 +277,13 @@ def main():
     if not a.out:
         print("Tumia --out <dir> (forward store) | --self-test.", file=sys.stderr)
         return 2
-    meta = write_store(a.out, symbols=tuple(a.symbols), bars=a.bars, forward_start=a.forward_start)
+    # creds/path kutoka ENV (SALAMA — password KAMWE kwenye argv/print/log/meta)
+    mt5_path = a.mt5_path or os.environ.get("ELITEFX_MT5_PATH")
+    login = os.environ.get("ELITEFX_MT5_LOGIN")
+    password = os.environ.get("ELITEFX_MT5_PASSWORD")
+    server = os.environ.get("ELITEFX_MT5_SERVER")
+    meta = write_store(a.out, symbols=tuple(a.symbols), bars=a.bars, forward_start=a.forward_start,
+                       mt5_path=mt5_path, login=login, password=password, server=server)
     for sym, s in meta["symbols"].items():
         print(f"  {sym} ({s['resolved']}): fetched={s['bars_fetched']} forward={s['bars_forward']} "
               f"point={s['point']}")

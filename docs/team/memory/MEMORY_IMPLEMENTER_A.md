@@ -1385,3 +1385,29 @@ KNOWN LIMITATION: H1-approx (Chief 2026-07-24) — spr=points->pips (SI tick-med
   consistent (math ileile ya training). MT5 order-execution+token+PD-signature = §9.3 (baadaye).
 NEXT: F2 imekamilisha Forward Track engine-side (F1 append + F2 feed). Subiri directive ya PD/Chief
   (mfano: run forward live kwenye PC ya Operator, au §9.3 live path).
+
+=== FWD-F2-CONN (2026-07-25) — MT5 login/creds kupitia ENV (SALAMA, bado READ-ONLY) — IMEKAMILIKA ===
+LAST COMPLETED: **MT5 connection fix — src/research/mt5_data.py** ✅ (surgical, faili moja; READ-ONLY inabaki).
+  TUKIO (Operator): mt5.initialize(path) -> -6 "Authorization failed" — terminal imepatikana LAKINI
+  haijalogini. FIX: creds kupitia ENV (password KAMWE kwenye argv/print/log/provenance).
+  1. _fetch_rates(..., mt5_path, login, password, server): jenga kwargs kwa mt5.initialize — path=mt5_path
+     (kama ipo); login/password/server ZOTE zikiwepo -> login=int(login), password, server. Ita
+     mt5.initialize(**kwargs). initialize ikishindwa -> RuntimeError yenye ujumbe: -6 => weka ENV
+     ELITEFX_MT5_LOGIN/PASSWORD/SERVER (+ ELITEFX_MT5_PATH). err = mt5.last_error() (HAKUNA password).
+  2. write_store(..., _mt5, mt5_path, login, password, server): threads creds -> default fetch ->
+     _fetch_rates. _mt5 = injection ya mock kwa test.
+  3. main: ENV resolution — mt5_path=ELITEFX_MT5_PATH (au --mt5-path), login=ELITEFX_MT5_LOGIN,
+     password=ELITEFX_MT5_PASSWORD, server=ELITEFX_MT5_SERVER. Pitisha write_store.
+  4. USALAMA: password si kwenye argv (ENV pekee), si kwenye print/log/_mt5_meta.json. meta haina creds.
+  · SHERIA: READ-ONLY (copy_rates/symbols_get/symbol_info pekee — grep-assert [d] bado GREEN). schema/
+    rates_to_arrays/FORWARD_START guard HAZIJAGUSWA. ZERO golden; live_engine/market_state_engine import tu.
+  Self-test (mt5_data --self-test, PASS; +1 mpya): (a-e) za awali GREEN; (f) connection — _FakeMT5 captures
+    initialize kwargs (path/login=int/password/server ZOTE zinapokelewa) NA password (secret) HAIPO kwenye
+    _mt5_meta.json (grep-assert). run_selftests 32/32.
+RUNBOOK (Operator, PC yenye MT5 login):
+  set ELITEFX_MT5_LOGIN=<acct>  ELITEFX_MT5_PASSWORD=<pw>  ELITEFX_MT5_SERVER=<broker-server>
+  [ELITEFX_MT5_PATH=C:\...\terminal64.exe kama inahitajika]
+  python src/research/mt5_data.py --out <store>  ->  live_engine.py --forward --data <store>
+  -> model_steward.py -> dashboard ingest. (password kwenye ENV pekee — kamwe si kwenye amri/log.)
+NEXT: Forward Track (F1 append + F2 feed + connection) tayari. Subiri directive ya PD/Chief (endesha
+  forward live PC ya Operator, au §9.3 live-execution path).
