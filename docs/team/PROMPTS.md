@@ -1300,3 +1300,41 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari DASH-V2-A4" + note ya lugh
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [FWD-F1] (Forward Track F1 — engine forward-append incremental mode)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: FORWARD TRACK F1 — ongeza
+mode ya FORWARD-APPEND (incremental) kwenye src/research/live_engine.py: inashughulikia bars MPYA TU
+(as_of > watermark AND >= FORWARD-START), append-only + resumable + idempotent, na GUARD ngumu ya
+dirisha lililosealwa (§3.1b). Paper — HAKUNA pesa halisi. SPEC: docs/FORWARD_TRACK_CHARTER.md (F1).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/FORWARD_TRACK_CHARTER.md (F1 + MPAKA MTAKATIFU) · docs/DOCTRINE_V2.md §3.1b (sealed 2026-05+)
+· docs/RUNBOOK_forward_paper_trading.md · src/research/live_engine.py (run(split=...), _append, _as_of,
+_mk_loader, self_test, argparse --run/--split; LOG_F=data/paper/paper_log.jsonl) · src/research/
+decision_repository.py (REQUIRED fields).
+
+JENGA (additive — REUSE run() logic; ZERO golden/statistic; STRAT configs HAZIBADILIKI):
+  1. FORWARD-START constant (default "2026-07-24", override kwa --forward-start). Guard: bar/candidate
+     yenye entry as_of < FORWARD-START -> SKIP + counter skipped_sealed (kamwe isiingie paper_log kama
+     forward). HOLDOUT red-line iliyopo inabaki.
+  2. Watermark: soma paper_log iliyopo -> as_of ya juu kabisa ya decision/execution (max as_of). Forward
+     mode inashughulikia candidates zenye entry as_of > watermark TU (hakuna kurudia zilizopo).
+  3. --forward flag: endesha loop ile ile ya run() LAKINI (a) chanzo cha bars = forward data store
+     (--data <path> au split ya forward; kwa sasa fixture/CSV inakubalika — F2/MT5 itaunganishwa baadaye),
+     (b) chuja kwa watermark + FORWARD-START, (c) append kwenye paper_log ile ile. Idempotent: run mbili
+     bila data mpya -> candidates_new=0, hakuna rekodi mpya (thibitisha kwa watermark).
+  4. Usibadilishe --run (replay validation) — inabaki kama ilivyo. --forward = njia mpya tofauti.
+
+SHERIA: append-only (audit); no-look-ahead (decision kwa bar iliyofungwa); costs halisi (episodes).
+  ZERO golden fns kuguswa. STRAT-001/002 configs HASA. Sealed window + HOLDOUT HAZIGUSWI. Self-test
+  (ongeza kwenye run_selftests): (a) sealed-guard: bar as_of < FORWARD-START -> skipped (haiingii log);
+  (b) watermark idempotence: run -> N rekodi; run tena (data ile ile) -> +0 rekodi; (c) forward-append:
+  bar mpya > watermark -> rekodi mpya inaongezwa; (d) HOLDOUT bado inakataliwa; (e) forward records ni
+  valid dhidi ya decision_repository.REQUIRED. Run: python src/research/run_selftests.py -> live_engine GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F1" + jinsi ya kuendesha (--forward --data
+  <fixture>) + uthibitisho wa sealed-guard + idempotence. (F2 = MT5 read-only data feed inafuata.)
+```
+
+---
