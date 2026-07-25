@@ -1508,3 +1508,19 @@ testable) + F2 mt5_data.py read-only feed (inahitaji MT5 PC). MPAKA: FORWARD-STA
 **F1 prompt:** IMPLEMENTER-A [FWD-F1] — --forward incremental (watermark + FORWARD-START guard +
 idempotent + sealed-guard), append paper_log, STRAT configs HAZIBADILIKI, golden 0, self-tests (sealed-
 guard, idempotence, forward-append, HOLDOUT reject, repo-valid). HATUA: Operator → "tayari FWD-F1".
+
+---
+
+## 2026-07-24 — FWD-F1 (engine forward-append) REVIEW: PASS → F1 imekamilika
+
+**live_engine --forward (main `e9b71a6`): review PASS — self-test 12/12 (6 mpya forward).**
+- FORWARD_START=2026-07-24 (§3.1b). Sealed-guard: skipped_sealed, dirisha 2026-05→start + HOLDOUT
+  KAMWE haiingii forward (test g: records=0). Watermark idempotence (test i: rerun→0). Forward-append
+  (h). Records valid vs decision_repository.REQUIRED + as_of>=START + paper (k). run_forward auto-watermark (l).
+- --run (replay) haijabadilika; golden fns HAZIJAGUSWA; STRAT configs HASA; HOLDOUT red-line intact;
+  diff = live_engine.py TU; sweep 32/32.
+- Known-limit (kubali): account-state fresh per batch (cum_pnl/daily-budget hazibebwi cross-run;
+  per-trade pnl_r honest). Si tatizo F1 (kila candidate = trade kamili entry+exit).
+
+**HATUA:** F2 — mt5_data.py READ-ONLY feed (inaandika forward store <dir>/<SYMBOL>.npz ambayo --forward
+inaisoma). INAHITAJI MT5 + MetaTrader5 python kwenye PC ya Operator — nithibitishe upatikanaji kabla ya build.
