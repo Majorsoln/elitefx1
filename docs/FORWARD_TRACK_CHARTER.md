@@ -43,3 +43,19 @@ Kila siku/wiki (Operator): (1) `mt5_data.py` vuta bars mpya → (2) `live_engine
 ## MATOKEO
 Ushahidi wa kweli wa STRAT-001/002 (forward, pre-registered) unakusanyika kila wiki → Steward + scorecard
 zinaonyesha FORWARD performance → msingi wa uamuzi wa live (MT5 §9.3 + PD signature) baadaye.
+
+---
+
+## ROLLOUT (demo → VPS → live; directive ya PD 2026-07-25)
+Wakati WOTE hadi Faza 4 = **demo/paper** (read-only market data; hakuna order). Terminal data
+HAIGUSWI (copy_rates read-only). Forward store = folda tofauti (data/forward).
+
+| Faza | Mahali | Muda | Inapima | Kigezo cha kusonga |
+|------|--------|------|---------|--------------------|
+| 1 SOAK | PC (demo) | siku 2–3 | UIMARA WA BOMBA (crash? data? append? dashboard?) — SI faida | bomba safi, logs bila error |
+| 2 EXTEND | PC (demo) | wiki 1–2 | forward N inaanza kukua; hakuna tatizo | stable + trades zinaingia |
+| 3 VPS | VPS (demo) | mwezi 1 | 24/7 mfululizo; forward N ya maana | uptime + N≥ (siku 20/trades 30) |
+| 4 LIVE | VPS (live) | — | — | §9.3 (orders+token) + **SAINI YA PD** + forward imethibitika |
+
+**forward_cycle** = automation inayowezesha Faza 1–3 (amri moja + log; Task Scheduler/cron).
+Faza 1 haitahukumu EV (nr7 teule — trades chache). Trades/EV = wiki (Faza 2–3).

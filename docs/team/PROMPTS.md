@@ -1454,3 +1454,42 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-F2-CONN" + jinsi ya ku
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [FWD-CYCLE] (forward_cycle — automation ya cadence + log; soak/VPS)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: jenga src/research/
+forward_cycle.py — orchestrator inayoendesha cadence nzima ya forward kwa amri MOJA + log ya kila run,
+kwa soak-test (Faza 1) na VPS (Faza 3). Paper/READ-ONLY (haiongezi trade logic). SPEC:
+docs/FORWARD_TRACK_CHARTER.md (ROLLOUT).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/FORWARD_TRACK_CHARTER.md (ROLLOUT + cadence) · src/research/mt5_data.py (CLI --out) ·
+src/research/live_engine.py (CLI --forward --data) · src/research/model_steward.py (CLI) ·
+dashboard/manage.py (ingest command).
+
+JENGA src/research/forward_cycle.py (additive — REUSE CLIs zilizopo kwa subprocess; ZERO golden/
+trade logic mpya):
+  1. Endesha hatua 4 kwa mpangilio (subprocess, python sys.executable): (1) mt5_data.py --out <store>
+     -> (2) live_engine.py --forward --data <store> -> (3) model_steward.py -> (4) dashboard/manage.py
+     ingest (bila --demo). Kila hatua: capture stdout/stderr + returncode + muda.
+  2. FAIL-SOFT + fail-fast chaguo: kama hatua inashindwa, rekodi status=FAIL + rudisha exit-code isiyo
+     0; --continue-on-error kuendelea. Hatua ya mt5_data ikishindwa (MT5 down) -> skip zilizobaki kwa
+     default (hakuna maana kuendelea bila data mpya).
+  3. LOG: append JSONL data/forward/cycle_log.jsonl -> {ts, step, status, returncode, duration_s,
+     summary (mfano candidates_new/filled kutoka stdout ya live_engine kama inapatikana), error_tail}.
+     Pia print muhtasari wa mwisho (hatua ngapi OK/FAIL + forward candidates_new).
+  4. CLI: --store data/forward (default) · --skip-dashboard (kama Django haipo kwenye env hiyo) ·
+     --continue-on-error · --mt5-path/-passthrough (env inatosha). Suitable kwa Task Scheduler/cron.
+
+SHERIA: READ-ONLY/paper (haitumii order; inaita CLIs zilizopo tu — usibadilishe zozote). ENV ya MT5
+  (ELITEFX_MT5_*) inarithiwa na subprocess. ZERO golden kuguswa; hakuna faili lingine linalobadilika.
+  Self-test (bila MT5/Django — mock/stub subprocess): (a) mpangilio wa hatua 4 sahihi; (b) fail-soft:
+  hatua ikirudi returncode!=0 -> cycle status=FAIL + exit!=0 + zilizobaki skipped (bila --continue);
+  (c) cycle_log.jsonl inaandikwa kwa kila hatua (append-only); (d) mt5-fail -> hatua zilizobaki
+  zinaskipiwa. Run: python src/research/forward_cycle.py --self-test. GREEN. run_selftests 32/32.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-CYCLE" + jinsi ya kuendesha (amri moja +
+  Task Scheduler note) + sample cycle_log. (Faza 1 soak inaanza baada ya hii.)
+```
+
+---
