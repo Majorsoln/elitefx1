@@ -1352,3 +1352,36 @@ KNOWN LIMITATION: forward run kila batch = account state fresh (_acct_state) —
   HAZIBEBWI kati ya runs (per-trade pnl_r honest imehifadhiwa; gating ni per-batch). Cross-run open-position
   carry si lazima F1 (kila candidate = trade kamili entry+exit kutoka episodes).
 NEXT: F2 — mt5_data.py READ-ONLY data feed (inahitaji MT5 kwenye PC ya Operator).
+
+=== FWD-F2 build (2026-07-25) — MT5 READ-ONLY data feed (forward store) — IMEKAMILIKA ===
+LAST COMPLETED: **Forward Track F2 — src/research/mt5_data.py** ✅ (docs/FORWARD_TRACK_CHARTER.md F2;
+  additive, faili MPYA moja; ZERO golden/reused-module kuguswa — import tu).
+  Chota H1 bars za USDCHF/USDJPY kutoka MT5 kwa KUSOMA TU -> features (REUSE market_state_engine) ->
+  forward store <dir>/<SYMBOL>.npz ambayo live_engine --forward (F1) inaisoma. Paper — HAKUNA order.
+  1. Seam ya MT5 mock-able: _fetch_rates(symbol, n) -> (rows, point, resolved) kupitia
+     mt5.copy_rates_from_pos(sym, TIMEFRAME_H1, 0, n). Import ya MetaTrader5 = LAZY (module i-import bila
+     MT5). _resolve_symbol: USDCHF/USDJPY -> broker symbol (handle suffix .m/.raw/.pro; override config).
+  2. rates_to_arrays(rows, sym, point): -> arrays za npz kwa schema HALISI ya load_pair (PIP-SPACE):
+     o/h/l/c=price/pip; spr=spread(points)*point/pip (H1-approx); atr=state_df _atr(ATR14 Wilder)/pip;
+     hour=server-hour int; vol=volatility_state (REUSE _deseason/_reg3); tc=tick_volume float; ts=epoch
+     datetime64[s]. REUSE state_df -> features SAWASAWA na training (GIGO — usivumbue).
+  3. write_store(dir): fetch -> rates_to_arrays -> np.savez. GUARD: bars ts >= FORWARD_START PEKEE
+     (features zilihesabiwa na warmup wa bars ZOTE -> trailing windows sahihi; publish = forward tu).
+     Provenance <dir>/_mt5_meta.json (source, H1-approx, forward_start, resolved/point/counts kila sym).
+  4. CLI: python mt5_data.py --out <dir> [--bars N] [--symbols USDCHF USDJPY] [--forward-start].
+  · SHERIA: READ-ONLY KABISA — copy_rates + symbols_get + symbol_info PEKEE; HAKUNA order-write/
+    position-modify/account-write. REUSE pip/_atr/_deseason/_reg3 (state_df). ZERO golden; live_engine/
+    market_state_engine HAZIBADILIKA (import tu). run_selftests 32/32 (mt5_data = standalone self-test, si
+    kwenye sweep-list — sweep inabaki 32).
+  Self-test (mt5_data --self-test, bila MT5 — mock rows; PASS): (a) schema kamili (keys/urefu/pip-space/
+    dtype); (b) FORWARD_START guard (sealed-era -> store tupu); (c) round-trip npz -> live_engine.
+    _forward_loader -> run(forward=True) bila error (candidates=9); (d) READ-ONLY grep-assert (tokens
+    zimeundwa kwa concatenation ili zisijigrep — hakuna order/position-write CALLS); (e) determinism.
+RUNBOOK (F1+F2 kamili): (Operator, PC yenye MT5) python mt5_data.py --out <store> -> python live_engine.py
+  --forward --data <store> -> python model_steward.py -> dashboard ingest -> scorecard FORWARD inasasishwa.
+  Cadence: kila siku/wiki. Chini: siku 20+/trades 30+ kabla hitimisho (N ndogo = si proof).
+KNOWN LIMITATION: H1-approx (Chief 2026-07-24) — spr=points->pips (SI tick-median), tc=tick_volume (proxy);
+  SI tick-exact. volatility_state=UNKNOWN hadi history itoshe (rolling min_periods ya WIN_BARS H1) — GIGO-
+  consistent (math ileile ya training). MT5 order-execution+token+PD-signature = §9.3 (baadaye).
+NEXT: F2 imekamilisha Forward Track engine-side (F1 append + F2 feed). Subiri directive ya PD/Chief
+  (mfano: run forward live kwenye PC ya Operator, au §9.3 live path).
