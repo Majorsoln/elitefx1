@@ -1578,3 +1578,17 @@ Operator: initialize(path) -> -6 "Authorization failed" (terminal found, haijalo
 demo credentials kupitia ENV (ELITEFX_MT5_PATH/LOGIN/PASSWORD/SERVER) kwa mt5.initialize(**kwargs).
 USALAMA: password KAMWE kwenye git/print/provenance. READ-ONLY inabaki. FWD-F2-CONN inachukua nafasi ya
 F2-FIX (path pekee). Prompt: IMPLEMENTER-A [FWD-F2-CONN]. HATUA: Operator aweke ENV -> "tayari FWD-F2-CONN".
+
+---
+
+## 2026-07-24 — FWD-F2-CONN REVIEW: PASS + MT5 CONNECTION HALISI imethibitika (True, symbols 418)
+
+**mt5_data connection (main `0ab025b`): review PASS — self-test 6/6.**
+- (f) mpya: initialize(path/login/password/server) inapokea creds; **password HAIPO kwenye _mt5_meta.json**
+  (grep-assert). ENV: ELITEFX_MT5_PATH/LOGIN/PASSWORD/SERVER. Read-only (d) bado clean. Diff = mt5_data.py TU.
+- **Operator one-liner ilithibitisha MT5 halisi:** initialize(path=...terminal64.exe) -> True (1,'Success'),
+  symbols_total=418. (MT5 mara nyingine inahitaji jaribio 1 kuamka.) Connection inafanya kazi.
+
+**FORWARD TRACK TAYARI KIKAMILIFU (engine + feed + connection).** HATUA: Operator aendeshe mt5_data --out
+(path kupitia ENV/--mt5-path; ongeza login/password/server kama -6 irudi) -> --forward -> steward ->
+dashboard. Forward accumulation inaanza. Sealed 2026-05→start haiguswi (§3.1b). §9.3 live = baadaye.
