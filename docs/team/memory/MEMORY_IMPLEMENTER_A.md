@@ -1446,3 +1446,33 @@ sample cycle_log (run moja OK): mt5_data OK · live_engine OK summary{candidates
   model_steward OK · dashboard_ingest OK (4 mistari, exit 0).
 NEXT: Forward Track KAMILI (F1 append + F2 feed + connection + cycle orchestrator). Operator aendeshe Faza 1
   SOAK. Subiri directive ya PD/Chief (Faza 2/3 au §9.3).
+
+=== EA-1 build (2026-07-26) — KAIROS EA (MQL5): STRAT-001/002 ndani ya MT5 — IMEKAMILIKA ===
+LAST COMPLETED: **KAIROS EA (MQL5)** ✅ (docs/KAIROS_EA_CHARTER.md; faili MPYA: mql5/KAIROS.mq5 +
+  docs/RUNBOOK_kairos_ea.md; HAKUNA Python/golden kuguswa — MQL5 mpya). PORT HALISI ya STRAT-001/002
+  kwa Strategy Tester (backtest ya PD) + chart demo/live.
+  PARITY (port kutoka src/research, BILA kubadilisha):
+  - nr7_break (event_library_v2): rngSig = high[1]-low[1]; rmin = MIN(range za bars 1..InpNR INCLUSIVE);
+    nr = rngSig <= rmin. buy-stop = high[1]+tickOff, sell-stop = low[1]-tickOff (OCO). tick = InpTick(0.1)
+    pips -> price (0.1*pipSize).
+  - no-LATE: MUHIMU — Python _mask_context inatumia session ya bar ya ENTRY (i+1), SI signal
+    (_sess(hour[i+1]), EP-5 ex-ante schedule). Kwa H1 EA entry bar = shift 0 (inayoundwa); signal = shift 1.
+    late = hour(shift0) >= InpNoLateStart(17). _sess: ASIA 0-6, LONDON 7-11, NY 12-16, LATE 17-23.
+  - ATR = Wilder(InpATR=14) kupitia iATR, thamani ya SIGNAL bar (shift 1). SL/TP kwa ATR ya SIGNAL bar
+    (Python episodes: a=atr[i], i=signal — SI entry). SL=InpSL_mult*ATR, TP=InpTP_mult*ATR. tie->SL
+    (broker fill). OCO: moja ikijaza -> futa nyingine (OcoCleanup kila tick); pending = bar MOJA (expiry).
+  - Variants (INPUT): KAIROS-1 USDCHF SL2.0/TP1.0 · KAIROS-2 USDJPY SL1.0/TP1.0 (attach chart + inputs).
+  - Risk: InpRiskPct (lot kwa SL-distance x tick_value), InpMaxPositions=1/symbol/magic, InpDailyLossPct
+    (baseline = balance ya mwanzo wa siku, deterministic), InpMagic per instance. CTrade/BuyStop/SellStop.
+  - SIGNAL-LOG CSV (MQL5/Files/KAIROS_signals_<sym>_<magic>.csv): ts(signal bar epoch), range_pips,
+    rmin_pips, nr(1/0), atr_pips, session(entry-bar/i+1), long_level_pips, short_level_pips. PIP-SPACE (÷pip)
+    kwa parity ya moja kwa moja na Python. 1 mstari/closed bar. Strategy-Tester safe.
+  · NIDHAMU: demo/backtest PEKEE (live = Faza 4 + SAINI YA PD §3.1b/§9). HAKUNA golden/Python kuguswa
+    (src/research byte-untouched; sweep 32/32). MQL5 haicompili hapa (Linux) — PD anacompile MetaEditor (F7).
+  RUNBOOK (docs/RUNBOOK_kairos_ea.md): install Experts/ -> compile F7 -> Strategy Tester (USDCHF/USDJPY H1,
+    real ticks) -> demo chart attach + AutoTrading -> signal-log kwa parity. Inputs table KAIROS-1 vs KAIROS-2.
+NEXT: EA-2 = parity harness (Python) inalinganisha signal-log na nr7_break+wilder_atr+_sess (levels/atr/
+  session LAZIMA zifanane) + deploy/backtest guide. (EA-1 imeandaa .mq5; PD anacompile + backtest.)
+KUMBUKA (parity subtleties kwa EA-2): (1) no-LATE = session ya ENTRY bar (i+1), si signal; (2) SL/TP ATR =
+  SIGNAL bar; (3) rmin INCLUSIVE (bars 1..7 incl signal); (4) log = PIP-SPACE; (5) iATR seeding vs
+  wilder_atr(atr[0]=tr[0]) hutofautiana kidogo warmup -> tolerance; (6) MT5 fill/spread != Python (cross-check).
