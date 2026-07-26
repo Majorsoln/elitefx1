@@ -1620,3 +1620,17 @@ Bomba zima paper/read-only; terminal data haiguswi; sealed 2026-05→start haigu
 
 **HATUA — FAZA 1 SOAK (PD 2026-07-25):** Operator aendeshe forward_cycle kila siku (siku 2–3), tupitie
 cycle_log kuona uimara wa bomba (crash/data/append/dashboard) KABLA ya VPS. Faza 1 haitahukumu EV.
+
+---
+
+## 2026-07-26 — FAZA 1 SOAK: uimara wa bomba UMETHIBITIKA (runs 3 safi, idempotent)
+
+Operator aliendesha forward_cycle mara 3 mfululizo: **4 OK, 0 FAIL kila run; candidates_new=0 kila run**
+(idempotence — hakuna kurudia rekodi). Nyakati: mt5_data 1.2–2.5s, live_engine 0.6–0.8s, steward 0.6–0.8s,
+dashboard_ingest 64–72s (imetulia, haikui — sawa kwa VPS ya saa). Hakuna crash/error. Bomba IMARA.
+
+candidates_new=0 = SAWA (forward siku ~1–2 tu; nr7 teule). Faza 1 (uimara) imethibitika.
+
+**HATUA:** washa Task Scheduler (kila saa) — inakamilisha soak kwa nyakati tofauti NA inaanza Faza 2
+(forward N inakusanyika yenyewe). env za kudumu kwa setx (demo; si git). Watch-item: dashboard_ingest
+~65s (full re-ingest); ikikua sana mwezi wa VPS → boresha incremental-ingest (si dharura).
