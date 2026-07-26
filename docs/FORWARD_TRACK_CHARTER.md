@@ -24,14 +24,19 @@ pre-registered by construction (RUNBOOK_forward_paper_trading: hakuna lookahead/
 - Guard ya sealed window: as_of < FORWARD-START → SKIP (+ log ya sababu). HOLDOUT red-line inabaki.
 - STRAT-001/002 configs HAZIBADILIKI. Fills/costs = episodes (honest, no-look-ahead). Golden 0.
 
-### F2 — MT5 READ-ONLY DATA FEED (inahitaji MT5 kwenye PC ya Operator)
+### F2 — MT5 READ-ONLY FEED → CANONICAL (imerekebishwa 2026-07-26; Doctrine §8.3b)
 `mt5_data.py`: kuvuta H1 bars za hivi karibuni (USDCHF/USDJPY) kwa **kusoma TU** (MetaTrader5
-`copy_rates_*`) → forward data store. HAKUNA trading, HAKUNA order, HAKUNA account-write — market
-data pekee. Hii ndiyo nusu SALAMA ya MT5 (order-execution + token + PD-signature = §9.3, baadaye).
+`copy_rates_*`) → **APPEND kwenye CANONICAL state parquet** (data ile ile ya training,
+`data/processed/state/`) kwa **INCREMENT** (bars zilizoFUNGWA tu; historia HAIGUSWI; features kwa
+`state_df` ile ile). **HAKUNA silo ya `data/forward/*.npz`** (design ya awali imefutwa — PD
+correction: "data zetu lazima ziwe updated by increment"). `--out` npz imebaki kwa fixture/debug tu.
+HAKUNA trading, HAKUNA order, HAKUNA account-write — market data pekee (nusu SALAMA ya MT5;
+order-execution + token + PD-signature = §9.3, baadaye).
 
 ## CADENCE (RUNBOOK — baada ya F1+F2)
-Kila siku/wiki (Operator): (1) `mt5_data.py` vuta bars mpya → (2) `live_engine --forward` append →
-(3) `model_steward.py` (forward practical-vs-learned) → (4) dashboard `ingest` → scorecard inasasishwa.
+Kila siku/wiki (Operator): (1) `mt5_data.py` (canonical increment) → (2) `live_engine --forward`
+(inasoma canonical) append → (3) `model_steward.py` (forward practical-vs-learned) → (4) dashboard
+`ingest` → scorecard inasasishwa.
 
 ## KANUNI ZA TATHMINI (RUNBOOK_forward_paper_trading — zinatumika)
 - Chini kabisa kabla ya hitimisho: **siku 20+ / trades 30+**. N ndogo mwanzoni — Steward inaandika

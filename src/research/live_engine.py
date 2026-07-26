@@ -18,7 +18,8 @@ NIDHAMU: mode=paper PEKEE (broker_adapter Q1 live=refuse-stub — HAIBADILISHWI)
 HAZIBADILIKI. Append-only log. Forward/replay: split='validation' (holdout HAIGUSWI).
 
 Endesha (PC ya data): python live_engine.py --run                 (replay validation -> paper_log.jsonl)
-Forward-append (F1):   python live_engine.py --forward --data <dir>  (bars mpya TU >= FORWARD_START, idempotent)
+Forward-append (F1):   python live_engine.py --forward   (CANONICAL state parquet — Doctrine §8.3;
+                       bars mpya TU >= FORWARD_START, idempotent. --data <dir> = npz fixture/debug tu)
 Self-test (bila data):  python live_engine.py --self-test
 """
 from __future__ import annotations
@@ -114,15 +115,51 @@ def _watermark(records):
 
 
 def _forward_loader(data_dir):
-    """Loader ya forward data store: <data_dir>/<SYMBOL>.npz zenye arrays o,h,l,c,atr,spr,hour,vol,ts
-    (schema ya load_window). F2/MT5 itaandika store hii; kwa sasa fixture/CSV->npz inakubalika.
-    Sym isiyopo -> None (run() inairuka kama load_window)."""
+    """Loader ya FIXTURE store: <data_dir>/<SYMBOL>.npz zenye arrays o,h,l,c,atr,spr,hour,vol,ts
+    (schema ya load_window). Kwa self-tests/debug PEKEE — production forward inasoma CANONICAL
+    (Doctrine §8.3, _canonical_loader). Sym isiyopo -> None (run() inairuka)."""
     def _lw(sym, tf, split, token=None):
         p = Path(data_dir) / f"{sym}.npz"
         if not p.exists():
             return None
         z = np.load(p, allow_pickle=True)
         return {k: z[k] for k in z.files}
+    return _lw
+
+
+def _parquet_arrays(path, sym):
+    """Canonical state parquet -> arrays za engine (PIP-SPACE, schema ya load_pair — BILA TRAIN cut;
+    forward filtering = watermark + FORWARD_START guards za run()). Haipo -> None."""
+    p = Path(path)
+    if not p.exists():
+        return None
+    import polars as pl                                   # lazy (forward mode pekee)
+    from market_state_engine import pip
+    df = pl.read_parquet(p).sort("ts")
+    if df.height == 0:
+        return None
+    pp = pip(sym)
+    return dict(
+        o=df["o"].to_numpy() / pp, h=df["h"].to_numpy() / pp,
+        l=df["l"].to_numpy() / pp, c=df["c"].to_numpy() / pp,
+        atr=df["atr"].to_numpy() / pp,
+        spr=np.nan_to_num(df["spr"].to_numpy(), nan=0.0),
+        tc=df["tc"].to_numpy().astype(float),
+        hour=df["ts"].dt.hour().to_numpy().astype(int),
+        vol=np.asarray(df["volatility_state"].to_list()),
+        ts=df["ts"].to_numpy().astype("datetime64[s]"))
+
+
+def _canonical_loader(_path_fn=None):
+    """Loader ya CANONICAL data (Doctrine §8.3): state parquet ILE ILE ya training/load_pair
+    (data/processed/state/symbol=<SYM>/tf=H1.parquet), inayosasishwa kwa increment na mt5_data.
+    Hakuna silo — chanzo KIMOJA cha ukweli. _path_fn(sym, tf) = injection ya self-test."""
+    def _default_path(sym, tf):
+        from latent_structure import state_path           # lazy (precedent: load_pair)
+        return state_path(sym, tf)
+    pf = _path_fn or _default_path
+    def _lw(sym, tf, split, token=None):
+        return _parquet_arrays(pf(sym, tf), sym)
     return _lw
 
 
@@ -331,8 +368,9 @@ def run(split="validation", log_path=LOG_F, cfg=None, sink=None, pairs=None, pol
 def run_forward(data_dir=None, log_path=LOG_F, forward_start=FORWARD_START, cfg=None,
                 sink=None, _loader=None):
     """FWD-F1 CLI helper: soma watermark kutoka paper_log iliyopo -> run(forward=True) kwa bars mpya TU.
-    Chanzo cha bars = forward store (<data_dir>/<SYMBOL>.npz) au _loader (fixture). Append-only + resumable."""
-    lw = _loader or (_forward_loader(data_dir) if data_dir else load_window)
+    Chanzo cha bars (Doctrine §8.3): DEFAULT = CANONICAL state parquet (inayosasishwa na mt5_data kwa
+    increment — chanzo KIMOJA). data_dir = npz fixture/debug pekee. Append-only + resumable."""
+    lw = _loader or (_forward_loader(data_dir) if data_dir else _canonical_loader())
     existing = sink if sink is not None else repo.load(log_path)
     wm = _watermark(existing)
     return run(log_path=log_path, cfg=cfg, sink=sink, _loader=lw,
@@ -512,6 +550,36 @@ def self_test():
     print(f"  [l] run_forward auto-watermark: candidates=0 (idempotent) watermark={rfw['watermark']} -> {wrap_ok}")
     ok = ok and wrap_ok
 
+    # (m) CANONICAL loader (Doctrine §8.3): state parquet -> arrays pip-space -> run(forward) inafanya
+    #     kazi; parquet isiyopo -> None (fail-soft)
+    import tempfile
+    import polars as pl
+    with tempfile.TemporaryDirectory() as tmp:
+        fx = _fixture(1, split_start="2026-07-24")            # forward-era synthetic (pip-space)
+        from market_state_engine import pip as _pip
+        pp = _pip("USDCHF")
+        n = len(fx["ts"])
+        pq = pl.DataFrame(dict(
+            ts=fx["ts"].astype("datetime64[us]"),
+            o=fx["o"] * pp, h=fx["h"] * pp, l=fx["l"] * pp, c=fx["c"] * pp,
+            atr=fx["atr"] * pp, tc=np.asarray(fx.get("tc", np.ones(n)), dtype=float),
+            spr=fx["spr"], volatility_state=list(fx["vol"]),
+            activity_state=["NORMAL"] * n, spread_state=["NORMAL"] * n))
+        pdir = Path(tmp) / "symbol=USDCHF"; pdir.mkdir(parents=True)
+        pq.write_parquet(pdir / "tf=H1.parquet")
+        pf = lambda sym, tf: Path(tmp) / f"symbol={sym}" / f"tf={tf}.parquet"
+        arr = _parquet_arrays(pf("USDCHF", "H1"), "USDCHF")
+        pip_ok = arr is not None and np.allclose(arr["o"], fx["o"]) and np.allclose(arr["atr"], fx["atr"])
+        missing_ok = _parquet_arrays(pf("USDJPY", "H1"), "USDJPY") is None
+        sc = []
+        rc = run(cfg=cfg, sink=sc, _loader=_canonical_loader(pf), forward=True, watermark=None,
+                 pairs=("USDCHF",))
+        canon_run_ok = rc["forward"] and rc["candidates"] >= 0 and rc["skipped_sealed"] == 0
+    canon_ok = bool(pip_ok and missing_ok and canon_run_ok)
+    print(f"  [m] canonical loader (§8.3): parquet->pip-space arrays={bool(pip_ok)}, "
+          f"missing->None={missing_ok}, run(forward) candidates={rc['candidates']} -> {canon_ok}")
+    ok = ok and canon_ok
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -524,17 +592,15 @@ def main():
     ap.add_argument("--split", default="validation", help="validation (default) | train (replay)")
     ap.add_argument("--forward", action="store_true",
                     help="FORWARD-APPEND incremental (bars mpya TU: as_of > watermark & >= FORWARD_START)")
-    ap.add_argument("--data", default=None, help="forward data store dir (<SYMBOL>.npz) kwa --forward")
+    ap.add_argument("--data", default=None,
+                    help="FIXTURE/DEBUG npz dir kwa --forward (default: CANONICAL state parquet §8.3)")
     ap.add_argument("--forward-start", default=FORWARD_START, help="mpaka mtakatifu wa forward (§3.1b)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
     if a.forward:
-        if not a.data:
-            print("--forward inahitaji --data <dir> (forward store yenye <SYMBOL>.npz).", file=sys.stderr)
-            return 2
-        res = run_forward(a.data, forward_start=a.forward_start)
+        res = run_forward(a.data, forward_start=a.forward_start)     # a.data=None -> CANONICAL (§8.3)
         print(f"FORWARD-APPEND (start={a.forward_start}): candidates_new={res['candidates']} "
               f"FILLED={res['filled']} REJECTED={res['rejected']} cum_pnl=${res['cum_pnl']}")
         print(f"  watermark={res['watermark']} skipped_sealed={res['skipped_sealed']} "

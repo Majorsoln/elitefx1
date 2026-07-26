@@ -1692,3 +1692,28 @@ SULUHU (safi zaidi): EA ilog OHLC kwenye signal-log -> Python irehesabu nr7/ATR/
 ileile -> parity CSV-pekee (bars zinalingana 100%, hakuna re-fetch/broker-drift). Patch ya EA = LOG pekee
 (strategy HAIGUSWI). Prompt: IMPLEMENTER-A [EA-2v2] (inachukua nafasi ya EA-2). HATUA: Operator ->
 re-compile -> tester quick run -> kairos_parity -> "tayari EA-2".
+
+---
+
+## 2026-07-26 — CORRECTION YA PD IMETEKELEZWA: MT5 feed → CANONICAL increment (Chief = implementer)
+
+**PD alinikamata nikiacha doctrine:** "MT5 ni execution tu... kazi yake ni kutuma data za current;
+data zetu lazima ziwe updated by increment." Silo ya data/forward/*.npz ilikuwa drift — imefutwa.
+
+**Nimetekeleza mwenyewe (hatua 5):**
+1. mt5_data: `update_canonical()` — MT5 (read-only) → APPEND bars mpya zilizoFUNGWA kwenye canonical
+   state parquet (data/processed/state/, ile ile ya training/load_pair). Increment-only (historia
+   HAIGUSWI), closed-bar guard, features kwa state_df ILE ILE (GIGO), atomic write, _mt5_feed_meta.json.
+   CLI default = canonical (bila --out); --out npz = fixture/debug tu. Self-test [g].
+2. live_engine: `_parquet_arrays` + `_canonical_loader` — `--forward` bila --data inasoma CANONICAL
+   (pip-space kama load_pair, BILA TRAIN cut; sealed/watermark guards za run() zinabaki). Self-test [m].
+3. forward_cycle: hatua 1-2 → canonical calls (mt5_data bila --out; --forward bila --data).
+4. Doctrine: §8.3b (KANUNI YA FEED — canonical increment, hakuna silo; sealed = sheria ya ANALYSIS)
+   + §3.1b utekelezaji note + FORWARD_TRACK_CHARTER F2 imerekebishwa.
+5. Tests: mt5_data 7/7 · live_engine 13/13 · forward_cycle 5/5 · sweep 32/32. Golden HAZIJAGUSWA.
+
+**Faida ya ziada:** EA-2 parity sasa ina bars za backtest window ndani ya canonical (wrinkle ya
+data-2025 imetatuliwa kimuundo). Sealed window inaingia canonical — inazuiliwa kwa MATUMIZI (guards).
+
+**HATUA (Operator):** git pull → forward_cycle inaendelea kama kawaida (amri ile ile) — sasa inalisha
+canonical. Run ya kwanza itaonyesha appended=N kwenye mt5_data. Kisha: EA-2 parity juu ya canonical.
