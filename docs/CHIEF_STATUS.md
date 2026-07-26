@@ -1666,3 +1666,19 @@ vitendo. Source-review = logic inalingana. GATE HALISI: (1) compile MetaEditor F
 (2) EA-2 empirical parity (signal-log CSV = nr7_break/wilder_atr/_sess). Hadi hapo, EA haijathibitishwa.
 
 **HATUA:** PD compile F7 -> ripoti (0 errors au paste) -> Strategy Tester quick run -> kisha EA-2 parity.
+
+---
+
+## 2026-07-26 — KAIROS-1 Strategy Tester: HASARA (contradicts Python +EV) → EA-2 parity ni lazima
+
+**Operator ali-compile + backtest KAIROS-1** (USDCHF, Dukascopy-demo, H1, 2025.01.01–2026.01.24, real
+ticks 99%): **Net -1,626.08 · PF 0.72 · Expected Payoff -5.15/trade · N=316 · maxDD 18.70%.**
+INAPINGANA na Python HOLDOUT (STRAT-001 = +1.92 pips/trade CHANYA, N=303, kipindi kile kile).
+
+**Sababu mbili zinazowezekana (EA-2 itaamua):** (1) PARITY BUG — EA signals ≠ Python (port error); (2)
+GHARAMA HALISI — edge nyembamba (+1.92 pips) haivumilii spread/slippage halisi ya Dukascopy stop-fills
+(LESSON-039: edge < 3-4× cost). HAKUNA hitimisho bila parity.
+
+**EA-2:** src/research/kairos_parity.py — linganisha EA signal-log CSV na nr7_break/wilder_atr/_sess kwa
+bars zilezile (mt5_data, broker uleule); verdict PARITY OK/FAIL + localize. Prompt: IMPLEMENTER-A [EA-2].
+HATUA: Operator aendeshe -> "tayari EA-2" -> Chief atafsiri (bug vs cost-reality).
