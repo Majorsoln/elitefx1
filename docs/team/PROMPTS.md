@@ -1493,3 +1493,41 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari FWD-CYCLE" + jinsi ya kuen
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [EA-1] (KAIROS EA — MQL5 Expert Advisor: Strategy Tester + demo chart)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: andika KAIROS EA (MQL5) —
+Expert Advisor inayotekeleza STRAT-001/002 ndani ya MT5 (Strategy Tester + chart demo/live). PORT
+HALISI kutoka Python (parity = LAZIMA, GIGO). SPEC: docs/KAIROS_EA_CHARTER.md.
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/KAIROS_EA_CHARTER.md · src/research/event_library_v2.py (nr7_break — LOGIC HASA: range<=min(range,7)
+-> buy-stop high+tick, sell-stop low-tick, OCO) · src/research/event_quality_report.py (SESSIONS/_sess:
+ASIA 0-6, LONDON 7-11, NY 12-16, LATE 17-23 -> no-LATE = server-hour 0-16 tu; wilder_atr; SL/TP kwa ATR
+ya bar ya entry, tie->SL) · src/research/live_engine.py (STRATS: KAIROS-1 USDCHF SL2/TP1, KAIROS-2
+USDJPY SL1/TP1).
+
+JENGA mql5/KAIROS.mq5 (Expert Advisor; onchart + Strategy-Tester compatible):
+  - Inputs: InpNR=7, InpATR=14, InpSL_mult (default 2.0), InpTP_mult (default 1.0), InpRiskPct,
+    InpMaxPositions=1, InpDailyLossPct, InpMagic, InpNoLateStart=17 (LATE huanza), InpTick.
+  - Logic (kwa new CLOSED H1 bar): range=high-low; rmin=MIN(range za bars InpNR zilizofungwa); kama
+    range<=rmin -> compression: buy-stop=high+tick, sell-stop=low-tick (OCO). Server-hour ya bar >=17
+    (LATE) -> HAKUNA order. ATR=Wilder(InpATR). SL=entry-/+ InpSL_mult*ATR; TP=entry+/- InpTP_mult*ATR
+    (kwa direction). OCO: order moja ikijaza, futa nyingine. Position moja kwa symbol (InpMaxPositions).
+    Daily-loss guard: ikizidi InpDailyLossPct ya balance ya siku -> acha kufungua siku hiyo.
+  - Timeframe: H1 (thibitisha PERIOD_H1 au tumia bar za H1). Trading kwa OrderSend/CTrade.
+  - SIGNAL-LOG (parity): kila closed bar, andika CSV (Files/): ts,range,rmin,nr,atr,session,long_level,
+    short_level. (Kwa parity harness EA-2.)
+  - Comments za wazi + inputs zilizoandikwa; salama kwa Strategy Tester (hakuna live-only calls
+    zinazovunja tester).
+
+NIDHAMU: logic = PORT HALISI ya Python (usibadilishe nr7/no-LATE/ATR/SL-TP). Demo/tester = salama;
+  live = tahadhari (PD Faza 4). Agent HAIWEZI compile (MetaEditor kwa PD) — andika .mq5 safi + maelezo
+  ya kucompile. HAKUNA Python/golden kuguswa (huu ni MQL5 mpya). Andika docs/RUNBOOK_kairos_ea.md
+  (jinsi ya: compile MetaEditor -> Strategy Tester backtest -> attach demo chart -> soma signal-log).
+UKIMALIZA: commit+push (mql5/KAIROS.mq5 + RUNBOOK); MEMORY update; ripoti "tayari EA-1" + inputs za
+  KAIROS-1 vs KAIROS-2 + jinsi ya kucompile/backtest. (EA-2 parity harness inafuata.)
+```
+
+---

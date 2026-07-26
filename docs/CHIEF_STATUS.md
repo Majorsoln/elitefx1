@@ -1634,3 +1634,18 @@ candidates_new=0 = SAWA (forward siku ~1–2 tu; nr7 teule). Faza 1 (uimara) ime
 **HATUA:** washa Task Scheduler (kila saa) — inakamilisha soak kwa nyakati tofauti NA inaanza Faza 2
 (forward N inakusanyika yenyewe). env za kudumu kwa setx (demo; si git). Watch-item: dashboard_ingest
 ~65s (full re-ingest); ikikua sana mwezi wa VPS → boresha incremental-ingest (si dharura).
+
+---
+
+## 2026-07-26 — KAIROS EA (MQL5): deploy PC + MT5 Strategy Tester (directive ya PD)
+
+PD (moja kwa moja): "tumalize development, deploy local PC, nione ikitrade kiuhalisia, PIA backtest kwenye
+MT5 Strategy Tester." Uamuzi: jenga KAIROS EA (MQL5) — port HALISI ya STRAT-001/002 (nr7+no-LATE+ATR14+
+SL/TP) inayoendesha ndani ya MT5: Strategy Tester (backtest) + chart (demo). Charter: KAIROS_EA_CHARTER.md.
+
+PARITY ni LAZIMA (GIGO): EA signals = Python (nr7_break/wilder_atr/_sess). Caveat: MT5-tester ≠ Python-
+backtest (fill/spread) = cross-check. LIVE = Faza 4 (saini ya PD). IP: EA hii ina logic (matumizi ya PD/
+local); conduit-EA ya lessee (§9, bila logic) = kazi tofauti.
+
+Awamu: EA-1 (KAIROS.mq5 + RUNBOOK) -> EA-2 (parity harness). Prompt: IMPLEMENTER-A [EA-1]. HATUA:
+Operator aendeshe EA-1 -> compile MetaEditor -> "tayari EA-1".
