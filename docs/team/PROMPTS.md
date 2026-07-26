@@ -1531,3 +1531,41 @@ UKIMALIZA: commit+push (mql5/KAIROS.mq5 + RUNBOOK); MEMORY update; ripoti "tayar
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [EA-2] (KAIROS parity harness — EA signal-log vs Python engine)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: jenga parity harness (Python)
+inayothibitisha KAIROS EA (MQL5) inatoa signals ZILEZILE za engine ya Python iliyothibitika. MUKTADHA
+MUHIMU: backtest ya EA (USDCHF Dukascopy) ilitoa HASARA (PF 0.72, EP -5.15, N=316) LAKINI Python HOLDOUT
+ni +1.92 pips CHANYA. Parity itaamua: (bug ya port) AU (gharama halisi zinakula edge nyembamba). SPEC:
+docs/KAIROS_EA_CHARTER.md (§PARITY).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/KAIROS_EA_CHARTER.md · mql5/KAIROS.mq5 (signal-log CSV schema: ts,range_pips,rmin_pips,nr,
+atr_pips,session,long_level_pips,short_level_pips — PIP-SPACE) · src/research/event_library_v2.nr7_break ·
+src/research/event_quality_report.py (wilder_atr, _sess, SESSIONS) · src/research/mt5_data.py (kuvuta bars
+za broker uleule kwa alignment) · market_state_engine.pip.
+
+JENGA src/research/kairos_parity.py (READ-ONLY; ZERO golden kuguswa — import tu):
+  1. Soma EA signal-log CSV (--ea-log <path>) -> rows per ts (pip-space).
+  2. Bars za kipindi kilekile + broker uleule: --bars-npz (kutoka mt5_data --out, USDCHF/USDJPY) AU
+     --bars-csv. Hesabu Python: nr7_break (long_level/short_level), wilder_atr, _sess kwa bars hizo
+     (PIP-SPACE, sawa na EA — tumia pip()).
+  3. ALIGN kwa ts (timestamp ya bar). Kwa kila ts inayolingana, linganisha: nr(bool), long_level,
+     short_level, atr, session. Tolerance ya float (mfano 0.05 pip kwa levels; ATR tolerance kubwa kidogo
+     kwa iATR-seeding, mfano 5%). Ripoti: n_aligned, match% kwa kila field, mismatches za kwanza (ts +
+     EA vs Python), na VERDICT: PARITY OK (match >= threshold, mfano 98% nr + levels) au PARITY FAIL
+     (+localize: field gani, mfano no-LATE session au nr window au atr).
+  4. Output: reports/kairos_parity.md + stdout muhtasari. Provenance (commit, ea-log path, bars source, N).
+
+SHERIA: READ-ONLY; ZERO golden kuguswa (import nr7_break/wilder_atr/_sess). Self-test (bila MT5 — synthetic
+  bars + synthetic CSV): (a) EA-log inayolingana kabisa -> PARITY OK 100%; (b) EA-log yenye no-LATE tofauti
+  (session gate ime-shift) -> PARITY FAIL + localize "session/no-LATE"; (c) nr-window tofauti -> FAIL +
+  localize "nr"; (d) tolerance ya atr inafanya kazi (5% -> OK; 50% -> FAIL); (e) determinism. Run:
+  python src/research/kairos_parity.py --self-test. GREEN. run_selftests 32/32.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari EA-2" + jinsi ya kuendesha (mt5_data --out ->
+  Strategy Tester run signal-log -> kairos_parity --ea-log <csv> --bars-npz <store>) + tafsiri ya verdict.
+```
+
+---
