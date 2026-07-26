@@ -5,9 +5,9 @@ Cadence nzima ya forward kwa amri MOJA + log ya kila run — kwa SOAK-test (Faza
 inapima UIMARA WA BOMBA) na VPS (Faza 3: 24/7). Paper/READ-ONLY — HAITENGENEZI trade logic; inaita TU
 CLIs zilizopo kwa subprocess (mt5_data / live_engine / model_steward / dashboard ingest).
 
-Hatua 4 kwa mpangilio:
-  (1) mt5_data.py --out <store>            (READ-ONLY MT5 -> forward store <SYMBOL>.npz)
-  (2) live_engine.py --forward --data <store>  (F1 append-only, bars mpya TU)
+Hatua 4 kwa mpangilio (Doctrine §8.3 — CANONICAL, hakuna silo):
+  (1) mt5_data.py                          (READ-ONLY MT5 -> CANONICAL state parquet, increment)
+  (2) live_engine.py --forward             (inasoma CANONICAL; append-only, bars mpya TU)
   (3) model_steward.py                     (forward practical-vs-learned -> reports/model_steward.json)
   (4) dashboard/manage.py ingest           (bila --demo -> scorecard inasasishwa)
 
@@ -15,7 +15,8 @@ FAIL-SOFT + fail-fast: hatua ikishindwa -> status=FAIL, zilizobaki SKIPPED, exit
 (--continue-on-error kuendelea). mt5_data ikishindwa (MT5 down) -> zilizobaki skipped kwa default.
 LOG: append data/forward/cycle_log.jsonl. ENV ya MT5 (ELITEFX_MT5_*) inarithiwa na subprocess.
 
-Endesha:  python forward_cycle.py [--store data/forward] [--skip-dashboard] [--continue-on-error]
+Endesha:  python forward_cycle.py [--skip-dashboard] [--continue-on-error]
+(--store = eneo la cycle_log tu — data inaenda CANONICAL, si silo)
 Self-test: python forward_cycle.py --self-test   (bila MT5/Django — stub subprocess)
 Task Scheduler/cron-ready (exit-code != 0 = cycle imeshindwa).
 """
@@ -41,10 +42,12 @@ _LE_SUMMARY = re.compile(r"candidates_new=(\d+)\s+FILLED=(\d+)\s+REJECTED=(\d+)"
 
 
 def _steps(store, skip_dashboard):
-    """(name, argv, cwd) kwa hatua 4 — REUSE CLIs zilizopo (sys.executable). store = absolute."""
+    """(name, argv, cwd) kwa hatua 4 — REUSE CLIs zilizopo (sys.executable). Doctrine §8.3: mt5_data
+    bila --out (canonical increment) na live_engine --forward bila --data (inasoma canonical).
+    store = eneo la cycle_log pekee (si data silo tena)."""
     steps = [
-        ("mt5_data", [sys.executable, "mt5_data.py", "--out", str(store)], SR),
-        ("live_engine", [sys.executable, "live_engine.py", "--forward", "--data", str(store)], SR),
+        ("mt5_data", [sys.executable, "mt5_data.py"], SR),
+        ("live_engine", [sys.executable, "live_engine.py", "--forward"], SR),
         ("model_steward", [sys.executable, "model_steward.py"], SR),
     ]
     if not skip_dashboard:

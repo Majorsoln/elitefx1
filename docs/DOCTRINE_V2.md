@@ -58,7 +58,10 @@ Kila strategy/model/filter kabla ya LIVE:
      kabla ya live/leasing. Rasilimali ya kweli ya forward-power = **forward-LIVE kuanzia sasa**
      (real-time paper/MT5 demo — bikira NA inajizalisha kila siku, HAIadimu). Onyo: dirisha la
      historia = integration+sanity gate (N ndogo mwanzoni, inakua); live-conditions halisi (fills/
-     latency/spread) = MT5 demo forward pekee.
+     latency/spread) = MT5 demo forward pekee. **Utekelezaji (2026-07-26, §8.3b):** SEALED ni sheria
+     ya ANALYSIS, si silo ya kimwili — data ya dirisha INAINGIA canonical store (feed ya MT5
+     inaisasisha kwa increment); kinachozuiliwa ni MATUMIZI (engine FORWARD_START guard; nidhamu ya
+     Steward/diagnostics). Acceptance-run ya EA kamili itasoma dirisha kutoka canonical, mara moja.
 2. **Pre-registration FROZEN by commit** KABLA ya kufungua dirisha lolote.
 3. **Honest harness:** next-bar fills, stop=touch gap-honest, costs = spread(halisi per bar) +
    slippage (0.1 mkt/0.3 stop) + swap (swing). Episode non-overlap.
@@ -150,6 +153,15 @@ daily-loss/positions) → sizer+compliance; (c) order execution ← decisions. N
 Python package (rahisi) au EA-MQL5 bridge. **Env-var pattern:** code ile ile, mode=paper (sasa) →
 mode=MT5 (baadaye) kwa config — hakuna kubadilisha ubongo. Live-gating: PD signature + artifact
 (broker_adapter Q1) — hakuna live bila ruhusa ya PD.
+
+**8.3b KANUNI YA FEED — CANONICAL INCREMENT (correction ya PD 2026-07-26).** MT5 ni EXECUTION +
+FEED tu — **si chanzo cha data yake ya pembeni.** Feed inasasisha **DATA YETU YA KANUNI** (canonical
+state parquet ile ile ya training — `data/processed/state/`) kwa **INCREMENT**: bars mpya
+zilizoFUNGWA tu zinaongezwa (append-only; historia HAIGUSWI), features zinarehesabiwa kwa
+`state_df` ILE ILE (GIGO — forward inalingana na training kwa ujenzi). **HAKUNA silo/store ya
+pembeni** — chanzo KIMOJA cha ukweli (2016 → leo, kinachokua). Analysis zote (engine forward,
+Steward, EA-parity) zinasoma canonical. Sealed window (§3.1b) = **sheria ya ANALYSIS** (guards za
+matumizi), si silo ya kimwili — data inaingia canonical; matumizi ndiyo yanayozuiwa.
 
 ---
 
