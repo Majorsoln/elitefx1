@@ -1411,3 +1411,38 @@ RUNBOOK (Operator, PC yenye MT5 login):
   -> model_steward.py -> dashboard ingest. (password kwenye ENV pekee — kamwe si kwenye amri/log.)
 NEXT: Forward Track (F1 append + F2 feed + connection) tayari. Subiri directive ya PD/Chief (endesha
   forward live PC ya Operator, au §9.3 live-execution path).
+
+=== FWD-CYCLE build (2026-07-26) — forward orchestrator (cadence, soak/VPS) — IMEKAMILIKA ===
+LAST COMPLETED: **Forward Track orchestrator — src/research/forward_cycle.py** ✅ (docs/FORWARD_TRACK_CHARTER.md
+  ROLLOUT; faili MPYA moja; ZERO golden/trade logic — inaita CLIs zilizopo kwa subprocess TU).
+  Lengo: cadence nzima ya forward kwa amri MOJA + log ya kila run — Faza 1 SOAK (PC demo, siku 2-3,
+  inapima UIMARA WA BOMBA) + Faza 3 VPS (24/7). Paper/READ-ONLY.
+  1. Hatua 4 kwa mpangilio (subprocess, sys.executable, ENV inarithiwa -> ELITEFX_MT5_* zinapita):
+     mt5_data.py --out <store> -> live_engine.py --forward --data <store> -> model_steward.py ->
+     dashboard/manage.py ingest (bila --demo). Kila hatua: capture stdout/stderr/returncode/duration.
+  2. FAIL-SOFT + fail-fast: hatua FAIL -> zilizobaki SKIPPED + exit-code!=0; --continue-on-error kuendelea.
+     mt5_data FAIL (MT5 down) -> zilizobaki ZOTE skipped (bomba lasimama salama). Subprocess exception
+     (binary/cwd batili) -> FAIL (si crash).
+  3. LOG: append data/forward/cycle_log.jsonl -> {ts, step, status, returncode, duration_s, summary
+     (candidates_new/filled/rejected kutoka stdout ya live_engine kwa regex), error_tail (stderr tail 15)}.
+     _print_summary: hatua ngapi OK/FAIL/SKIP + candidates_new/filled.
+  4. CLI: --store data/forward (default) · --skip-dashboard · --continue-on-error. Task-Scheduler/cron-ready
+     (exit-code!=0 = cycle imeshindwa). run_cycle(..., _runner=) = injection kwa test.
+  · SHERIA: READ-ONLY/paper (inaita CLIs, HAIBADILISHI). ZERO golden; live_engine/mt5_data/model_steward
+    HAZIJAGUSWA (subprocess tu). forward_cycle import = stdlib pekee (subprocess/json/re/time) -> i-import
+    bila numpy/MT5/Django.
+  Self-test (forward_cycle --self-test, stub subprocess; PASS): (a) mpangilio hatua 4 + live_engine
+    summary(candidates_new=7); (b) fail-soft model_steward FAIL -> exit!=0 + dashboard SKIPPED (haikuitwa);
+    (c) cycle_log.jsonl append (4->8) + schema kamili; (d) mt5-fail -> zilizobaki ZOTE skipped; (e)
+    --continue-on-error (hakuna skip) + --skip-dashboard (hatua 3). run_selftests 32/32 (forward_cycle si
+    kwenye sweep-list).
+RUNBOOK (Faza 1 SOAK, PC demo — ENV ya MT5 kama FWD-F2-CONN):
+  python src/research/forward_cycle.py                      # amri MOJA (hatua 4 + log)
+  # Task Scheduler (Windows): Action = python.exe src\research\forward_cycle.py; Trigger = kila saa/siku;
+  #   "Start in" = repo root; ENV ELITEFX_MT5_* kwenye system/user env. exit!=0 -> Scheduler inaona fail.
+  # cron (VPS Faza 3): 0 * * * * cd <repo> && python src/research/forward_cycle.py >> cron.out 2>&1
+  Log: data/forward/cycle_log.jsonl (1 mstari/hatua/run; JSONL append-only).
+sample cycle_log (run moja OK): mt5_data OK · live_engine OK summary{candidates_new,filled,rejected} ·
+  model_steward OK · dashboard_ingest OK (4 mistari, exit 0).
+NEXT: Forward Track KAMILI (F1 append + F2 feed + connection + cycle orchestrator). Operator aendeshe Faza 1
+  SOAK. Subiri directive ya PD/Chief (Faza 2/3 au §9.3).
