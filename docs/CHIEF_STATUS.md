@@ -1649,3 +1649,20 @@ local); conduit-EA ya lessee (§9, bila logic) = kazi tofauti.
 
 Awamu: EA-1 (KAIROS.mq5 + RUNBOOK) -> EA-2 (parity harness). Prompt: IMPLEMENTER-A [EA-1]. HATUA:
 Operator aendeshe EA-1 -> compile MetaEditor -> "tayari EA-1".
+
+---
+
+## 2026-07-26 — EA-1 (KAIROS.mq5) SOURCE-REVIEW: PASS (compile + parity zinasubiri)
+
+**KAIROS EA (main `25ee69a`): source-review PASS — parity-critical logic inalingana na Python.**
+- nr7: rngSig=high[1]-low[1]; rmin=min(s=1..InpNR); nr=rngSig<=rmin → sawa na nr7_break (7-bar inclusive).
+- no-LATE: entry-bar (shift 0) hour>=17 blocked → sawa na _sess(hour[i+1]) (Python filters ENTRY bar).
+- ATR: CopyBuffer shift 1 (SIGNAL bar); SL/TP = mult×signal-bar ATR → sawa na a=atr[i]. tie→SL. OCO.
+- Variants = inputs (KAIROS-1 USDCHF SL2/TP1, KAIROS-2 USDJPY SL1/TP1). signal-log CSV (pip-space) kwa EA-2.
+- src/research byte-untouched; sweep 32/32; diff = mql5/KAIROS.mq5 + RUNBOOK_kairos_ea.md.
+
+**SI certification kamili (uwazi):** Chief HAWEZI compile MQL5 (Linux) wala kuthibitisha parity kwa
+vitendo. Source-review = logic inalingana. GATE HALISI: (1) compile MetaEditor F7 (PC ya PD, 0 errors);
+(2) EA-2 empirical parity (signal-log CSV = nr7_break/wilder_atr/_sess). Hadi hapo, EA haijathibitishwa.
+
+**HATUA:** PD compile F7 -> ripoti (0 errors au paste) -> Strategy Tester quick run -> kisha EA-2 parity.
