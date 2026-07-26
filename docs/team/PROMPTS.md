@@ -1569,3 +1569,40 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari EA-2" + jinsi ya kuendesha
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [EA-2v2] (KAIROS parity — self-contained: EA logs OHLC + Python recompute)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: parity ya KAIROS EA — self-
+contained. Chief amebaini: mt5_data ina forward-guard (2026-07-24+), haitoi bars za backtest window
+(2025) kwa parity. SULUHU: EA ilog OHLC kwenye signal-log; Python irehesabu nr7/ATR/session kutoka OHLC
+ileile -> parity CSV-pekee (bars zinalingana 100%). MUKTADHA: backtest ya EA ilitoa HASARA (PF 0.72) vs
+Python +1.92 pips -> parity itaamua bug-vs-cost. SPEC: docs/KAIROS_EA_CHARTER.md (§PARITY).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: mql5/KAIROS.mq5 (signal-log block) · src/research/event_library_v2.nr7_break · event_quality_report
+(wilder_atr, _sess, SESSIONS) · market_state_engine.pip · docs/KAIROS_EA_CHARTER.md.
+
+SEHEMU 1 — patch mql5/KAIROS.mq5 (signal-log ONGEZA OHLC):
+  - Ongeza columns: open,high,low,close (za SIGNAL bar shift=1, PIP-SPACE = price/pip) kwenye header +
+    kila row. Vifungu vingine (range/rmin/nr/atr/session/levels) VIBAKI. Hakuna logic nyingine
+    kubadilika (nr7/no-LATE/ATR/SL/TP HAZIGUSWI — patch ya LOG pekee).
+
+SEHEMU 2 — jenga src/research/kairos_parity.py (READ-ONLY; import golden, usiiguse):
+  - Soma EA signal-log CSV (--ea-log). Jenga OHLC series (pip-space) kutoka columns za EA (mpangilio wa ts).
+  - Hesabu Python kwa series HIYO: nr7_break (long/short levels), wilder_atr, _sess(hour ya ENTRY bar =
+    bar inayofuata; kwa H1 tumia ts+1h au hour ya row inayofuata — LINGANISHA na jinsi EA inavyofanya
+    no-LATE kwa entry bar). Linganisha na EA's logged nr/atr/session/levels kwa kila ts.
+  - Tolerance: levels ~0.05 pip; atr ~5% (iATR seeding); nr/session lazima match kabisa. Ripoti match%
+    kwa field + mismatches za kwanza + VERDICT PARITY OK/FAIL + localize (nr / no-LATE-session / atr /
+    levels). reports/kairos_parity.md + stdout + provenance (commit, ea-log, N).
+
+SHERIA: patch ya EA = LOG pekee (strategy HAIGUSWI). kairos_parity READ-ONLY (golden import tu). Self-test
+  (synthetic OHLC CSV): (a) EA-log sahihi -> PARITY OK 100%; (b) session ime-shift -> FAIL localize
+  no-LATE; (c) nr-window tofauti -> FAIL localize nr; (d) atr tolerance (5% OK / 50% FAIL); (e) determinism.
+  Run: python src/research/kairos_parity.py --self-test. GREEN. run_selftests 32/32.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari EA-2" + jinsi: re-compile EA (F7) -> Strategy Tester
+  quick run (signal-log mpya yenye OHLC) -> kairos_parity --ea-log <csv> -> verdict + tafsiri (bug au cost).
+```
+
+---
