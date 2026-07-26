@@ -1682,3 +1682,13 @@ GHARAMA HALISI — edge nyembamba (+1.92 pips) haivumilii spread/slippage halisi
 **EA-2:** src/research/kairos_parity.py — linganisha EA signal-log CSV na nr7_break/wilder_atr/_sess kwa
 bars zilezile (mt5_data, broker uleule); verdict PARITY OK/FAIL + localize. Prompt: IMPLEMENTER-A [EA-2].
 HATUA: Operator aendeshe -> "tayari EA-2" -> Chief atafsiri (bug vs cost-reality).
+
+---
+
+## 2026-07-26 — EA-2 imerekebishwa (self-contained parity: EA logs OHLC) — mt5_data forward-guard wrinkle
+
+Chief amebaini: mt5_data (forward-guard 2026-07-24+) haitoi bars za backtest window (2025) kwa parity.
+SULUHU (safi zaidi): EA ilog OHLC kwenye signal-log -> Python irehesabu nr7/ATR/session kutoka OHLC
+ileile -> parity CSV-pekee (bars zinalingana 100%, hakuna re-fetch/broker-drift). Patch ya EA = LOG pekee
+(strategy HAIGUSWI). Prompt: IMPLEMENTER-A [EA-2v2] (inachukua nafasi ya EA-2). HATUA: Operator ->
+re-compile -> tester quick run -> kairos_parity -> "tayari EA-2".
