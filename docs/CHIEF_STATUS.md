@@ -1604,3 +1604,19 @@ siku 2–3 → extend → VPS mwezi (demo) → live (§9.3 + saini). Charter ROL
 forward_cycle = orchestrator (amri moja: mt5_data→--forward→steward→ingest) + cycle_log.jsonl, fail-
 soft, Task-Scheduler/cron-ready. Paper/read-only (REUSE CLIs). Prompt: IMPLEMENTER-A [FWD-CYCLE].
 HATUA: Operator → "tayari FWD-CYCLE" → Chief review → Faza 1 soak inaanza.
+
+---
+
+## 2026-07-25 — FWD-CYCLE REVIEW: PASS → FORWARD TRACK KAMILI; Faza 1 SOAK inaanza
+
+**forward_cycle.py (main `79f4291`): review PASS — self-test 5/5.**
+- Orchestrator: mt5_data → --forward → model_steward → dashboard ingest (subprocess, ENV inarithiwa).
+  Fail-soft + fail-fast (hatua FAIL → zilizobaki skipped + exit≠0; --continue-on-error/--skip-dashboard).
+  cycle_log.jsonl (ts/step/status/returncode/duration/summary/error_tail). Task-Scheduler/cron-ready.
+- Diff = forward_cycle.py TU (subprocess pekee; CLIs zilizopo HAZIJAGUSWA); golden 0; sweep 32/32.
+
+**FORWARD TRACK KAMILI:** F1 (--forward append) + F2 (mt5_data feed) + connection (ENV) + orchestrator.
+Bomba zima paper/read-only; terminal data haiguswi; sealed 2026-05→start haiguswi (§3.1b).
+
+**HATUA — FAZA 1 SOAK (PD 2026-07-25):** Operator aendeshe forward_cycle kila siku (siku 2–3), tupitie
+cycle_log kuona uimara wa bomba (crash/data/append/dashboard) KABLA ya VPS. Faza 1 haitahukumu EV.
