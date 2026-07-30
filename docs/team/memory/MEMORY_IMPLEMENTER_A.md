@@ -1476,3 +1476,33 @@ NEXT: EA-2 = parity harness (Python) inalinganisha signal-log na nr7_break+wilde
 KUMBUKA (parity subtleties kwa EA-2): (1) no-LATE = session ya ENTRY bar (i+1), si signal; (2) SL/TP ATR =
   SIGNAL bar; (3) rmin INCLUSIVE (bars 1..7 incl signal); (4) log = PIP-SPACE; (5) iATR seeding vs
   wilder_atr(atr[0]=tr[0]) hutofautiana kidogo warmup -> tolerance; (6) MT5 fill/spread != Python (cross-check).
+
+=== BRIDGE-1 build (2026-07-30) — CONDUIT BRIDGE Awamu 1 (Python ubongo) — IMEKAMILIKA ===
+LAST COMPLETED: **live_brain.py (edge-mode + commands writer + results ingester)** ✅ (docs/CONDUIT_BRIDGE_
+  CHARTER.md Awamu 1; faili MPYA moja; ZERO golden/reused-module kuguswa — import tu; ZERO MT5).
+  Doctrine §9: MODEL INAAMUA, EA (Awamu 2) itatekeleza tu. Python HAIWEKI order (hakuna MetaTrader5;
+  transport = JSON bridge files). DEMO PEKEE (§3.1b; live = saini ya PD).
+  (a) EDGE edge_decision(): bar ya mwisho ILIYOFUNGWA (i=n-1) -> nr7_break (REUSE golden) -> no-LATE
+      (_sess ya ENTRY bar i+1 = (hour[i]+1)%24; LATE -> veto) -> ATR ya SIGNAL bar (data['atr'][i], parity
+      na live_engine a=atr[i]) -> SL/TP -> size (DailyRiskBudgetSizer+FTMO) -> integrity_gate. PASS ->
+      PLACE_OCO {cmd_id=strategy:bar_ts (deterministic), symbol, magic, lots, buy_stop/sell_stop,
+      sl_buy/tp_buy/sl_sell/tp_sell, bar_ts, expiry_utc=bar_open+2h}; FAIL/veto -> None + sababu. Levels
+      PIP-SPACE -> PRICE (*pip; digits 3 JPY / 5). Account view fresh (BRIDGE-1 haitunzi cross-bar state).
+  (b) write_commands(): <bridge>/commands.json {seq, issued_utc, commands[]} atomic (tmp+os.replace),
+      idempotent (seti ile ile ya cmd_id -> seq haiongezeki). --cancel-all -> CANCEL_ALL (kill-switch).
+  (c) ingest_results(): results.jsonl/json -> FILLED/REJECTED/EXPIRED/CANCELLED -> execution; CLOSED ->
+      settlement(+pnl/pnl_r/exit); PLACED -> ack. Append paper_log.jsonl (repo.append; schema=live_brain@v1).
+      Idempotent kwa record id (exec:<oid>/<oid>) -> re-ingest +0. learned_ev tag; mode=paper account=demo;
+      settlement.id=oid==execution.order_id (dashboard linkage).
+  (d) CLI: --bridge-dir (env ELITEFX_BRIDGE_DIR) · --decide · --ingest · --cycle · --cancel-all · --self-test.
+  · SHERIA: REUSE nr7_break/_sess/sizer/gate/_canonical_loader/STRATS; STRAT configs HASA; paper_log
+    dashboard-compatible. ZERO golden; live_engine/event_library/event_quality/broker_adapter/integrity_gate/
+    decision_repository byte-untouched (import tu). sweep 32/32.
+  Self-test (PASS): (a) edge nr7 -> PLACE_OCO levels/SL/TP/lots sahihi (buy_stop=(high+0.1)*pip; sl_buy=
+    (high+0.1-2*ATR)*pip; cmd_id/magic/expiry); (b) no-LATE (entry hour 17) -> hakuna amri; (c) budget=0 ->
+    qty=0 -> hakuna amri; (d) commands atomic+idempotent; (e) ingest FILLED+CLOSED repo-valid + idempotent
+    (+0) + linkage; (f) determinism.
+RUNBOOK (Awamu 1, bila MT5): python live_brain.py --cycle --bridge-dir <MQL5/Files/bridge> = (1) ingest
+  results za EA -> paper_log; (2) canonical -> edge decide -> commands.json. Cadence: kila H1 bar (Task
+  Scheduler baada ya mt5_data canonical). EA (Awamu 2) inapoll commands, inatekeleza, inaripoti results.
+NEXT: BRIDGE-2 (KAIROS_CONDUIT.mq5 — poll commands, execute, report results; demo-only guard; HAINA logic).
