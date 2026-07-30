@@ -1606,3 +1606,53 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari EA-2" + jinsi: re-compile 
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [BRIDGE-1] (Conduit Bridge — ubongo wa Python: edge-mode + commands + results)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: CONDUIT BRIDGE Awamu 1 —
+upande wa PYTHON (ubongo): (a) EDGE-MODE decision (bar mpya iliyofungwa -> amri za stop-orders KABLA
+entry haijatokea), (b) commands.json writer, (c) results.json ingester -> decision_repository log.
+MODEL INAAMUA; EA (Awamu 2) itatekeleza tu. SPEC: docs/CONDUIT_BRIDGE_CHARTER.md. DEMO paper-path —
+hakuna order yoyote kutoka Python (EA ndiyo itakayoweka orders — Awamu 2).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/CONDUIT_BRIDGE_CHARTER.md (usanifu/schema/edge-mode/nidhamu) · src/research/live_engine.py
+(STRATS, _canonical_loader/_parquet_arrays, _ftmo_config, _as_of; run() kama rejea ya wiring) ·
+event_library_v2.nr7_break · event_quality_report (wilder_atr semantics, _sess/no-LATE = ENTRY bar) ·
+broker_adapter (DailyRiskBudgetSizer, build_constraints/build_context, size) · integrity_gate.gate ·
+decision_repository (REQUIRED) · mql5/KAIROS.mq5 (lot-sizing/OCO semantics kama rejea — SI kuiga logic
+placement, ubongo ndiye anayeamua).
+
+JENGA src/research/live_brain.py (additive — REUSE zote; ZERO golden kuguswa; ZERO MT5 calls):
+  1. EDGE DECISION kwa kila strategy (STRATS): soma CANONICAL (_canonical_loader) -> bar ya mwisho
+     ILIYOFUNGWA: nr7 check (range<=min ya bars 7 zilizofungwa — nr7_break kwenye tail) -> no-LATE
+     (server-hour ya ENTRY bar inayofuata) -> ATR ya signal bar -> SL/TP (sl_atr/tp_atr za strategy) ->
+     size (DailyRiskBudgetSizer + FTMO config) -> compliance (integrity_gate). PASS -> command
+     PLACE_OCO {cmd_id deterministic (strategy+bar_ts), symbol, buy_stop, sell_stop, sl/tp pande zote,
+     lots, expiry_utc = bar inayofuata + 1h, magic, strategy}. FAIL/veto -> hakuna amri + log sababu.
+  2. COMMANDS WRITER: andika/replace <bridge_dir>/commands.json {seq inayoongezeka, issued_utc,
+     commands:[...]} — atomic (tmp+replace). Amri ile ile (cmd_id) HAIRUDIWI kwenye seq mpya kama
+     bado hai (idempotent). CANCEL_ALL support (--cancel-all).
+  3. RESULTS INGESTER: soma <bridge_dir>/results.json(l) (append-only ya EA events: PLACED/FILLED/
+     CANCELLED/EXPIRED/REJECTED/CLOSED) -> geuza kuwa decision_repository records HALALI (decision/
+     execution/settlement na REQUIRED fields; FILLED->execution, CLOSED->settlement na pnl) -> append
+     kwenye data/paper/paper_log.jsonl (chanzo kile kile cha dashboard/steward). Idempotent kwa event
+     (processed marker/watermark ya seq). learned_ev tag per strategy (steward).
+  4. CLI: --bridge-dir (env ELITEFX_BRIDGE_DIR) · --decide (edge decision -> commands) · --ingest
+     (results -> log) · --cycle (zote mbili) · --cancel-all · --self-test.
+
+SHERIA: Python HAIWEKI order yoyote (hakuna MetaTrader5 import hapa — bridge files pekee). REUSE
+  sizer/gate/nr7/canonical (usiandike mpya). STRAT configs HASA. Sealed/holdout: edge inafanya kazi
+  kwenye bar za SASA tu (leo > FORWARD_START — kwa ujenzi). paper_log schema = dashboard-compatible
+  (loaders). Self-test (bila MT5 — canonical parquet synthetic + results faili bandia): (a) edge nr7
+  detect kwenye tail synthetic -> PLACE_OCO na levels/SL/TP/lots sahihi (linganisha na hesabu ya mkono);
+  (b) no-LATE entry-hour -> hakuna amri; (c) compliance-veto (budget=0) -> hakuna amri + sababu;
+  (d) commands atomic + idempotent (run mbili -> seq mpya lakini cmd_id ile ile mara moja tu hai);
+  (e) ingest: results FILLED+CLOSED -> repo-valid records (REQUIRED) kwenye log, idempotent (re-ingest
+  -> +0); (f) determinism. Run: python src/research/live_brain.py --self-test. GREEN. run_selftests 32/32.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari BRIDGE-1" + mfano wa commands.json + jinsi ya
+  --cycle. (BRIDGE-2 = KAIROS_CONDUIT.mq5 inafuata.)
+```
+
+---

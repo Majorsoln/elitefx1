@@ -1717,3 +1717,21 @@ data-2025 imetatuliwa kimuundo). Sealed window inaingia canonical — inazuiliwa
 
 **HATUA (Operator):** git pull → forward_cycle inaendelea kama kawaida (amri ile ile) — sasa inalisha
 canonical. Run ya kwanza itaonyesha appended=N kwenye mt5_data. Kisha: EA-2 parity juu ya canonical.
+
+---
+
+## 2026-07-30 — DIRECTIVE YA PD: CONDUIT BRIDGE (model inaamua, EA inatekeleza) — §9 kwa vitendo
+
+**PD:** "maamuzi model ndio zinaamua; EA inapokea points na actions kwa muda husika, wakati EA inatoa
+update data kupeleka Python ikafanyiwe mchakato kamili." = Doctrine §9 HASA (model=trader, EA=conduit).
+KAIROS.mq5 (logic ndani) inashushwa kuwa TESTER-TOOL ya PD pekee — live haitumii logic yake.
+
+**Charter:** docs/CONDUIT_BRIDGE_CHARTER.md — usanifu (canonical feed -> ubongo edge-mode -> commands
+.json -> conduit-EA -> results.json -> ingest -> log/dashboard/steward), schema, DEMO-only guard (live
+= saini ya PD Faza 4), kill-switch, IP (EA tupu ndiyo ya kukodisha §9).
+
+**EA-2 parity: IMEAHIRISHWA** (live haitumii port ya EA — hakuna parity inayohitajika; swali la GHARAMA
+la tester-loss litajibiwa na demo-forward fills halisi za conduit). Awamu: BRIDGE-1 (Python: live_brain
+edge+commands+ingest — prompt tayari) -> BRIDGE-2 (KAIROS_CONDUIT.mq5) -> BRIDGE-3 (demo end-to-end PC).
+
+**HATUA:** Operator aendeshe BRIDGE-1 -> "tayari BRIDGE-1" -> Chief review -> BRIDGE-2.
