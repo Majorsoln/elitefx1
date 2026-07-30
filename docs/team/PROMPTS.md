@@ -1656,3 +1656,47 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari BRIDGE-1" + mfano wa comma
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [BRIDGE-2] (KAIROS_CONDUIT.mq5 — conduit EA tupu: execute + report)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: CONDUIT BRIDGE Awamu 2 —
+andika mql5/KAIROS_CONDUIT.mq5: EA TUPU (HAINA strategy logic — IP §9) inayopoll commands.json ya
+ubongo (live_brain), kutekeleza amri HASA, na kuripoti results. DEMO-ONLY guard. SPEC:
+docs/CONDUIT_BRIDGE_CHARTER.md (schema + nidhamu).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/CONDUIT_BRIDGE_CHARTER.md · src/research/live_brain.py (commands.json schema HASA: seq,
+issued_utc, commands[{cmd_id, action PLACE_OCO|CANCEL_ALL, symbol, magic, lots, buy_stop, sell_stop,
+sl_buy, tp_buy, sl_sell, tp_sell, bar_ts, expiry_utc}]; results events zinazotarajiwa na
+ingest_results: PLACED/FILLED/CANCELLED/EXPIRED/REJECTED/CLOSED + fields zake) · mql5/KAIROS.mq5
+(CTrade/BuyStop/SellStop/OCO mechanics kama rejea ya API — SI logic).
+
+JENGA mql5/KAIROS_CONDUIT.mq5 (Expert Advisor — conduit TUPU):
+  1. Inputs: InpBridgeDir (subfolder ndani ya MQL5\Files, default "bridge"), InpPollSeconds (5),
+     InpMagicFilter (0 = zote za commands), InpEnabled (kill-switch ya mkono).
+  2. DEMO-ONLY guard (OnInit): AccountInfoInteger(ACCOUNT_TRADE_MODE) != ACCOUNT_TRADE_MODE_DEMO ->
+     INIT_FAILED + ujumbe "LIVE inahitaji saini ya PD (Faza 4)". HAKUNA njia ya kuipita kwa input.
+  3. OnTimer(InpPollSeconds): soma <Files>\<bridge>\commands.json -> parser NDOGO ya schema YETU flat
+     (string search ya keys — hakuna lib; vumilia whitespace). Kwa kila PLACE_OCO ambayo cmd_id
+     HAIJATEKELEZWA (track kwenye <bridge>\processed.txt — idempotent kati ya restarts): weka BuyStop
+     + SellStop (lots/SL/TP/magic kutoka amri; expiration = expiry_utc kwa ORDER_TIME_SPECIFIED au
+     cancel ya mkono). CANCEL_ALL -> futa pending zote za magic zetu. seq ile ile -> usisome tena.
+  4. OCO + lifecycle: moja ikijaza -> futa nyingine (OnTradeTransaction au poll ya positions/orders).
+     Expiry bila fill -> EXPIRED. Kila tukio -> append <bridge>\results.jsonl (mstari mmoja wa JSON kwa
+     tukio — FileOpen FILE_READ|FILE_WRITE seek-end): {cmd_id, event, order_id, price, ts (epoch),
+     symbol, side?, pnl? (CLOSED), error? (REJECTED)}. CLOSED: position ya magic yetu ikifungwa (SL/TP)
+     -> pnl halisi ya deal (HistoryDeal). Sequence salama: EA pekee inaANDIKA results; ubongo unasoma.
+  5. HAKUNA strategy logic yoyote (hakuna nr7/ATR/indicator calls) — grep-able cleanliness: EA hii
+     itakodishwa kwa lessee (§9); ubongo unabaki kwetu.
+
+NIDHAMU: usiguse mql5/KAIROS.mq5 (tester-tool inabaki). HAKUNA Python kuguswa. Andika/extend
+  docs/RUNBOOK_conduit.md: compile (F7) -> attach chart moja (yoyote) demo -> ELITEFX_BRIDGE_DIR
+  kwa Python = <DataFolder>\MQL5\Files\bridge -> cadence (mt5_data -> live_brain --cycle) ->
+  kuona orders kwenye terminal + results.jsonl. Eleza kwamba agent HAWEZI compile (PD anacompile F7).
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari BRIDGE-2" + jinsi ya kucompile + integration
+  quick-check (BRIDGE-3: live_brain --decide -> commands -> EA inaweka orders demo -> results ->
+  live_brain --ingest -> paper_log/dashboard).
+```
+
+---

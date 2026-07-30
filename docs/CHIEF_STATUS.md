@@ -1735,3 +1735,20 @@ la tester-loss litajibiwa na demo-forward fills halisi za conduit). Awamu: BRIDG
 edge+commands+ingest — prompt tayari) -> BRIDGE-2 (KAIROS_CONDUIT.mq5) -> BRIDGE-3 (demo end-to-end PC).
 
 **HATUA:** Operator aendeshe BRIDGE-1 -> "tayari BRIDGE-1" -> Chief review -> BRIDGE-2.
+
+---
+
+## 2026-07-30 — BRIDGE-1 (ubongo wa Python) REVIEW: PASS → BRIDGE-2 (conduit EA) prompt
+
+**live_brain.py (main `2c92d3a`): review PASS — self-test 6/6, sweep 32/32.**
+- Edge decision: nr7 (golden) -> no-LATE kwa ENTRY bar ((hour[i]+1)%24 -> _sess — parity na
+  _mask_context) -> ATR ya signal bar -> SL/TP -> sizer+gate (REUSE) -> PLACE_OCO (cmd_id
+  deterministic, expiry +1h). Veto -> hakuna amri + sababu.
+- Commands atomic+idempotent; CANCEL_ALL kill-switch. Ingest: FILLED->execution, CLOSED->settlement
+  (repo-valid REQUIRED, idempotent, learned_ev tag) -> paper_log (dashboard/steward chanzo kile kile).
+- HAKUNA MetaTrader5 import / order calls (nimethibitisha grep) — Python HAIWEKI order. Golden 0.
+- Known-limit (nimekubali kwa BRIDGE-1, LAZIMA kabla ya VPS/Faza-3): account view fresh per decision —
+  daily-budget/loss reconstruction kutoka paper_log = kazi ya BRIDGE-3/hardening.
+
+**HATUA:** BRIDGE-2 — KAIROS_CONDUIT.mq5 (conduit TUPU: poll commands.json, execute, report results;
+demo-only guard; HAKUNA strategy logic — ndiyo EA ya kukodisha §9). Prompt tayari.
