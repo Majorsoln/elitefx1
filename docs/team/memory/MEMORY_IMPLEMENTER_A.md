@@ -1506,3 +1506,32 @@ RUNBOOK (Awamu 1, bila MT5): python live_brain.py --cycle --bridge-dir <MQL5/Fil
   results za EA -> paper_log; (2) canonical -> edge decide -> commands.json. Cadence: kila H1 bar (Task
   Scheduler baada ya mt5_data canonical). EA (Awamu 2) inapoll commands, inatekeleza, inaripoti results.
 NEXT: BRIDGE-2 (KAIROS_CONDUIT.mq5 — poll commands, execute, report results; demo-only guard; HAINA logic).
+
+=== BRIDGE-2 build (2026-07-30) — KAIROS_CONDUIT.mq5 (EA tupu conduit) — IMEKAMILIKA ===
+LAST COMPLETED: **KAIROS_CONDUIT.mq5 + docs/RUNBOOK_conduit.md** ✅ (docs/CONDUIT_BRIDGE_CHARTER.md Awamu 2;
+  faili MPYA; HAKUNA KAIROS.mq5/Python kuguswa). EA TUPU (HAINA strategy logic — IP §9) inayotekeleza amri
+  za live_brain (ubongo). DEMO PEKEE.
+  1. Inputs: InpBridgeDir("bridge"), InpPollSeconds(5), InpMagicFilter(0=zote), InpEnabled(true).
+  2. DEMO-ONLY guard (OnInit): ACCOUNT_TRADE_MODE != DEMO -> INIT_FAILED ("LIVE = SAINI YA PD Faza 4").
+     Hakuna njia ya kuipita.
+  3. OnTimer (poll): soma <Files>\<bridge>\commands.json -> flat JSON parser YETU (JNum/JStr string-search;
+     split kwa "cmd_id"). seq ile ile -> usisome tena. cmd_id HAIJATEKELEZWA (processed.txt — idempotent
+     kati ya restarts): PLACE_OCO -> CTrade.BuyStop+SellStop (lots/SL/TP/magic; ORDER_TIME_GTC + EA-managed
+     expiry). CANCEL_ALL -> futa pending za magic zetu (kill-switch, hata InpEnabled=false). Magic filter.
+  4. OCO + lifecycle: OnTradeTransaction DEAL_ENTRY_IN -> FILLED + futa nyingine (OCO); DEAL_ENTRY_OUT ->
+     CLOSED (+pnl = DEAL_PROFIT+SWAP+COMMISSION). ScanExpiry (UTC TimeGMT() >= expiry) -> futa + EXPIRED.
+     Placement fail -> REJECTED. Kila tukio -> append <bridge>\results.jsonl (JSON mstari mmoja). EA PEKEE
+     inaandika results; ubongo unasoma.
+  5. HAKUNA nr7/ATR/indicators/decisions (conduit tupu — itakodishwa kwa lessee §9).
+  · SHERIA: KAIROS.mq5 (tester-tool) HAIJAGUSWA; Python HAIJAGUSWA (sweep 32/32). MQL5 haicompili hapa
+    (Linux) — PD anacompile F7. results schema = HASA inayotarajiwa na live_brain._event_to_records.
+  BRIDGE-3 integration quick-check (bila MT5, hapa): results.jsonl bandia (PLACED+FILLED+CLOSED, umbo HASA
+    la EA) -> live_brain.ingest_results -> execution+settlement repo-REQUIRED valid, idempotent (re-ingest
+    +0/skipped 2), linkage settlement.id==execution.order_id, learned_ev=1.92 tag, PLACED ignored. PASS.
+  RUNBOOK (docs/RUNBOOK_conduit.md): compile F7 -> demo chart attach -> ELITEFX_BRIDGE_DIR=<DataFolder>\MQL5\
+    Files\bridge -> cadence: mt5_data canonical + live_brain --cycle (ingest+decide) -> ona pending/fills
+    terminal + results.jsonl. Kill-switch: live_brain --cancel-all.
+KNOWN LIMITATION (BRIDGE-3 hardening): g_oco (hali ya OCO) iko kwenye kumbukumbu — EA ikirestart kabla
+  position kufunga, FILLED/CLOSED za order za awali hazitaripotiwa (rebuild kutoka positions/comment =
+  baadaye). expiry = UTC (broker-time-independent). Orders = GTC + EA-managed expiry.
+NEXT: BRIDGE-3 (integration PC ya PD: demo end-to-end -> VPS -> baadaye sealed-window acceptance + live saini).
