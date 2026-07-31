@@ -1700,3 +1700,36 @@ UKIMALIZA: commit+push; MEMORY update; ripoti "tayari BRIDGE-2" + jinsi ya kucom
 ```
 
 ---
+
+## PROMPT — IMPLEMENTER-A [M4-0] (BREADTH baseline: nr7 proven kwa pairs 12 pooled)
+
+```text
+Wewe ni IMPLEMENTER-A wa mradi ELITEFX (repo: Majorsoln/elitefx1). KAZI: MZUNGUKO-4 hatua 0 —
+BREADTH baseline: endesha nr7 (logic ILE ILE iliyothibitika) kwa PAIRS 12 pooled -> namba ambayo ML
+LAZIMA ishinde. Hii ni cheap-win + kigezo cha haki (ML ishinde breadth, si nr7-2-pairs pekee).
+SPEC: docs/CYCLE4_ML_CHARTER.md (§1B, §5).
+
+SYNC KWANZA: git checkout main && git pull origin main.
+SOMA: docs/CYCLE4_ML_CHARTER.md · src/research/event_quality_report.py (episodes, load_pair — golden) ·
+src/research/family_pooled.py (pooled R-normalization + _boot_ci — L-041) · src/research/swing_family.py
+(mfano wa runner wa pooled multi-pair) · docs/STRATEGIES.md (STRAT-001/002 configs) · config/data_config.
+
+JENGA src/research/breadth_baseline.py (additive; REUSE golden — ZERO statistic/fill mpya):
+  1. Kwa KILA pair inayopatikana (hadi 12) x variants MBILI za exit (SL2/TP1 na SL1/TP1), TF=H1,
+     event=nr7_break, mask=no-LATE: episodes -> trades (gharama halisi).
+  2. POOLED (L-041): R-normalization ya family_pooled; EV_R + EV_pips pooled, N, trades/mwaka,
+     p_boot (block bootstrap iliyopo), win%, PF. HAKUNA best-pair selection — pooled TU (+ jedwali la
+     per-pair kwa diagnostics, likiwa na tahadhari ya max-selection).
+  3. SPLIT: TRAIN + VALIDATION pekee (HOLDOUT HAIGUSWI — red-line; sealed 2026-05+ pia haiingii).
+  4. Output reports/breadth_baseline.md: pooled EV/N/p per exit-variant, trades/mwaka, per-pair table,
+     na **BASELINE LINE** wazi: "ML ya M4-2 LAZIMA izidi: EV_net=X pips, trades/mwaka=Y (VALID)".
+
+SHERIA: golden fns HAZIGUSWI (import tu). Pooled ndiyo hukumu (L-041). Gharama halisi (spread+slip)
+  kwenye kila namba (L-039). HOLDOUT/sealed HAZIGUSWI. Self-test: (a) pooled math = family_pooled
+  (cross-check kwa sample ndogo); (b) HOLDOUT-guard (kuomba holdout -> refuse); (c) determinism
+  (seed); (d) per-pair + pooled zinalingana kwa N. Ongeza kwenye run_selftests. GREEN.
+UKIMALIZA: commit+push; MEMORY update; ripoti "tayari M4-0" + BASELINE LINE (namba ambayo ML lazima
+  izidi) + trades/mwaka za breadth vs nr7-2-pairs.
+```
+
+---
