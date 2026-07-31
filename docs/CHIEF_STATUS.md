@@ -1795,3 +1795,31 @@ BILA ML. ML LAZIMA ishinde breadth, si nr7-2-pairs. Inaendeshwa SAMBAMBA (cheap 
 
 **Awamu:** M4-0 breadth -> M4-1 dataset (triple-barrier, bars ZOTE) -> M4-2 GBM -> M4-3 LSTM ->
 M4-4 RL exit -> M4-5 gate. Prompt ya M4-0 tayari. HATUA: Operator -> "tayari M4-0".
+
+---
+
+## 2026-07-30 — RISK-1: MIUNDOMBINU IMEREKEBISHWA (Chief = implementer; directive ya PD)
+
+**PD:** models zote zinatafuta entries kwa uhuru (hakuna kizuizi cha pair); RISK MANAGEMENT ndilo lango
+pekee (max-open -> reject + sababu); bajeti ya siku = start +50% faida −100% hasara; correlation max 3;
+**config zibadilishwe na user WAKATI WOWOTE BILA CODE.** Nimetekeleza mwenyewe:
+
+1. **CONFIG NJE YA CODE:** `config/models.yaml` mpya = REGISTRY ya KAIROS (call_sign, enabled, **pairs[]**,
+   sl_atr, tp_atr, learned_ev, magic). PD anaongeza KAIROS-3..10 kwa kuhariri YAML — HAKUNA code.
+   `load_models()` + `_validate_model()` = **fail-closed** (YAML mbovu inasimamisha, haivunji kimya);
+   `enabled:false` inaruka bila kufuta; `models_fingerprint()` = provenance kwenye kila rejection.
+   ftmo_config: **max_slots 4→7, max_correlated_slots 2→3.** Dashboard callsigns.py sasa inasoma
+   models.yaml (CHANZO KIMOJA).
+2. **STATE HALISI:** `account_state_from_log()` — open positions (FILLED bila settlement) -> open_slots +
+   correlation_exposure; P&L ya LEO -> daily_profit/daily_loss -> `_budget` (win/loss factor).
+   **Kabla: zero kila mara** (bajeti haikui/haipungui, max-open haikufanya kazi). Sasa ni kweli.
+3. **MULTI-PAIR:** model inascan `pairs[]` zake zote (cmd_id sasa `name:pair:ts`).
+4. **BATCH RESERVATION:** amri ikikubaliwa, slots/correlation zinaongezwa ndani ya batch -> pendekezo la
+   8 halipiti wakati max_slots=7 (bila hii zote zingepita pamoja).
+5. **REJECTION + SABABU:** decision record lifecycle=REJECTED (+reason, models_config) -> paper_log ->
+   dashboard/steward. PD anaona KWA NINI trade haikufanyika.
+
+**Tests:** live_brain 7/7 (mpya [g]: yaml/validation/state/max-open/rejection) · sweep 32/32 ·
+dashboard 35/35. Golden HAZIJAGUSWA.
+
+**HATUA:** KAIROS hatua kwa hatua — M4-0 breadth (pairs za KAIROS-1/2 -> models.yaml) kisha M4-1+ (ML).
