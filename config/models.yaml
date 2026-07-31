@@ -1,0 +1,27 @@
+# ============================================================
+#  models.yaml — REGISTRY YA MODELS (KAIROS-1..N)
+#  PD anabadilisha HAPA wakati wowote — HAKUNA code inayohitajika.
+#  Kuongeza KAIROS mpya = kuongeza block hapa (baada ya kupita GATE ya doctrine §3).
+#  TAHADHARI: pairs = zile zilizofanya vizuri kwenye UTAFITI wa model hiyo (si kubahatisha).
+# ============================================================
+
+models:
+  STRAT-001:
+    call_sign:  KAIROS-1          # jina la public (lessee anaona hili tu)
+    enabled:    true              # false = model haitoi entries (haifutwi)
+    pairs:      [USDCHF]          # pairs ZOTE zilizoruhusiwa (model inascan zote)
+    sl_atr:     2.0               # SL = 2.0 x ATR(14)
+    tp_atr:     1.0               # TP = 1.0 x ATR(14)
+    learned_ev: 1.92              # EV ya HOLDOUT (pips/trade) — kwa Steward divergence
+    magic:      20260730001       # kitambulisho cha EA (kipekee kwa kila model)
+
+  STRAT-002:
+    call_sign:  KAIROS-2
+    enabled:    true
+    pairs:      [USDJPY]
+    sl_atr:     1.0
+    tp_atr:     1.0
+    learned_ev: 2.65
+    magic:      20260730002
+
+# KAIROS-3.. zitaongezwa hapa baada ya kupita HOLDOUT gate (Mzunguko-4).

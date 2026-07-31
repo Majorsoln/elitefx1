@@ -32,7 +32,8 @@ import numpy as np
 
 # REUSE ubongo/wiring zilizopo (hakuna logic mpya ya trade)
 from live_engine import (STRATS, STRAT_POLICY, TF, LOG_F, _ftmo_config, _acct_state, _acct_view,
-                         _budget, _pip_value, _as_of, _canonical_loader)
+                         _budget, _pip_value, _as_of, _canonical_loader, _corr_group,
+                         account_state_from_log, models_fingerprint)
 import decision_repository as repo
 from event_library_v2 import nr7_break
 from event_quality_report import _sess
@@ -59,8 +60,10 @@ def _digits(pair):
 
 # ==================== (a) EDGE DECISION ====================
 
-def edge_decision(name, strat, data, cfg, constraints):
+def edge_decision(name, strat, data, cfg, constraints, pair=None, st=None):
     """Uamuzi kwenye UKINGO kwa bar ya mwisho iliyofungwa. Rudisha (command|None, reason).
+    pair = pair mahususi (model ina pairs[] — PD 2026-07-30). st = hali HALISI ya akaunti
+    (account_state_from_log) — bila hii bajeti/slots ni bandia.
     REUSE: nr7_break, _sess (no-LATE = entry bar i+1), DailyRiskBudgetSizer, integrity_gate.
     ATR = data['atr'][i] (signal bar; parity na live_engine.candidates a=atr[i]). PIP-SPACE -> price."""
     o, h, l_, c = data["o"], data["h"], data["l"], data["c"]
@@ -68,6 +71,7 @@ def edge_decision(name, strat, data, cfg, constraints):
     n = len(c)
     if n < 8:
         return None, "insufficient bars"
+    pair = pair or strat["pair"]                           # model ina pairs[] (PD 2026-07-30)
     i = n - 1                                              # bar ya mwisho ILIYOFUNGWA = signal bar
     out = nr7_break(o, h, l_, c, data.get("tc"), hour)     # REUSE golden (byte-identical)
     LL, SS = out["long_level"], out["short_level"]
@@ -84,7 +88,7 @@ def edge_decision(name, strat, data, cfg, constraints):
     ts_epoch = _as_of(ts[i])                               # signal bar open (canonical ts = bucket start)
 
     # SIGNAL decision (readiness snapshot) — REUSE decide/policy (kama live_engine)
-    snap = {"id": f"signal:{name}:{strat['pair']}:{ts_epoch}", "as_of": ts_epoch,
+    snap = {"id": f"signal:{name}:{pair}:{ts_epoch}", "as_of": ts_epoch,
             "readiness_state": "READY", "reliability": 1.0, "uncertainty": 0.0,
             "temporal_conflict": 0.0, "structural_conflict": {},
             "aggregate": {"source": name, "support": 1, "learned_ev": strat["learned_ev"]}}
@@ -92,14 +96,14 @@ def edge_decision(name, strat, data, cfg, constraints):
 
     # SIZE (DailyRiskBudgetSizer+FTMO) — account view fresh (BRIDGE-1: brain haitunzi state ya cross-bar;
     # daily-state reconstruction kutoka paper_log = awamu ijayo). spread ya bar hii ndani ya context.
-    st = _acct_state()
+    st = _acct_state() if st is None else st                # HALI HALISI inatoka decide_all
     acct = _acct_view(cfg, st)
-    acct["spread_by_pair"] = {strat["pair"]: float(spr[i])}
-    qty = size(cfg, acct, sl_pips, _pip_value(strat["pair"]), budget_remaining=_budget(cfg, st))
-    risk = qty * sl_pips * _pip_value(strat["pair"])
+    acct["spread_by_pair"] = {pair: float(spr[i])}
+    qty = size(cfg, acct, sl_pips, _pip_value(pair), budget_remaining=_budget(cfg, st))
+    risk = qty * sl_pips * _pip_value(pair)
 
     # COMPLIANCE (integrity_gate)
-    g = gate(dsig, constraints, build_context(acct, strat["pair"], worst_case=risk))
+    g = gate(dsig, constraints, build_context(acct, pair, worst_case=risk))
     elig = dict(g["eligibility"])
     if g["lifecycle"] != "VALIDATED":
         return None, "gate veto: " + (",".join(elig.get("failed", [])) or "not VALIDATED")
@@ -107,10 +111,10 @@ def edge_decision(name, strat, data, cfg, constraints):
         return None, "budget/slots=0 -> qty=0"
 
     # levels PIP-SPACE -> PRICE (canonical o/h/l/c ni price/pip)
-    pp = pip(strat["pair"]); dg = _digits(strat["pair"])
+    pp = pip(pair); dg = _digits(pair)
     buy_stop = LL[i]; sell_stop = SS[i]
     cmd = dict(
-        cmd_id=f"{name}:{ts_epoch}", action="PLACE_OCO", strategy=name, symbol=strat["pair"],
+        cmd_id=f"{name}:{pair}:{ts_epoch}", action="PLACE_OCO", strategy=name, symbol=pair,
         magic=MAGIC.get(name), lots=round(float(qty), 2),
         buy_stop=round(float(buy_stop) * pp, dg), sell_stop=round(float(sell_stop) * pp, dg),
         sl_buy=round(float(buy_stop - strat["sl_atr"] * a) * pp, dg),
@@ -122,24 +126,62 @@ def edge_decision(name, strat, data, cfg, constraints):
     return cmd, "PLACE_OCO"
 
 
-def decide_all(bridge_dir, cfg=None, loader=None, write=True):
-    """Edge decision kwa STRATS zote -> andika commands.json. Rudisha dict(commands, reasons, seq)."""
+def decide_all(bridge_dir, cfg=None, loader=None, write=True, log_path=None, now_epoch=None,
+               models=None, log_rejections=True):
+    """Edge decision kwa MODELS zote x PAIRS zao -> commands.json (PD 2026-07-30).
+
+    - MODELS zote zinatafuta entries kwa uhuru (hakuna kizuizi cha model-level); pairs = zile
+      zilizofanya vizuri kwenye utafiti (config/models.yaml, PD anahariri BILA code).
+    - RISK MANAGEMENT ndilo LANGO PEKEE: hali HALISI (account_state_from_log) -> bajeti ya siku
+      (win_factor/loss_factor) + max_slots/max_correlated_slots. Ikizidi -> REJECT + SABABU.
+    - SLOT RESERVATION: amri ikikubaliwa, slots/correlation zinaongezwa PROVISIONALLY ndani ya batch
+      ili pendekezo la 8 lisipite wakati max_slots=7 (vinginevyo zote zingepita kwa pamoja).
+    """
     cfg = cfg or _ftmo_config()
     constraints = build_constraints(cfg)
     lw = loader or _canonical_loader()
-    cmds, reasons = [], {}
-    for name, strat in STRATS.items():
-        data = lw(strat["pair"], TF, "forward")
-        if data is None or data.get("ts") is None or len(data["ts"]) == 0:
-            reasons[name] = "no data (canonical haipo)"; continue
-        cmd, why = edge_decision(name, strat, data, cfg, constraints)
-        reasons[name] = why
-        if cmd is not None:
+    strats = models or STRATS
+    st = account_state_from_log(log_path=log_path or LOG_F, cfg=cfg, now_epoch=now_epoch)
+    cmds, reasons, rejects = [], {}, []
+    for name, strat in strats.items():
+        for pair in strat.get("pairs", [strat.get("pair")]):
+            key = f"{name}:{pair}"
+            data = lw(pair, TF, "forward")
+            if data is None or data.get("ts") is None or len(data["ts"]) == 0:
+                reasons[key] = "no data (canonical haipo)"; continue
+            cmd, why = edge_decision(name, strat, data, cfg, constraints, pair=pair, st=st)
+            reasons[key] = why
+            if cmd is None:
+                if why not in ("no nr7 compression (range si nyembamba zaidi ya bars 7)",
+                               "insufficient bars", "atr<=0"):
+                    rejects.append(dict(key=key, name=name, pair=pair, reason=why,
+                                        as_of=int(_as_of(data["ts"][-1]))))
+                continue
             cmds.append(cmd)
+            st["open_slots"] += 1                          # RESERVATION (batch-aware max-open)
+            g = _corr_group(pair, cfg)
+            st["correlation_exposure"][g] = st["correlation_exposure"].get(g, 0) + 1
+    if log_rejections and rejects:
+        _log_rejections(rejects, log_path or LOG_F, cfg)
     seq = None
     if write:
         seq = write_commands(bridge_dir, cmds)["seq"]
-    return dict(commands=cmds, reasons=reasons, seq=seq)
+    return dict(commands=cmds, reasons=reasons, rejects=rejects, seq=seq,
+                account=dict(open_slots=st["open_slots"], daily_profit=st["daily_profit"],
+                             daily_loss=st["daily_loss"], budget=_budget(cfg, st)))
+
+
+def _log_rejections(rejects, log_path, cfg):
+    """Rekodi ya trade ILIYOKATALIWA + SABABU (PD: 'ina reject execution na inawekwa sababu').
+    decision record (REQUIRED: id/as_of/lifecycle) -> paper_log -> dashboard/steward."""
+    for r in rejects:
+        obj = {"id": f"reject:{r['key']}:{r['as_of']}", "as_of": r["as_of"], "lifecycle": "REJECTED",
+               "strategy": r["name"], "pair": r["pair"], "reason": r["reason"],
+               "models_config": models_fingerprint(), "mode": "paper"}
+        try:
+            repo.append(log_path, "decision", obj, BRAIN_VERSIONS)
+        except (OSError, repo.RepositoryError) as e:        # log ni diagnostics — isivunje uamuzi
+            print(f"  [warn] rejection-log imeshindwa: {type(e).__name__}: {e}", file=sys.stderr)
 
 
 # ==================== (b) COMMANDS WRITER (atomic + idempotent) ====================
@@ -298,7 +340,7 @@ def self_test():
     exp_sell = round(float(d["l"][-1] - 0.1) * pp, 5)
     a = 5.0
     edge_ok = (cmd is not None and cmd["action"] == "PLACE_OCO" and cmd["symbol"] == "USDCHF"
-               and cmd["cmd_id"] == f"STRAT-001:{_as_of(d['ts'][-1])}"
+               and cmd["cmd_id"] == f"STRAT-001:USDCHF:{_as_of(d['ts'][-1])}"   # pair ndani (multi-pair)
                and abs(cmd["buy_stop"] - exp_buy) < 1e-9 and abs(cmd["sell_stop"] - exp_sell) < 1e-9
                and abs(cmd["sl_buy"] - round((d["h"][-1] + 0.1 - 2.0 * a) * pp, 5)) < 1e-9
                and abs(cmd["tp_buy"] - round((d["h"][-1] + 0.1 + 1.0 * a) * pp, 5)) < 1e-9
@@ -365,6 +407,57 @@ def self_test():
         det_ok = (json.dumps(cmdA, sort_keys=True) == json.dumps(cmdB, sort_keys=True))
         print(f"  [f] determinism (edge command bit-identical) -> {det_ok}")
         ok = ok and det_ok
+
+    # (g) MIUNDOMBINU (PD 2026-07-30): config nje ya code + state halisi + max-open + rejection log
+    import tempfile, yaml as _yaml
+    from live_engine import load_models, ConfigError, account_state_from_log
+    with tempfile.TemporaryDirectory() as tmp:
+        # g1: models.yaml — PD anahariri BILA code (pairs[], enabled, disabled inarukwa)
+        y = Path(tmp) / "models.yaml"
+        y.write_text(_yaml.safe_dump({"models": {
+            "STRAT-001": dict(call_sign="KAIROS-1", enabled=True, pairs=["USDCHF", "USDCAD"],
+                              sl_atr=2.0, tp_atr=1.0, learned_ev=1.92, magic=1),
+            "KAIROS-9": dict(call_sign="KAIROS-9", enabled=False, pairs=["EURUSD"], sl_atr=1.0,
+                             tp_atr=1.0, learned_ev=0.5, magic=9)}}), encoding="utf-8")
+        mm = load_models(y)
+        cfg_ok = (list(mm) == ["STRAT-001"] and mm["STRAT-001"]["pairs"] == ["USDCHF", "USDCAD"]
+                  and mm["STRAT-001"]["pair"] == "USDCHF")
+        # g2: validation fail-closed (sl_atr batili)
+        bad = Path(tmp) / "bad.yaml"
+        bad.write_text(_yaml.safe_dump({"models": {"X": dict(pairs=["EURUSD"], sl_atr=-1, tp_atr=1.0,
+                                                             learned_ev=1.0, magic=1)}}), encoding="utf-8")
+        try:
+            load_models(bad); val_ok = False
+        except ConfigError:
+            val_ok = True
+        # g3: state halisi kutoka log -> bajeti inapungua kwa hasara + open_slots/correlation
+        recs = [{"kind": "execution", "obj": {"order_id": "o1", "status": "FILLED", "pair": "USDCHF"}},
+                {"kind": "execution", "obj": {"order_id": "o2", "status": "FILLED", "pair": "USDJPY"}},
+                {"kind": "settlement", "obj": {"id": "o1", "parent_execution_id": "o1",
+                                               "as_of": 1790000000, "pnl": -60.0}}]
+        stx = account_state_from_log(cfg=cfg, now_epoch=1790000000, records=recs)
+        state_ok = (stx["open_slots"] == 1 and stx["daily_loss"] == 60.0
+                    and stx["correlation_exposure"].get("USD_strength") == 1
+                    and _budget(cfg, stx) == cfg["daily_budget_start"] - 60.0)
+        # g4: MAX-OPEN batch reservation — max_slots=1, models 2 -> amri MOJA tu (nyingine REJECT)
+        cfg1 = dict(cfg, max_slots=1, max_correlated_slots=9)
+        two = {"M1": dict(pairs=["USDCHF"], sl_atr=2.0, tp_atr=1.0, learned_ev=1.9, magic=1),
+               "M2": dict(pairs=["USDCHF"], sl_atr=1.0, tp_atr=1.0, learned_ev=2.6, magic=2)}
+        logp = str(Path(tmp) / "log.jsonl")
+        r4 = decide_all(str(Path(tmp) / "b4"), cfg=cfg1, loader=lambda p_, t_, s_: d,
+                        models=two, log_path=logp, now_epoch=int(_as_of(d["ts"][-1])))
+        slots_ok = len(r4["commands"]) == 1 and any("slots" in x["reason"] or "qty=0" in x["reason"]
+                                                    or "gate" in x["reason"] for x in r4["rejects"])
+        # g5: rejection + SABABU zimeandikwa kwenye log (decision REJECTED, repo-valid)
+        rej = [r for r in repo.load(logp) if r["kind"] == "decision"
+               and r["obj"].get("lifecycle") == "REJECTED"]
+        rej_ok = bool(rej) and all({"id", "as_of", "lifecycle"} <= set(r["obj"]) and r["obj"]["reason"]
+                                   for r in rej)
+    infra_ok = cfg_ok and val_ok and state_ok and slots_ok and rej_ok
+    print(f"  [g] miundombinu: models.yaml(pairs[]/disabled)={cfg_ok} validation-fail-closed={val_ok} "
+          f"state-halisi(budget/slots/corr)={state_ok} max-open-reservation={slots_ok} "
+          f"rejection+sababu-log={rej_ok} -> {infra_ok}")
+    ok = ok and infra_ok
 
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1

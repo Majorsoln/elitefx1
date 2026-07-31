@@ -53,11 +53,76 @@ SESSION_FILTER = "no-LATE"
 # FORWARD_START inakataliwa). HOLDOUT (2025-01..2026-04) iko chini ya mpaka huu pia -> haiingii forward.
 FORWARD_START = "2026-07-24"
 
-# STRAT configs HASA (docs/STRATEGIES.md) + learned EV (backtest — STEWARD divergence tag, §8.2)
-STRATS = {
-    "STRAT-001": dict(pair="USDCHF", sl_atr=2.0, tp_atr=1.0, learned_ev=1.92),
-    "STRAT-002": dict(pair="USDJPY", sl_atr=1.0, tp_atr=1.0, learned_ev=2.65),
+# ---------- MODELS REGISTRY (config/models.yaml — PD anabadilisha BILA code; directive 2026-07-30) ----------
+MODELS_YAML = REPO_ROOT / "config" / "models.yaml"
+_FALLBACK_MODELS = {                                   # kama YAML haipo (self-test/bootstrap)
+    "STRAT-001": dict(call_sign="KAIROS-1", enabled=True, pairs=["USDCHF"], sl_atr=2.0, tp_atr=1.0,
+                      learned_ev=1.92, magic=20260730001),
+    "STRAT-002": dict(call_sign="KAIROS-2", enabled=True, pairs=["USDJPY"], sl_atr=1.0, tp_atr=1.0,
+                      learned_ev=2.65, magic=20260730002),
 }
+_MODEL_REQUIRED = ("pairs", "sl_atr", "tp_atr", "learned_ev", "magic")
+
+
+class ConfigError(ValueError):
+    """models.yaml/ftmo_config batili — FAIL-CLOSED (afadhali kusimama kuliko kutrade kimakosa)."""
+
+
+def _validate_model(name, m):
+    """Validator ya block ya model (PD anahariri YAML — makosa YASIVUNJE kimya)."""
+    miss = [k for k in _MODEL_REQUIRED if k not in m]
+    if miss:
+        raise ConfigError(f"models.yaml [{name}]: fields zinakosekana: {miss}")
+    if not isinstance(m["pairs"], (list, tuple)) or not m["pairs"]:
+        raise ConfigError(f"models.yaml [{name}]: 'pairs' lazima iwe orodha isiyo tupu")
+    for k in ("sl_atr", "tp_atr"):
+        if not (isinstance(m[k], (int, float)) and m[k] > 0):
+            raise ConfigError(f"models.yaml [{name}]: '{k}' lazima iwe namba > 0 (ipo: {m[k]!r})")
+    if not isinstance(m["magic"], int):
+        raise ConfigError(f"models.yaml [{name}]: 'magic' lazima iwe integer")
+    return True
+
+
+def load_models(path=None, include_disabled=False):
+    """Soma config/models.yaml -> {internal_id: {call_sign, enabled, pairs[], pair, sl_atr, tp_atr,
+    learned_ev, magic}}. PD anahariri YAML wakati wowote — HAKUNA code. Validation = fail-closed.
+    'pair' (single) inabaki kwa backward-compat = pairs[0]. enabled=false -> haitolewi (bila kufutwa)."""
+    import yaml
+    p = Path(path or MODELS_YAML)
+    raw = None
+    if p.exists():
+        try:
+            doc = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        except yaml.YAMLError as e:
+            raise ConfigError(f"models.yaml haisomeki (YAML batili): {e}") from e
+        raw = doc.get("models")
+        if raw is not None and not isinstance(raw, dict):
+            raise ConfigError("models.yaml: 'models' lazima iwe mapping ya {internal_id: {...}}")
+    src = raw if raw else _FALLBACK_MODELS
+    out = {}
+    for name, m in src.items():
+        m = dict(m)
+        _validate_model(name, m)
+        if not include_disabled and not m.get("enabled", True):
+            continue
+        m["pairs"] = [str(x) for x in m["pairs"]]
+        m["pair"] = m["pairs"][0]                       # backward-compat (code ya zamani)
+        m.setdefault("call_sign", name)
+        out[name] = m
+    if not out:
+        raise ConfigError("models.yaml: hakuna model iliyo enabled")
+    return out
+
+
+def models_fingerprint(path=None):
+    """SHA ya models.yaml (provenance — decision inarekodi config iliyotumika)."""
+    import hashlib
+    p = Path(path or MODELS_YAML)
+    return hashlib.sha256(p.read_bytes()).hexdigest()[:12] if p.exists() else "fallback"
+
+
+STRATS = load_models()                                  # configs HASA (docs/STRATEGIES.md) + learned EV
+MAGIC = {n: m["magic"] for n, m in STRATS.items()}      # kitambulisho cha EA per model
 
 # Strategy policy: nr7 signal iliyothibitika = SELECT (K4-filter NO-LIFT -> hakuna veto ya model).
 STRAT_POLICY = {"id": "policy:strat-nr7@v1",
@@ -198,6 +263,67 @@ def _acct_state():
     return dict(date=None, daily_profit=0.0, daily_loss=0.0, cum_pnl=0.0, peak_pnl=0.0,
                 open_slots=0, correlation_exposure={}, spread_by_pair={},
                 worst_case=0.0, open_positions=[])
+
+
+def _corr_group(pair, cfg):
+    """Kundi la correlation la pair (ftmo_config.correlation_groups). Halipo -> pair yenyewe."""
+    for g, members in (cfg.get("correlation_groups") or {}).items():
+        if pair in members:
+            return g
+    return pair
+
+
+def account_state_from_log(log_path=None, cfg=None, now_epoch=None, records=None):
+    """HALI HALISI ya akaunti kutoka paper_log (directive ya PD 2026-07-30 — bila hii bajeti ni bandia).
+
+    Inajenga upya: (a) OPEN positions = execution FILLED zisizo na settlement (open_slots +
+    correlation_exposure -> max_slots/max_correlated_slots zinafanya kazi KWELI); (b) P&L YA LEO
+    (settlements za leo) -> daily_profit/daily_loss -> _budget (win_factor/loss_factor); (c) cum_pnl/
+    peak_pnl (total-DD). Append-only log = chanzo; hakuna state ya pembeni."""
+    cfg = cfg or _ftmo_config()
+    if records is None:
+        records = repo.load(log_path or LOG_F)
+    now = int(now_epoch if now_epoch is not None else datetime.now(timezone.utc).timestamp())
+    today = str(np.datetime64(int(now), "s").astype("datetime64[D]"))
+
+    execs, settled = {}, {}
+    for r in records:
+        o, kind = r.get("obj", r), r.get("kind")
+        if kind == "execution" and o.get("status") == "FILLED":
+            oid = o.get("order_id") or o.get("id")
+            if oid is not None:
+                execs[oid] = o
+        elif kind == "settlement":
+            sid = o.get("parent_execution_id") or o.get("id")
+            if sid is not None:
+                settled[sid] = o
+
+    st = _acct_state()
+    st["date"] = today
+    for oid, e in execs.items():                                   # OPEN = FILLED bila settlement
+        if oid in settled:
+            continue
+        pair = e.get("pair") or "?"
+        st["open_positions"].append(dict(order_id=oid, pair=pair, strategy=e.get("strategy")))
+        st["open_slots"] += 1
+        g = _corr_group(pair, cfg)
+        st["correlation_exposure"][g] = st["correlation_exposure"].get(g, 0) + 1
+
+    cum = peak = 0.0
+    for s_ in sorted(settled.values(), key=lambda x: x.get("as_of") or 0):
+        pnl = float(s_.get("pnl", s_.get("realized_pnl", 0.0)) or 0.0)
+        cum += pnl
+        peak = max(peak, cum)
+        a = s_.get("as_of")
+        if isinstance(a, (int, float)) and \
+                str(np.datetime64(int(a), "s").astype("datetime64[D]")) == today:
+            if pnl >= 0:
+                st["daily_profit"] += pnl
+            else:
+                st["daily_loss"] += -pnl                            # daily_loss = chanya (magnitude)
+    st["cum_pnl"], st["peak_pnl"] = round(cum, 2), round(peak, 2)
+    st["daily_profit"], st["daily_loss"] = round(st["daily_profit"], 2), round(st["daily_loss"], 2)
+    return st
 
 
 def _acct_view(cfg, st, extra_worst=0.0):

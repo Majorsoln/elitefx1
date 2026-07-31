@@ -9,8 +9,8 @@ daily_budget_start:      400    # bajeti ya mwanzo (4% ya akaunti)
 win_factor:              0.50   # bajeti inakua 50% ya faida
 loss_factor:             1.00   # bajeti inapungua 100% ya hasara
 max_per_trade:           120    # kikomo cha juu kwa trade moja ($)
-max_slots:                 4    # trades nyingi zaidi kwa wakati mmoja
-max_correlated_slots:      2    # trades nyingi zaidi kwenye correlation group moja
+max_slots:                 7    # trades nyingi zaidi kwa wakati mmoja (PD 2026-07-30)
+max_correlated_slots:      3    # trades nyingi zaidi kwenye correlation group moja (PD 2026-07-30)
 max_daily_loss:          500    # FTMO: 5% ya akaunti
 max_total_dd:           1000    # FTMO: 10% ya akaunti
 
