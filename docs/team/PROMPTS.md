@@ -1722,7 +1722,12 @@ JENGA src/research/breadth_baseline.py (additive; REUSE golden — ZERO statisti
      per-pair kwa diagnostics, likiwa na tahadhari ya max-selection).
   3. SPLIT: TRAIN + VALIDATION pekee (HOLDOUT HAIGUSWI — red-line; sealed 2026-05+ pia haiingii).
   4. Output reports/breadth_baseline.md: pooled EV/N/p per exit-variant, trades/mwaka, per-pair table,
-     na **BASELINE LINE** wazi: "ML ya M4-2 LAZIMA izidi: EV_net=X pips, trades/mwaka=Y (VALID)".
+     na **BASELINE LINE** wazi: "KAIROS-3 LAZIMA izidi: EV_net=X pips, trades/mwaka=Y (VALID)".
+  5. **PENDEKEZO la pairs[] kwa config/models.yaml** (KAIROS-1/2 multi-pair) — kwa KANUNI, SI ranking:
+     pair inapendekezwa IKIWA EV_net > 0 kwenye TRAIN **NA** VALIDATION (uthabiti wa OOS) NA N_valid
+     >= 30. **HAKUNA "top-N kwa EV"** (= max-selection bias, L-041 E[max]~+1.16 sigma). Ripoti orodha
+     mbili: (a) pairs zinazopita kanuni; (b) zilizokataliwa + sababu (train-only/N-ndogo/negative).
+     Andika wazi: hili ni PENDEKEZO — PD ndiye anayehariri models.yaml.
 
 SHERIA: golden fns HAZIGUSWI (import tu). Pooled ndiyo hukumu (L-041). Gharama halisi (spread+slip)
   kwenye kila namba (L-039). HOLDOUT/sealed HAZIGUSWI. Self-test: (a) pooled math = family_pooled
