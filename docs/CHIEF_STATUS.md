@@ -1771,3 +1771,27 @@ demo-only guard; HAKUNA strategy logic — ndiyo EA ya kukodisha §9). Prompt ta
 
 **HATUA — BRIDGE-3 (PC ya PD):** compile F7 -> attach demo chart -> bridge dir env -> mt5_data ->
 live_brain --cycle -> orders kwenye terminal (demo) -> results -> ingest -> dashboard. RUNBOOK_conduit.md.
+
+---
+
+## 2026-07-30 — MZUNGUKO-4 IMEZINDULIWA: ML signal-generation (PD: LSTM + GBM + RL)
+
+**PD:** "tunaenda kubuni mbinu mpya za kuongeza nafasi za trade — iwe ML: LSTM + XGBoost/LightGBM + RL."
+**Chief: nakubali zote tatu** — hii ni signal GENERATION (nafasi mpya), SI K4 filtering (L-042). Lakini
+kila mbinu inapewa KAZI inayoifaa (charter §2):
+- **GBM = signal generation** (P(TP kabla ya SL) kwa kila bar -> entries mpya). Auditable (trees->JSON).
+- **LSTM = sequence member** (ensemble/stacking baada ya GBM kuonyesha lift).
+- **RL = SI entry-discovery bali EXIT/position-management + sizing** — RL kwa entry juu ya FX yenye SNR
+  ndogo (~64k bars/pair) ni mashine ya overfit; action-space ndogo (hold/exit/trail) + simulator wetu
+  wa honest = matumizi salama yenye thamani. (Siikatai RL — naipeleka inapofaa.)
+
+**Nidhamu:** triple-barrier labels kutoka `episodes` (golden — hakuna labeling ya mkono) · purged+
+embargoed CV · pooled multi-pair (L-041) · **COST-AWARE red line** (nafasi nyingi = gharama nyingi;
+metric = EV_net, si AUC — L-039) · artifacts JSON/npz (hakuna pickle) · kill-criteria pre-registered ·
+HOLDOUT one-shot mwishoni kwa winner MMOJA.
+
+**Ubunifu wa Chief — BREADTH baseline (M4-0):** nr7 ILE ILE kwa pairs 12 pooled = nafasi nyingi zaidi
+BILA ML. ML LAZIMA ishinde breadth, si nr7-2-pairs. Inaendeshwa SAMBAMBA (cheap win).
+
+**Awamu:** M4-0 breadth -> M4-1 dataset (triple-barrier, bars ZOTE) -> M4-2 GBM -> M4-3 LSTM ->
+M4-4 RL exit -> M4-5 gate. Prompt ya M4-0 tayari. HATUA: Operator -> "tayari M4-0".
