@@ -1752,3 +1752,22 @@ edge+commands+ingest — prompt tayari) -> BRIDGE-2 (KAIROS_CONDUIT.mq5) -> BRID
 
 **HATUA:** BRIDGE-2 — KAIROS_CONDUIT.mq5 (conduit TUPU: poll commands.json, execute, report results;
 demo-only guard; HAKUNA strategy logic — ndiyo EA ya kukodisha §9). Prompt tayari.
+
+---
+
+## 2026-07-30 — BRIDGE-2 (conduit EA) SOURCE-REVIEW: PASS → BRIDGE-3 (demo end-to-end, PC ya PD)
+
+**KAIROS_CONDUIT.mq5 (main `0b44751`): source-review PASS.**
+- Conduit TUPU KWELI (nimethibitisha grep): hakuna nr7/ATR/indicators/decisions — IP §9 ipo Python.
+  Ndiyo EA ya kukodisha.
+- DEMO-ONLY guard: ACCOUNT_TRADE_MODE != DEMO -> INIT_FAILED, hakuna bypass ("LIVE = SAINI YA PD").
+- Poll idempotent (seq + processed.txt kati ya restarts) · OCO lifecycle (fill->futa nyingine; expiry
+  UTC->EXPIRED; fail->REJECTED) · results.jsonl (EA pekee inaandika; ubongo unasoma).
+- **Round-trip imethibitishwa Python-side:** results za umbo la EA -> ingest_results -> execution+
+  settlement repo-valid + linkage + learned_ev + idempotent (+0 re-ingest). Sweep 32/32; Python +
+  KAIROS.mq5 byte-untouched.
+- Uwazi: MQL5 haicompili hapa — gate halisi = F7 ya PD + BRIDGE-3 demo. Known-limit (BRIDGE-3
+  hardening): OCO state in-memory (restart kabla ya close -> events za awali hazitaripotiwa).
+
+**HATUA — BRIDGE-3 (PC ya PD):** compile F7 -> attach demo chart -> bridge dir env -> mt5_data ->
+live_brain --cycle -> orders kwenye terminal (demo) -> results -> ingest -> dashboard. RUNBOOK_conduit.md.
