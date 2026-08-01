@@ -219,23 +219,46 @@ def _span_years(rows):
 
 
 # ---------- runner ----------
-def run_capacity(out_root=REPO_ROOT, write=True, pairs=None, splits=SPLITS):
+def recommended_pairs(out_root=REPO_ROOT):
+    """Soma orodha ya `pairs[]` ILIYOPENDEKEZWA na M4-0 kutoka `data/strategies/breadth_baseline.jsonl`
+    (kind="pairs_rule"). HAKUNA uchaguzi mpya hapa — ni kanuni ile ile ya M4-0 ikisomwa tena
+    (EV_R>0 train NA valid NA N_valid>=30). Faili haipo -> None."""
+    p = Path(out_root) / "data" / "strategies" / "breadth_baseline.jsonl"
+    if not p.exists():
+        return None
+    out = {}
+    with open(p, encoding="utf-8") as f:
+        for ln in f:
+            if not ln.strip():
+                continue
+            r = json.loads(ln)
+            if r.get("kind") == "pairs_rule":
+                out[r["variant"]] = [x["pair"] for x in r.get("passed", [])]
+    return out or None
+
+
+def run_capacity(out_root=REPO_ROOT, write=True, pairs=None, splits=SPLITS, pairs_by_variant=None,
+                 scenario="pairs zote 12"):
     """M4-0b kamili: kwa kila variant × split -> cost stress + capacity (modes 2) + COMBINED
-    (models MBILI zinashindania slots zilezile — hali halisi ya KAIROS-1 + KAIROS-2)."""
+    (models MBILI zinashindania slots zilezile — hali halisi ya KAIROS-1 + KAIROS-2).
+    `pairs_by_variant` = {variant: [pairs]} (mfano: orodha ya `pairs[]` iliyopendekezwa na M4-0) —
+    ndio hali halisi ya deployment; bila hiyo, pairs zote (upper bound ya shinikizo la slots)."""
     from live_engine import _ftmo_config
     cfg = _ftmo_config()
     out = dict(event=EVENT, tf=TF, session_filter=SESSION_FILTER, max_hold=MAX_HOLD,
+               scenario=scenario, pairs_by_variant=pairs_by_variant,
                cfg=dict(max_slots=cfg["max_slots"], max_correlated_slots=cfg["max_correlated_slots"],
                         correlation_groups=cfg.get("correlation_groups")),
                variants={}, combined={})
     streams_by_split = {sp: [] for sp in splits}
     for sl_atr, tp_atr in VARIANTS:
         vk = variant_key(sl_atr, tp_atr)
+        pairs_v = (pairs_by_variant or {}).get(vk, pairs) or _pairs()
         out["variants"][vk] = {}
         for sp in splits:
-            cost = cost_stress_variant(sp, sl_atr, tp_atr, pairs=pairs)
+            cost = cost_stress_variant(sp, sl_atr, tp_atr, pairs=pairs_v)
             rows = []
-            for pair in (pairs or _pairs()):
+            for pair in pairs_v:
                 rs, _ = pair_stream(pair, sp, sl_atr, tp_atr)
                 if rs:
                     rows.extend(rs)
@@ -250,10 +273,16 @@ def run_capacity(out_root=REPO_ROOT, write=True, pairs=None, splits=SPLITS):
 
 
 # ---------- outputs ----------
+def _suffix(res):
+    """Scenario ya `pairs[]` iliyopendekezwa inaandika faili ZAKE — haifuti ya pairs-12."""
+    return "_recommended" if res.get("pairs_by_variant") else ""
+
+
 def _write_outputs(res, out_root):
     out_root = Path(out_root)
+    sfx = _suffix(res)
     sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
-    with open(sdir / OUT_JSONL, "w", encoding="utf-8") as f:
+    with open(sdir / OUT_JSONL.replace(".jsonl", f"{sfx}.jsonl"), "w", encoding="utf-8") as f:
         for vk, v in res["variants"].items():
             for sp, r in v.items():
                 f.write(json.dumps({**r["cost"], "kind": "cost", "variant": vk, "split": sp},
@@ -267,7 +296,7 @@ def _write_outputs(res, out_root):
                                    sort_keys=True, default=str) + "\n")
 
     cfg = res["cfg"]
-    L = [f"# M4-0b — COST STRESS + CAPACITY ya BREADTH ({EVENT} × pairs 12 × {TF})\n",
+    L = [f"# M4-0b — COST STRESS + CAPACITY ya BREADTH ({EVENT} × {TF}) — **{res['scenario']}**\n",
          f"*{datetime.now():%Y-%m-%d %H:%M} | nyongeza ya reports/breadth_baseline.md (M4-0) | "
          f"splits: TRAIN + VALIDATION | reuse: cost_stress (R5) + config HALISI ya ftmo_config + "
          f"semantiki za lango la live (live_brain/broker_adapter) | HOLDOUT + sealed 2026-05+ "
@@ -280,6 +309,12 @@ def _write_outputs(res, out_root):
          "> ⚠ **Mipaka ya sim:** CHECK 3 (slots) + CHECK 4 (correlation) PEKEE. daily_loss/total_dd/"
          "max_spread zinategemea P&L ya wakati halisi — hazipo hapa. Hii ni **kadirio la capacity**, "
          "si backtest ya akaunti.\n"]
+    if res.get("pairs_by_variant"):
+        L.append("> **Scenario ya deployment:** kila model inatumia `pairs[]` ILIYOPENDEKEZWA na M4-0 "
+                 "(kanuni ile ile — hakuna uchaguzi mpya):")
+        for vk, ps in res["pairs_by_variant"].items():
+            L.append(f">   · **{vk}** ({len(ps)}): `{', '.join(ps)}`")
+        L.append("")
 
     # ---- 1. COST ----
     L.append("\n## 1. COST STRESS — EV(Δspread) analytic (cost_stress §R5(1))\n")
@@ -378,7 +413,8 @@ def _write_outputs(res, out_root):
     L.append("\n*reuse-only: cost_stress/pool_streams/pair_stream(episodes)/ftmo_config ni imports. "
              "Baseline ≠ edge. Profitable != Tradable Edge. Protect capital first.*")
 
-    rpt = out_root / "reports" / OUT_REPORT; rpt.parent.mkdir(parents=True, exist_ok=True)
+    rpt = out_root / "reports" / OUT_REPORT.replace(".md", f"{sfx}.md")
+    rpt.parent.mkdir(parents=True, exist_ok=True)
     rpt.write_text("\n".join(L), encoding="utf-8")
     return sdir / OUT_JSONL, rpt
 
@@ -526,6 +562,40 @@ def self_test():
     print(f"  [run] full runner: det={det} · COMBINED N={comb['n']} (== 2× {one['n']}) rej "
           f"{comb['n_rejected']} ≥ {one['n_rejected']} · outputs={sorted(kinds)} -> {r_ok}")
 
+    # ---- (h) scenario ya pairs[] iliyopendekezwa: inasomwa kutoka M4-0 jsonl (hakuna uchaguzi mpya),
+    # inatumia pairs ZILE ZILE per-variant, na inaandika faili ZAKE (haifuti ya pairs-12).
+    _self.pair_stream = _fake_stream
+    _self.spread_states = lambda pair, tf, ts: np.array(["NORMAL"] * len(ts))
+    le._ftmo_config = lambda: dict(CFG)
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            sdir = Path(tmp) / "data" / "strategies"; sdir.mkdir(parents=True)
+            recs_in = [dict(kind="pairs_rule", variant="SL2/TP1",
+                            passed=[dict(pair=p) for p in ["EURUSD", "GBPUSD", "USDJPY"]]),
+                       dict(kind="pairs_rule", variant="SL1/TP1",
+                            passed=[dict(pair=p) for p in ["EURUSD", "USDJPY"]])]
+            (sdir / "breadth_baseline.jsonl").write_text(
+                "\n".join(json.dumps(r) for r in recs_in) + "\n", encoding="utf-8")
+            pbv = recommended_pairs(tmp)
+            rc = run_capacity(out_root=tmp, pairs_by_variant=pbv,
+                              scenario="pairs[] zilizopendekezwa (M4-0)")
+            files = sorted(x.name for x in sdir.iterdir())
+            rec_rpt = (Path(tmp) / "reports" / "breadth_cost_capacity_recommended.md")
+            n_sl2 = rc["variants"]["SL2/TP1"]["validation"]["capacity"]["live"]["n"]
+            n_sl1 = rc["variants"]["SL1/TP1"]["validation"]["capacity"]["live"]["n"]
+            h_ok = (pbv == {"SL2/TP1": ["EURUSD", "GBPUSD", "USDJPY"], "SL1/TP1": ["EURUSD", "USDJPY"]}
+                    and n_sl2 == 3 * 40 and n_sl1 == 2 * 40          # pairs 3 na 2 × trades 40
+                    and rc["combined"]["validation"]["live"]["n"] == n_sl2 + n_sl1
+                    and "breadth_capacity_recommended.jsonl" in files
+                    and "breadth_capacity.jsonl" not in files        # haifuti ya pairs-12
+                    and rec_rpt.exists() and "zilizopendekezwa" in rec_rpt.read_text(encoding="utf-8"))
+    finally:
+        _self.pair_stream, _self.spread_states = orig_ps, orig_ss
+        le._ftmo_config = orig_cfg
+    ok = ok and h_ok
+    print(f"  [h] scenario ya pairs[] pendekezo: {pbv} · N per-variant {n_sl2}/{n_sl1} · "
+          f"faili tofauti (no-clobber) -> {h_ok}")
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -535,14 +605,25 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", action="store_true", help="endesha M4-0b (PC ya data)")
+    ap.add_argument("--recommended", action="store_true",
+                    help="tumia pairs[] zilizopendekezwa na M4-0 (breadth_baseline.jsonl) badala ya pairs zote")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         return self_test()
     if not a.run:
-        print("Tumia --run | --self-test.", file=sys.stderr)
+        print("Tumia --run [--recommended] | --self-test.", file=sys.stderr)
         return 2
-    res = run_capacity()
+    pbv = None
+    if a.recommended:
+        pbv = recommended_pairs()
+        if not pbv:
+            print("data/strategies/breadth_baseline.jsonl haipo — endesha breadth_baseline.py --run kwanza",
+                  file=sys.stderr)
+            return 2
+        print(f"scenario: pairs[] zilizopendekezwa (M4-0) — { {k: len(v) for k, v in pbv.items()} }")
+    res = run_capacity(pairs_by_variant=pbv,
+                       scenario=("pairs[] zilizopendekezwa (M4-0)" if pbv else "pairs zote 12"))
     print(f"M4-0b COST + CAPACITY ({EVENT} × {TF}, pairs pooled)")
     for vk, v in res["variants"].items():
         for sp, r in v.items():
@@ -555,7 +636,9 @@ def main():
         c = ms["live"]
         print(f"  COMBINED {sp:10s} accepted {c['n_accepted']}/{c['n']} ({c['reject_rate']:.1%} rej) · "
               f"conc max={c['concurrency']['max']} at-cap={c['concurrency']['at_cap_share']:.1%}")
-    print(f"  data/strategies/{OUT_JSONL}\n  reports/{OUT_REPORT}")
+    sfx = _suffix(res)
+    print(f"  data/strategies/{OUT_JSONL.replace('.jsonl', sfx + '.jsonl')}\n"
+          f"  reports/{OUT_REPORT.replace('.md', sfx + '.md')}")
     return 0
 
 
