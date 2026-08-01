@@ -1659,3 +1659,30 @@ DECISIONS (PD alinipa mamlaka 2026-08-01 "unaweza decide... lakini zingatia maku
 NEXT: **docs/M4_2_REGISTRATION.md imesajiliwa KABLA ya model yoyote** (charter §4.6): kupita =
   EV_R > +0.0328 (sl2tp1) / +0.0526 (sl1tp1) NA trades/mwaka ≥ 854/890 NA p_boot<0.05 NA folds ≥4/5.
   Kisha: jenga k3_model.py (GBM + threshold sweep juu ya out-of-fold + freeze), TRAIN PEKEE.
+
+=== M4-2 (2026-08-01) — GBM CV: **LESSON** (vigezo vilivyosajiliwa havikutimia) ===
+MATOKEO (PD aliendesha; reports/k3_model_cv_*.md):
+  | geometry | pool EV_R | best OOF (threshold) | lift | ilihitajika | % ya lengo |
+  | sl2tp1 | −0.0470 | **−0.0252** (top-5%) | +0.0218 R | +0.0798 R | 27% |
+  | sl1tp1 | −0.1019 | **−0.0295** (top-1%) | +0.0724 R | +0.1545 R | 47% |
+  - **HAKUNA threshold yenye EV_R chanya** (achilia mbali kuzidi breadth). c1 imeanguka kila mahali;
+    c3 (p_boot) imeanguka kwa ujenzi kwa kuwa EV<0 (p≈0.79-1.0).
+  - **Signal IPO:** lift ni monotone kutoka top-20% hadi top-5%/1% kwenye geometries ZOTE MBILI,
+    out-of-fold, purged. Hii SI kelele — GBM inapanga (rank) kitu halisi.
+  - **Tail inarudi nyuma:** top-0.1% ni MBAYA kuliko top-5% (sl2tp1 −0.0753 vs −0.0252) — predictions
+    zenye ujasiri zaidi SI trades bora. Onyo kwa yeyote atakayerudia.
+  - Utambuzi (takriban, kutoka decomposition ya EV): cost/R ≈ 0.036 (sl2tp1) / 0.087 (sl1tp1) ->
+    gross ≈ +0.011 / +0.058 R. **Gharama ni mara 1.5-3.3 ya gross edge** = muundo ULE ULE wa L-039
+    ("discriminating diagnostic ni gross-vs-cost margin, si net pekee").
+MPAKA WA MADAI (muhimu — kosa la muundo wangu wa M4-1, nalimiliki):
+  Dataset ya M4-1 ina **market entry kwenye open ya bar i+1 na mwelekeo uliochaguliwa EX-ANTE**
+  (ilifuata charter §6.2 "bars ZOTE"). Lakini nr7 inavyofanya kazi ni **stop-entry OCO** — soko lenyewe
+  ndilo linalochagua upande kwa kuvunja. KAIROS_3_SPEC §3 inasema rules zinatoa "wapi pa kuangalia"
+  (pamoja na mechanics ZAO za entry) na ML inachagua "ipi ya kuchukua". Kwa hiyo M4-2 ilipima
+  **"ML inabashiri mwelekeo ex-ante kwenye kila bar ya H1"** — SI design ya spec.
+  -> LESSON ni halali na imefungwa; LAKINI haiuai variant ya spec (family-pool yenye entry mechanics
+     zao). Hiyo ingehitaji **pre-registration MPYA**, si re-tune ya jaribio lililoanguka.
+UAMUZI (charter §5, pre-registered): **HATUA 2 (LSTM) HAIANZI.** SITARUDIA M4-2 kwa hyperparams
+  nyingine — hiyo ingekuwa multiple-testing juu ya data ileile baada ya kuona matokeo (haramu §4.6).
+INASUBIRI: namba ya `nr7_flag`-only (baseline ya ndani) kutoka ripoti — inaamua kama ni "ML haiwezi"
+  au "bwawa la all-bars/market-entry ndilo lisilofaa".
