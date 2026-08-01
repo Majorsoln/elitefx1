@@ -107,8 +107,8 @@ TRAIN PEKEE — VALIDATION ni eval MOJA baada ya FREEZE; HOLDOUT/sealed hazipo k
 
 ```
 cd src\research
-python breadth_baseline.py --tf H4
-python breadth_baseline.py --tf D1
+python breadth_baseline.py --run --tf H4
+python breadth_baseline.py --run --tf D1
 python cost_budget.py --report
 ```
 Runner ni ILE ILE ya M4-0 (hakuna statistic/fill mpya) — `--tf` inabadilisha **max_hold** na
