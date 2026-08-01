@@ -79,3 +79,13 @@ Inatoa `reports/breadth_cost_capacity.md` + `data/strategies/breadth_capacity.js
 - Outputs zinaandika faili **mbili** zilizotajwa pekee (`candidates*.jsonl` hazibadilishwi).
 
 *Baseline ≠ edge. STRAT-001/002 pekee ndizo PROVEN (holdout one-shot). Profitable ≠ Tradable Edge.*
+
+## M4-1 — DATASET ya KAIROS-3 (baada ya M4-0/M4-0b)
+
+```
+cd src\research
+python k3_dataset.py --build      (dakika kadhaa: pairs 12 × bars zote × dirs 2)
+```
+Inatoa `data/processed/k3/<pair>.parquet` + `k3_manifest.json` (**nje ya git** — data nzito) na
+`reports/k3_dataset.md` (rekodi inayoenda git: manifest, label balance, folds za purged-CV, NaN%).
+TRAIN PEKEE (2016-2022) — guard mbili: split-guard + assert `max(ts) < TRAIN_END`.
