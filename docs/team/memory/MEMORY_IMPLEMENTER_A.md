@@ -1713,3 +1713,39 @@ LAST COMPLETED:
   Sweep 38/38. H1 outputs za M4-0 HAZIFUTWI (suffix ya TF kwa H4/D1).
 NEXT: PD aendeshe `--tf H4` na `--tf D1` + `cost_budget --report`; kisha tathmini dhidi ya vigezo
   vya M4_HTF_REGISTRATION §3.
+
+=== M4-HTF (2026-08-01) — HUKUMU: vigezo VYOTE vitano vimetimia (H4 na D1) ===
+MATOKEO (PD aliendesha, NA swap — rmap.apply_swap + config; reports/breadth_baseline_{H4,D1}_swap.md):
+  | TF/variant | EV_R TRAIN→VALID | EV_pips FX (VALID) | swap drag | trades/mwaka | p_boot | pairs |
+  | H4 SL1/TP1 | +0.1373 → **+0.1386** | **+5.14** | 0.10 pips | 1,051 | 0.0001 | 11/12 |
+  | H4 SL2/TP1 | +0.0664 → +0.0730 | +4.23 | 0.30 | 969 | 0.0001 | 11/12 |
+  | D1 SL1/TP1 | +0.1885 → **+0.1856** | **+19.98** | 1.77 | 211 | 0.0005 | 8/12 |
+  | D1 SL2/TP1 | +0.0823 → +0.0657 | +16.78 | 2.94 | 192 | 0.0338 | 7/12 |
+  TATHMINI dhidi ya M4_HTF_REGISTRATION §3 (vigezo vilivyofungwa KABLA):
+   1. EV_R>0 VALID: ✅ 4/4 · 2. ishara imara TRAIN→VALID: ✅ 4/4 (H4 SL1 imesogea 0.0013 TU) ·
+   3. **gross/cost ≥3×: ✅ H4 ~8.3× / 7.0× · D1 ~9.4× / 5.7×** (H1 breadth ilikuwa 2.52×) ·
+   4. ≥6/12 pairs: ✅ (11/12, 11/12, 8/12, 7/12) · 5. trades/mwaka: imeripotiwa (hakuna floor).
+  -> **HTF-BREADTH NI MGOMBEA** kwa mujibu wa tafsiri iliyofungwa mapema.
+KOSA LANGU LA KADIRIO (nalimiliki): nilikadiria swap ya D1 ~7 pips (usiku 14) na H4 ~1.5 (usiku 3).
+  HALISI: D1 = 1.77 (≈usiku 3.5), H4 = 0.10 (≈usiku 0.2). Sababu: max_hold ni kikomo, si muda halisi —
+  trades nyingi zinafunga mapema kwa TP/SL. Kadirio langu lilikuwa conservative mara ~4.
+MAANA (uzito wa matokeo):
+  · H4: ~1,051 trades/mwaka × +5.14 pips ≈ **~5,400 pips/mwaka**; H1 breadth ≈ 2,400; KAIROS-1/2 ≈ 1,000.
+  · D1: ~211 × +19.98 ≈ **~4,200 pips/mwaka**, na msongamano wa slots hauwezi kubana (trade 1 kila
+    siku 1.7 kwa pairs 12).
+  · **Bajeti ya gharama inakuwa pana:** commission inayoruhusiwa (tradable ≥3× gross/cost) inapanda
+    kutoka $1.9-4.8/lot (H1) hadi **~$12.5/lot (H4)** na **~$50/lot (D1)**. Aina ya broker inaacha
+    kuwa kikwazo — hii ndiyo faida kubwa kuliko EV yenyewe.
+  · Uthibitisho wa ndani: Swing Family (D1 nr7 × LOW-vol, NA swap) ilitoa EV_R +0.067 (N=139); sisi
+    (bila filter) +0.1856 (N=422). Filter ya LOW-vol ilipunguza N mara 3 bila kuboresha EV.
+  · Gold: XAUUSD IMEKATALIWA na kanuni kwenye D1 (variants zote) — EV_pips(12) ya D1 SL2 VALID ni
+    −1.29 wakati FX ni +16.78. Kanuni ilifanya kazi bila mkono wa mtu.
+TAHADHARI ZILIZOBAKI (zimeandikwa kwenye registration tangu mwanzo):
+  · Madirisha ya H4/D1 TRAIN/VALID yameshaguswa (grid ya C2; atlas ya rmap) -> p_boot ni DESCRIPTIVE.
+    HII SI ushahidi wa OOS. Kilicho na uzito ni kwamba **hypothesis (cost/R inashuka na TF)
+    ilisajiliwa KABLA** na ikathibitika 2/2 TF na 4/4 variants.
+  · HOLDOUT: hatua yoyote inayoigusa INAHITAJI pre-registration MPYA + idhini ya Chief/PD (historia
+    ya dirisha hili ni ngumu — C2-WATCH na Swing zote zilishaligusa kwa namna zao).
+NEXT (pendekezo langu): (1) PD athibitishe pairs[] + forward paper (H4 kwanza — trades nyingi zaidi,
+  hakuna dirisha linalochomwa); (2) pre-registration mpya ya holdout ikiamuliwa; (3) LESSON-046 ya
+  M4-HTF baada ya PD kusoma.
