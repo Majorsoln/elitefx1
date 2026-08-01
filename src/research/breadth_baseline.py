@@ -46,6 +46,7 @@ from event_library_v2 import EVENTS_V2
 from event_quality_report import episodes
 from strategy_lab import load_window, _mask_context, pvalue_boot, pvalue_gt0
 from family_pooled import _r_normalize, pool_streams, _boot_ci, _seed_from_registration
+from rmap import apply_swap
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -77,6 +78,7 @@ MAX_BOOT_CELLS = 2e7                           # ulinzi wa RAM: B×N (idx array 
 
 # kanuni ya pairs[] (pre-registered — SI ranking)
 MIN_N_VALID = 30
+SWAP_DEFAULT = 0.5          # fallback ya pips/usiku kama config haina pair (sawa na swing_family)
 
 REG_PREFIX = "BREADTH-BASELINE-M4-0"
 DAYS_PER_YEAR = 365.25
@@ -87,6 +89,12 @@ OUT_REPORT = "breadth_baseline.md"
 def _pairs():
     from market_state_engine import cfg
     return list(cfg()["pairs"])
+
+
+def _swap_cfg():
+    """swap_pips_per_night kutoka config (ILE ILE inayotumiwa na swing_family)."""
+    from market_state_engine import cfg
+    return cfg().get("swap_pips_per_night", {})
 
 
 def variant_key(sl_atr, tp_atr):
@@ -103,11 +111,12 @@ def _guard_split(split):
             "HOLDOUT = one-shot ya gate ya mwisho (charter §4.1/§5); sealed 2026-05+ = §3.1b.")
 
 
-def _reg_string(sl_atr, tp_atr, split, tf=TF):
+def _reg_string(sl_atr, tp_atr, split, tf=TF, swap=False):
     """Seed deterministic kutoka spec ya variant (hashing ILEILE ya family_pooled — reuse)."""
     ts_spec = TF_SPEC[tf]
     return "|".join([REG_PREFIX, EVENT, tf, str(ts_spec["session_filter"]), str(VOL_FILTER),
-                     variant_key(sl_atr, tp_atr), f"hold{ts_spec['max_hold']}", split])
+                     variant_key(sl_atr, tp_atr), f"hold{ts_spec['max_hold']}",
+                     f"swap{int(bool(swap))}", split])
 
 
 def boot_B(n, B=B_BOOT):
@@ -120,7 +129,7 @@ def boot_B(n, B=B_BOOT):
 
 
 # ---------- streams (REUSE: event fn -> _mask_context -> episodes -> _r_normalize) ----------
-def pair_stream(pair, split, sl_atr, tp_atr, tf=TF):
+def pair_stream(pair, split, sl_atr, tp_atr, tf=TF, swap=None):
     """R-stream ya pair moja kwa variant moja. Njia SAWASAWA na family_pooled.cell_stream /
     swing_family._pair_stream (fill rules HAZIGUSWI). Rudisha (rows, years) au (None, None) kama
     dirisha halipo. years = span halisi ya ts (kwa trades/mwaka)."""
@@ -136,6 +145,10 @@ def pair_stream(pair, split, sl_atr, tp_atr, tf=TF):
     out = _mask_context(out, spec["entry"], hour, vol, ts_spec["session_filter"], VOL_FILTER)
     trs = episodes(out, spec["entry"], o, h, l_, c, atr, spr, hour, vol,
                    sl_atr=sl_atr, tp_atr=tp_atr, max_hold=ts_spec["max_hold"])
+    if swap is not None:                             # M4-HTF §5: carry ya usiku (HTF inashikilia siku)
+        sw = apply_swap(trs, ts, float(swap))        # REUSE ya swing_family (episodes HAIGUSWI)
+        trs = [(eb, xb, d, sw[k][1], sess, vs)       # pnl -> pnl baada ya swap
+               for k, (eb, xb, d, _pnl, sess, vs) in enumerate(trs)]
     rows = _r_normalize(trs, atr, sl_atr, ts, pair)
     for r in rows:                                   # ADDITIVE (M4-0b capacity): muda wa kufunga
         r["ts_exit"] = ts[r["exit_bar"]]             # occupancy ya slot = ts_entry -> ts_exit
@@ -157,15 +170,17 @@ def _acct(rows):
                 pf=(round(gain / loss, 3) if loss > 0 else None))
 
 
-def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT, tf=TF):
+def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT, tf=TF, swap=False):
     """Pooled breadth run ya variant moja kwenye split moja. POOLED = hukumu (L-041); per-pair =
     diagnostics. Pair bila dirisha -> inarekodiwa `missing` (SI kimya — inaonekana kwenye ripoti)."""
     _guard_split(split)
     pairs = pairs or _pairs()
+    swap_cfg = _swap_cfg() if swap else {}
     streams, per_pair, missing = [], [], []
     rate_sum = 0.0
     for pair in pairs:
-        rows, years = pair_stream(pair, split, sl_atr, tp_atr, tf=tf)
+        sw = float(swap_cfg.get(pair, SWAP_DEFAULT)) if swap else None
+        rows, years = pair_stream(pair, split, sl_atr, tp_atr, tf=tf, swap=sw)
         if rows is None:
             missing.append(pair)
             continue
@@ -179,7 +194,7 @@ def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT, tf=TF):
     pooled = pool_streams(streams)                       # dedup (pair, entry_bar) — AT7 ya family_pooled
     R = np.array([r["pnl_R"] for r in pooled], float)
     n = len(R)
-    res = dict(split=split, tf=tf, sl_atr=sl_atr, tp_atr=tp_atr,
+    res = dict(split=split, tf=tf, swap=bool(swap), sl_atr=sl_atr, tp_atr=tp_atr,
                variant=variant_key(sl_atr, tp_atr),
                pairs_used=[p["pair"] for p in per_pair], missing=missing, per_pair=per_pair,
                trades_per_year=round(rate_sum, 2))
@@ -191,7 +206,7 @@ def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT, tf=TF):
     res["ev_pips_fx"] = (round(float(P_fx.mean()), 4) if len(P_fx) else None)
     res["n_fx"] = int(len(P_fx))
     if n >= 2:
-        seed = _seed_from_registration(_reg_string(sl_atr, tp_atr, split, tf))
+        seed = _seed_from_registration(_reg_string(sl_atr, tp_atr, split, tf, swap))
         b_eff = boot_B(n, B)
         res.update(seed=seed, B_eff=b_eff,
                    p_boot=round(float(pvalue_boot(R, B=b_eff, mean_block=MEAN_BLOCK, seed=seed)), 6),
@@ -261,16 +276,17 @@ def _baseline_line(variants):
                 other_variants={k: v["splits"]["validation"].get("ev_R") for k, v in variants.items()})
 
 
-def run_baseline(out_root=REPO_ROOT, write=True, pairs=None, B=B_BOOT, tf=TF):
+def run_baseline(out_root=REPO_ROOT, write=True, pairs=None, B=B_BOOT, tf=TF, swap=False):
     """M4-0 kamili: variants 2 × splits 2 (TRAIN+VALIDATION) -> pooled + per-pair + pairs[]-rule ->
     BASELINE LINE -> outputs. Deterministic (hakuna timestamp ndani ya result)."""
     variants = {}
     for sl_atr, tp_atr in VARIANTS:
-        splits = {sp: run_variant(sp, sl_atr, tp_atr, pairs=pairs, B=B, tf=tf) for sp in SPLITS}
+        splits = {sp: run_variant(sp, sl_atr, tp_atr, pairs=pairs, B=B, tf=tf, swap=swap)
+                  for sp in SPLITS}
         passed, rejected = recommend_pairs(splits["train"]["per_pair"], splits["validation"]["per_pair"])
         variants[variant_key(sl_atr, tp_atr)] = dict(sl_atr=sl_atr, tp_atr=tp_atr, splits=splits,
                                                      pairs_passed=passed, pairs_rejected=rejected)
-    result = dict(event=EVENT, tf=tf, session_filter=TF_SPEC[tf]["session_filter"],
+    result = dict(event=EVENT, tf=tf, swap=bool(swap), session_filter=TF_SPEC[tf]["session_filter"],
                   vol_filter=VOL_FILTER, max_hold=TF_SPEC[tf]["max_hold"],
                   splits=list(SPLITS), min_n_valid=MIN_N_VALID,
                   variants=variants, baseline=_baseline_line(variants))
@@ -286,7 +302,7 @@ def _f(x, spec="+.4f"):
 
 def _write_outputs(res, out_root):
     out_root = Path(out_root)
-    sfx = "" if res["tf"] == "H1" else f"_{res['tf']}"        # H1 = M4-0 (haifutwi)
+    sfx = ("" if res["tf"] == "H1" else f"_{res['tf']}") + ("_swap" if res.get("swap") else "")
     sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
     jl = sdir / OUT_JSONL.replace(".jsonl", f"{sfx}.jsonl")
     with open(jl, "w", encoding="utf-8") as f:
@@ -309,7 +325,9 @@ def _write_outputs(res, out_root):
     L = [f"# M4-0 — BREADTH BASELINE ({EVENT} × pairs 12 × {res['tf']}, POOLED)\n",
          f"*{datetime.now():%Y-%m-%d %H:%M} | charter: docs/CYCLE4_ML_CHARTER.md §1B/§5 · spec: "
          f"docs/KAIROS_3_SPEC.md §5.3 | splits: TRAIN 2016-2022 + VALIDATION 2023-2024 | "
-         f"filter: {res['session_filter']}, vol={VOL_FILTER}, max_hold={res['max_hold']} | costs: spread halisi ya bar "
+         f"filter: {res['session_filter']}, vol={VOL_FILTER}, max_hold={res['max_hold']} | "
+         f"swap: {'IMETUMIKA (config swap_pips_per_night, rmap.apply_swap)' if res.get('swap') else 'HAIJATUMIKA'} "
+         f"| costs: spread halisi ya bar "
          f"ya entry + slippage (L-039) | engine RASMI: pvalue_boot mean_block={MEAN_BLOCK}, "
          f"seed=hash(registration)*\n",
          "> **HII SI EDGE CLAIM MPYA.** Logic ni ILE ILE iliyothibitika (`nr7_break` × H1 × no-LATE = "
@@ -623,6 +641,31 @@ def self_test():
           f"D1(hold {r_d1['max_hold']}, {r_d1['session_filter']}) · seeds tofauti={seeds_differ} · "
           f"faili {rpts} (H1 haifutwi) -> {f_ok}")
 
+    # ---- (g) SWAP (M4-HTF §5): carry ya usiku inapunguza EV, N HAIBADILIKI, na outputs zina faili
+    # zao (bila-swap haifutwi). Swap = rmap.apply_swap (REUSE ya swing_family; episodes HAIGUSWI).
+    import market_state_engine as _mse
+    _self.load_window = lambda sym, tf, split, token=None: fx.get(sym)
+    orig_cfg = _mse.cfg
+    _mse.cfg = lambda: dict(pairs=P12, swap_pips_per_night={p: 0.5 for p in P12}, paths={})
+    try:
+        no_sw = run_variant("validation", 2.0, 1.0, pairs=P12, B=200, tf="D1", swap=False)
+        with_sw = run_variant("validation", 2.0, 1.0, pairs=P12, B=200, tf="D1", swap=True)
+        with tempfile.TemporaryDirectory() as tmp:
+            run_baseline(out_root=tmp, pairs=P12, B=200, tf="D1", swap=False)
+            run_baseline(out_root=tmp, pairs=P12, B=200, tf="D1", swap=True)
+            files = sorted(x.name for x in (Path(tmp) / "reports").iterdir())
+        g_ok = (no_sw["n"] == with_sw["n"] and with_sw["ev_R"] < no_sw["ev_R"]
+                and with_sw["swap"] is True and no_sw["swap"] is False
+                and files == sorted([OUT_REPORT.replace(".md", "_D1.md"),
+                                     OUT_REPORT.replace(".md", "_D1_swap.md")]))
+    finally:
+        _mse.cfg = orig_cfg
+        _self.load_window = orig_lw
+    ok = ok and g_ok
+    print(f"  [g] swap (D1): EV_R bila={no_sw['ev_R']:+.4f} -> na swap={with_sw['ev_R']:+.4f} "
+          f"(drag {no_sw['ev_R'] - with_sw['ev_R']:+.4f}, N sawa={no_sw['n'] == with_sw['n']}) · "
+          f"faili {files} -> {g_ok}")
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -633,6 +676,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", action="store_true", help="endesha M4-0 breadth baseline (PC ya data)")
     ap.add_argument("--boot-B", dest="B", type=int, default=B_BOOT, help=f"B ya pvalue_boot (default {B_BOOT})")
+    ap.add_argument("--swap", action="store_true",
+                    help="ongeza carry ya usiku (rmap.apply_swap + config swap_pips_per_night) — LAZIMA kwa H4/D1")
     ap.add_argument("--tf", default=TF, choices=list(TF_SPEC),
                     help="H1 = M4-0 (default). H4/D1 = M4-HTF (docs/M4_HTF_REGISTRATION.md)")
     ap.add_argument("--self-test", action="store_true")
@@ -642,10 +687,11 @@ def main():
     if not a.run:
         print("Tumia --run (breadth baseline) | --self-test.", file=sys.stderr)
         return 2
-    res = run_baseline(B=a.B, tf=a.tf)
+    res = run_baseline(B=a.B, tf=a.tf, swap=a.swap)
     b = res["baseline"]
     print(f"BREADTH BASELINE ({EVENT} × {a.tf} × {TF_SPEC[a.tf]['session_filter']}, "
-          f"max_hold={TF_SPEC[a.tf]['max_hold']}, pairs pooled — L-041)")
+          f"max_hold={TF_SPEC[a.tf]['max_hold']}, swap={'NDIYO' if a.swap else 'HAPANA'}, "
+          f"pairs pooled — L-041)")
     for vk, v in res["variants"].items():
         for sp in res["splits"]:
             r = v["splits"][sp]
@@ -657,7 +703,7 @@ def main():
         print(f"  BASELINE LINE -> KAIROS-3 LAZIMA izidi: EV_net={_f(b['ev_pips_fx'], '+.2f')} pips "
               f"(FX), EV_R={_f(b['ev_R'])}, trades/mwaka={_f(b['trades_per_year'], '.1f')} "
               f"(VALIDATION, variant {b['variant']})")
-    sfx = "" if a.tf == "H1" else f"_{a.tf}"
+    sfx = ("" if a.tf == "H1" else f"_{a.tf}") + ("_swap" if a.swap else "")
     print(f"  data/strategies/{OUT_JSONL.replace('.jsonl', sfx + '.jsonl')}\n"
           f"  reports/{OUT_REPORT.replace('.md', sfx + '.md')}")
     return 0

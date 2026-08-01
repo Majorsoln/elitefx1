@@ -107,11 +107,16 @@ TRAIN PEKEE — VALIDATION ni eval MOJA baada ya FREEZE; HOLDOUT/sealed hazipo k
 
 ```
 cd src\research
-python breadth_baseline.py --run --tf H4
-python breadth_baseline.py --run --tf D1
+python breadth_baseline.py --run --tf H4 --swap
+python breadth_baseline.py --run --tf D1 --swap
 python cost_budget.py --report
 ```
 Runner ni ILE ILE ya M4-0 (hakuna statistic/fill mpya) — `--tf` inabadilisha **max_hold** na
 **session_filter** kwa mujibu wa `TF_SPEC` PEKEE (provenance: H4 = family_pooled/C2-WATCH;
 D1 = swing_family). Outputs za H4/D1 zina suffix yao (`breadth_baseline_H4.md` n.k.) —
 **matokeo ya M4-0 (H1) hayafutwi**. TRAIN + VALIDATION PEKEE; HOLDOUT/sealed hazipo.
+
+**`--swap` ni LAZIMA kwa H4/D1** (registration §5): HTF inashikilia position kwa siku/wiki, kwa hiyo
+carry ya usiku ni gharama halisi. Inatumia `rmap.apply_swap` + `swap_pips_per_night` ya config
+(NJIA ILE ILE ya swing_family; `episodes` haiguswi). Outputs zina suffix `_swap` — run ya bila-swap
+haifutwi, kwa hiyo tofauti kati yao inaonekana.
