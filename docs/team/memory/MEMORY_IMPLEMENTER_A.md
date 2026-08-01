@@ -1535,3 +1535,42 @@ KNOWN LIMITATION (BRIDGE-3 hardening): g_oco (hali ya OCO) iko kwenye kumbukumbu
   position kufunga, FILLED/CLOSED za order za awali hazitaripotiwa (rebuild kutoka positions/comment =
   baadaye). expiry = UTC (broker-time-independent). Orders = GTC + EA-managed expiry.
 NEXT: BRIDGE-3 (integration PC ya PD: demo end-to-end -> VPS -> baadaye sealed-window acceptance + live saini).
+
+=== M4-0 build (2026-08-01) — BREADTH BASELINE (nr7 × pairs 12 pooled) — IMEKAMILIKA (runner) ===
+LAST COMPLETED: **src/research/breadth_baseline.py** ✅ (docs/CYCLE4_ML_CHARTER.md §1B/§5/§6.1 +
+  docs/KAIROS_3_SPEC.md §5.3) + **docs/RUNBOOK_breadth_baseline.md** + registration kwenye run_selftests.
+  KUSUDI: namba ambayo KAIROS-3 (na ML yote M4-1..M4-4) LAZIMA ishinde — SI hypothesis mpya: logic
+  ILE ILE iliyothibitika (`nr7_break` × H1 × no-LATE = STRAT-001/002) ikienezwa pairs 2 -> **12 pooled**.
+  1. SPEC FROZEN: nr7_break (stop/OCO) · H1 · no-LATE · vol=None · max_hold=24 · variants MBILI
+     SL2.0/TP1.0 (KAIROS-1) na SL1.0/TP1.0 (KAIROS-2) · pairs 12 (data_config) · splits **TRAIN +
+     VALIDATION PEKEE**.
+  2. POOLED = hukumu (L-041): `_r_normalize`+`pool_streams` (family_pooled) -> EV_R, EV_pips,
+     EV_pips_FX (bila XAUUSD — pip-scale), N, trades/mwaka (Σ n_i/miaka_i), p_boot (pvalue_boot,
+     mean_block=3, seed=hash(registration)), CI90 (`_boot_ci`), p_z, win%, PF. Per-pair =
+     **diagnostics TU** yenye tahadhari ya L-041 iliyoandikwa kwenye ripoti.
+  3. RED LINE `_guard_split`: split != train/validation -> PermissionError **KABLA ya kusoma data**
+     (holdout/sealed/forward/all). Red-line ya `load_window` (token) inabaki juu yake.
+  4. `recommend_pairs()` — KANUNI pre-registered, SI ranking: EV_R>0 TRAIN **NA** VALIDATION **NA**
+     N_valid>=30; orodha ya **alfabeti** (si EV); HAKUNA top-N. Ripoti: (a) zilizopita + YAML snippet;
+     (b) zilizokataliwa + sababu. Ni PENDEKEZO — **PD ndiye anayehariri config/models.yaml**.
+  5. Outputs: `reports/breadth_baseline.md` (BASELINE LINE + pooled per variant + per-pair
+     diagnostics + pendekezo la pairs[] + caveats) na `data/strategies/breadth_baseline.jsonl`
+     (kind=pair/pooled/pairs_rule/baseline). No-clobber (candidates*.jsonl hazibadilishwi).
+  6. `boot_B()`: engine ILEILE, B ina-cap kwa RAM (array B×N ya _stationary_indices; sakafu 1,000,
+     kamwe zaidi ya B iliyoombwa) — `B_eff` inaripotiwa kwenye jedwali.
+  · SHERIA: golden ZERO changes — episodes/_mask_context/pvalue_boot/pvalue_gt0/load_window/
+    _r_normalize/pool_streams/_boot_ci ni **imports TU**. Gharama halisi kwenye kila namba (L-039).
+    HOLDOUT + sealed 2026-05+ HAZIJAGUSWA.
+  Self-test (PASS, sweep **33/33**): (a) pooled math == family_pooled (EV_R/p_boot/CI90 recompute huru
+    kwa golden fns); (b) HOLDOUT/sealed guard (4 splits + pair_stream -> PermissionError, load_window
+    haikuitwa hata mara moja); (c) determinism (run mara 2 = JSON ileile) + no-clobber + outputs +
+    BASELINE LINE ndani ya ripoti + rule-closure/exhaustive + coverage 12/12; (d) Σ per-pair N ==
+    pooled N; (e) pairs[]-rule: train-only chanya (+0.30, KUBWA kuliko mshindi) **INAKATALIWA**,
+    N_valid=29 INAKATALIWA, orodha ni alfabeti; nyongeza: no-LATE decidability (entries LATE = 0) na
+    L-039 (EV_pips(spr0) − EV_pips(spr2) == 2.0 EXACT = gharama ipo ndani ya kila namba).
+KNOWN LIMITATION: **namba halisi hazipo hapa** — container ya agent haina state parquets (26GB iko
+  kwa PD). Runner + self-tests ni GREEN; `reports/breadth_baseline.md` inazalishwa na
+  `python breadth_baseline.py --run` kwenye PC ya data (RUNBOOK hatua 1-6), ndipo BASELINE LINE +
+  orodha ya pairs[] zitakuwa halisi.
+NEXT: M4-1 (DATASET: triple-barrier labels + features kwa bars ZOTE, pairs 12, TRAIN pekee; purged-CV
+  splitter) baada ya BASELINE LINE kurudi kutoka PC ya data.
