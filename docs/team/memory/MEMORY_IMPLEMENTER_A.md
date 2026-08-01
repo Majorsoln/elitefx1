@@ -1598,3 +1598,37 @@ NEXT: (i) M4-0b iliyopendekezwa — cost-stress (Δspread 0.2/0.5/1.0 + WIDE-spl
   KABLA PD hajapanua pairs[] live; (ii) M4-1 DATASET (triple-barrier + features kwa bars ZOTE, pairs
   12, TRAIN pekee; purged+embargoed CV). Bar ya KAIROS-3 sasa iko wazi: spec §5.2 (≥3.0 pips) ndiyo
   binding, si breadth (+0.91) — ML lazima ilete **UBORA**, wingi tayari unamilikiwa na breadth.
+
+=== M4-0b (2026-08-01) — COST STRESS + CAPACITY ya breadth — IMEKAMILIKA (PD aliendesha) ===
+LAST COMPLETED: **src/research/breadth_capacity.py** ✅ (commits fbb76b2 + cfc6c6e; sweep 34/34).
+  Reuse-only: cost_stress R5(1)/R5(2) · config HALISI ya ftmo_config · semantiki HALISI za lango la
+  live (live_engine._corr_group reservation + broker_adapter._groups_of check) · pair_stream ya M4-0.
+  Splits TRAIN+VALIDATION pekee; HOLDOUT + sealed 2026-05+ hazijaguswa.
+MATOKEO (PD, 2026-08-01) — **scenario MBILI zililinganishwa:**
+  | scenario | variant | breakeven Δspread (VALID) | COMBINED rej (VALID) | at-cap |
+  | pairs 12 | SL2/TP1 | 0.90 pip | 26.6% | 29.0% |
+  | pairs 12 | SL1/TP1 | 0.91 pip | " | " |
+  | pairs[] pendekezo (9/8) | SL2/TP1 | **1.58 pip** | **16.8%** | **11.8%** |
+  | pairs[] pendekezo (9/8) | SL1/TP1 | **1.78 pip** | " | " |
+  - **Kanuni ya pairs[] ya M4-0 haikuondoa tu pairs hasi — iliboresha ustahimilivu wa gharama MARA
+    ~2** (0.90 → 1.58/1.78 pips; KAIROS-1 = 1.92). Pooled-FX EV = breakeven kwa ufafanuzi.
+  - **TAHADHARI YA MSINGI (selection bias):** kanuni ilitumia VALIDATION kuchagua pairs, kisha
+    tunapima EV kwenye VALIDATION ILEILE → makadirio ya 1.58/1.78 ni **hot** (in-sample-of-the-rule).
+    Mwelekeo (kuondoa pairs zenye ishara hasi mfululizo kunasaidia) ni wa kuaminika; **ukubwa SI**.
+    Precedent ya mradi: VALID/TRAIN ~2× hot → shrink 0.346 (family_pooled §4). Hakimu = forward/holdout.
+  - **CAPACITY:** model MOJA haina kikwazo (rej 0.1-2.2%). **Models MBILI kwenye akaunti moja** ndipo
+    lango linabana: pairs 12 → 26.6% rej / at-cap 29%; pendekezo 9/8 → 16.8% rej / at-cap 11.8%.
+    Hitimisho: kupanua pairs kupita kiasi kunanunua **msongamano**, si nafasi.
+  - **EV acc vs rej:** ishara inapinduka kati ya splits (TRAIN rej hasi, VALID rej chanya) na N ya
+    rejects ni ndogo (2-238 per-variant) → **hakuna ushahidi wa queueing bias ya kimfumo; ni kelele.**
+    Hoja ya kupanga foleni kwa UBORA inabaki halali kimuundo (at-cap 12-29% = uteuzi wa nasibu),
+    si kwa namba hizi.
+  - **BASELINE LINE ya KAIROS-3 HAIBADILIKI** (pairs-12 pooled: EV_net +0.91 pips FX / EV_R +0.0526 /
+    2,680 kwa mwaka). Sababu: ilikuwa pre-registered kwa pairs-12; na kwa vyovyote spec §5.2 (≥3.0
+    pips) ndiyo binding — inazidi 0.91 NA 1.78.
+  - SWALI LA WAZI (halijarekebishwa, ni la Chief/PD): live_brain ina-increment correlation-group MOJA
+    wakati CHECK 4 inakagua makundi YOTE → EUR_group cap ni laini kuliko nia. Safu `live` vs `strict`
+    kwenye ripoti zinaonyesha ukubwa wa tofauti.
+PENDEKEZO KWA PD: panua `pairs[]` kwa orodha ZA KANUNI (KAIROS-1 → 9, KAIROS-2 → 8), **si** pairs 12;
+  fuatilia spread (breakeven ~1.6-1.8 pip si pana kiasi cha kupuuza); hakimu wa mwisho = forward.
+NEXT: M4-1 DATASET (triple-barrier + features, bars ZOTE, pairs 12, TRAIN pekee, purged+embargoed CV).
