@@ -48,6 +48,27 @@ Hiari: `--boot-B <N>` (default 10,000) — B ya `pvalue_boot`. Runner ina-cap B 
   Ripoti inaonyesha (a) zilizopita + snippet ya YAML; (b) zilizokataliwa + **sababu**.
   **Ni PENDEKEZO — PD ndiye anayehariri `config/models.yaml`.** Code haiandiki registry.
 
+## M4-0b — COST STRESS + CAPACITY (baada ya M4-0)
+
+M4-0 ilionyesha breadth halali LAKINI **cost-thin** (EV_net FX +0.91 pips ⇒ breakeven Δspread 0.91
+pip). Kabla ya kupanua `pairs[]` live, endesha:
+
+```
+cd src\research
+python breadth_capacity.py --run
+```
+
+Inatoa `reports/breadth_cost_capacity.md` + `data/strategies/breadth_capacity.jsonl`:
+1. **EV(Δspread)** analytic (`cost_stress` R5(1)) — pooled FX + per-pair breakeven.
+2. **spread_state** ya bar ya ENTRY (R5(2)) — je trades za **WIDE** ndizo zinazokula faida?
+   (EV_WIDE < 0 ⇒ pendekezo la WIDE-skip kwenye **deployment policy**, si backtest — inahitaji
+   forward-verify.)
+3. **CAPACITY** chini ya lango halisi (`config/ftmo_config.yaml`: max_slots 7 / correlated 3):
+   accepted vs rejected, sababu, concurrency, na **EV ya zilizokataliwa vs zilizopita** (kama
+   zilizokataliwa ni bora, lango linakata faida → hoja ya kupanga foleni kwa ubora = KAIROS-3).
+   Safu `live` = tabia ya code ya sasa; `strict` = kila correlation-group inaongezeka (§SWALI LA WAZI).
+   **COMBINED** = KAIROS-1 + KAIROS-2 zikishindania slots zilezile (hali halisi).
+
 ## Red lines (zilizowekwa kwenye code, si kwenye nia)
 
 - `_guard_split` inarefuse split yoyote isiyokuwa `train`/`validation` **kabla ya kusoma data**

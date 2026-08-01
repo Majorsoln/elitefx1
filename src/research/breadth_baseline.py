@@ -126,6 +126,8 @@ def pair_stream(pair, split, sl_atr, tp_atr):
     trs = episodes(out, spec["entry"], o, h, l_, c, atr, spr, hour, vol,
                    sl_atr=sl_atr, tp_atr=tp_atr, max_hold=MAX_HOLD)
     rows = _r_normalize(trs, atr, sl_atr, ts, pair)
+    for r in rows:                                   # ADDITIVE (M4-0b capacity): muda wa kufunga
+        r["ts_exit"] = ts[r["exit_bar"]]             # occupancy ya slot = ts_entry -> ts_exit
     years = float((ts[-1] - ts[0]) / np.timedelta64(1, "D") / DAYS_PER_YEAR)
     return rows, years
 
