@@ -1568,9 +1568,33 @@ LAST COMPLETED: **src/research/breadth_baseline.py** ✅ (docs/CYCLE4_ML_CHARTER
     pooled N; (e) pairs[]-rule: train-only chanya (+0.30, KUBWA kuliko mshindi) **INAKATALIWA**,
     N_valid=29 INAKATALIWA, orodha ni alfabeti; nyongeza: no-LATE decidability (entries LATE = 0) na
     L-039 (EV_pips(spr0) − EV_pips(spr2) == 2.0 EXACT = gharama ipo ndani ya kila namba).
-KNOWN LIMITATION: **namba halisi hazipo hapa** — container ya agent haina state parquets (26GB iko
-  kwa PD). Runner + self-tests ni GREEN; `reports/breadth_baseline.md` inazalishwa na
-  `python breadth_baseline.py --run` kwenye PC ya data (RUNBOOK hatua 1-6), ndipo BASELINE LINE +
-  orodha ya pairs[] zitakuwa halisi.
-NEXT: M4-1 (DATASET: triple-barrier labels + features kwa bars ZOTE, pairs 12, TRAIN pekee; purged-CV
-  splitter) baada ya BASELINE LINE kurudi kutoka PC ya data.
+MATOKEO HALISI (PD aliendesha PC ya data 2026-08-01; commit 777b8c7 — reports/breadth_baseline.md):
+  **BASELINE LINE (imesajiliwa): KAIROS-3 LAZIMA izidi EV_net = +0.91 pips/trade (FX pooled,
+  N=4934), EV_R = +0.0526, trades/mwaka = 2,680 — VALIDATION, variant SL1/TP1.**
+  | variant | split | N | EV_R | EV_pips FX | win% | PF | p_boot |
+  | SL2/TP1 | TRAIN | 19,164 | +0.0291 | +1.02 | 71.4 | 1.10 | 0.00096 |
+  | SL2/TP1 | VALID |  5,094 | +0.0328 | +0.90 | 72.2 | 1.11 | 0.00076 |
+  | SL1/TP1 | TRAIN | 20,316 | +0.0559 | +1.09 | 57.7 | 1.12 | 0.00100 |
+  | SL1/TP1 | VALID |  5,355 | +0.0526 | +0.91 | 58.1 | 1.11 | 0.00027 |
+  - **BREADTH INAFANYA KAZI kwa mechanism-level:** VALID ≈ TRAIN (haikushuka — tofauti na fails 3/3
+    za L-041 ambazo zilipinduka hasi OOS); 9/12 (SL2/TP1) na 8/12 (SL1/TP1) pairs sign-consistent.
+  - pairs[] PENDEKEZO (kanuni, si ranking): SL2/TP1 → AUDUSD EURUSD GBPJPY GBPUSD NZDUSD USDCAD
+    USDCHF USDJPY XAUUSD (9); SL1/TP1 → zilezile bila NZDUSD (8). Zilizokataliwa: EURCHF (train −),
+    EURGBP (valid −, train − kwa SL1), EURJPY (valid −), NZDUSD (valid − kwa SL1) — **EUR-crosses
+    zote tatu zinaanguka kwenye variants zote mbili** (hypothesis: NR7 inahitaji expansion
+    follow-through; pairs za range-bound/low-vol zinatoa false breaks — SI dai, ni observation).
+  - USDCHF/USDJPY (pairs za STRAT-001/002) zimepita kanuni **zenyewe** = consistency check ya ndani.
+    Zote mbili hazikuwa top za TRAIN (USDCHF train +0.0060 → valid +0.1355) = ushahidi zaidi wa L-041
+    (TRAIN ranking ni kelele).
+  - **TAHADHARI (L-039):** +0.91 pips/trade ⇒ breakeven Δspread = 0.91 pip (cost_stress §1 analytic).
+    KAIROS-1 = 1.92, KAIROS-2 = 2.65 → breadth ni dhaifu mara 2-3 kwa kila trade; inashinda kwa
+    WINGI (~2× pip-flow ya pairs-2), si UBORA. Charter §4.4 inataka edge ~3-4× cost — hii ni ~0.7×.
+  - **R vs pips divergence:** GBPJPY (+0.0126 R / −0.39 pips) na NZDUSD (+0.0040 R / −0.15 pips)
+    kwenye SL2/TP1 zinapita kwa R lakini si kwa pips VALIDATION. Kanuni ilikuwa **pre-registered kwa
+    EV_R** — kuongeza pips-filter SASA (baada ya kuona namba) = kuhamisha magoli (post-hoc selection).
+    Imeandikwa kama caveat; uamuzi ni wa PD, na uthibitisho ni forward/holdout.
+NEXT: (i) M4-0b iliyopendekezwa — cost-stress (Δspread 0.2/0.5/1.0 + WIDE-split, cost_stress.py
+  iliyopo) + capacity chini ya risk-engine (max_slots 7 / correlated 3; 2,680/mwaka ≈ 10-11/siku)
+  KABLA PD hajapanua pairs[] live; (ii) M4-1 DATASET (triple-barrier + features kwa bars ZOTE, pairs
+  12, TRAIN pekee; purged+embargoed CV). Bar ya KAIROS-3 sasa iko wazi: spec §5.2 (≥3.0 pips) ndiyo
+  binding, si breadth (+0.91) — ML lazima ilete **UBORA**, wingi tayari unamilikiwa na breadth.
