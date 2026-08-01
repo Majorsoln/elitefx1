@@ -71,7 +71,10 @@ OUT_MANIFEST = "k3_manifest.json"
 
 # ---------- MANIFEST (mpaka rasmi — trainer ya M4-2 ita-assert dhidi yake) ----------
 # FEATURES = za k4 manifest (BASE bila `range_nr7_atr`) + `range_atr` + `nr7_flag` + CTX zote.
-FEATURES = ([f for f in BASE_FEATURES if f != "range_nr7_atr"] + ["range_atr", "nr7_flag"]
+# `dir` ni META (identifier) **NA** feature halali: mwelekeo wa trade unajulikana wakati wa uamuzi,
+# na bila hiyo model isingeweza kutofautisha long na short (features nyingine ni zilezile kwa pande
+# zote mbili). Kuwa kwenye orodha zote mbili hakuvunji leak-assert (FEATURES ∩ OUTCOMES = tupu).
+FEATURES = (["dir"] + [f for f in BASE_FEATURES if f != "range_nr7_atr"] + ["range_atr", "nr7_flag"]
             + CTX_FEATURES)
 OUTCOMES = [f"{k}_{g}" for g in GEOMS for k in ("pnl_pips", "pnl_R", "win", "bars_held")]
 META = ["pair", "split", "year", "dir", "ts_entry", "ts_exit", "signal_bar", "fold"]

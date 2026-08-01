@@ -89,3 +89,16 @@ python k3_dataset.py --build      (dakika kadhaa: pairs 12 × bars zote × dirs 
 Inatoa `data/processed/k3/<pair>.parquet` + `k3_manifest.json` (**nje ya git** — data nzito) na
 `reports/k3_dataset.md` (rekodi inayoenda git: manifest, label balance, folds za purged-CV, NaN%).
 TRAIN PEKEE (2016-2022) — guard mbili: split-guard + assert `max(ts) < TRAIN_END`.
+
+## M4-2 — GBM CV + threshold sweep (baada ya M4-1)
+
+Kwanza: `pip install -r requirements.txt` (lightgbm imeongezwa).
+
+```
+cd src\research
+python k3_model.py --cv        (geometries zote mbili; dakika kadhaa kwa kila moja)
+```
+Inatoa `reports/k3_model_cv_<geom>.md`. Vigezo vya kupita vimesajiliwa **kabla** ya model —
+`docs/M4_2_REGISTRATION.md` §3. Ripoti inaonyesha kila threshold na **kigezo gani hasa**
+kilishindikana (c1 EV · c2 trades/mwaka · c3 p_boot · c4 folds), si "karibu kufaulu".
+TRAIN PEKEE — VALIDATION ni eval MOJA baada ya FREEZE; HOLDOUT/sealed hazipo kwenye njia hii.
