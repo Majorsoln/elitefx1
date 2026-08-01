@@ -102,3 +102,16 @@ Inatoa `reports/k3_model_cv_<geom>.md`. Vigezo vya kupita vimesajiliwa **kabla**
 `docs/M4_2_REGISTRATION.md` §3. Ripoti inaonyesha kila threshold na **kigezo gani hasa**
 kilishindikana (c1 EV · c2 trades/mwaka · c3 p_boot · c4 folds), si "karibu kufaulu".
 TRAIN PEKEE — VALIDATION ni eval MOJA baada ya FREEZE; HOLDOUT/sealed hazipo kwenye njia hii.
+
+## M4-HTF — breadth kwenye H4 na D1 (chanzo C; spec: docs/M4_HTF_REGISTRATION.md)
+
+```
+cd src\research
+python breadth_baseline.py --tf H4
+python breadth_baseline.py --tf D1
+python cost_budget.py --report
+```
+Runner ni ILE ILE ya M4-0 (hakuna statistic/fill mpya) — `--tf` inabadilisha **max_hold** na
+**session_filter** kwa mujibu wa `TF_SPEC` PEKEE (provenance: H4 = family_pooled/C2-WATCH;
+D1 = swing_family). Outputs za H4/D1 zina suffix yao (`breadth_baseline_H4.md` n.k.) —
+**matokeo ya M4-0 (H1) hayafutwi**. TRAIN + VALIDATION PEKEE; HOLDOUT/sealed hazipo.

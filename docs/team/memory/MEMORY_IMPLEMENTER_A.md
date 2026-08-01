@@ -1686,3 +1686,30 @@ UAMUZI (charter §5, pre-registered): **HATUA 2 (LSTM) HAIANZI.** SITARUDIA M4-2
   nyingine — hiyo ingekuwa multiple-testing juu ya data ileile baada ya kuona matokeo (haramu §4.6).
 INASUBIRI: namba ya `nr7_flag`-only (baseline ya ndani) kutoka ripoti — inaamua kama ni "ML haiwezi"
   au "bwawa la all-bars/market-entry ndilo lisilofaa".
+
+=== 2026-08-01 (jioni) — COST BUDGET + LESSON-045 + M4-HTF registration ===
+LAST COMPLETED:
+  1. **cost_budget.py + config/broker_costs.yaml** (commit d878ad6) — jibu la kizuizi cha PD ("sina
+     commission/swap; itatumika na brokers tofauti"): badala ya kufunga gharama za broker mmoja,
+     kila strategy ina **BAJETI** (= EV yake; breakeven Δ kwa cost_stress R5(1)) na broker YEYOTE
+     anapimwa dhidi yake bila backtest. Uwiano wa doctrine unapimwa kwa **GROSS/cost** (charter §4.4
+     inamaanisha gross — mfano wake ni "+0.5 gross vs cost 1.5 = HASARA"), si net/cost.
+     Kikomo cha commission (tradable, ≥3× gross/cost): KAIROS-1 $2.40/lot · KAIROS-2 $4.83 ·
+     breadth-8 $1.93 · breadth-9 $1.27 · breadth-12 $0.00.
+     **MATOKEO MAKUU: kwenye raw/ECN ($7/lot) HAKUNA strategy inayotimiza doctrine, na breadth-12
+     inakufa (EV −0.04). Kwenye spread-only: KAIROS-1/2 + breadth-8/9 zote zinapita.** Aina ya
+     broker ni PARAMETER ya strategy. Hii pia inathibitisha (kwa kigezo cha PILI, huru) pendekezo
+     la 9/8 badala ya pairs 12.
+  2. **docs/lessons/LESSON-045.md** — M4-2: taarifa ipo (lift monotone OOF), gharama ni mara 1.5-3.3
+     ya gross edge. Muundo ULE ULE wa L-039 kwa data mara ~50 zaidi na mbinu tofauti. Mpaka wa dai
+     umeandikwa wazi: M4-1 ilitumia market-entry + mwelekeo wa ex-ante, si stop-entry ya nr7 — kwa
+     hiyo variant ya KAIROS_3_SPEC §3 (family-pool yenye entry mechanics zao) HAIJAPIMWA.
+  3. **docs/M4_HTF_REGISTRATION.md** (KABLA ya namba) + `breadth_baseline.py --tf H4|D1` (additive;
+     TF_SPEC yenye provenance: H4 hold24/no-LATE = C2-WATCH; D1 hold20/None = swing_family).
+     Vigezo: EV_R>0 VALID · ishara isibadilike TRAIN→VALID · **gross/cost ≥ 3×** · ≥6/12 pairs ·
+     trades/mwaka bila floor. Hoja: spread haibadiliki na TF, move inakua -> cost/R inashuka ~2×
+     (H4) hadi ~5× (D1). Ushahidi wa awali: C2-WATCH (H4) na Swing (D1) zote zilikuwa +EV_R,
+     zilianguka kwa POWER si ishara.
+  Sweep 38/38. H1 outputs za M4-0 HAZIFUTWI (suffix ya TF kwa H4/D1).
+NEXT: PD aendeshe `--tf H4` na `--tf D1` + `cost_budget --report`; kisha tathmini dhidi ya vigezo
+  vya M4_HTF_REGISTRATION §3.

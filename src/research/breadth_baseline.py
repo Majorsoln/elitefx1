@@ -55,6 +55,15 @@ TF = "H1"
 SESSION_FILTER = "no-LATE"
 VOL_FILTER = None
 MAX_HOLD = 24                                  # default golden ya H1 (event_quality_report.MAX_HOLD)
+
+# M4-HTF (docs/M4_HTF_REGISTRATION.md §5): vigezo vya kila TF, kila kimoja na PROVENANCE — hakuna
+# namba iliyobuniwa. H1 = default (M4-0, matokeo yake HAYABADILIKI). Kubadilisha TF kunabadilisha
+# max_hold/session_filter kwa mujibu wa jedwali hili PEKEE.
+TF_SPEC = {
+    "H1": dict(max_hold=24, session_filter="no-LATE"),   # golden default; STRAT-001/002
+    "H4": dict(max_hold=24, session_filter="no-LATE"),   # family_pooled (C2-WATCH) ilitumia hivi
+    "D1": dict(max_hold=20, session_filter=None),        # swing_family: hold 20; session haina maana D1
+}
 VARIANTS = ((2.0, 1.0), (1.0, 1.0))            # (sl_atr, tp_atr): KAIROS-1 · KAIROS-2 geometry
 SPLITS = ("train", "validation")               # HOLDOUT + sealed 2026-05+ HAZIGUSWI (§3.1b)
 GOLD = "XAUUSD"                                # pip-scale nje ya FX -> EV_pips ya FX inaripotiwa pia
@@ -94,10 +103,11 @@ def _guard_split(split):
             "HOLDOUT = one-shot ya gate ya mwisho (charter §4.1/§5); sealed 2026-05+ = §3.1b.")
 
 
-def _reg_string(sl_atr, tp_atr, split):
+def _reg_string(sl_atr, tp_atr, split, tf=TF):
     """Seed deterministic kutoka spec ya variant (hashing ILEILE ya family_pooled — reuse)."""
-    return "|".join([REG_PREFIX, EVENT, TF, SESSION_FILTER, str(VOL_FILTER),
-                     variant_key(sl_atr, tp_atr), f"hold{MAX_HOLD}", split])
+    ts_spec = TF_SPEC[tf]
+    return "|".join([REG_PREFIX, EVENT, tf, str(ts_spec["session_filter"]), str(VOL_FILTER),
+                     variant_key(sl_atr, tp_atr), f"hold{ts_spec['max_hold']}", split])
 
 
 def boot_B(n, B=B_BOOT):
@@ -110,21 +120,22 @@ def boot_B(n, B=B_BOOT):
 
 
 # ---------- streams (REUSE: event fn -> _mask_context -> episodes -> _r_normalize) ----------
-def pair_stream(pair, split, sl_atr, tp_atr):
+def pair_stream(pair, split, sl_atr, tp_atr, tf=TF):
     """R-stream ya pair moja kwa variant moja. Njia SAWASAWA na family_pooled.cell_stream /
     swing_family._pair_stream (fill rules HAZIGUSWI). Rudisha (rows, years) au (None, None) kama
     dirisha halipo. years = span halisi ya ts (kwa trades/mwaka)."""
     _guard_split(split)
-    data = load_window(pair, TF, split)
+    data = load_window(pair, tf, split)
     if data is None or data.get("ts") is None:
         return None, None
+    ts_spec = TF_SPEC[tf]
     spec = EVENTS_V2[EVENT]
     o, h, l_, c = data["o"], data["h"], data["l"], data["c"]
     atr, spr, hour, vol, ts = data["atr"], data["spr"], data["hour"], data.get("vol"), data["ts"]
     out = spec["fn"](o, h, l_, c, data.get("tc"), hour)
-    out = _mask_context(out, spec["entry"], hour, vol, SESSION_FILTER, VOL_FILTER)
+    out = _mask_context(out, spec["entry"], hour, vol, ts_spec["session_filter"], VOL_FILTER)
     trs = episodes(out, spec["entry"], o, h, l_, c, atr, spr, hour, vol,
-                   sl_atr=sl_atr, tp_atr=tp_atr, max_hold=MAX_HOLD)
+                   sl_atr=sl_atr, tp_atr=tp_atr, max_hold=ts_spec["max_hold"])
     rows = _r_normalize(trs, atr, sl_atr, ts, pair)
     for r in rows:                                   # ADDITIVE (M4-0b capacity): muda wa kufunga
         r["ts_exit"] = ts[r["exit_bar"]]             # occupancy ya slot = ts_entry -> ts_exit
@@ -146,7 +157,7 @@ def _acct(rows):
                 pf=(round(gain / loss, 3) if loss > 0 else None))
 
 
-def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT):
+def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT, tf=TF):
     """Pooled breadth run ya variant moja kwenye split moja. POOLED = hukumu (L-041); per-pair =
     diagnostics. Pair bila dirisha -> inarekodiwa `missing` (SI kimya — inaonekana kwenye ripoti)."""
     _guard_split(split)
@@ -154,7 +165,7 @@ def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT):
     streams, per_pair, missing = [], [], []
     rate_sum = 0.0
     for pair in pairs:
-        rows, years = pair_stream(pair, split, sl_atr, tp_atr)
+        rows, years = pair_stream(pair, split, sl_atr, tp_atr, tf=tf)
         if rows is None:
             missing.append(pair)
             continue
@@ -168,7 +179,8 @@ def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT):
     pooled = pool_streams(streams)                       # dedup (pair, entry_bar) — AT7 ya family_pooled
     R = np.array([r["pnl_R"] for r in pooled], float)
     n = len(R)
-    res = dict(split=split, sl_atr=sl_atr, tp_atr=tp_atr, variant=variant_key(sl_atr, tp_atr),
+    res = dict(split=split, tf=tf, sl_atr=sl_atr, tp_atr=tp_atr,
+               variant=variant_key(sl_atr, tp_atr),
                pairs_used=[p["pair"] for p in per_pair], missing=missing, per_pair=per_pair,
                trades_per_year=round(rate_sum, 2))
     res.update(_acct(pooled))
@@ -179,7 +191,7 @@ def run_variant(split, sl_atr, tp_atr, pairs=None, B=B_BOOT):
     res["ev_pips_fx"] = (round(float(P_fx.mean()), 4) if len(P_fx) else None)
     res["n_fx"] = int(len(P_fx))
     if n >= 2:
-        seed = _seed_from_registration(_reg_string(sl_atr, tp_atr, split))
+        seed = _seed_from_registration(_reg_string(sl_atr, tp_atr, split, tf))
         b_eff = boot_B(n, B)
         res.update(seed=seed, B_eff=b_eff,
                    p_boot=round(float(pvalue_boot(R, B=b_eff, mean_block=MEAN_BLOCK, seed=seed)), 6),
@@ -249,17 +261,18 @@ def _baseline_line(variants):
                 other_variants={k: v["splits"]["validation"].get("ev_R") for k, v in variants.items()})
 
 
-def run_baseline(out_root=REPO_ROOT, write=True, pairs=None, B=B_BOOT):
+def run_baseline(out_root=REPO_ROOT, write=True, pairs=None, B=B_BOOT, tf=TF):
     """M4-0 kamili: variants 2 × splits 2 (TRAIN+VALIDATION) -> pooled + per-pair + pairs[]-rule ->
     BASELINE LINE -> outputs. Deterministic (hakuna timestamp ndani ya result)."""
     variants = {}
     for sl_atr, tp_atr in VARIANTS:
-        splits = {sp: run_variant(sp, sl_atr, tp_atr, pairs=pairs, B=B) for sp in SPLITS}
+        splits = {sp: run_variant(sp, sl_atr, tp_atr, pairs=pairs, B=B, tf=tf) for sp in SPLITS}
         passed, rejected = recommend_pairs(splits["train"]["per_pair"], splits["validation"]["per_pair"])
         variants[variant_key(sl_atr, tp_atr)] = dict(sl_atr=sl_atr, tp_atr=tp_atr, splits=splits,
                                                      pairs_passed=passed, pairs_rejected=rejected)
-    result = dict(event=EVENT, tf=TF, session_filter=SESSION_FILTER, vol_filter=VOL_FILTER,
-                  max_hold=MAX_HOLD, splits=list(SPLITS), min_n_valid=MIN_N_VALID,
+    result = dict(event=EVENT, tf=tf, session_filter=TF_SPEC[tf]["session_filter"],
+                  vol_filter=VOL_FILTER, max_hold=TF_SPEC[tf]["max_hold"],
+                  splits=list(SPLITS), min_n_valid=MIN_N_VALID,
                   variants=variants, baseline=_baseline_line(variants))
     if write:
         _write_outputs(result, out_root)
@@ -273,8 +286,9 @@ def _f(x, spec="+.4f"):
 
 def _write_outputs(res, out_root):
     out_root = Path(out_root)
+    sfx = "" if res["tf"] == "H1" else f"_{res['tf']}"        # H1 = M4-0 (haifutwi)
     sdir = out_root / "data" / "strategies"; sdir.mkdir(parents=True, exist_ok=True)
-    jl = sdir / OUT_JSONL
+    jl = sdir / OUT_JSONL.replace(".jsonl", f"{sfx}.jsonl")
     with open(jl, "w", encoding="utf-8") as f:
         for vk, v in res["variants"].items():
             for sp, r in v["splits"].items():
@@ -292,10 +306,10 @@ def _write_outputs(res, out_root):
         f.write(json.dumps(dict(kind="baseline", **res["baseline"]), sort_keys=True) + "\n")
 
     b = res["baseline"]
-    L = [f"# M4-0 — BREADTH BASELINE ({EVENT} × pairs 12 × {TF}, POOLED)\n",
+    L = [f"# M4-0 — BREADTH BASELINE ({EVENT} × pairs 12 × {res['tf']}, POOLED)\n",
          f"*{datetime.now():%Y-%m-%d %H:%M} | charter: docs/CYCLE4_ML_CHARTER.md §1B/§5 · spec: "
          f"docs/KAIROS_3_SPEC.md §5.3 | splits: TRAIN 2016-2022 + VALIDATION 2023-2024 | "
-         f"filter: {SESSION_FILTER}, vol={VOL_FILTER}, max_hold={MAX_HOLD} | costs: spread halisi ya bar "
+         f"filter: {res['session_filter']}, vol={VOL_FILTER}, max_hold={res['max_hold']} | costs: spread halisi ya bar "
          f"ya entry + slippage (L-039) | engine RASMI: pvalue_boot mean_block={MEAN_BLOCK}, "
          f"seed=hash(registration)*\n",
          "> **HII SI EDGE CLAIM MPYA.** Logic ni ILE ILE iliyothibitika (`nr7_break` × H1 × no-LATE = "
@@ -413,7 +427,8 @@ def _write_outputs(res, out_root):
     L.append("\n*reuse-only: episodes/_mask_context/pvalue_boot/load_window/_r_normalize/pool_streams/"
              "_boot_ci ni imports (ZERO changes). Profitable != Tradable Edge. Protect capital first.*")
 
-    rpt = out_root / "reports" / OUT_REPORT; rpt.parent.mkdir(parents=True, exist_ok=True)
+    rpt = out_root / "reports" / OUT_REPORT.replace(".md", f"{sfx}.md")
+    rpt.parent.mkdir(parents=True, exist_ok=True)
     rpt.write_text("\n".join(L), encoding="utf-8")
     return jl, rpt
 
@@ -587,6 +602,27 @@ def self_test():
           f"coverage 12/12={cover} · variants={sorted(ra['variants'])} · splits={SPLITS} · "
           f"outputs={sorted(kinds)} · baseline={base['variant']} EV_R={_f(base['ev_R'])} -> {c_ok}")
 
+    # ---- (f) M4-HTF: --tf inabadilisha max_hold/session_filter kwa TF_SPEC PEKEE, na outputs za
+    # H4/D1 zina faili ZAO (H1 = M4-0 haifutwi). Registration-seed pia inatofautiana kwa TF.
+    _self.load_window = lambda sym, tf, split, token=None: fx.get(sym)
+    with tempfile.TemporaryDirectory() as tmp:
+        r_h1 = run_baseline(out_root=tmp, pairs=P12, B=300, tf="H1")
+        r_d1 = run_baseline(out_root=tmp, pairs=P12, B=300, tf="D1")
+        rpts = sorted(x.name for x in (Path(tmp) / "reports").iterdir())
+        seeds_differ = (_seed_from_registration(_reg_string(2.0, 1.0, "validation", "H1"))
+                        != _seed_from_registration(_reg_string(2.0, 1.0, "validation", "D1")))
+        f_ok = (r_h1["max_hold"] == 24 and r_h1["session_filter"] == "no-LATE"
+                and r_d1["max_hold"] == 20 and r_d1["session_filter"] is None
+                and r_d1["tf"] == "D1" and seeds_differ
+                and rpts == sorted([OUT_REPORT, OUT_REPORT.replace(".md", "_D1.md")])
+                and r_h1["variants"]["SL2/TP1"]["splits"]["validation"]["n"]
+                != r_d1["variants"]["SL2/TP1"]["splits"]["validation"]["n"])
+    _self.load_window = orig_lw
+    ok = ok and f_ok
+    print(f"  [f] M4-HTF --tf: H1(hold {r_h1['max_hold']}, {r_h1['session_filter']}) vs "
+          f"D1(hold {r_d1['max_hold']}, {r_d1['session_filter']}) · seeds tofauti={seeds_differ} · "
+          f"faili {rpts} (H1 haifutwi) -> {f_ok}")
+
     print("SELF-TEST:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -597,6 +633,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", action="store_true", help="endesha M4-0 breadth baseline (PC ya data)")
     ap.add_argument("--boot-B", dest="B", type=int, default=B_BOOT, help=f"B ya pvalue_boot (default {B_BOOT})")
+    ap.add_argument("--tf", default=TF, choices=list(TF_SPEC),
+                    help="H1 = M4-0 (default). H4/D1 = M4-HTF (docs/M4_HTF_REGISTRATION.md)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -604,9 +642,10 @@ def main():
     if not a.run:
         print("Tumia --run (breadth baseline) | --self-test.", file=sys.stderr)
         return 2
-    res = run_baseline(B=a.B)
+    res = run_baseline(B=a.B, tf=a.tf)
     b = res["baseline"]
-    print(f"M4-0 BREADTH BASELINE ({EVENT} × {TF} × {SESSION_FILTER}, pairs pooled — L-041)")
+    print(f"BREADTH BASELINE ({EVENT} × {a.tf} × {TF_SPEC[a.tf]['session_filter']}, "
+          f"max_hold={TF_SPEC[a.tf]['max_hold']}, pairs pooled — L-041)")
     for vk, v in res["variants"].items():
         for sp in res["splits"]:
             r = v["splits"][sp]
@@ -618,7 +657,9 @@ def main():
         print(f"  BASELINE LINE -> KAIROS-3 LAZIMA izidi: EV_net={_f(b['ev_pips_fx'], '+.2f')} pips "
               f"(FX), EV_R={_f(b['ev_R'])}, trades/mwaka={_f(b['trades_per_year'], '.1f')} "
               f"(VALIDATION, variant {b['variant']})")
-    print(f"  data/strategies/{OUT_JSONL}\n  reports/{OUT_REPORT}")
+    sfx = "" if a.tf == "H1" else f"_{a.tf}"
+    print(f"  data/strategies/{OUT_JSONL.replace('.jsonl', sfx + '.jsonl')}\n"
+          f"  reports/{OUT_REPORT.replace('.md', sfx + '.md')}")
     return 0
 
 
