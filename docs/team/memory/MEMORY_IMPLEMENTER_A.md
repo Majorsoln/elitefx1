@@ -1632,3 +1632,30 @@ MATOKEO (PD, 2026-08-01) — **scenario MBILI zililinganishwa:**
 PENDEKEZO KWA PD: panua `pairs[]` kwa orodha ZA KANUNI (KAIROS-1 → 9, KAIROS-2 → 8), **si** pairs 12;
   fuatilia spread (breakeven ~1.6-1.8 pip si pana kiasi cha kupuuza); hakimu wa mwisho = forward.
 NEXT: M4-1 DATASET (triple-barrier + features, bars ZOTE, pairs 12, TRAIN pekee, purged+embargoed CV).
+
+=== M4-1 (2026-08-01) — DATASET ya KAIROS-3 — IMEKAMILIKA (PD alijenga) ===
+LAST COMPLETED: **purged_cv.py + k3_dataset.py** ✅ (commit 830fcd4; sweep 36/36).
+  Ubunifu muhimu: **residue-class scan** (stride = max_hold+2 = 26) unaruhusu `episodes()` YA GOLDEN
+  kutoa label kwa **KILA bar** bila kuandika labeler mpya — ndani ya class moja trade daima inafunga
+  kabla ya signal ifuatayo, kwa hiyo non-overlap discipline hairuki bar hata moja. Parity
+  imethibitishwa dhidi ya episodes iliyoitwa bar-moja-moja (mismatch 0, coverage kamili).
+MATOKEO (PD, 2026-08-01): **rows 1,025,338** · pairs 12 · dirs 2 · folds 5 (purged+embargoed).
+  | geometry | win-rate (bila uteuzi) | EV_R (bila uteuzi) |
+  | sl2tp1 | 65.96% | −0.0470 |
+  | sl1tp1 | 49.25% | −0.1019 |
+  - Bwawa lote lina EV hasi kwa ujenzi (kila bar inalipa gharama) — ndiyo hatua sahihi ya sifuri.
+  - Sanity: sl1tp1 (1:1 symmetric) ina win ~49.25% ≈ sarafu bila alpha; sl2tp1 (TP karibu, SL mbali)
+    ina win 65.96% ≈ break-even ya kijiometri 66.7% — labels ni consistent kimuundo.
+  - Uteuzi unaohitajika ni MDOGO: 854 trades/mwaka × miaka 7 ≈ 0.6% ya bwawa (breadth-12 = ~1.8%).
+DECISIONS (PD alinipa mamlaka 2026-08-01 "unaweza decide... lakini zingatia makubaliano"):
+  1. **config/models.yaml SIJAIHARIRI** — agreement (KAIROS_3_SPEC §6 + kichwa cha models.yaml)
+     inasema PD ndiye anayehariri. Nimempa block ya kupaste (KAIROS-1 → 9 pairs, KAIROS-2 → 8).
+  2. **BASELINE LINE haibadiliki** (+0.91 pips pairs-12) — ilikuwa pre-registered; kuipandisha kwa
+     kuwa 9/8 zinaonekana bora = kuhamisha magoli.
+  3. **Code ya live sijaigusa** (asymmetry ya correlation ni SWALI LA WAZI lenye namba).
+  4. **WIDE-skip: sijaamua** hadi nisome §2 ya reports/breadth_cost_capacity*.md.
+  5. **M4-2 trainer = LightGBM**, artifact = JSON tree dump (hakuna pickle), **inference = pure-numpy
+     scorer yetu** (live/paper hazitegemei framework — mwendelezo wa msimamo wa k4_model).
+NEXT: **docs/M4_2_REGISTRATION.md imesajiliwa KABLA ya model yoyote** (charter §4.6): kupita =
+  EV_R > +0.0328 (sl2tp1) / +0.0526 (sl1tp1) NA trades/mwaka ≥ 854/890 NA p_boot<0.05 NA folds ≥4/5.
+  Kisha: jenga k3_model.py (GBM + threshold sweep juu ya out-of-fold + freeze), TRAIN PEKEE.
