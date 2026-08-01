@@ -17,7 +17,7 @@ MODULES = ["frozen", "decision_object", "evidence_snapshot", "decision_policy", 
            "portfolio_v0", "cost_stress", "winrate_monitor", "family_pooled",
            "intraday_state_engine", "htf_context", "wave_c2a", "gold_spread_quality",
            "rmap", "k4_dataset", "swing_family", "k4_model", "live_engine", "model_steward",
-           "breadth_baseline", "breadth_capacity", "purged_cv", "k3_dataset", "k3_model",
+           "breadth_baseline", "breadth_capacity", "purged_cv", "k3_dataset", "k3_model", "cost_budget",
            "e2e_paper_demo"]     # purity_check=P107; strategy_lab=S1(+R1 boot); WAVE-1 R4/R5/R6; intraday+htf=C2-0; wave_c2a=C2-3 (MZUNGUKO-2); false_break+gold=WAVE-B-prep; rmap=M3-1 + k4_dataset=M3-4 + swing_family=M3-3-S2 + k4_model=M3-5 + live_engine=LIVE-ENGINE + model_steward=MODEL-STEWARD (MZUNGUKO-3) + breadth_baseline=M4-0 (MZUNGUKO-4)
 
 # Windows CMD hutumia cp1252 kwa child stdout → herufi za Unicode (→ ≠ ✓) zinaanguka kwenye pipe.

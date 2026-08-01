@@ -1,0 +1,52 @@
+# ============================================================
+#  broker_costs.yaml — PROFILES za GHARAMA za BROKER (PD anahariri; hakuna code)
+#  KWA NINI: mfumo utatumika kwa brokers TOFAUTI (§9 leasing). Kwa hiyo hatufungi
+#  commission/swap ya broker mmoja kwenye research. Badala yake:
+#    (1) kila strategy ina **COST BUDGET** (gharama ya ziada inayoweza kubeba) — namba
+#        isiyotegemea broker, inayotoka kwenye EV yake iliyothibitishwa;
+#    (2) broker YEYOTE anapimwa dhidi ya bajeti hiyo kwa sekunde (src/research/cost_budget.py).
+#  TAHADHARI: research ya EliteFX ina-charge **spread halisi + slippage** PEKEE. Commission na
+#  swap HAZIMO kwenye namba za backtest — ndiyo maana faili hii ipo.
+# ============================================================
+
+# Kubadilisha pips <-> USD: commission ya lot moja (100k units) round-turn.
+# pip moja ya lot 1 ya FX ≈ $10 (majority pairs). Kwa hiyo: comm_pips = comm_usd_round_turn / 10.
+pip_value_per_lot_usd: 10
+
+profiles:
+
+  # Hakuna commission (spread-only). Brokers wengi wa "standard account" + prop firms nyingi.
+  spread_only:
+    commission_usd_round_turn: 0.0
+    swap_pips_per_night:       0.0      # 0 = usifikirie swap (kwa strategies za intraday tu)
+    note: "Standard/spread-only account. Hakuna commission; swap imepuuzwa (intraday)."
+
+  # Raw/ECN ya kawaida: ~$7 round-turn kwa lot = 0.7 pip. Swap ya wastani ya usiku mmoja.
+  raw_typical:
+    commission_usd_round_turn: 7.0      # -> 0.70 pip
+    swap_pips_per_night:       0.5
+    note: "Raw-spread/ECN ya kawaida. Hii ndiyo default ya TAHADHARI kwa mipango ya live."
+
+  # Hali mbaya inayowezekana (kwa stress): commission juu + swap kubwa.
+  stress:
+    commission_usd_round_turn: 12.0     # -> 1.20 pip
+    swap_pips_per_night:       1.0
+    note: "Stress scenario — si utabiri; ni jaribio la ustahimilivu."
+
+# Profile inayotumika kama default kwenye ripoti (PD anabadilisha hapa).
+default_profile: raw_typical
+
+# Wastani wa usiku kwa kila trade (swap = nights x swap_pips_per_night).
+# H1 max_hold 24 bars -> mara nyingi usiku 0 au 1. D1 hold 20 -> wiki kadhaa.
+# Hizi ni KADIRIO; zinaweza kupimwa HASA kwa data run (rmap.apply_swap inahesabu nights halisi).
+avg_nights_per_trade:
+  H1: 0.5
+  H4: 1.0
+  D1: 14.0
+
+# Gharama ya MSINGI iliyomo tayari kwenye namba za research (spread + slippage), kwa pips/trade.
+# Inatumika kwa uwiano wa doctrine (edge >= 3x cost). Kadirio: spread median FX ~0.3 + slip.
+# Inaweza kupimwa HASA kwa data run (spr ipo kwenye state parquet).
+base_cost_pips:
+  stop_entry:   0.6      # spread ~0.3 + SLIP_STOP 0.3   (nr7/KAIROS-1/2, breadth)
+  market_entry: 0.4      # spread ~0.3 + SLIP_MARKET 0.1
