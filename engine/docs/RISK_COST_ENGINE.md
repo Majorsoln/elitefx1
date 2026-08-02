@@ -66,13 +66,7 @@ risk_per_trade = budget ÷ max_open_trades
 | Leo tayari −$150 | 9,650 | 175 | 400−175−150 = **75** | **10.7** |
 | Leo +$100 baada ya hapo | 9,750 | 125 | 400−125−150+50 = **175** | **25.0** |
 
-> ⚠ **TAHADHARI YA CHIEF (uamuzi wako unahitajika):** kwa fomula hii, budget inafika **SIFURI** DD
-> ikifika `base ÷ penalty_factor` = **$800 (8%)**. Baada ya hapo **hakuna trade kabisa** — hakuna njia
-> ya kupona kwa kutrade. Hii inaweza kuwa **nia yako** (breki laini inayosimama kabla ya kikomo kigumu
-> cha 10%) — ikiwa ndivyo, ni muundo mzuri. Kama unataka uwezekano wa kupona, chaguo:
-> (a) `budget_floor_frac: 0.25` (bajeti isishuke chini ya 25% ya base);
-> (b) penalty inayoyeyuka kwa muda badala ya kufuata DD moja kwa moja.
-> **Sitabadilisha — nia yako ndiyo sheria; nataka tu uujue mkondo huu.**
+
 
 ---
 
