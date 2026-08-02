@@ -1,0 +1,282 @@
+{
+  "agenda": [
+    {
+      "divergence": null,
+      "expected_lift": "uwezo mpya wa diagnostics",
+      "hypothesis": "regime (trend/range/compression) haijalog na live_engine bado",
+      "model": "ALL",
+      "n": 0,
+      "proposed_experiment": "ongeza HTF regime tag kwenye execution record ya engine (additive) ili weakness-map ya regime iwezekane",
+      "rank_score": 0.0,
+      "risk": "hakuna (log field additive)",
+      "verdict": "DATA-GAP",
+      "weakness": "regime dimension haipo kwenye log"
+    }
+  ],
+  "min_n": 30,
+  "models": {
+    "STRAT-001": {
+      "learned_ev": 1.92,
+      "mean_R": 0.1371,
+      "n": 425,
+      "overall": {
+        "ci_hi": 4.244,
+        "ci_lo": 1.874,
+        "divergence": 1.152,
+        "mean": 3.072,
+        "n": 425,
+        "verdict": "HOLDS"
+      },
+      "weakness_map": {
+        "cost": {
+          "HIGH-COST": {
+            "ci_hi": 4.015,
+            "ci_lo": -1.399,
+            "divergence": -0.552,
+            "mean": 1.368,
+            "n": 108,
+            "verdict": "HOLDS"
+          },
+          "LOW-COST": {
+            "ci_hi": 5.712,
+            "ci_lo": 2.674,
+            "divergence": 2.307,
+            "mean": 4.227,
+            "n": 190,
+            "verdict": "LIFTS"
+          },
+          "MID-COST": {
+            "ci_hi": 5.011,
+            "ci_lo": 0.531,
+            "divergence": 0.873,
+            "mean": 2.793,
+            "n": 127,
+            "verdict": "HOLDS"
+          }
+        },
+        "session": {
+          "ASIA": {
+            "ci_hi": 3.608,
+            "ci_lo": 0.753,
+            "divergence": 0.273,
+            "mean": 2.193,
+            "n": 326,
+            "verdict": "HOLDS"
+          },
+          "LONDON": {
+            "ci_hi": null,
+            "ci_lo": null,
+            "divergence": 5.543,
+            "mean": 7.463,
+            "n": 19,
+            "verdict": "INSUFFICIENT"
+          },
+          "NY": {
+            "ci_hi": 8.013,
+            "ci_lo": 3.086,
+            "divergence": 3.692,
+            "mean": 5.612,
+            "n": 80,
+            "verdict": "LIFTS"
+          }
+        },
+        "streak": {
+          "AFTER_2L+": {
+            "ci_hi": null,
+            "ci_lo": null,
+            "divergence": 6.091,
+            "mean": 8.011,
+            "n": 22,
+            "verdict": "INSUFFICIENT"
+          },
+          "AFTER_LOSS": {
+            "ci_hi": 3.257,
+            "ci_lo": -3.352,
+            "divergence": -1.965,
+            "mean": -0.045,
+            "n": 65,
+            "verdict": "HOLDS"
+          },
+          "AFTER_WIN": {
+            "ci_hi": 4.568,
+            "ci_lo": 1.944,
+            "divergence": 1.391,
+            "mean": 3.311,
+            "n": 337,
+            "verdict": "LIFTS"
+          },
+          "FRESH": {
+            "ci_hi": null,
+            "ci_lo": null,
+            "divergence": 14.441,
+            "mean": 16.361,
+            "n": 1,
+            "verdict": "INSUFFICIENT"
+          }
+        },
+        "vol": {
+          "HIGH": {
+            "ci_hi": 6.137,
+            "ci_lo": 0.827,
+            "divergence": 1.524,
+            "mean": 3.444,
+            "n": 142,
+            "verdict": "HOLDS"
+          },
+          "LOW": {
+            "ci_hi": 4.516,
+            "ci_lo": 2.023,
+            "divergence": 1.347,
+            "mean": 3.267,
+            "n": 142,
+            "verdict": "LIFTS"
+          },
+          "MID": {
+            "ci_hi": 4.334,
+            "ci_lo": 0.56,
+            "divergence": 0.581,
+            "mean": 2.501,
+            "n": 141,
+            "verdict": "HOLDS"
+          }
+        }
+      }
+    },
+    "STRAT-002": {
+      "learned_ev": 2.65,
+      "mean_R": 0.1598,
+      "n": 443,
+      "overall": {
+        "ci_hi": 5.841,
+        "ci_lo": 1.753,
+        "divergence": 1.211,
+        "mean": 3.861,
+        "n": 443,
+        "verdict": "HOLDS"
+      },
+      "weakness_map": {
+        "cost": {
+          "HIGH-COST": {
+            "ci_hi": 15.1,
+            "ci_lo": 4.095,
+            "divergence": 7.028,
+            "mean": 9.678,
+            "n": 112,
+            "verdict": "LIFTS"
+          },
+          "LOW-COST": {
+            "ci_hi": 3.121,
+            "ci_lo": -1.842,
+            "divergence": -1.957,
+            "mean": 0.693,
+            "n": 166,
+            "verdict": "HOLDS"
+          },
+          "MID-COST": {
+            "ci_hi": 6.15,
+            "ci_lo": -0.115,
+            "divergence": 0.449,
+            "mean": 3.099,
+            "n": 165,
+            "verdict": "HOLDS"
+          }
+        },
+        "session": {
+          "ASIA": {
+            "ci_hi": 5.783,
+            "ci_lo": -0.549,
+            "divergence": 0.206,
+            "mean": 2.856,
+            "n": 168,
+            "verdict": "HOLDS"
+          },
+          "LONDON": {
+            "ci_hi": 8.12,
+            "ci_lo": 0.625,
+            "divergence": 1.599,
+            "mean": 4.249,
+            "n": 162,
+            "verdict": "HOLDS"
+          },
+          "NY": {
+            "ci_hi": 8.932,
+            "ci_lo": 0.472,
+            "divergence": 2.147,
+            "mean": 4.797,
+            "n": 113,
+            "verdict": "HOLDS"
+          }
+        },
+        "streak": {
+          "AFTER_2L+": {
+            "ci_hi": 6.757,
+            "ci_lo": -3.428,
+            "divergence": -1.021,
+            "mean": 1.629,
+            "n": 73,
+            "verdict": "HOLDS"
+          },
+          "AFTER_LOSS": {
+            "ci_hi": 8.004,
+            "ci_lo": -0.362,
+            "divergence": 1.21,
+            "mean": 3.86,
+            "n": 103,
+            "verdict": "HOLDS"
+          },
+          "AFTER_WIN": {
+            "ci_hi": 7.468,
+            "ci_lo": 1.917,
+            "divergence": 1.974,
+            "mean": 4.624,
+            "n": 266,
+            "verdict": "HOLDS"
+          },
+          "FRESH": {
+            "ci_hi": null,
+            "ci_lo": null,
+            "divergence": -38.942,
+            "mean": -36.292,
+            "n": 1,
+            "verdict": "INSUFFICIENT"
+          }
+        },
+        "vol": {
+          "HIGH": {
+            "ci_hi": 10.652,
+            "ci_lo": 0.809,
+            "divergence": 2.936,
+            "mean": 5.586,
+            "n": 148,
+            "verdict": "HOLDS"
+          },
+          "LOW": {
+            "ci_hi": 3.694,
+            "ci_lo": 0.157,
+            "divergence": -0.725,
+            "mean": 1.925,
+            "n": 148,
+            "verdict": "HOLDS"
+          },
+          "MID": {
+            "ci_hi": 6.865,
+            "ci_lo": 1.23,
+            "divergence": 1.422,
+            "mean": 4.072,
+            "n": 147,
+            "verdict": "HOLDS"
+          }
+        }
+      }
+    }
+  },
+  "provenance": {
+    "commit": "366ac9ade5465db4ce405f3d20ae16f4e7d6f959",
+    "generated_at": "2026-07-30T16:13:44.722646+00:00",
+    "log": "C:\\Users\\Hp\\project\\elitefx1\\data\\paper\\paper_log.jsonl",
+    "log_lines": 6984,
+    "log_sha256": "5d107ea95f26b5bb",
+    "n_closed": 868,
+    "sample_note": "SAMPLE: replay/validation, si forward halisi bado \u2014 power inakua na forward data. HAKUNA dai la 'model imethibitika forward' bila forward."
+  }
+}
