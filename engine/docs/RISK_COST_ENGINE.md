@@ -85,20 +85,45 @@ spread_pips = (Ask − Bid) ÷ PipSize
 ```
 `PipSize` = 0.01 (JPY, XAU) au 0.0001 (nyingine). Inachukuliwa kwenye **bar ya entry**, si wastani.
 
-### 3.2 Slippage — **inaanza kama dhana, inakuwa MODEL**
-**Awamu 1 (sasa):** 0.1 pips (market) · 0.3 pips (stop).
-**Awamu 2 (PD directive):** **SLIPPAGE MODEL** inayojifunza:
-- **Inakusanya:** kwa kila fill — slippage halisi (`fill_px − requested_px`), broker, aina ya order,
-  session, spread wakati huo, volatility, ukubwa wa lot, news-proximity.
-- **Inajifunza:** slippage inayotarajiwa **per broker × hali ya soko × aina ya strategy**.
-- **Multi-tenant (muhimu):** mfumo utahudumia servers/MT5/brokers tofauti; kila tenant ana broker
-  wake. Kwa hiyo model ni **per-account/per-broker**, si moja ya jumla.
-- **Continuous learning:** inajisasisha kadri fills zinavyoingia; inaweza ku-bootstrap kutoka
-  history ya akaunti za brokers tofauti.
-- **Fallback:** data ikiwa haitoshi kwa broker mpya → tumia default (0.1/0.3) + alama ya
-  "UNCALIBRATED" hadi N ya kutosha ifikiwe.
-> Hii ni **model** — kwa hiyo inapita nidhamu ya Idara 3 (artifact + provenance + validation),
-> ingawa matumizi yake ni ndani ya RCE.
+### 3.2 Slippage — **CAP, si utabiri** (uamuzi wa PD 2026-08-02)
+
+Hatutabiri slippage. **Tunaifunga.** Kila order inatumwa na `deviation` (max slippage) — bei
+ikienda mbali zaidi ya kikomo, **order HAIJAZI** badala ya kujaza kwa bei mbaya.
+
+```
+slippage_pips = slippage_cap_pips        (thamani ya sizing = kikomo, si makadirio)
+order.deviation = slippage_cap_pips × (PipSize ÷ point)     # MT5 inatumia POINTS
+```
+
+**Kanuni ya dhahabu — cap = dhana ya utafiti:**
+`episodes()` ilihesabu kila trade ikitoza `SLIP_STOP = 0.3` (stop) / `SLIP_MARKET = 0.1` (market).
+Tukiweka **cap ILE ILE**, basi:
+```
+slippage ya live  ≤  slippage iliyodhaniwa kwenye backtest     ← KWA UJENZI
+```
+Namba zilizothibitishwa (EV, ratio) **zinabaki halali** — hazitegemei bahati ya broker. Hii ndiyo
+faida kubwa: **pengo kati ya utafiti na live linafungwa**, si kupunguzwa.
+
+**Kinachopotea (uwazi):** orders zingine hazitajaza. Hiyo ni **bei ya usalama** — trade
+iliyokosekana ni bure; fill mbaya kwenye edge nyembamba ni ghali.
+
+**Kipimo cha lazima — FILL RATE.** Cap ikiwa ngumu sana, trades zinapungua kuliko utafiti ulivyodhani
+→ **strategy halisi inakuwa tofauti na iliyothibitishwa.** Kwa hiyo:
+```
+fill_rate = orders zilizojaza ÷ orders zilizotumwa
+KAMA fill_rate < fill_rate_min  →  ONYO: "cap ni ngumu; strategy inatofautiana na utafiti"
+```
+Hatua ikitokea: (a) legeza cap **NA** rekodi kwamba dhana ya gharama imebadilika (namba za utafiti
+zinahitaji kupimwa upya), au (b) acha strategy hiyo kwa broker huyu.
+
+**MIPAKA — cap inalinda ENTRY pekee.** SL/TP ziko kwa broker; soko likiruka (gap, news), SL inaweza
+kujaza mbali zaidi. **Hilo haliwezi kufungwa** (ukiliweka cap, huondoki kwenye trade — mbaya zaidi).
+Backtest yetu tayari ni gap-honest (stop = touch), kwa hiyo hatari hii imo kwenye namba — lakini
+**si bounded**. Ni tail-risk halali inayobaki.
+
+**Data (bure, bila mradi mpya):** kila fill inarekodi `requested_px`, `fill_px`, `slippage halisi`,
+`fill_rate`. Hii ni **kipimo**, si model — inatuambia kama cap inafaa na kama broker anabadilika.
+Ikitokea baadaye tunataka usahihi zaidi, data ipo tayari; **lakini haihitajiki kwa mfumo kufanya kazi.**
 
 ### 3.3 Commission — **pande MBILI (round-turn)**
 ```

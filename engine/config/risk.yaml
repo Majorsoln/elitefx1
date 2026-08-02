@@ -34,12 +34,12 @@ correlation_groups:
   AUD_NZD_group:  [AUDUSD, NZDUSD]
 
 # ---------- GHARAMA ----------
-slippage_default_pips:            # hutumika hadi SLIPPAGE MODEL ikalibiwe (per broker)
-  market:  0.1
-  stop:    0.3
-slippage_model:
-  enabled:        false           # awamu ya 2
-  min_samples:    200             # chini ya hii -> UNCALIBRATED (tumia default)
+# SLIPPAGE = CAP, si utabiri (spec §3.2). Cap = dhana ILE ILE ya backtest ->
+# slippage ya live HAIWEZI kuvuka iliyothibitishwa. Order isiyoweza kujaza ndani ya cap HAIJAZI.
+slippage_cap_pips:
+  market:  0.1                    # = SLIP_MARKET ya episodes()
+  stop:    0.3                    # = SLIP_STOP ya episodes()
+fill_rate_min:         0.60       # chini ya hii -> ONYO: cap ngumu, strategy inatofautiana na utafiti
 commission_side:   "round_turn"   # thamani ya broker_costs.yaml ni ya pande MBILI
 swap:
   enabled:        true
