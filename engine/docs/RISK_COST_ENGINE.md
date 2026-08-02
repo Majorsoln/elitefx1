@@ -190,15 +190,3 @@ news ✓ → **PASS**, trade inafunguliwa.
 
 ---
 
-## 7. HALI YA UJENZI
-| Kipengele | Ipo | Inahitajika |
-|---|---|---|
-| base/penalty/budget | ndani-ya-siku pekee | **base_balance + penalty (DD)** + tz 00:00 CE(S)T |
-| risk_per_trade | ÷ slots zilizobaki | ÷ `max_open_trades` (fomula ya PD) |
-| spread | ✔ (backtest) | live kutoka MT5 |
-| slippage | dhana 0.1/0.3 | **SLIPPAGE MODEL** (per-broker, continuous) |
-| commission | config | round-turn + pips conversion |
-| swap | config rahisi | **spec kamili** (mode/rollover/triple) kutoka MT5 |
-| pip conversion | pip_value tuli | **conversion ya sarafu** |
-| lots | risk ÷ (SL × pipval) | **+ cost_pips kwenye denominator** + volume_step |
-| gate 1,2,4,5 | ✔ | **3 (3/4 brake)** · **6 (news)** |
