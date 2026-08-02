@@ -1,0 +1,47 @@
+# ============================================================
+#  risk.yaml — RISK & COST ENGINE (spec: engine/docs/RISK_COST_ENGINE.md)
+#  PD anabadilisha HAPA wakati wowote — HAKUNA code inayohitajika.
+#  Kila kigezo kina maana kwenye spec; usiongeze kigezo kisichokuwa kwenye spec.
+# ============================================================
+
+# ---------- BAJETI YA SIKU ----------
+base_balance:          10000      # salio la AWALI (rejea isiyobadilika, si salio la sasa)
+base_percentage:       0.04       # 4% -> base = 400
+penalty_factor:        0.50       # 50% ya DD ya jumla inakuwa adhabu
+win_factor:            0.50       # +50% ya faida ya leo
+loss_factor:           1.00       # -100% ya hasara ya leo
+day_reset_tz:          "Europe/Berlin"    # 00:00 CE(S)T
+budget_floor_frac:     null       # null = hakuna floor (stop kamili DD 8%) | 0.25 = floor ya 25%
+                                  # ⚠ UAMUZI WA PD unasubiriwa (spec §2 tahadhari)
+
+# ---------- MALANGO (viability gate) ----------
+max_open_trades:       7
+max_correlated:        3
+daily_loss_stop_frac:  0.75       # hasara ya leo >= 3/4 ya base NA positions wazi -> acha
+max_total_dd:          1000       # kikomo kigumu cha DD ya jumla
+trade_news:            true       # swichi ya news on/off
+max_spread:                       # pips, per symbol
+  USDCHF:   2.0
+  USDJPY:   2.0
+  EURUSD:   2.0
+  GBPUSD:   2.5
+  XAUUSD:  30.0
+
+correlation_groups:
+  USD_group:      [EURUSD, GBPUSD, AUDUSD, NZDUSD]
+  USD_strength:   [USDJPY, USDCAD, USDCHF]
+  EUR_group:      [EURUSD, EURJPY, EURGBP]
+  AUD_NZD_group:  [AUDUSD, NZDUSD]
+
+# ---------- GHARAMA ----------
+slippage_default_pips:            # hutumika hadi SLIPPAGE MODEL ikalibiwe (per broker)
+  market:  0.1
+  stop:    0.3
+slippage_model:
+  enabled:        false           # awamu ya 2
+  min_samples:    200             # chini ya hii -> UNCALIBRATED (tumia default)
+commission_side:   "round_turn"   # thamani ya broker_costs.yaml ni ya pande MBILI
+swap:
+  enabled:        true
+  triple_day:     "WED"           # Jumatano -> Alhamisi = swap x3
+  server_rollover_hour: 0         # 00:00 server time
