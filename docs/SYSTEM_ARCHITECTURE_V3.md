@@ -48,8 +48,11 @@
 risk iliyotengwa; kisha **rekebisha lots** kwa gharama.
 - **Cost-inclusive sizing** (§SIZING hapa chini) — gharama inaingia kwenye denominator, si kutolewa
   baadaye.
-- **Viability gate (L-039 runtime):** `gross_edge ≥ K × cost` (K=3 default, config). Trade
-  isiyoweza kulipia gharama yake **HAIFUNGULIWI** — hata kama risk ipo.
+- **Runtime cost-guard:** kutumia **ratio iliyothibitishwa na Idara 3** kwa strategy hii; gharama ya
+  SASA (spread ya bar hii + commission + swap) ikishusha ratio chini ya kizingiti, trade
+  **HAIFUNGULIWI**. Idara 2 **INATEKELEZA** namba; **HAIZIGUNDUI** (uchambuzi = Idara 3, §UBORA).
+- **Actual-vs-assumed tracking:** gharama halisi (fills za EA) dhidi ya iliyodhaniwa → onyo dhana
+  zikivunjika.
 - Vipengele vya gharama: spread (bar ya entry) + slippage + commission/lot + swap × usiku
   unaotarajiwa (HTF).
 
@@ -58,6 +61,43 @@ risk iliyotengwa; kisha **rekebisha lots** kwa gharama.
 - Utafiti unaendelea hapa (ML + indicators + hali ya soko = "lessons").
 - **Vipimo vya model** (scorecard): pips zilizovunwa · **max-DD** · **muda wa trade** · win% ·
   EV/trade · gross/cost. (Steward inafuatilia; DD + time-in-trade zinaongezwa.)
+
+### §UBORA — mfumo wa kupima ubora na ku-OPTIMIZE (PD 2026-08-02: uchambuzi huu ni wa IDARA 3)
+Vipimo vitatu, kila kimoja kinajibu swali TOFAUTI. Vyote vinatoka kwenye utafiti (backtest), na
+matokeo yake (namba zilizothibitishwa) ndiyo yanayotumiwa na Idara 1/2 wakati wa kutrade.
+
+| Kipimo | Swali | Hesabu | Hulinda |
+|---|---|---|---|
+| **EV net** | kila trade inaniachia nini? | wastani wa `pnl` (gharama tayari imetolewa) | matokeo |
+| **GROSS** | move yenyewe ni kubwa kiasi gani? | `EV net + cost` (aljebra, si kadirio) | — |
+| **GROSS ÷ COST** | gharama ikipanda, nitasurvive? | ratio; kizingiti **≥ 3×** | **usalama** |
+
+**Mfano (trades 100, TP+10 / SL−20 / win 72%, cost 0.6):**
+```
+GROSS = 72(+10) + 28(−20) = +160 pips  →  1.6 pips/trade
+COST  = 100 × 0.6         = 60 pips
+NET   = 160 − 60          = +100 pips  →  1.0 pip/trade
+RATIO = 1.6 ÷ 0.6         = 2.7×
+```
+Ratio 2.7 = **gharama inaweza kupanda mara 2.7 kabla strategy haijafa**:
+| cost | net jumla | hali |
+|---|---|---|
+| 0.6 | +100 | ✅ |
+| 1.2 (×2) | +40 | ⚠️ 60% imeliwa |
+| 1.8 (×3) | −20 | ❌ imekufa |
+
+**Kwa nini GROSS si NET kwenye ratio:** gross **haibadiliki** broker akibadilika (ni sifa ya soko);
+commission inaongeza cost pekee. Kutumia net/cost = kukata gharama mara mbili.
+
+**Kwa nini ratio inahitajika ingawa gharama ipo kwenye sizing:** sizing ni **uhasibu wa trade moja**
+(hasara isivuke risk); ratio ni **kinga ya mfumo**. Strategy mbili zenye sizing sahihi ile ile:
+A (gross 3.0, ratio 5.0×) na B (gross 0.8, ratio 1.3×) — zote chanya leo; spread ikipanda 0.4 pips,
+A inabaki +2.0, **B inageuka −0.2**. Sizing haikuokoa B; ratio ingeonya mapema.
+*Rejea halisi: KAIROS-3 (ML) ilikuwa na gross CHANYA na sizing ingekuwa sahihi — ilikufa kwa ratio
+0.3–0.7× (LESSON-045/039).*
+
+**Matumizi ya OPTIMIZE:** ratio ndiyo dira ya kuboresha — TF ipi (H1 2.5× → H4 8.2× → D1 8.7×),
+exit-geometry ipi, pairs zipi, broker gani anavumilika (`qualify_broker`/`max_commission`).
 - Model HAIAMUI risk wala gharama — inapendekeza tu. Idara 1 na 2 ndizo zinazoamua.
 
 ## IDARA 4 — OPEN-POSITION MANAGEMENT
@@ -115,6 +155,6 @@ Kisha **viability gate**: `(tp_pips × p_win_estimate) vs cost_pips` — au rahi
 | Idara | Ipo | Inahitajika |
 |---|---|---|
 | 1 RISK | bajeti ndani ya siku · slots · correlation · reject+sababu | **CARRY** kati ya siku · nanga ya equity · floor/cap · **news toggle** |
-| 2 COST | gharama kwenye backtest (episodes) | **cost-inclusive sizing** · **viability gate** kwa kila trade |
-| 3 MODELS | KAIROS-1/2 · models.yaml · Steward | DD + time-in-trade kwenye scorecard · KAIROS-3+ |
+| 2 COST | gharama kwenye backtest (episodes) | **cost-inclusive sizing** · runtime cost-guard (ratio ya Idara 3) · actual-vs-assumed |
+| 3 MODELS | KAIROS-1/2 · models.yaml · Steward · **§UBORA (EV/gross/ratio, `cost_budget`)** | DD + time-in-trade kwenye scorecard · KAIROS-3+ |
 | 4 OPEN-POS | SL/TP zisizobadilika (broker-side) | **IDARA NZIMA** — monitor · lock-profit · session · news · RL |
