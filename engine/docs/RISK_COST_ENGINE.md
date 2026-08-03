@@ -22,6 +22,29 @@ Idara 3 (model) ──► pendekezo: symbol, dir, entry, SL, TP
 
 ---
 
+## 0. TIMEFRAMES NA KAZI ZAKE (PD 2026-08-02)
+
+| TF | Kazi | Idara inayoitumia |
+|---|---|---|
+| **D1** | Macro Bias — mwelekeo mkuu | KAIROS-1 |
+| **H4** | Structural Trend — uthibitisho wa trend | KAIROS-1 |
+| **H2** | Filter Regime — hali ya soko | KAIROS-1 |
+| **H1** | **Decision + EXECUTION — injini kuu** | KAIROS-1 **na RCE** |
+| **M30** | Setup refinement — ubora wa ndani | KAIROS-1 |
+| **M15** | Trigger confirmation — timing | KAIROS-1 |
+| **M5** | **Intrabar analytics — spread, slippage, volatility** | **RCE** |
+
+**RCE inatumia TF MBILI pekee, kila moja kwa kazi yake:**
+- **H1 = muktadha wa utekelezaji.** Entry inatokea hapa; kwa hiyo ukwasi, spread ya msingi, bar ya
+  entry, na muundo wa hatari (SL/TP, lots) vyote vinapimwa kwa uhalisia wa H1.
+- **M5 = analytics za ndani ya bar.** H1 inaficha spikes; M5 ndiyo chanzo KILICHOTEULIWA cha
+  **spread-spike**, **slippage cap**, na **volatility** zinazoingia kwenye gharama.
+
+TF nyingine tano (D1/H4/H2/M30/M15) ni **ingizo la KAIROS-1** — RCE **haizigusi**. Mgawanyo huu
+unazuia idara moja kuingilia hukumu ya nyingine.
+
+---
+
 ## 1. CONFIG (yaml — PD anabadilisha bila code)
 
 ```yaml
@@ -104,9 +127,13 @@ ikienda mbali zaidi ya kikomo, **order HAIJAZI** badala ya kujaza kwa bei mbaya.
 
 ```
 cap = min( dynamic_estimate(M5_volatility) , backtest_assumption )   # inabana TU
+#      ^ M5 = chanzo KILICHOTEULIWA cha slippage/volatility (§0 — kazi za TF)
 slippage_pips   = cap                    (thamani ya sizing = kikomo, si makadirio)
 order.deviation = cap × (PipSize ÷ point)                   # MT5 inatumia POINTS
 ```
+**Chanzo:** M5 (kazi yake ni intrabar analytics — §0). **Inatumika:** kwenye order ya H1
+(muktadha wa utekelezaji).
+
 **Cap inayoweza kubana, isiyoweza kulegea (PD 2026-08-02):** soko likiwa tulivu, M5-volatility
 inaruhusu cap **ngumu zaidi** (fills bora). Soko likichafuka, cap **HAIZIDI** dhana ya backtest —
 kwa hiyo dhamana ya "live ≤ backtest" **inabaki**. Cap ikiruhusiwa kulegea, namba zilizothibitishwa

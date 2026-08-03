@@ -34,11 +34,20 @@ inayotekelezeka, inayolipa baada ya gharama.*
 | **EV** | thamani inayotarajiwa | `EV_signal` |
 | **Fill** | uwezekano wa kujaza ndani ya cap | `P(fill)` |
 
-### 1.2 Timeframe hierarchy
-```
-D1  macro regime  →  H4/H2 structure  →  H1 DECISION  →  M30 validation
-                                      →  M15 confirm  →  M5 execution timing
-```
+### 1.2 Timeframe hierarchy — kila TF ina KAZI moja (PD 2026-08-02)
+| TF | Kazi | Inalisha |
+|---|---|---|
+| **D1** | Macro Bias — mwelekeo mkuu | HMM · Transformer |
+| **H4** | Structural Trend — uthibitisho wa trend | HMM · CNN · Transformer |
+| **H2** | Filter Regime — hali ya soko | HMM |
+| **H1** | **Decision + Execution — injini kuu** | models ZOTE (uamuzi unafanyika hapa) |
+| **M30** | Setup refinement — ubora wa ndani | XGBoost · CNN |
+| **M15** | Trigger confirmation — timing | CNN · XGBoost |
+| **M5** | Intrabar analytics — spread, slippage, volatility | **RCE** (si KAIROS-1) |
+
+**Muhimu:** **M5 ni ya RCE**, si ya KAIROS-1. KAIROS-1 haitumii M5 kwa uamuzi wa entry — inaitumia
+RCE kwa gharama/cap pekee (§0 ya `RISK_COST_ENGINE.md`). Uamuzi wa entry unafungwa kwenye **H1**;
+M15 inathibitisha timing ndani ya muundo wa H1, **haihamishi** uamuzi kwenda TF ndogo.
 
 ---
 
