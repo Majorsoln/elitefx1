@@ -79,11 +79,23 @@ cost_pips = spread_pips
           + swap_pips
 ```
 
-### 3.1 Spread
+### 3.1 Spread — MSETO: H1 base + M5 spike-guard (uamuzi wa PD 2026-08-02)
 ```
-spread_pips = (Ask − Bid) ÷ PipSize
+spread_pips = (Ask − Bid) ÷ PipSize          # PipSize: 0.01 (JPY/XAU) · 0.0001 (nyingine)
+
+spread_base      = wastani wa spread_H1 (bars N za mwisho)      # muktadha wa EXECUTION
+spread_vol_adj   = percentile_95(spread_M5, bars N za mwisho)   # kinga ya spikes
+spread_effective = max(spread_base, spread_vol_adj)             # ← inayotumika kwenye cost_pips
 ```
-`PipSize` = 0.01 (JPY, XAU) au 0.0001 (nyingine). Inachukuliwa kwenye **bar ya entry**, si wastani.
+**Kwa nini H1 ndiyo msingi:** entry inatokea kwenye bar ya H1; ukwasi, fill, na muundo wa hatari
+(SL/TP, lots) vyote vinalingana na uhalisia wa H1. Kutumia spread ya M5 **peke yake** = kudharau
+gharama → lots kubwa mno → **EV ya bandia**.
+
+**Kwa nini M5 inaongezwa:** H1 inaficha **spikes za ndani ya bar** (upanuzi wa spread, slippage).
+p95 ya M5 inanasa hizo bila kuruhusu wastani wa M5 kushusha makadirio.
+
+**Athari:** spread halisi zaidi → position ndogo kidogo → **EV ya kweli inayoweza kuuzika**
+(attestation), badala ya edge ya bandia.
 
 ### 3.2 Slippage — **CAP, si utabiri** (uamuzi wa PD 2026-08-02)
 
@@ -91,9 +103,14 @@ Hatutabiri slippage. **Tunaifunga.** Kila order inatumwa na `deviation` (max sli
 ikienda mbali zaidi ya kikomo, **order HAIJAZI** badala ya kujaza kwa bei mbaya.
 
 ```
-slippage_pips = slippage_cap_pips        (thamani ya sizing = kikomo, si makadirio)
-order.deviation = slippage_cap_pips × (PipSize ÷ point)     # MT5 inatumia POINTS
+cap = min( dynamic_estimate(M5_volatility) , backtest_assumption )   # inabana TU
+slippage_pips   = cap                    (thamani ya sizing = kikomo, si makadirio)
+order.deviation = cap × (PipSize ÷ point)                   # MT5 inatumia POINTS
 ```
+**Cap inayoweza kubana, isiyoweza kulegea (PD 2026-08-02):** soko likiwa tulivu, M5-volatility
+inaruhusu cap **ngumu zaidi** (fills bora). Soko likichafuka, cap **HAIZIDI** dhana ya backtest —
+kwa hiyo dhamana ya "live ≤ backtest" **inabaki**. Cap ikiruhusiwa kulegea, namba zilizothibitishwa
+hazingekuwa halali tena.
 
 **Kanuni ya dhahabu — cap = dhana ya utafiti:**
 `episodes()` ilihesabu kila trade ikitoza `SLIP_STOP = 0.3` (stop) / `SLIP_MARKET = 0.1` (market).
@@ -179,11 +196,23 @@ za broker; ikishuka chini ya `volume_min` → **REJECT** ("risk ndogo kuliko lot
 | 2 | **max correlated** | exposure ya kundi < `max_correlated` (**makundi YOTE ya pair**) | `max_correlated:<kundi>` |
 | 3 | **daily-loss brake** | KAMA `today_loss ≥ 0.75 × base` **NA** open_positions > 0 → kataa | `daily_loss_75pct_with_open` |
 | 4 | **total-DD** | `(base_balance − current_balance) < max_total_dd` | `max_total_dd` |
+|   | *(PD 2026-08-02: DD inazuia **entries mpya** PEKEE — **HAKUNA** kufunga positions zilizo wazi)* | | |
 | 5 | **max-spread** | `spread_pips ≤ max_spread[symbol]` | `max_spread` |
 | 6 | **news** | KAMA `trade_news == false` NA news kubwa inakaribia → kataa | `news_window` |
 
 Kikikataliwa: **hakuna trade**, na rekodi ya `lifecycle=REJECTED` + sababu + config-fingerprint
 inaandikwa (dashboard inaonyesha).
+
+---
+
+## 5b. SIGNAL ILIYOKATALIWA — HAIRUDISHWI (PD 2026-08-02)
+KAIROS ni **event-driven**: kila bar ni tathmini **mpya**. Signal iliyokataliwa na gate **HAIWEKWI
+kwenye foleni** wala **HAIRUDIWI**. Setup ikiendelea kustahili bar inayofuata, ni **tathmini mpya**
+yenye bei mpya, spread mpya, gharama mpya na EV mpya — si ufufuo wa ile ya zamani.
+
+**Sababu:** muktadha wa soko unabadilika kila bar. Kurudia signal ile ile = (a) kuingia kwa bei
+iliyoshasogea (EV imeshuka), (b) sifa ya kupita kiasi (over-fitting ya "kusubiri nafasi"),
+(c) uwiano mbaya wa hasara. Hakuna signal queue kwenye mfumo huu.
 
 ---
 
